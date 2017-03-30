@@ -1,0 +1,1299 @@
+BANK 0
+LABEL $C800 Vec_Snd_Shadow
+COMMENT_LABEL $C800 Shadow of sound chip registers (15 bytes)
+LABEL $C80F Vec_Btn_State
+COMMENT_LABEL $C80F Current state of all joystick buttons
+LABEL $C810 Vec_Prev_Btns
+COMMENT_LABEL $C810 Previous state of all joystick buttons
+LABEL $C811 Vec_Buttons
+COMMENT_LABEL $C811 Current toggle state of all buttons
+LABEL $C812 Vec_Button_1_1
+COMMENT_LABEL $C812 Current toggle state of stick 1 button 1
+LABEL $C813 Vec_Button_1_2
+COMMENT_LABEL $C813 Current toggle state of stick 1 button 2
+LABEL $C814 Vec_Button_1_3
+COMMENT_LABEL $C814 Current toggle state of stick 1 button 3
+LABEL $C815 Vec_Button_1_4
+COMMENT_LABEL $C815 Current toggle state of stick 1 button 4
+LABEL $C816 Vec_Button_2_1
+COMMENT_LABEL $C816 Current toggle state of stick 2 button 1
+LABEL $C817 Vec_Button_2_2
+COMMENT_LABEL $C817 Current toggle state of stick 2 button 2
+LABEL $C818 Vec_Button_2_3
+COMMENT_LABEL $C818 Current toggle state of stick 2 button 3
+LABEL $C819 Vec_Button_2_4
+COMMENT_LABEL $C819 Current toggle state of stick 2 button 4
+LABEL $C81A Vec_Joy_Resltn
+COMMENT_LABEL $C81A Joystick A/D resolution ($80=min $00=max)
+LABEL $C81B Vec_Joy_1_X
+COMMENT_LABEL $C81B Joystick 1 left/right
+LABEL $C81C Vec_Joy_1_Y
+COMMENT_LABEL $C81C Joystick 1 up/down
+LABEL $C81D Vec_Joy_2_X
+COMMENT_LABEL $C81D Joystick 2 left/right
+LABEL $C81E Vec_Joy_2_Y
+COMMENT_LABEL $C81E Joystick 2 up/down
+LABEL $C81F Vec_Joy_Mux
+COMMENT_LABEL $C81F Joystick enable/mux flags (4 bytes)
+LABEL $C81F Vec_Joy_Mux_1_X
+COMMENT_LABEL $C81F Joystick 1 X enable/mux flag (=1)
+LABEL $C820 Vec_Joy_Mux_1_Y
+COMMENT_LABEL $C820 Joystick 1 Y enable/mux flag (=3)
+LABEL $C821 Vec_Joy_Mux_2_X
+COMMENT_LABEL $C821 Joystick 2 X enable/mux flag (=5)
+LABEL $C822 Vec_Joy_Mux_2_Y
+COMMENT_LABEL $C822 Joystick 2 Y enable/mux flag (=7)
+LABEL $C823 Vec_Misc_Count
+COMMENT_LABEL $C823 Misc counter/flag byte, zero when not in use
+LABEL $C824 Vec_0Ref_Enable
+COMMENT_LABEL $C824 Check0Ref enable flag
+LABEL $C825 Vec_Loop_Count
+COMMENT_LABEL $C825 Loop counter word (incremented in Wait_Recal)
+LABEL $C827 Vec_Brightness
+COMMENT_LABEL $C827 Default brightness
+LABEL $C828 Vec_Dot_Dwell
+COMMENT_LABEL $C828 Dot dwell time?
+LABEL $C829 Vec_Pattern
+COMMENT_LABEL $C829 Dot pattern (bits)
+LABEL $C82A Vec_Text_HW
+COMMENT_LABEL $C82A Default text height and width
+LABEL $C82A Vec_Text_Height
+COMMENT_LABEL $C82A Default text height
+LABEL $C82B Vec_Text_Width
+COMMENT_LABEL $C82B Default text width
+LABEL $C82C Vec_Str_Ptr
+COMMENT_LABEL $C82C Temporary string pointer for Print_Str
+LABEL $C82E Vec_Counters
+COMMENT_LABEL $C82E Six bytes of counters
+LABEL $C82E Vec_Counter_1
+COMMENT_LABEL $C82E First  counter byte
+LABEL $C82F Vec_Counter_2
+COMMENT_LABEL $C82F Second counter byte
+LABEL $C830 Vec_Counter_3
+COMMENT_LABEL $C830 Third  counter byte
+LABEL $C831 Vec_Counter_4
+COMMENT_LABEL $C831 Fourth counter byte
+LABEL $C832 Vec_Counter_5
+COMMENT_LABEL $C832 Fifth  counter byte
+LABEL $C833 Vec_Counter_6
+COMMENT_LABEL $C833 Sixth  counter byte
+LABEL $C834 Vec_RiseRun_Tmp
+COMMENT_LABEL $C834 Temp storage word for rise/run
+LABEL $C836 Vec_Angle
+COMMENT_LABEL $C836 Angle for rise/run and rotation calculations
+LABEL $C837 Vec_Run_Index
+COMMENT_LABEL $C837 Index pair for run
+LABEL $C839 Vec_Rise_Index
+COMMENT_LABEL $C839 Index pair for rise
+LABEL $C83B Vec_RiseRun_Len
+COMMENT_LABEL $C83B length for rise/run
+LABEL $C83D Vec_Rfrsh
+COMMENT_LABEL $C83D Refresh time (divided by 1.5MHz)
+LABEL $C83D Vec_Rfrsh_lo
+COMMENT_LABEL $C83D Refresh time low byte
+LABEL $C83E Vec_Rfrsh_hi
+COMMENT_LABEL $C83E Refresh time high byte
+LABEL $C83F Vec_Music_Work
+COMMENT_LABEL $C83F Music work buffer (14 bytes, backwards?)
+LABEL $C842 Vec_Music_Wk_A
+COMMENT_LABEL $C842 register 10
+LABEL $C845 Vec_Music_Wk_7
+COMMENT_LABEL $C845 register 7
+LABEL $C846 Vec_Music_Wk_6
+COMMENT_LABEL $C846 register 6
+LABEL $C847 Vec_Music_Wk_5
+COMMENT_LABEL $C847 register 5
+LABEL $C84B Vec_Music_Wk_1
+COMMENT_LABEL $C84B register 1
+LABEL $C84D Vec_Freq_Table
+COMMENT_LABEL $C84D Pointer to note-to-frequency table (normally $FC8D)
+LABEL $C84F Vec_Max_Players
+COMMENT_LABEL $C84F Maximum number of players for Select_Game
+LABEL $C850 Vec_Max_Games
+COMMENT_LABEL $C850 Maximum number of games for Select_Game
+LABEL $C84F Vec_ADSR_Table
+COMMENT_LABEL $C84F Storage for first music header word (ADSR table)
+LABEL $C851 Vec_Twang_Table
+COMMENT_LABEL $C851 Storage for second music header word ('twang' table)
+LABEL $C853 Vec_Music_Ptr
+COMMENT_LABEL $C853 Music data pointer
+LABEL $C853 Vec_Expl_ChanA
+COMMENT_LABEL $C853 Used by Explosion_Snd - bit for first channel used?
+LABEL $C854 Vec_Expl_Chans
+COMMENT_LABEL $C854 Used by Explosion_Snd - bits for all channels used?
+LABEL $C855 Vec_Music_Chan
+COMMENT_LABEL $C855 Current sound channel number for Init_Music
+LABEL $C856 Vec_Music_Flag
+COMMENT_LABEL $C856 Music active flag ($00=off $01=start $80=on)
+LABEL $C857 Vec_Duration
+COMMENT_LABEL $C857 Duration counter for Init_Music
+LABEL $C858 Vec_Music_Twang
+COMMENT_LABEL $C858 3 word 'twang' table used by Init_Music
+LABEL $C858 Vec_Expl_1
+COMMENT_LABEL $C858 Four bytes copied from Explosion_Snd's U-reg parameters
+LABEL $C859 Vec_Expl_2
+LABEL $C85A Vec_Expl_3
+LABEL $C85B Vec_Expl_4
+LABEL $C85C Vec_Expl_Chan
+COMMENT_LABEL $C85C Used by Explosion_Snd - channel number in use?
+LABEL $C85D Vec_Expl_ChanB
+COMMENT_LABEL $C85D Used by Explosion_Snd - bit for second channel used?
+LABEL $C85E Vec_ADSR_Timers
+COMMENT_LABEL $C85E ADSR timers for each sound channel (3 bytes)
+LABEL $C861 Vec_Music_Freq
+COMMENT_LABEL $C861 Storage for base frequency of each channel (3 words)
+LABEL $C867 Vec_Expl_Flag
+COMMENT_LABEL $C867 Explosion_Snd initialization flag?
+LABEL $C877 Vec_Expl_Timer
+COMMENT_LABEL $C877 Used by Explosion_Snd
+LABEL $C879 Vec_Num_Players
+COMMENT_LABEL $C879 Number of players selected in Select_Game
+LABEL $C87A Vec_Num_Game
+COMMENT_LABEL $C87A Game number selected in Select_Game
+LABEL $C87B Vec_Seed_Ptr
+COMMENT_LABEL $C87B Pointer to 3-byte random number seed (=$C87D)
+LABEL $C87D Vec_Random_Seed
+COMMENT_LABEL $C87D Default 3-byte random number seed
+LABEL $CBEA Vec_Default_Stk
+COMMENT_LABEL $CBEA Default top-of-stack
+LABEL $CBEB Vec_High_Score
+COMMENT_LABEL $CBEB High score storage (7 bytes)
+LABEL $CBF2 Vec_SWI3_Vector
+COMMENT_LABEL $CBF2 SWI2/SWI3 interrupt vector (3 bytes)
+LABEL $CBF2 Vec_SWI2_Vector
+COMMENT_LABEL $CBF2 SWI2/SWI3 interrupt vector (3 bytes)
+LABEL $CBF5 Vec_FIRQ_Vector
+COMMENT_LABEL $CBF5 FIRQ interrupt vector (3 bytes)
+LABEL $CBF8 Vec_IRQ_Vector
+COMMENT_LABEL $CBF8 IRQ interrupt vector (3 bytes)
+LABEL $CBFB Vec_SWI_Vector
+COMMENT_LABEL $CBFB SWI/NMI interrupt vector (3 bytes)
+LABEL $CBFB Vec_NMI_Vector
+COMMENT_LABEL $CBFB SWI/NMI interrupt vector (3 bytes)
+LABEL $CBFE Vec_Cold_Flag
+COMMENT_LABEL $CBFE Cold start flag (warm start if = $7321)
+LABEL $D000 VIA_port_b
+COMMENT_LABEL $D000 VIA port B data I/O register
+LABEL $D001 VIA_port_a
+COMMENT_LABEL $D001 VIA port A data I/O register (handshaking)
+LABEL $D002 VIA_DDR_b
+COMMENT_LABEL $D002 VIA port B data direction register (0=input 1=output)
+LABEL $D003 VIA_DDR_a
+COMMENT_LABEL $D003 VIA port A data direction register (0=input 1=output)
+LABEL $D004 VIA_t1_cnt_lo
+COMMENT_LABEL $D004 VIA timer 1 count register lo (scale factor)
+LABEL $D005 VIA_t1_cnt_hi
+COMMENT_LABEL $D005 VIA timer 1 count register hi
+LABEL $D006 VIA_t1_lch_lo
+COMMENT_LABEL $D006 VIA timer 1 latch register lo
+LABEL $D007 VIA_t1_lch_hi
+COMMENT_LABEL $D007 VIA timer 1 latch register hi
+LABEL $D008 VIA_t2_lo
+COMMENT_LABEL $D008 VIA timer 2 count/latch register lo (refresh)
+LABEL $D009 VIA_t2_hi
+COMMENT_LABEL $D009 VIA timer 2 count/latch register hi
+LABEL $D00A VIA_shift_reg
+COMMENT_LABEL $D00A VIA shift register
+LABEL $D00B VIA_aux_cntl
+COMMENT_LABEL $D00B VIA auxiliary control register
+LABEL $D00C VIA_cntl
+COMMENT_LABEL $D00C VIA control register
+LABEL $D00D VIA_int_flags
+COMMENT_LABEL $D00D VIA interrupt flags register
+LABEL $D00E VIA_int_enable
+COMMENT_LABEL $D00E VIA interrupt enable register
+LABEL $D00F VIA_port_a_nohs
+COMMENT_LABEL $D00F VIA port A data I/O register (no handshaking)
+LABEL $F000 Cold_Start
+LABEL $F06C Warm_Start
+LABEL $F14C Init_VIA
+LABEL $F164 Init_OS_RAM
+LABEL $F18B Init_OS
+LABEL $F192 Wait_Recal
+LABEL $F1A2 Set_Refresh
+LABEL $F1AA DP_to_D0
+LABEL $F1AF DP_to_C8
+LABEL $F1B4 Read_Btns_Mask
+LABEL $F1BA Read_Btns
+LABEL $F1F5 Joy_Analog
+LABEL $F1F8 Joy_Digital
+LABEL $F256 Sound_Byte
+LABEL $F259 Sound_Byte_x
+LABEL $F25B Sound_Byte_raw
+LABEL $F272 Clear_Sound
+LABEL $F27D Sound_Bytes
+LABEL $F284 Sound_Bytes_x
+LABEL $F289 Do_Sound
+LABEL $F28C Do_Sound_x
+LABEL $F29D Intensity_1F
+LABEL $F2A1 Intensity_3F
+LABEL $F2A5 Intensity_5F
+LABEL $F2A9 Intensity_7F
+LABEL $F2AB Intensity_a
+LABEL $F2BE Dot_ix_b
+LABEL $F2C1 Dot_ix
+LABEL $F2C3 Dot_d
+LABEL $F2C5 Dot_here
+LABEL $F2D5 Dot_List
+LABEL $F2DE Dot_List_Reset
+LABEL $F2E6 Recalibrate
+LABEL $F2F2 Moveto_x_7F
+LABEL $F2FC Moveto_d_7F
+LABEL $F308 Moveto_ix_FF
+LABEL $F30C Moveto_ix_7F
+LABEL $F30E Moveto_ix_a
+LABEL $F310 Moveto_ix
+LABEL $F312 Moveto_d
+LABEL $F34A Reset0Ref_D0
+LABEL $F34F Check0Ref
+LABEL $F354 Reset0Ref
+LABEL $F35B Reset_Pen
+LABEL $F36B Reset0Int
+LABEL $F373 Print_Str_hwyx
+LABEL $F378 Print_Str_yx
+LABEL $F37A Print_Str_d
+LABEL $F385 Print_List_hw
+LABEL $F38A Print_List
+LABEL $F38C Print_List_chk
+LABEL $F391 Print_Ships_x
+LABEL $F393 Print_Ships
+LABEL $F3AD Mov_Draw_VLc_a
+COMMENT_LABEL $F3AD count y x y x ...
+LABEL $F3B1 Mov_Draw_VL_b
+COMMENT_LABEL $F3B1 y x y x ...
+LABEL $F3B5 Mov_Draw_VLcs
+COMMENT_LABEL $F3B5 count scale y x y x ...
+LABEL $F3B7 Mov_Draw_VL_ab
+COMMENT_LABEL $F3B7 y x y x ...
+LABEL $F3B9 Mov_Draw_VL_a
+COMMENT_LABEL $F3B9 y x y x ...
+LABEL $F3BC Mov_Draw_VL
+COMMENT_LABEL $F3BC y x y x ...
+LABEL $F3BE Mov_Draw_VL_d
+COMMENT_LABEL $F3BE y x y x ...
+LABEL $F3CE Draw_VLc
+COMMENT_LABEL $F3CE count y x y x ...
+LABEL $F3D2 Draw_VL_b
+COMMENT_LABEL $F3D2 y x y x ...
+LABEL $F3D6 Draw_VLcs
+COMMENT_LABEL $F3D6 count scale y x y x ...
+LABEL $F3D8 Draw_VL_ab
+COMMENT_LABEL $F3D8 y x y x ...
+LABEL $F3DA Draw_VL_a
+COMMENT_LABEL $F3DA y x y x ...
+LABEL $F3DD Draw_VL
+COMMENT_LABEL $F3DD y x y x ...
+LABEL $F3DF Draw_Line_d
+COMMENT_LABEL $F3DF y x y x ...
+LABEL $F404 Draw_VLp_FF
+COMMENT_LABEL $F404 pattern y x pattern y x ... $01
+LABEL $F408 Draw_VLp_7F
+COMMENT_LABEL $F408 pattern y x pattern y x ... $01
+LABEL $F40C Draw_VLp_scale
+COMMENT_LABEL $F40C scale pattern y x pattern y x ... $01
+LABEL $F40E Draw_VLp_b
+COMMENT_LABEL $F40E pattern y x pattern y x ... $01
+LABEL $F410 Draw_VLp
+COMMENT_LABEL $F410 pattern y x pattern y x ... $01
+LABEL $F434 Draw_Pat_VL_a
+COMMENT_LABEL $F434 y x y x ...
+LABEL $F437 Draw_Pat_VL
+COMMENT_LABEL $F437 y x y x ...
+LABEL $F439 Draw_Pat_VL_d
+COMMENT_LABEL $F439 y x y x ...
+LABEL $F46E Draw_VL_mode
+COMMENT_LABEL $F46E mode y x mode y x ... $01
+LABEL $F495 Print_Str
+LABEL $F511 Random_3
+LABEL $F517 Random
+LABEL $F533 Init_Music_Buf
+LABEL $F53F Clear_x_b
+LABEL $F542 Clear_C8_RAM
+COMMENT_LABEL $F542 never used by GCE carts?
+LABEL $F545 Clear_x_256
+LABEL $F548 Clear_x_d
+LABEL $F550 Clear_x_b_80
+LABEL $F552 Clear_x_b_a
+LABEL $F55A Dec_3_Counters
+LABEL $F55E Dec_6_Counters
+LABEL $F563 Dec_Counters
+LABEL $F56D Delay_3
+COMMENT_LABEL $F56D 30 cycles
+LABEL $F571 Delay_2
+COMMENT_LABEL $F571 25 cycles
+LABEL $F575 Delay_1
+COMMENT_LABEL $F575 20 cycles
+LABEL $F579 Delay_0
+COMMENT_LABEL $F579 12 cycles
+LABEL $F57A Delay_b
+COMMENT_LABEL $F57A 5*B + 10 cycles
+LABEL $F57D Delay_RTS
+COMMENT_LABEL $F57D 5 cycles
+LABEL $F57E Bitmask_a
+LABEL $F584 Abs_a_b
+LABEL $F58B Abs_b
+LABEL $F593 Rise_Run_Angle
+LABEL $F5D9 Get_Rise_Idx
+LABEL $F5DB Get_Run_Idx
+LABEL $F5EF Get_Rise_Run
+LABEL $F5FF Rise_Run_X
+LABEL $F601 Rise_Run_Y
+LABEL $F603 Rise_Run_Len
+LABEL $F610 Rot_VL_ab
+LABEL $F616 Rot_VL
+LABEL $F61F Rot_VL_Mode_a
+LABEL $F62B Rot_VL_Mode
+LABEL $F637 Rot_VL_dft
+LABEL $F65B Xform_Run_a
+LABEL $F65D Xform_Run
+LABEL $F661 Xform_Rise_a
+LABEL $F663 Xform_Rise
+LABEL $F67F Move_Mem_a_1
+LABEL $F683 Move_Mem_a
+LABEL $F687 Init_Music_chk
+LABEL $F68D Init_Music
+LABEL $F692 Init_Music_x
+LABEL $F7A9 Select_Game
+LABEL $F84F Clear_Score
+LABEL $F85E Add_Score_a
+LABEL $F87C Add_Score_d
+LABEL $F8B7 Strip_Zeros
+LABEL $F8C7 Compare_Score
+LABEL $F8D8 New_High_Score
+LABEL $F8E5 Obj_Will_Hit_u
+LABEL $F8F3 Obj_Will_Hit
+LABEL $F8FF Obj_Hit
+LABEL $F92E Explosion_Snd
+LABEL $FF9F Draw_Grid_VL
+LABEL $FD0D music1
+LABEL $FD1D music2
+LABEL $FD81 music3
+LABEL $FDD3 music4
+LABEL $FE38 music5
+LABEL $FE76 music6
+LABEL $FEC6 music7
+LABEL $FEF8 music8
+LABEL $FF26 music9
+LABEL $FF44 musica
+LABEL $FF62 musicb
+LABEL $FF7A musicc
+LABEL $FF8F musicd
+LABEL $F9F4 Char_Table
+LABEL $FBD4 Char_Table_End
+LABEL $C880 score
+COMMENT_LABEL $C880 7 bytes
+LABEL $C887 highscore
+COMMENT_LABEL $C887 7 bytes
+LABEL $C88E shipdir
+COMMENT_LABEL $C88E 1 byte
+LABEL $C88F shippos
+LABEL $C890 shipXpos
+LABEL $C891 in_alley
+LABEL $C892 bullet0e
+LABEL $C893 bullet1e
+COMMENT_LABEL $C893 shit Exists in alley
+LABEL $C894 bullet2e
+LABEL $C895 bullet3e
+LABEL $C896 bullet4e
+LABEL $C897 bullet5e
+LABEL $C898 bullet6e
+LABEL $C899 bullet0d
+LABEL $C89A bullet1d
+COMMENT_LABEL $C89A travel direction
+LABEL $C89B bullet2d
+LABEL $C89C bullet3d
+LABEL $C89D bullet4d
+LABEL $C89E bullet5d
+LABEL $C89F bullet6d
+LABEL $C8A0 bullet0x
+LABEL $C8A1 bullet1x
+COMMENT_LABEL $C8A1 location on X axis
+LABEL $C8A2 bullet2x
+LABEL $C8A3 bullet3x
+LABEL $C8A4 bullet4x
+LABEL $C8A5 bullet5x
+LABEL $C8A6 bullet6x
+LABEL $C8A7 alley0e
+COMMENT_LABEL $C8A7 is there a monster in the alley? (Exists?)
+LABEL $C8A8 alley1e
+LABEL $C8A9 alley2e
+LABEL $C8AA alley3e
+LABEL $C8AB alley4e
+LABEL $C8AC alley5e
+LABEL $C8AD alley6e
+LABEL $C8AE alley0d
+COMMENT_LABEL $C8AE which way is the monster moving?
+LABEL $C8AF alley1d
+LABEL $C8B0 alley2d
+LABEL $C8B1 alley3d
+LABEL $C8B2 alley4d
+LABEL $C8B3 alley5d
+LABEL $C8B4 alley6d
+LABEL $C8B5 alley0x
+COMMENT_LABEL $C8B5 where monster is on x axis
+LABEL $C8B6 alley1x
+LABEL $C8B7 alley2x
+LABEL $C8B8 alley3x
+LABEL $C8B9 alley4x
+LABEL $C8BA alley5x
+LABEL $C8BB alley6x
+LABEL $C8BC bullet_count
+COMMENT_LABEL $C8BC 1 byte
+LABEL $C8BD ships_left
+COMMENT_LABEL $C8BD 1 byte
+LABEL $C8BE bulletYtemp
+LABEL $C8BF Ship_Dead
+LABEL $C8C0 temp
+EQU $11 ALLEYWIDTH
+EQU $08 MOVEAMOUNT
+LABEL $0382 setup
+COMMENT_LABEL $0382 setting up hardware, resetting scores, once per boot
+EQU $1D start
+LABEL $0038 main
+LABEL $005E jsdoneY
+LABEL $0056 going_down
+LABEL $006B leave_flag
+LABEL $009B jsdoneX
+LABEL $0086 going_left
+EQU $72 going_right
+LABEL $0082 setMaxRight
+LABEL $0084 setRightDone
+LABEL $0099 setMaxLeft
+LABEL $009B setLeftDone
+LABEL $00B9 MLF3183
+LABEL $00E7 MLF3453
+LABEL $00DC MLF33B3
+LABEL $00DE MLF33D3
+LABEL $00E2 MLF3413
+LABEL $00EB moveto_d_done3
+LABEL $04ED Full_Wall_nomode
+LABEL $00F0 Draw_VLa4
+LABEL $010A LF3F44
+LABEL $011A no_walls
+LABEL $013A MLF3186
+LABEL $0168 MLF3456
+LABEL $015D MLF33B6
+LABEL $015F MLF33D6
+LABEL $0163 MLF3416
+LABEL $016C moveto_d_done6
+LABEL $0171 Draw_VLa7
+LABEL $018B LF3F47
+LABEL $0611 bulletYpos_t
+LABEL $01C2 donuthin1
+LABEL $01CB MLF3189
+LABEL $01F9 MLF3459
+LABEL $01EE MLF33B9
+LABEL $01F0 MLF33D9
+LABEL $01F4 MLF3419
+LABEL $01FD moveto_d_done9
+LABEL $0516 ShipL_nomode
+LABEL $0208 donuthin2
+LABEL $0503 ShipR_nomode
+LABEL $020A Draw_VLa10
+LABEL $0224 LF3F410
+LABEL $023E toad
+LABEL $027A no_press
+LABEL $0618 bullete_t
+LABEL $027A already_exists
+LABEL $0626 bulletd_t
+LABEL $0634 bulletx_t
+LABEL $0276 negstart
+LABEL $027A newshotdone
+LABEL $03E2 move_bullets
+LABEL $043C draw_bullets
+LABEL $02D4 MLF31815
+LABEL $0302 MLF34515
+LABEL $02F7 MLF33B15
+LABEL $02F9 MLF33D15
+LABEL $02FD MLF34115
+LABEL $0306 moveto_d_done15
+LABEL $030C ships_left_loop
+LABEL $0539 Ship_Marker
+LABEL $0311 Draw_VLa16
+LABEL $032B LF3F416
+LABEL $0347 MLF31817
+LABEL $0375 MLF34517
+LABEL $036A MLF33B17
+LABEL $036C MLF33D17
+LABEL $0370 MLF34117
+LABEL $0379 moveto_d_done17
+LABEL $05AB Wedge_L
+LABEL $03EB move_start
+LABEL $042F next_bullet2
+LABEL $0429 moving_left
+LABEL $040D destroy_bullet
+LABEL $043B bullets_done2
+LABEL $0446 bstart
+LABEL $04C6 next_bullet
+LABEL $0488 MLF31819
+LABEL $04B6 MLF34519
+LABEL $04AB MLF33B19
+LABEL $04AD MLF33D19
+LABEL $04B1 MLF34119
+LABEL $04BA moveto_d_done19
+LABEL $04C1 dwellcnt
+LABEL $04D3 bullets_done
+LABEL $04FA Half_Wall
+LABEL $0529 Shot
+LABEL $0542 Arrow_R
+LABEL $0552 Arrow_L
+LABEL $0562 Bow_1
+LABEL $0572 Bow_2
+LABEL $0582 Dash
+LABEL $059E Wedge_R
+LABEL $05B8 Ghost
+LABEL $05D1 Tank_R
+LABEL $05D1 Tank_L
+LABEL $05D1 Tank_doh
+LABEL $0642 alleye_t
+LABEL $0650 alleyd_t
+LABEL $065E alleyx_t
+LABEL $066C enemy_t
+LABEL $068C Arrow_t
+LABEL $0688 Bow_t
+LABEL $0690 Wedge_t
+LABEL $0676 enemy_speed_t
+LABEL $0686 enemy_stuff_t
+LABEL $0694 Ghost_t
+LABEL $0696 Dash_t
+LABEL $0698 Tank_t
+LABEL $069C credits
+LABEL $06BB *
+COMMENT_LINE $0000 ***************************************************************************
+COMMENT_LINE $0000 DEFINE SECTION
+COMMENT_LINE $0000 ***************************************************************************
+COMMENT_LINE $0000 load vectrex bios routine definitions
+COMMENT $0000 vectrex function includes
+COMMENT_LINE $0000 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+COMMENT_LINE $0000 this file contains includes for vectrex BIOS functions and variables      ;
+COMMENT_LINE $0000 it was written by Bruce Tomlin, slighte changed by Malban                 ;
+COMMENT_LINE $0000 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+COMMENT_LINE $0000 ifndef INCLUDE_I
+COMMENT_LINE $0000 INCLUDE_I equ 1
+COMMENT_LINE $0000 $C839   ;Pointer to copyright string during startup
+COMMENT_LINE $0000 $C83B   ;High score cold-start flag (=0 if valid)
+COMMENT_LINE $0000 $C83C   ;temp byte
+COMMENT_LINE $0000 $C843   ;        register 9
+COMMENT_LINE $0000 $C844   ;        register 8
+COMMENT_LINE $0000 $C848   ;        register 4
+COMMENT_LINE $0000 $C849   ;        register 3
+COMMENT_LINE $0000 $C84A   ;        register 2
+COMMENT_LINE $0000 $C84C   ;        register 0
+COMMENT_LINE $0000 $C85E   ;Scratch 'score' storage for Display_Option (7 bytes)
+COMMENT_LINE $0000 $C868...$C876   ;Unused?
+COMMENT_LINE $0000 $C878   ;Unused?
+COMMENT_LINE $0000 $C880 - $CBEA is user RAM  ;
+COMMENT_LINE $0000 0 sample/hold (0=enable  mux 1=disable mux)
+COMMENT_LINE $0000 1 mux sel 0
+COMMENT_LINE $0000 2 mux sel 1
+COMMENT_LINE $0000 3 sound BC1
+COMMENT_LINE $0000 4 sound BDIR
+COMMENT_LINE $0000 5 comparator input
+COMMENT_LINE $0000 6 external device (slot pin 35) initialized to input
+COMMENT_LINE $0000 7 /RAMP
+COMMENT_LINE $0000 0 PA latch enable
+COMMENT_LINE $0000 1 PB latch enable
+COMMENT_LINE $0000 2 \                     110=output to CB2 under control of phase 2 clock
+COMMENT_LINE $0000 3  > shift register control     (110 is the only mode used by the Vectrex ROM)
+COMMENT_LINE $0000 4 /
+COMMENT_LINE $0000 5 0=t2 one shot                 1=t2 free running
+COMMENT_LINE $0000 6 0=t1 one shot                 1=t1 free running
+COMMENT_LINE $0000 7 0=t1 disable PB7 output       1=t1 enable PB7 output
+COMMENT_LINE $0000 0 CA1 control     CA1 -> SW7    0=IRQ on low 1=IRQ on high
+COMMENT_LINE $0000 1 \
+COMMENT_LINE $0000 2  > CA2 control  CA2 -> /ZERO  110=low 111=high
+COMMENT_LINE $0000 3 /
+COMMENT_LINE $0000 4 CB1 control     CB1 -> NC     0=IRQ on low 1=IRQ on high
+COMMENT_LINE $0000 5 \
+COMMENT_LINE $0000 6  > CB2 control  CB2 -> /BLANK 110=low 111=high
+COMMENT_LINE $0000 7 /
+COMMENT_LINE $0000 bit                             cleared by
+COMMENT_LINE $0000 0 CA2 interrupt flag            reading or writing port A I/O
+COMMENT_LINE $0000 1 CA1 interrupt flag            reading or writing port A I/O
+COMMENT_LINE $0000 2 shift register interrupt flag reading or writing shift register
+COMMENT_LINE $0000 3 CB2 interrupt flag            reading or writing port B I/O
+COMMENT_LINE $0000 4 CB1 interrupt flag            reading or writing port A I/O
+COMMENT_LINE $0000 5 timer 2 interrupt flag        read t2 low or write t2 high
+COMMENT_LINE $0000 6 timer 1 interrupt flag        read t1 count low or write t1 high
+COMMENT_LINE $0000 7 IRQ status flag               write logic 0 to IER or IFR bit
+COMMENT_LINE $0000 0 CA2 interrupt enable
+COMMENT_LINE $0000 1 CA1 interrupt enable
+COMMENT_LINE $0000 2 shift register interrupt enable
+COMMENT_LINE $0000 3 CB2 interrupt enable
+COMMENT_LINE $0000 4 CB1 interrupt enable
+COMMENT_LINE $0000 5 timer 2 interrupt enable
+COMMENT_LINE $0000 6 timer 1 interrupt enable
+COMMENT_LINE $0000 7 IER set/clear control
+COMMENT_LINE $0000 endif
+COMMENT_LINE $0000 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+COMMENT_LINE $0000 vim: ts=4
+COMMENT_LINE $0000 vim: syntax=asm6809
+COMMENT_LINE $0000 MACROS
+COMMENT_LINE $0000 adding bullet to alley if no other bullet is already there
+COMMENT $0000 set EXIST
+COMMENT_LINE $0000 left(0) or right(1)?
+COMMENT $0000 set DIRECTION
+COMMENT_LINE $0000 starting x coordinates
+COMMENT $0000 set start X
+COMMENT $0000 set start -X
+COMMENT $0000 rts
+COMMENT $0000 mask off low 4 bits to limit answer 0-7
+COMMENT $0000 mask some other random bit to derive start direction
+COMMENT_LINE $0000 need code to generate new random monster OR prize ?? in random alley
+COMMENT_LINE $0000 monster type, and direction, direction decidesd initial X placement
+COMMENT_LINE $0000 store answer in (bool)alleyNe (always 1), (bool)alleyNd (0 left, 1 right), (signed int)alleyNx (-127 or 127 )
+COMMENT $0000 /BLANK low and /ZERO low
+COMMENT $0000 clear shift register
+COMMENT $0000 clear D/A register
+COMMENT $0000 mux=1, disable mux
+COMMENT $0000 mux=1, enable mux
+COMMENT $0000 do it again
+COMMENT $0000 disable mu
+COMMENT $0000 Store Y in D/A register
+COMMENT $0000 Enable mux
+COMMENT $0000 Save D-register on stack
+COMMENT $0000 Blank low, zero high?
+COMMENT $0000 Clear shift regigster
+COMMENT $0000 Disable mux
+COMMENT $0000 Store X in D/A register
+COMMENT $0000 timer 1 count high
+COMMENT $0000 Get back D-reg
+COMMENT $0000 Wait for timer 1
+COMMENT $0000 Delay a moment
+COMMENT $0000 Wait for timer 1
+COMMENT $0000 Store intensity in D/A
+COMMENT $0000 Save intensity in $C827
+COMMENT $0000 mux disabled channel 2
+COMMENT $0000 mux enabled channel 2
+COMMENT $0000 do it again just because
+COMMENT $0000 turn off mux
+COMMENT $0000 inside an alley
+COMMENT $0000 disable Y position poll
+COMMENT $0000 no Y motion
+COMMENT $0000 slot 6 as far up as u can go
+COMMENT_LINE $0000 now test X first test should be if there is a prize in this alley.
+COMMENT $0000 is X basically in the middle alley? unset in_alley flag
+COMMENT $0000 if b-3 > 0 then clr in_alley
+COMMENT $0000 clear in alley flag when in middle
+COMMENT_LINE $0000 adda     shipXpos
+COMMENT_LINE $0000 sta      shipXpos
+COMMENT_LINE $0000 sta      shipXpos
+COMMENT $0000 Send Y to A/D
+COMMENT $0000 Enable mux
+COMMENT $0000 Point to next coordinate pair
+COMMENT $0000 Wait a moment
+COMMENT $0000 Disable mux
+COMMENT $0000 Send X to A/D
+COMMENT $0000 Shift reg=$FF (solid line), T1H=0
+COMMENT $0000 Put pattern in shift register
+COMMENT $0000 Set T1H (scale factor?)
+COMMENT $0000 B-reg = T1 interrupt bit
+COMMENT $0000 Wait for T1 to time out
+COMMENT $0000 Wait a moment more
+COMMENT $0000 Clear shift register (blank output)
+COMMENT $0000 Decrement line count
+COMMENT $0000 Go back for more points
+COMMENT_LINE $0000 jmp Check0Ref ;Reset zero reference if necessary
+COMMENT_LINE $0000 ***************************************************************************
+COMMENT_LINE $0000 Variable / RAM SECTION
+COMMENT_LINE $0000 ***************************************************************************
+COMMENT_LINE $0000 insert your variables (RAM usage) in the BSS section
+COMMENT_LINE $0000 user RAM starts at $c880
+COMMENT $0000 start of our ram space
+COMMENT_LINE $C880 CONSTANTS place after VARIABLES
+COMMENT_LINE $C880 ***************************************************************************
+COMMENT_LINE $C880 HEADER SECTION
+COMMENT_LINE $C880 ***************************************************************************
+COMMENT_LINE $C880 The cartridge ROM starts at address 0
+COMMENT_LINE $0000 the first few bytes are mandatory, otherwise the BIOS will not load
+COMMENT_LINE $0000 the ROM file, and will start MineStorm instead
+COMMENT $0000 'g' is copyright sign
+COMMENT $000B music from the rom
+COMMENT $000D hight, width, rel y, rel x (from 0,0)
+COMMENT $0011 some game information, ending with $80
+COMMENT $0019 end of game header
+COMMENT_LINE $001A ***************************************************************************
+COMMENT_LINE $001A CODE SECTION
+COMMENT_LINE $001A ***************************************************************************
+COMMENT_LINE $001A here the cartridge program starts off
+COMMENT $003E inside an alley
+COMMENT $0041 disable Y position poll
+COMMENT $0046 no Y motion
+COMMENT $004D slot 6 as far up as u can go
+COMMENT_LINE $005E now test X first test should be if there is a prize in this alley.
+COMMENT $005E is X basically in the middle alley? unset in_alley flag
+COMMENT $0066 if b-3 > 0 then clr in_alley
+COMMENT $0068 clear in alley flag when in middle
+COMMENT_LINE $007E adda     shipXpos
+COMMENT_LINE $0084 sta      shipXpos
+COMMENT_LINE $009B sta      shipXpos
+COMMENT $009D Store intensity in D/A
+COMMENT $009F Save intensity in $C827
+COMMENT $00A2 mux disabled channel 2
+COMMENT $00A7 mux enabled channel 2
+COMMENT $00A9 do it again just because
+COMMENT $00AD turn off mux
+COMMENT_LINE $00AF jmp no_walls ; skip printing walls to save cycles
+COMMENT_LINE $00AF bottom wall
+COMMENT_LINE $00AF lda #5
+COMMENT_LINE $00AF sta $C823 ; vector count
+COMMENT $00B3 Store Y in D/A register
+COMMENT $00B5 Enable mux
+COMMENT $00B7 Save D-register on stack
+COMMENT $00B9 Blank low, zero high?
+COMMENT $00BD Clear shift regigster
+COMMENT $00BF Disable mux
+COMMENT $00C1 Store X in D/A register
+COMMENT $00C3 timer 1 count high
+COMMENT $00C5 Get back D-reg
+COMMENT $00DC Wait for timer 1
+COMMENT $00E2 Delay a moment
+COMMENT $00E7 Wait for timer 1
+COMMENT $00EE jsr Draw_VLc
+COMMENT $00F5 Send Y to A/D
+COMMENT $00F7 Enable mux
+COMMENT $00F9 Point to next coordinate pair
+COMMENT $00FB Wait a moment
+COMMENT $00FC Disable mux
+COMMENT $00FE Send X to A/D
+COMMENT $0100 Shift reg=$FF (solid line), T1H=0
+COMMENT $0103 Put pattern in shift register
+COMMENT $0105 Set T1H (scale factor?)
+COMMENT $0107 B-reg = T1 interrupt bit
+COMMENT $010A Wait for T1 to time out
+COMMENT $010E Wait a moment more
+COMMENT $010F Clear shift register (blank output)
+COMMENT $0111 Decrement line count
+COMMENT $0115 Go back for more points
+COMMENT_LINE $0117 jmp Check0Ref ;Reset zero reference if necessary
+COMMENT_LINE $011A top wall
+COMMENT $011D /BLANK low and /ZERO low
+COMMENT $011F clear shift register
+COMMENT $0124 clear D/A register
+COMMENT $0126 mux=1, disable mux
+COMMENT $0128 mux=1, enable mux
+COMMENT $012A do it again
+COMMENT $012E disable mu
+COMMENT $0134 Store Y in D/A register
+COMMENT $0136 Enable mux
+COMMENT $0138 Save D-register on stack
+COMMENT $013A Blank low, zero high?
+COMMENT $013E Clear shift regigster
+COMMENT $0140 Disable mux
+COMMENT $0142 Store X in D/A register
+COMMENT $0144 timer 1 count high
+COMMENT $0146 Get back D-reg
+COMMENT $015D Wait for timer 1
+COMMENT $0163 Delay a moment
+COMMENT $0168 Wait for timer 1
+COMMENT $016F jsr Draw_VLc
+COMMENT $0176 Send Y to A/D
+COMMENT $0178 Enable mux
+COMMENT $017A Point to next coordinate pair
+COMMENT $017C Wait a moment
+COMMENT $017D Disable mux
+COMMENT $017F Send X to A/D
+COMMENT $0181 Shift reg=$FF (solid line), T1H=0
+COMMENT $0184 Put pattern in shift register
+COMMENT $0186 Set T1H (scale factor?)
+COMMENT $0188 B-reg = T1 interrupt bit
+COMMENT $018B Wait for T1 to time out
+COMMENT $018F Wait a moment more
+COMMENT $0190 Clear shift register (blank output)
+COMMENT $0192 Decrement line count
+COMMENT $0196 Go back for more points
+COMMENT_LINE $0198 jmp Check0Ref ;Reset zero reference if necessary
+COMMENT_LINE $0198 draw ship
+COMMENT $019B /BLANK low and /ZERO low
+COMMENT $019D clear shift register
+COMMENT $01A2 clear D/A register
+COMMENT $01A4 mux=1, disable mux
+COMMENT $01A6 mux=1, enable mux
+COMMENT $01A8 do it again
+COMMENT $01AC disable mu
+COMMENT $01B0 controls "scale"
+COMMENT_LINE $01B6 ldx #shippos_t
+COMMENT $01B9 get pos from shippos_t table
+COMMENT $01BB small offset
+COMMENT_LINE $01BD ldb #0 ; pointing LEFT stay as-is
+COMMENT $01BD testing for 0|LEFT 1|RIGHT
+COMMENT_LINE $01C2 ldb shipXpos ;#-17 ; pointing RIGHT move to the left to center
+COMMENT $01C5 Store Y in D/A register
+COMMENT $01C7 Enable mux
+COMMENT $01C9 Save D-register on stack
+COMMENT $01CB Blank low, zero high?
+COMMENT $01CF Clear shift regigster
+COMMENT $01D1 Disable mux
+COMMENT $01D3 Store X in D/A register
+COMMENT $01D5 timer 1 count high
+COMMENT $01D7 Get back D-reg
+COMMENT $01EE Wait for timer 1
+COMMENT $01F4 Delay a moment
+COMMENT $01F9 Wait for timer 1
+COMMENT $0200 testing for 0|LEFT 1|RIGHT
+COMMENT $0208 jsr Draw_VLc ;_mode
+COMMENT $020F Send Y to A/D
+COMMENT $0211 Enable mux
+COMMENT $0213 Point to next coordinate pair
+COMMENT $0215 Wait a moment
+COMMENT $0216 Disable mux
+COMMENT $0218 Send X to A/D
+COMMENT $021A Shift reg=$FF (solid line), T1H=0
+COMMENT $021D Put pattern in shift register
+COMMENT $021F Set T1H (scale factor?)
+COMMENT $0221 B-reg = T1 interrupt bit
+COMMENT $0224 Wait for T1 to time out
+COMMENT $0228 Wait a moment more
+COMMENT $0229 Clear shift register (blank output)
+COMMENT $022B Decrement line count
+COMMENT $022F Go back for more points
+COMMENT_LINE $0231 jmp Check0Ref ;Reset zero reference if necessary
+COMMENT_LINE $0231 place bullets
+COMMENT_LINE $0243 adding bullet to alley if no other bullet is already there
+COMMENT $0252 set EXIST
+COMMENT_LINE $0254 left(0) or right(1)?
+COMMENT $0260 set DIRECTION
+COMMENT_LINE $0262 starting x coordinates
+COMMENT $0272 set start X
+COMMENT $0278 set start -X
+COMMENT $027F Store intensity in D/A
+COMMENT $0281 Save intensity in $C827
+COMMENT $0284 mux disabled channel 2
+COMMENT $0289 mux enabled channel 2
+COMMENT $028B do it again just because
+COMMENT $028F turn off mux
+COMMENT $0296 Store intensity in D/A
+COMMENT $0298 Save intensity in $C827
+COMMENT $029B mux disabled channel 2
+COMMENT $02A0 mux enabled channel 2
+COMMENT $02A2 do it again just because
+COMMENT $02A6 turn off mux
+COMMENT_LINE $02A8 jmp main ; don't print scores
+COMMENT_LINE $02A8 display score and ships left
+COMMENT $02AB /BLANK low and /ZERO low
+COMMENT $02AD clear shift register
+COMMENT $02B2 clear D/A register
+COMMENT $02B4 mux=1, disable mux
+COMMENT $02B6 mux=1, enable mux
+COMMENT $02B8 do it again
+COMMENT $02BC disable mu
+COMMENT $02CE Store Y in D/A register
+COMMENT $02D0 Enable mux
+COMMENT $02D2 Save D-register on stack
+COMMENT $02D4 Blank low, zero high?
+COMMENT $02D8 Clear shift regigster
+COMMENT $02DA Disable mux
+COMMENT $02DC Store X in D/A register
+COMMENT $02DE timer 1 count high
+COMMENT $02E0 Get back D-reg
+COMMENT $02F7 Wait for timer 1
+COMMENT $02FD Delay a moment
+COMMENT $0302 Wait for timer 1
+COMMENT $0306 vector draw ships remaining routine TEST
+COMMENT $0316 Send Y to A/D
+COMMENT $0318 Enable mux
+COMMENT $031A Point to next coordinate pair
+COMMENT $031C Wait a moment
+COMMENT $031D Disable mux
+COMMENT $031F Send X to A/D
+COMMENT $0321 Shift reg=$FF (solid line), T1H=0
+COMMENT $0324 Put pattern in shift register
+COMMENT $0326 Set T1H (scale factor?)
+COMMENT $0328 B-reg = T1 interrupt bit
+COMMENT $032B Wait for T1 to time out
+COMMENT $032F Wait a moment more
+COMMENT $0330 Clear shift register (blank output)
+COMMENT $0332 Decrement line count
+COMMENT $0336 Go back for more points
+COMMENT_LINE $0338 jmp Check0Ref ;Reset zero reference if necessary
+COMMENT_LINE $033D end score+ship count
+COMMENT_LINE $033D ;;; DRAW VARIOUS STUFF TEST ZONE
+COMMENT $0341 Store Y in D/A register
+COMMENT $0343 Enable mux
+COMMENT $0345 Save D-register on stack
+COMMENT $0347 Blank low, zero high?
+COMMENT $034B Clear shift regigster
+COMMENT $034D Disable mux
+COMMENT $034F Store X in D/A register
+COMMENT $0351 timer 1 count high
+COMMENT $0353 Get back D-reg
+COMMENT $036A Wait for timer 1
+COMMENT $0370 Delay a moment
+COMMENT $0375 Wait for timer 1
+COMMENT $037F and repeat forever
+COMMENT_LINE $0382 ###########################################################################
+COMMENT_LINE $0382 SUBROUTINES/FUNCTIONS
+COMMENT_LINE $0382 ###########################################################################
+COMMENT $0382 enable
+COMMENT $038C disable for Joy Mux's
+COMMENT_LINE $0394 jsr Joy_Digital ; set joymode, not analog.
+COMMENT $03A0 clear first byte of bullets to destroy
+COMMENT $03E1 return from function
+COMMENT $03F6 don't do motion on non-existant bullets X
+COMMENT $03FB shift left == multiply by 2 table is 2 byte entry
+COMMENT $03FF get pointer from table
+COMMENT $0401 read from resolved address bulletNx
+COMMENT $0407 if moving goes out of bounds destroy_bullet
+COMMENT $042B if moving goes out of bounds destroy_bullet
+COMMENT $043E trying to make bullet brighter
+COMMENT $0449 shift left == multiply by 2 table is 2 byte entry
+COMMENT $0451 Doesn't EXIST
+COMMENT $0453 reset before positioning beam
+COMMENT $0456 /BLANK low and /ZERO low
+COMMENT $0458 clear shift register
+COMMENT $045D clear D/A register
+COMMENT $045F mux=1, disable mux
+COMMENT $0461 mux=1, enable mux
+COMMENT $0463 do it again
+COMMENT $0467 disable mu
+COMMENT_LINE $0469 find Y pos
+COMMENT $046C single mbyte table no asla
+COMMENT $046F do look up for Y pos from table TODO
+COMMENT_LINE $0474 find X pos
+COMMENT $0477 shift left == multiply by 2 table is 2 byte entry
+COMMENT $047B get pointer from table
+COMMENT $047D read from resolved address bulletNx
+COMMENT $0482 Store Y in D/A register
+COMMENT $0484 Enable mux
+COMMENT $0486 Save D-register on stack
+COMMENT $0488 Blank low, zero high?
+COMMENT $048C Clear shift regigster
+COMMENT $048E Disable mux
+COMMENT $0490 Store X in D/A register
+COMMENT $0492 timer 1 count high
+COMMENT $0494 Get back D-reg
+COMMENT $04AB Wait for timer 1
+COMMENT $04B1 Delay a moment
+COMMENT $04B6 Wait for timer 1
+COMMENT_LINE $04BA ldx #Shot
+COMMENT_LINE $04BA jsr Draw_VL_mode
+COMMENT_LINE $04BA jsr Dot_here
+COMMENT_LINE $04BA draw dot code inlined
+COMMENT $04BA Set pattern to all 1's
+COMMENT $04BC Store in VIA shift register
+COMMENT $04BE Get dot dwell (brightness)
+COMMENT $04C1 Delay leaving beam in place
+COMMENT $04C4 Blank beam in VIA shift register
+COMMENT_LINE $04C6 END draw dot inline END
+COMMENT $04DA Store intensity in D/A
+COMMENT $04DC Save intensity in $C827
+COMMENT $04DF mux disabled channel 2
+COMMENT $04E4 mux enabled channel 2
+COMMENT $04E6 do it again just because
+COMMENT $04EA turn off mux
+COMMENT_LINE $04ED ***************************************************************************
+COMMENT_LINE $04ED DATA SECTION
+COMMENT_LINE $04ED ***************************************************************************
+COMMENT_LINE $04ED ***************************************************************************
+COMMENT_LINE $04ED DATA SECTION
+COMMENT_LINE $04ED ***************************************************************************
+COMMENT $04ED lda #5 ; sta $C823 ; vector count
+COMMENT $04FA lda #3 ; sta $C823
+COMMENT $0503 fcb 0, +8, -12
+COMMENT $0516 fcb 0, +8, +12
+COMMENT_LINE $0542 Enemy list
+COMMENT $05BB TOP
+COMMENT $05C4 GAP
+COMMENT $05C7 Bottom
+COMMENT $05D1 sync and move to y, x
+COMMENT $05D4 draw, y, x
+COMMENT $05D7 draw, y, x
+COMMENT $05DA draw, y, x
+COMMENT $05DD draw, y, x
+COMMENT $05E0 draw, y, x
+COMMENT $05E3 draw, y, x
+COMMENT $05E6 draw, y, x
+COMMENT $05E9 draw, y, x
+COMMENT $05EC draw, y, x
+COMMENT $05EF draw, y, x
+COMMENT_LINE $05F2 fcb 0, -8, +11 ; sync and move to y, x
+COMMENT $05F2 draw, y, x
+COMMENT $05F5 draw, y, x
+COMMENT $05F8 draw, y, x
+COMMENT $05FB draw, y, x
+COMMENT $05FE draw, y, x
+COMMENT $0601 draw, y, x
+COMMENT $0604 draw, y, x
+COMMENT $0607 draw, y, x
+COMMENT $060A draw, y, x
+COMMENT $060D draw, y, x
+COMMENT $0610 endmarker
+COMMENT_LINE $0611 TABLES
+COMMENT_LINE $0611 shippos_t:          fcb      -3*ALLEYWIDTH,-2*ALLEYWIDTH,-1*ALLEYWIDTH,0,1*ALLEYWIDTH,2*ALLEYWIDTH,3*ALLEYWIDTH ; Y pos of ship
+COMMENT $0611 Y pos of bullet/ship/enemy per alley
+COMMENT $0618 exists TRUE/FALSE
+COMMENT $0626 direction left/right
+COMMENT $0634 X position
+COMMENT $066C , Prize, CannonBall, Tank
+COMMENT $0676 example
+COMMENT $0688 same, flippy 90 degree animation
+COMMENT $068C Right, Left
+COMMENT $0690 Right, Left
+COMMENT $0694 same
+COMMENT $0696 same
+COMMENT $0698 Right/left
+COMMENT_LINE $06BC JUNK below
+COMMENT_LINE $06BC ***************************************************************************
+COMMENT_LINE $06BC SCRATCH AREA
+COMMENT_LINE $06BC example
+COMMENT_LINE $06BC ldu      #vData                       ; address of list
+COMMENT_LINE $06BC LDA      #$0                          ; Text position relative Y
+COMMENT_LINE $06BC LDB      #-$0                         ; Text position relative X
+COMMENT_LINE $06BC tfr      d,x                          ; in x position of list
+COMMENT_LINE $06BC lda      #$40                         ; scale positioning
+COMMENT_LINE $06BC ldb      #$40                         ; scale move in list
+COMMENT_LINE $06BC jsr      draw_synced_list
+COMMENT_LINE $06BC BRA      main                         ; and repeat forever
+COMMENT_LINE $06BC ;***************************************************************************
+COMMENT_LINE $06BC ; SUBROUTINE SECTION
+COMMENT_LINE $06BC ;***************************************************************************
+COMMENT_LINE $06BC ;ZERO ing the integrators takes time. Measures at my vectrex show e.g.:
+COMMENT_LINE $06BC ;If you move the beam with a to x = -127 and y = -127 at diffferent scale values, the time to reach zero:
+COMMENT_LINE $06BC ;- scale $ff -> zero 110 cycles
+COMMENT_LINE $06BC ;- scale $7f -> zero 75 cycles
+COMMENT_LINE $06BC ;- scale $40 -> zero 57 cycles
+COMMENT_LINE $06BC ;- scale $20 -> zero 53 cycles
+COMMENT_LINE $06BC ZERO_DELAY          EQU      7                            ; delay 7 counter is exactly 111 cycles delay between zero SETTING and zero unsetting (in moveto_d)
+COMMENT_LINE $06BC ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+COMMENT_LINE $06BC ;U = address of vectorlist
+COMMENT_LINE $06BC ;X = (y,x) position of vectorlist (this will be point 0,0), positioning on screen
+COMMENT_LINE $06BC ;A = scalefactor "Move" (after sync)
+COMMENT_LINE $06BC ;B = scalefactor "Vector" (vectors in vectorlist)
+COMMENT_LINE $06BC ;
+COMMENT_LINE $06BC ;     mode, rel y, rel x,
+COMMENT_LINE $06BC ;     mode, rel y, rel x,
+COMMENT_LINE $06BC ;     .      .      .
+COMMENT_LINE $06BC ;     .      .      .
+COMMENT_LINE $06BC ;     mode, rel y, rel x,
+COMMENT_LINE $06BC ;     0x02
+COMMENT_LINE $06BC ; where mode has the following meaning:
+COMMENT_LINE $06BC ; negative draw line
+COMMENT_LINE $06BC ; 0 move to specified endpoint
+COMMENT_LINE $06BC ; 1 sync (and move to list start and than to place in vectorlist)
+COMMENT_LINE $06BC ; 2 end
+COMMENT_LINE $06BC ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+COMMENT_LINE $06BC draw_synced_list:
+COMMENT_LINE $06BC pshs     a                            ; remember out different scale factors
+COMMENT_LINE $06BC pshs     b
+COMMENT_LINE $06BC ; first list entry (first will be a sync + moveto_d, so we just stay here!)
+COMMENT_LINE $06BC lda      ,u+                          ; this will be a "1"
+COMMENT_LINE $06BC sync:
+COMMENT_LINE $06BC deca                                  ; test if real sync - or end of list (2)
+COMMENT_LINE $06BC lbne     drawdone                     ; if end of list -> jump
+COMMENT_LINE $06BC ; zero integrators
+COMMENT_LINE $06BC ldb      #$CC                         ; zero the integrators
+COMMENT_LINE $06BC stb      <VIA_cntl                    ; store zeroing values to cntl
+COMMENT_LINE $06BC ldb      #ZERO_DELAY                  ; and wait for zeroing to be actually done
+COMMENT_LINE $06BC ; reset integrators
+COMMENT_LINE $06BC clr      <VIA_port_a                  ; reset integrator offset
+COMMENT_LINE $06BC lda      #%10000010
+COMMENT_LINE $06BC ; wait that zeroing surely has the desired effect!
+COMMENT_LINE $06BC zeroLoop:
+COMMENT_LINE $06BC sta      <VIA_port_b                  ; while waiting, zero offsets
+COMMENT_LINE $06BC decb
+COMMENT_LINE $06BC bne      zeroLoop
+COMMENT_LINE $06BC inc      <VIA_port_b
+COMMENT_LINE $06BC ; unzero is done by moveto_d
+COMMENT_LINE $06BC lda      1,s                          ; scalefactor move
+COMMENT_LINE $06BC sta      <VIA_t1_cnt_lo               ; to timer t1 (lo=
+COMMENT_LINE $06BC tfr      x,d                          ; load our coordinates of "entry" of vectorlist
+COMMENT_LINE $06BC MOVETO_D                              ; move there
+COMMENT_LINE $06BC lda      ,s                           ; scale factor vector
+COMMENT_LINE $06BC sta      <VIA_t1_cnt_lo               ; to timer T1 (lo)
+COMMENT_LINE $06BC moveTo:
+COMMENT_LINE $06BC ldd      ,u++                         ; do our "internal" moveto d
+COMMENT_LINE $06BC beq      nextListEntry                ; there was a move 0,0, if so
+COMMENT_LINE $06BC MOVETO_D
+COMMENT_LINE $06BC nextListEntry:
+COMMENT_LINE $06BC lda      ,u+                          ; load next "mode" byte
+COMMENT_LINE $06BC beq      moveTo                       ; if 0, than we should move somewhere
+COMMENT_LINE $06BC bpl      sync                         ; if still positive it is a 1 pr 2 _> goto sync
+COMMENT_LINE $06BC ; now we should draw a vector
+COMMENT_LINE $06BC ldd      ,u++                         ;Get next coordinate pair
+COMMENT_LINE $06BC STA      <VIA_port_a                  ;Send Y to A/D
+COMMENT_LINE $06BC CLR      <VIA_port_b                  ;Enable mux
+COMMENT_LINE $06BC LDA      #$ff                         ;Get pattern byte
+COMMENT_LINE $06BC INC      <VIA_port_b                  ;Disable mux
+COMMENT_LINE $06BC STB      <VIA_port_a                  ;Send X to A/D
+COMMENT_LINE $06BC LDB      #$40                         ;B-reg = T1 interrupt bit
+COMMENT_LINE $06BC CLR      <VIA_t1_cnt_hi               ;Clear T1H
+COMMENT_LINE $06BC STA      <VIA_shift_reg               ;Store pattern in shift register
+COMMENT_LINE $06BC setPatternLoop:
+COMMENT_LINE $06BC BITB     <VIA_int_flags               ;Wait for T1 to time out
+COMMENT_LINE $06BC beq      setPatternLoop               ; wait till line is finished
+COMMENT_LINE $06BC CLR      <VIA_shift_reg               ; switch the light off (for sure)
+COMMENT_LINE $06BC bra      nextListEntry
+COMMENT_LINE $06BC drawdone:
+COMMENT_LINE $06BC puls     d                            ; correct stack and go back
+COMMENT_LINE $06BC rts
+COMMENT_LINE $06BC ;***************************************************************************
+COMMENT_LINE $06BC ; DATA SECTION
+COMMENT_LINE $06BC ;***************************************************************************
+COMMENT_LINE $06BC vData               =        Tank
+COMMENT_LINE $06BC Tank:
+COMMENT_LINE $06BC fcb      +1, +8, -10                  ; sync and move to y, x
+COMMENT_LINE $06BC fcb      -1, +0, +21                  ; draw, y, x
+COMMENT_LINE $06BC fcb      -1, -4, +0                   ; draw, y, x
+COMMENT_LINE $06BC fcb      -1, +0, -9                   ; draw, y, x
+COMMENT_LINE $06BC fcb      -1, -3, +0                   ; draw, y, x
+COMMENT_LINE $06BC fcb      -1, +0, +9                   ; draw, y, x
+COMMENT_LINE $06BC fcb      -1, -2, +0                   ; draw, y, x
+COMMENT_LINE $06BC fcb      -1, +0, -9                   ; draw, y, x
+COMMENT_LINE $06BC fcb      -1, -3, +0                   ; draw, y, x
+COMMENT_LINE $06BC fcb      -1, +0, +9                   ; draw, y, x
+COMMENT_LINE $06BC fcb      -1, -4, +0                   ; draw, y, x
+COMMENT_LINE $06BC fcb      +1, -8, +11                  ; sync and move to y, x
+COMMENT_LINE $06BC fcb      -1, +0, -21                  ; draw, y, x
+COMMENT_LINE $06BC fcb      -1, +5, +0                   ; draw, y, x
+COMMENT_LINE $06BC fcb      -1, +0, +2                   ; draw, y, x
+COMMENT_LINE $06BC fcb      -1, +2, +0                   ; draw, y, x
+COMMENT_LINE $06BC fcb      -1, +0, -2                   ; draw, y, x
+COMMENT_LINE $06BC fcb      -1, +2, +0                   ; draw, y, x
+COMMENT_LINE $06BC fcb      -1, +0, +2                   ; draw, y, x
+COMMENT_LINE $06BC fcb      -1, +2, +0                   ; draw, y, x
+COMMENT_LINE $06BC fcb      -1, +0, -2                   ; draw, y, x
+COMMENT_LINE $06BC fcb      -1, +5, +0                   ; draw, y, x
+COMMENT_LINE $06BC fcb      +2                           ; endmarker
+RANGE $0000-$000B CHAR_DATA 11
+RANGE $000B-$000D DW_DATA 1
+RANGE $000D-$0011 DB_DATA 4
+RANGE $0011-$0019 CHAR_DATA 8
+RANGE $0019-$001A DB_DATA 1
+RANGE $001A-$0119 CODE
+RANGE $011A-$04ED CODE
+RANGE $04ED-$04EE DB_DATA 1
+RANGE $04EE-$04F0 DB_DATA 2
+RANGE $04F0-$04F2 DB_DATA 2
+RANGE $04F2-$04F4 DB_DATA 2
+RANGE $04F4-$04F6 DB_DATA 2
+RANGE $04F6-$04F8 DB_DATA 2
+RANGE $04F8-$04FA DB_DATA 2
+RANGE $04FA-$04FB DB_DATA 1
+RANGE $04FB-$04FD DB_DATA 2
+RANGE $04FD-$04FF DB_DATA 2
+RANGE $04FF-$0501 DB_DATA 2
+RANGE $0501-$0503 DB_DATA 2
+RANGE $0503-$0504 DB_DATA 1
+RANGE $0504-$0506 DB_DATA 2
+RANGE $0506-$0508 DB_DATA 2
+RANGE $0508-$050A DB_DATA 2
+RANGE $050A-$050C DB_DATA 2
+RANGE $050C-$050E DB_DATA 2
+RANGE $050E-$0510 DB_DATA 2
+RANGE $0510-$0512 DB_DATA 2
+RANGE $0512-$0514 DB_DATA 2
+RANGE $0514-$0516 DB_DATA 2
+RANGE $0516-$0517 DB_DATA 1
+RANGE $0517-$0519 DB_DATA 2
+RANGE $0519-$051B DB_DATA 2
+RANGE $051B-$051D DB_DATA 2
+RANGE $051D-$051F DB_DATA 2
+RANGE $051F-$0521 DB_DATA 2
+RANGE $0521-$0523 DB_DATA 2
+RANGE $0523-$0525 DB_DATA 2
+RANGE $0525-$0527 DB_DATA 2
+RANGE $0527-$0529 DB_DATA 2
+RANGE $0529-$052C DB_DATA 3
+RANGE $052C-$052F DB_DATA 3
+RANGE $052F-$0532 DB_DATA 3
+RANGE $0532-$0535 DB_DATA 3
+RANGE $0535-$0538 DB_DATA 3
+RANGE $0538-$0539 DB_DATA 1
+RANGE $0539-$053A DB_DATA 1
+RANGE $053A-$053C DB_DATA 2
+RANGE $053C-$053E DB_DATA 2
+RANGE $053E-$0540 DB_DATA 2
+RANGE $0540-$0542 DB_DATA 2
+RANGE $0542-$0545 DB_DATA 3
+RANGE $0545-$0548 DB_DATA 3
+RANGE $0548-$054B DB_DATA 3
+RANGE $054B-$054E DB_DATA 3
+RANGE $054E-$0551 DB_DATA 3
+RANGE $0551-$0552 DB_DATA 1
+RANGE $0552-$0555 DB_DATA 3
+RANGE $0555-$0558 DB_DATA 3
+RANGE $0558-$055B DB_DATA 3
+RANGE $055B-$055E DB_DATA 3
+RANGE $055E-$0561 DB_DATA 3
+RANGE $0561-$0562 DB_DATA 1
+RANGE $0562-$0565 DB_DATA 3
+RANGE $0565-$0568 DB_DATA 3
+RANGE $0568-$056B DB_DATA 3
+RANGE $056B-$056E DB_DATA 3
+RANGE $056E-$0571 DB_DATA 3
+RANGE $0571-$0572 DB_DATA 1
+RANGE $0572-$0575 DB_DATA 3
+RANGE $0575-$0578 DB_DATA 3
+RANGE $0578-$057B DB_DATA 3
+RANGE $057B-$057E DB_DATA 3
+RANGE $057E-$0581 DB_DATA 3
+RANGE $0581-$0582 DB_DATA 1
+RANGE $0582-$0585 DB_DATA 3
+RANGE $0585-$0588 DB_DATA 3
+RANGE $0588-$058B DB_DATA 3
+RANGE $058B-$058E DB_DATA 3
+RANGE $058E-$0591 DB_DATA 3
+RANGE $0591-$0594 DB_DATA 3
+RANGE $0594-$0597 DB_DATA 3
+RANGE $0597-$059A DB_DATA 3
+RANGE $059A-$059D DB_DATA 3
+RANGE $059D-$059E DB_DATA 1
+RANGE $059E-$05A1 DB_DATA 3
+RANGE $05A1-$05A4 DB_DATA 3
+RANGE $05A4-$05A7 DB_DATA 3
+RANGE $05A7-$05AA DB_DATA 3
+RANGE $05AA-$05AB DB_DATA 1
+RANGE $05AB-$05AE DB_DATA 3
+RANGE $05AE-$05B1 DB_DATA 3
+RANGE $05B1-$05B4 DB_DATA 3
+RANGE $05B4-$05B7 DB_DATA 3
+RANGE $05B7-$05B8 DB_DATA 1
+RANGE $05B8-$05BB DB_DATA 3
+RANGE $05BB-$05BE DB_DATA 3
+RANGE $05BE-$05C1 DB_DATA 3
+RANGE $05C1-$05C4 DB_DATA 3
+RANGE $05C4-$05C7 DB_DATA 3
+RANGE $05C7-$05CA DB_DATA 3
+RANGE $05CA-$05CD DB_DATA 3
+RANGE $05CD-$05D0 DB_DATA 3
+RANGE $05D0-$05D1 DB_DATA 1
+RANGE $05D1-$05D4 DB_DATA 3
+RANGE $05D4-$05D7 DB_DATA 3
+RANGE $05D7-$05DA DB_DATA 3
+RANGE $05DA-$05DD DB_DATA 3
+RANGE $05DD-$05E0 DB_DATA 3
+RANGE $05E0-$05E3 DB_DATA 3
+RANGE $05E3-$05E6 DB_DATA 3
+RANGE $05E6-$05E9 DB_DATA 3
+RANGE $05E9-$05EC DB_DATA 3
+RANGE $05EC-$05EF DB_DATA 3
+RANGE $05EF-$05F2 DB_DATA 3
+RANGE $05F2-$05F5 DB_DATA 3
+RANGE $05F5-$05F8 DB_DATA 3
+RANGE $05F8-$05FB DB_DATA 3
+RANGE $05FB-$05FE DB_DATA 3
+RANGE $05FE-$0601 DB_DATA 3
+RANGE $0601-$0604 DB_DATA 3
+RANGE $0604-$0607 DB_DATA 3
+RANGE $0607-$060A DB_DATA 3
+RANGE $060A-$060D DB_DATA 3
+RANGE $060D-$0610 DB_DATA 3
+RANGE $0610-$0611 DB_DATA 1
+RANGE $0611-$0618 DB_DATA 7
+RANGE $0618-$0626 DW_DATA 7
+RANGE $0626-$0634 DW_DATA 7
+RANGE $0634-$0642 DW_DATA 7
+RANGE $0642-$0650 DW_DATA 7
+RANGE $0650-$065E DW_DATA 7
+RANGE $065E-$066C DW_DATA 7
+RANGE $066C-$0676 DW_DATA 5
+RANGE $0676-$0686 DW_DATA 8
+RANGE $0686-$0688 DW_DATA 1
+RANGE $0688-$068C DW_DATA 2
+RANGE $068C-$0690 DW_DATA 2
+RANGE $0690-$0694 DW_DATA 2
+RANGE $0694-$0696 DW_DATA 1
+RANGE $0696-$0698 DW_DATA 1
+RANGE $0698-$069C DW_DATA 2
+RANGE $069C-$06BC CHAR_DATA 32
+
