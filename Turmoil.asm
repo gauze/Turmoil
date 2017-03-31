@@ -63,14 +63,25 @@ bullet_count        equ      alley6x+1                    ; 1 byte
 ships_left          equ      bullet_count+1               ; 1 byte 
 bulletYtemp         equ      ships_left+1 
 Ship_Dead           equ      bulletYtemp+1 
-temp                equ      Ship_Dead+1 
+temp                equ      Ship_Dead+1                  ; 2 bytes temp 
+framecnt            equ      temp+2 
+; variables to hold which frame for each shape enemy
+; Arrow_t, Bow_t, Dash, Wedge_t, Ghost_t, Prize_t ;, CannonBall ;, Tank
+Arrow_f             equ      framecnt+1 
+Bow_f               equ      Arrow_f+1 
+Dash_f              equ      Bow_f+1 
+Wedge_f             equ      Dash_f+1 
+Ghost_f             equ      Wedge_f+1 
+Prize_f             equ      Ghost_f+1 
+Cannonball_f        equ      Prize_f+1 
+Tank_f              equ      Cannonball_f+1 
 ; CONSTANTS place after VARIABLES
 ALLEYWIDTH          equ      17 
 LEFT                equ      0 
 RIGHT               equ      1 
-FALSE               equ      0 
-TRUE                equ      1 
-MOVEAMOUNT          equ      8 
+;FALSE               equ      0 
+;TRUE                equ      1 
+MOVEAMOUNT          equ      8                            ; how many 'pixels per frame' FIX 
 ;***************************************************************************
 ; HEADER SECTION
 ;***************************************************************************
@@ -172,13 +183,55 @@ ships_left_loop
                     dec      temp 
                     bne      ships_left_loop 
 ; end score+ship count
-
 ;;;; DRAW VARIOUS STUFF TEST ZONE
-                    lda      #60 
-                    ldb      #-80    
+                    RESET0REF  
+                    ldx      #bulletYpos_t 
+                    lda      #6 
+                    lda      a,x                          ; Y 
+                    ldb      #-80                         ; X 
                     MOVETO_D  
-                    ldx      #Wedge_L                      ; 
-                    jsr      Draw_VL_mode  
+                    lda      framecnt 
+                    cmpa     #50 
+                    bgt      bowl 
+                    ldx      #Prize_1                     ; animation Primitive, switch every 100 frames 
+                    bra      dobowdraw 
+
+bowl 
+                    ldx      #Prize_2 
+dobowdraw 
+                    jsr      Draw_VL_mode 
+                    RESET0REF  
+                    ldx      #bulletYpos_t 
+                    lda      #0 
+                    lda      a,x                          ; Y 
+                                                          ; clra 
+                                                          ; clrb ; X 
+                    ldb      #-80 
+                    MOVETO_D  
+                    ldx      #Wedge_L                     ; 
+                    jsr      Draw_VL_mode
+ 
+; increment then Test frame counter
+; add more logic to set/increment SHAPE_f counters for desired animations
+; lda #10 
+; cmpa Arrow_f
+; bne label
+; inc Arrow_f
+; bra donearrowf
+; label:
+; clr Arrow_f
+; donearrowf 
+; PSEUDOCODE ABOVE
+                    lda      #100                         ; frame count 100=2 seconds (at full speed) 0-99 == 100
+                    inc      framecnt 
+                    cmpa     framecnt 
+                    bne      nocntreset 
+                    clr      framecnt 
+nocntreset 
+
+
+
+
                     jmp      main                         ; and repeat forever 
 
 ;###########################################################################
@@ -197,7 +250,7 @@ setup:                                                    ;        setting up ha
                     jsr      Clear_Score 
                     ldx      #score 
                     jsr      Clear_Score 
-                    lda      #0                           ; clear first byte of bullets to destroy 
+                    lda      #0                           ; set a bunch of variables to 0
                     sta      bullet0e 
                     sta      bullet1e 
                     sta      bullet2e 
@@ -219,7 +272,16 @@ setup:                                                    ;        setting up ha
                     sta      bullet4x 
                     sta      bullet5x 
                     sta      bullet6x 
-                    rts                                   ; return from function 
+                    sta      framecnt 
+                    sta      Arrow_f 
+                    sta      Bow_f 
+                    sta      Dash_f 
+                    sta      Wedge_f 
+                    sta      Ghost_f 
+                    sta      Prize_f 
+                    sta      Cannonball_f 
+                    sta      Tank_f 
+                    rts                                    
 
 move_bullets: 
                     lda      #127 
