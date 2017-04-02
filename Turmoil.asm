@@ -64,10 +64,9 @@ ships_left          equ      bullet_count+1               ; 1 byte
 bulletYtemp         equ      ships_left+1 
 Ship_Dead           equ      bulletYtemp+1 
 temp                equ      Ship_Dead+1                  ; 2 bytes temp 
-framecnt            equ      temp+2 
 ; variables to hold which frame for each shape enemy
 ; Arrow_t, Bow_t, Dash, Wedge_t, Ghost_t, Prize_t ;, CannonBall ;, Tank
-Arrow_f             equ      framecnt+1 
+Arrow_f             equ      temp+2 
 Bow_f               equ      Arrow_f+1 
 Dash_f              equ      Bow_f+1 
 Wedge_f             equ      Dash_f+1 
@@ -75,6 +74,15 @@ Ghost_f             equ      Wedge_f+1
 Prize_f             equ      Ghost_f+1 
 Cannonball_f        equ      Prize_f+1 
 Tank_f              equ      Cannonball_f+1 
+; frame counts for animations
+frm100cnt           equ      Tank_f+1 
+frm50cnt            equ      frm100cnt+1 
+frm25cnt            equ      frm50cnt+1 
+frm20cnt            equ      frm25cnt+1 
+frm10cnt            equ      frm20cnt+1 
+frm5cnt             equ      frm10cnt+1 
+frm2cnt             equ      frm5cnt+1 
+;
 ; CONSTANTS place after VARIABLES
 ALLEYWIDTH          equ      17 
 LEFT                equ      0 
@@ -125,9 +133,8 @@ main:
                     MOVETO_D  
                     ldx      #Full_Wall_nomode 
                     DRAW_VLC                              ;jsr Draw_VLc 
-                    jmp      no_walls 
-
-no_walls: 
+;                    jmp      no_walls 
+;no_walls: 
 ; top wall
                     RESET0REF  
                     lda      #60 
@@ -191,13 +198,18 @@ ships_left_loop
                     ldb      #-80                         ; X 
                     MOVETO_D  
                     lda      framecnt 
-                    cmpa     #50 
+                    cmpa     #25 
                     bgt      bowl 
-                    ldx      #Prize_1                     ; animation Primitive, switch every 100 frames 
+                    ldx      #Prize_t 
+                    lda      #0 
+                    ldx      a,x 
+                                                          ; ldx #Prize_1 ; animation Primitive, switch every 100 frames 
                     bra      dobowdraw 
 
 bowl 
-                    ldx      #Prize_2 
+                    ldx      #Prize_t 
+                    lda      #2 
+                    ldx      a,x 
 dobowdraw 
                     jsr      Draw_VL_mode 
                     RESET0REF  
@@ -209,10 +221,10 @@ dobowdraw
                     ldb      #-80 
                     MOVETO_D  
                     ldx      #Wedge_L                     ; 
-                    jsr      Draw_VL_mode
- 
+                    jsr      Draw_VL_mode 
 ; increment then Test frame counter
 ; add more logic to set/increment SHAPE_f counters for desired animations
+; ANIMATION PSEUDOCODE
 ; lda #10 
 ; cmpa Arrow_f
 ; bne label
@@ -222,16 +234,48 @@ dobowdraw
 ; clr Arrow_f
 ; donearrowf 
 ; PSEUDOCODE ABOVE
-                    lda      #100                         ; frame count 100=2 seconds (at full speed) 0-99 == 100
-                    inc      framecnt 
-                    cmpa     framecnt 
-                    bne      nocntreset 
-                    clr      framecnt 
-nocntreset 
+                    lda      #5 
+                    inc      frm5cnt 
+                    cmpa     frm5cnt 
+                    bne      no100cntreset 
+                    clr      frm5cnt 
 
+                    lda      #10 
+                    inc      frm10cnt 
+                    cmpa     frm10cnt 
+                    bne      no10cntreset 
+                    clr      frm10cnt
+no10cntreset
 
+                    lda      #20
+                    inc      frm20cnt
+                    cmpa     frm20cnt
+                    bne      no20cntreset
+                    clr      frm20cnt 
+no20cntreset
 
+                    lda      #25 
+                    inc      frm25cnt 
+                    cmpa     frm25cnt 
+                    bne      no25cntreset 
+                    clr      frm25cnt
+no25cntreset
 
+                    lda      #50 
+                    inc      frm50cnt 
+                    cmpa     frm50cnt 
+                    bne      no50cntreset 
+                    clr      frm50cnt
+no50cntreset
+
+                    lda      #100                         ; frame count 100=2 seconds (at full speed) 0-99 == 100 
+                                                          ; frame freq 1, 2, 4, 5, 10, 20, 25,50, 100 
+                                                          ; frame len .02, .04, .08, .1, .2, .4, .5, 1, 2 
+                    inc      frm100cnt 
+                    cmpa     frm100cnt 
+                    bne      no100cntreset 
+                    clr      frm100cnt 
+no100cntreset 
                     jmp      main                         ; and repeat forever 
 
 ;###########################################################################
@@ -250,7 +294,7 @@ setup:                                                    ;        setting up ha
                     jsr      Clear_Score 
                     ldx      #score 
                     jsr      Clear_Score 
-                    lda      #0                           ; set a bunch of variables to 0
+                    lda      #0                           ; set a bunch of variables to 0 
                     sta      bullet0e 
                     sta      bullet1e 
                     sta      bullet2e 
@@ -281,7 +325,7 @@ setup:                                                    ;        setting up ha
                     sta      Prize_f 
                     sta      Cannonball_f 
                     sta      Tank_f 
-                    rts                                    
+                    rts      
 
 move_bullets: 
                     lda      #127 
@@ -377,7 +421,7 @@ next_bullet
                     lda      bullet_count 
                     cmpa     #7 
                     beq      bullets_done 
-                    bra      bstart 
+                    jmp      bstart 
 
 bullets_done 
                     lda      #$05 
