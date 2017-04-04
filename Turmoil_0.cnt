@@ -1,4 +1,5 @@
 BANK 0
+EQU $00 
 LABEL $C800 Vec_Snd_Shadow
 COMMENT_LABEL $C800 Shadow of sound chip registers (15 bytes)
 LABEL $C80F Vec_Btn_State
@@ -380,85 +381,143 @@ LABEL $FF7A musicc
 LABEL $FF8F musicd
 LABEL $F9F4 Char_Table
 LABEL $FBD4 Char_Table_End
-LABEL $C880 score
-COMMENT_LABEL $C880 7 bytes
-LABEL $C887 highscore
-COMMENT_LABEL $C887 7 bytes
-LABEL $C88E shipdir
-COMMENT_LABEL $C88E 1 byte
-LABEL $C88F shippos
-LABEL $C890 shipXpos
-LABEL $C891 in_alley
+LABEL $0000 Full_Wall_nomode
+LABEL $000D Half_Wall
+LABEL $0016 ShipR_nomode
+LABEL $0029 ShipL_nomode
+LABEL $003C Shot
+EQU $4C Ship_Marker
+EQU $55 Arrow_R
+EQU $65 Arrow_L
+EQU $75 Bow_1
+LABEL $0085 Bow_2
+LABEL $0095 Dash
+LABEL $00B1 Wedge_R
+LABEL $00BE Wedge_L
+LABEL $00CB Ghost
+LABEL $00E4 Tank_R
+LABEL $00E4 Tank_L
+LABEL $00E4 Tank_doh
+LABEL $0124 Prize_1
+LABEL $0134 Prize_2
+LABEL $0144 Cannonball
+LABEL $0145 Explode_0
+LABEL $0158 Explode_1
+LABEL $016B Explode_2
+LABEL $017E Explode_3
+LABEL $0191 Explode_4
+LABEL $01A4 Explode_5
+LABEL $01B7 Explode_6
+LABEL $01CA Explode_7
+LABEL $01DD Explode_8
+LABEL $01F0 Explode_9
+LABEL $0203 Explode_10
+LABEL $0216 bulletYpos_t
+LABEL $021D bullete_t
 LABEL $C892 bullet0e
 LABEL $C893 bullet1e
-COMMENT_LABEL $C893 shit Exists in alley
 LABEL $C894 bullet2e
 LABEL $C895 bullet3e
 LABEL $C896 bullet4e
 LABEL $C897 bullet5e
 LABEL $C898 bullet6e
+LABEL $022B bulletd_t
 LABEL $C899 bullet0d
 LABEL $C89A bullet1d
-COMMENT_LABEL $C89A travel direction
 LABEL $C89B bullet2d
 LABEL $C89C bullet3d
 LABEL $C89D bullet4d
 LABEL $C89E bullet5d
 LABEL $C89F bullet6d
+LABEL $0239 bulletx_t
 LABEL $C8A0 bullet0x
 LABEL $C8A1 bullet1x
-COMMENT_LABEL $C8A1 location on X axis
 LABEL $C8A2 bullet2x
 LABEL $C8A3 bullet3x
 LABEL $C8A4 bullet4x
 LABEL $C8A5 bullet5x
 LABEL $C8A6 bullet6x
+LABEL $0247 alleye_t
 LABEL $C8A7 alley0e
-COMMENT_LABEL $C8A7 is there a monster in the alley? (Exists?)
 LABEL $C8A8 alley1e
 LABEL $C8A9 alley2e
 LABEL $C8AA alley3e
 LABEL $C8AB alley4e
 LABEL $C8AC alley5e
 LABEL $C8AD alley6e
+LABEL $0255 alleyd_t
 LABEL $C8AE alley0d
-COMMENT_LABEL $C8AE which way is the monster moving?
 LABEL $C8AF alley1d
 LABEL $C8B0 alley2d
 LABEL $C8B1 alley3d
 LABEL $C8B2 alley4d
 LABEL $C8B3 alley5d
 LABEL $C8B4 alley6d
+LABEL $0263 alleyx_t
 LABEL $C8B5 alley0x
-COMMENT_LABEL $C8B5 where monster is on x axis
 LABEL $C8B6 alley1x
 LABEL $C8B7 alley2x
 LABEL $C8B8 alley3x
 LABEL $C8B9 alley4x
 LABEL $C8BA alley5x
 LABEL $C8BB alley6x
+LABEL $0271 enemy_speed_t
+LABEL $0281 enemy_stuff_t
+LABEL $0283 Arrow_D
+LABEL $0299 Arrow_L_t
+LABEL $029B Arrow_R_t
+LABEL $0287 Bow_D
+LABEL $029D Bow_t
+LABEL $0289 Dash_D
+LABEL $02A1 Dash_t
+LABEL $028B Explode_D
+LABEL $02A3 Explode_t
+LABEL $028D Ghost_D
+LABEL $02B7 Ghost_t
+LABEL $028F Prize_D
+LABEL $02BD Prize_t
+LABEL $0291 Tank_D
+LABEL $02B9 Tank_L_t
+LABEL $02BB Tank_R_t
+LABEL $0295 Wedge_D
+LABEL $02C1 Wedge_L_t
+LABEL $02C3 Wedge_R_t
+LABEL $02C5 credits
+LABEL $C880 score
+LABEL $C887 highscore
+LABEL $C88E shipdir
+LABEL $C88F shippos
+LABEL $C890 shipXpos
+LABEL $C891 in_alley
 LABEL $C8BC bullet_count
-COMMENT_LABEL $C8BC 1 byte
 LABEL $C8BD ships_left
-COMMENT_LABEL $C8BD 1 byte
 LABEL $C8BE bulletYtemp
 LABEL $C8BF Ship_Dead
-LABEL $C8C0 temp
-COMMENT_LABEL $C8C0 2 bytes temp
-LABEL $C8C2 framecnt
-LABEL $C8C3 Arrow_f
-LABEL $C8C4 Bow_f
-LABEL $C8C5 Dash_f
-LABEL $C8C6 Wedge_f
-LABEL $C8C7 Ghost_f
-LABEL $C8C8 Prize_f
-LABEL $C8C9 Cannonball_f
-LABEL $C8CA Tank_f
+LABEL $C8C0 Arrow_f
+LABEL $C8C1 Bow_f
+LABEL $C8C2 Dash_f
+LABEL $C8C3 Wedge_f
+LABEL $C8C4 Ghost_f
+LABEL $C8C5 Prize_f
+LABEL $C8C6 Cannonball_f
+LABEL $C8C7 Tank_f
+LABEL $C8C8 Explode_f
+LABEL $C8C9 frm100cnt
+LABEL $C8CA frm50cnt
+LABEL $C8CB frm25cnt
+LABEL $C8CC frm20cnt
+LABEL $C8CD frm10cnt
+LABEL $C8CE frm5cnt
+LABEL $C8CF frm2cnt
+LABEL $C8D0 temp
+LABEL $C8D1 rottemp
 EQU $11 ALLEYWIDTH
+EQU $00 LEFT
+EQU $01 RIGHT
 EQU $08 MOVEAMOUNT
-COMMENT_LABEL $08 how many 'pixels per frame' FIX
-LABEL $0413 setup
-COMMENT_LABEL $0413 setting up hardware, resetting scores, once per boot
+COMMENT_LABEL $08 how many 'pixels per frame' TOD/FIX/something
+LABEL $046F setup
+COMMENT_LABEL $046F setting up hardware, resetting scores, once per boot
 EQU $1D start
 LABEL $0038 main
 LABEL $005E jsdoneY
@@ -477,112 +536,77 @@ LABEL $00DC MLF33B3
 LABEL $00DE MLF33D3
 LABEL $00E2 MLF3413
 LABEL $00EB moveto_d_done3
-LABEL $0599 Full_Wall_nomode
 LABEL $00F0 Draw_VLa4
 LABEL $010A LF3F44
-LABEL $011A no_walls
-LABEL $013A MLF3186
-LABEL $0168 MLF3456
-LABEL $015D MLF33B6
-LABEL $015F MLF33D6
-LABEL $0163 MLF3416
-LABEL $016C moveto_d_done6
-LABEL $0171 Draw_VLa7
-LABEL $018B LF3F47
-LABEL $06DE bulletYpos_t
-LABEL $01C2 donuthin1
-LABEL $01CB MLF3189
-LABEL $01F9 MLF3459
-LABEL $01EE MLF33B9
-LABEL $01F0 MLF33D9
-LABEL $01F4 MLF3419
-LABEL $01FD moveto_d_done9
-LABEL $05C2 ShipL_nomode
-LABEL $0208 donuthin2
-LABEL $05AF ShipR_nomode
-LABEL $020A Draw_VLa10
-LABEL $0224 LF3F410
-LABEL $023E toad
-LABEL $027A no_press
-LABEL $06E5 bullete_t
-LABEL $027A already_exists
-LABEL $06F3 bulletd_t
-LABEL $0701 bulletx_t
-LABEL $0276 negstart
-LABEL $027A newshotdone
-LABEL $048E move_bullets
-LABEL $04E8 draw_bullets
-LABEL $02D4 MLF31815
-LABEL $0302 MLF34515
-LABEL $02F7 MLF33B15
-LABEL $02F9 MLF33D15
-LABEL $02FD MLF34115
-LABEL $0306 moveto_d_done15
-LABEL $030C ships_left_loop
-LABEL $05E5 Ship_Marker
-LABEL $0311 Draw_VLa16
-LABEL $032B LF3F416
-LABEL $0362 MLF31818
-LABEL $0390 MLF34518
-LABEL $0385 MLF33B18
-LABEL $0387 MLF33D18
-LABEL $038B MLF34118
-LABEL $0394 moveto_d_done18
-LABEL $03A0 bowl
-LABEL $06BD Prize_1
-LABEL $03A3 dobowdraw
-LABEL $06CD Prize_2
-LABEL $03CB MLF31820
-LABEL $03F9 MLF34520
-LABEL $03EE MLF33B20
-LABEL $03F0 MLF33D20
-LABEL $03F4 MLF34120
-LABEL $03FD moveto_d_done20
-LABEL $0657 Wedge_L
-LABEL $0410 nocntreset
-LABEL $0497 move_start
-LABEL $04DB next_bullet2
-LABEL $04D5 moving_left
-LABEL $04B9 destroy_bullet
-LABEL $04E7 bullets_done2
-LABEL $04F2 bstart
-LABEL $0572 next_bullet
-LABEL $0534 MLF31822
-LABEL $0562 MLF34522
-LABEL $0557 MLF33B22
-LABEL $0559 MLF33D22
-LABEL $055D MLF34122
-LABEL $0566 moveto_d_done22
-LABEL $056D dwellcnt
-LABEL $057F bullets_done
-LABEL $05A6 Half_Wall
-LABEL $05D5 Shot
-LABEL $05EE Arrow_R
-LABEL $05FE Arrow_L
-LABEL $060E Bow_1
-LABEL $061E Bow_2
-LABEL $062E Dash
-LABEL $064A Wedge_R
-LABEL $0664 Ghost
-LABEL $067D Tank_R
-LABEL $067D Tank_L
-LABEL $067D Tank_doh
-LABEL $06DD Cannonball
-LABEL $070F alleye_t
-LABEL $071D alleyd_t
-LABEL $072B alleyx_t
-LABEL $0739 enemy_t
-LABEL $075B Arrow_t
-LABEL $0757 Bow_t
-LABEL $075F Wedge_t
-LABEL $0763 Ghost_t
-LABEL $076B Prize_t
-LABEL $0745 enemy_speed_t
-LABEL $0755 enemy_stuff_t
-LABEL $0765 Dash_t
-LABEL $0767 Tank_t
-LABEL $076F credits
-LABEL $078C *
+LABEL $0137 MLF3186
+LABEL $0165 MLF3456
+LABEL $015A MLF33B6
+LABEL $015C MLF33D6
+LABEL $0160 MLF3416
+LABEL $0169 moveto_d_done6
+LABEL $016E Draw_VLa7
+LABEL $0188 LF3F47
+LABEL $01BF donuthin1
+LABEL $01C8 MLF3189
+LABEL $01F6 MLF3459
+LABEL $01EB MLF33B9
+LABEL $01ED MLF33D9
+LABEL $01F1 MLF3419
+LABEL $01FA moveto_d_done9
+LABEL $0205 donuthin2
+LABEL $0207 Draw_VLa10
+LABEL $0221 LF3F410
+LABEL $023B toad
+LABEL $0277 no_press
+LABEL $0277 already_exists
+LABEL $0273 negstart
+LABEL $0277 newshotdone
+LABEL $04F9 move_bullets
+LABEL $0553 draw_bullets
+LABEL $02D1 MLF31815
+LABEL $02FF MLF34515
+LABEL $02F4 MLF33B15
+LABEL $02F6 MLF33D15
+LABEL $02FA MLF34115
+LABEL $0303 moveto_d_done15
+LABEL $0309 ships_left_loop
+LABEL $030E Draw_VLa16
+LABEL $0328 LF3F416
+LABEL $035F MLF31818
+LABEL $038D MLF34518
+LABEL $0382 MLF33B18
+LABEL $0384 MLF33D18
+LABEL $0388 MLF34118
+LABEL $0391 moveto_d_done18
+LABEL $03A1 bowl
+LABEL $03A8 dobowdraw
+LABEL $03D0 MLF31820
+LABEL $03FE MLF34520
+LABEL $03F3 MLF33B20
+LABEL $03F5 MLF33D20
+LABEL $03F9 MLF34120
+LABEL $0402 moveto_d_done20
+LABEL $046C no100cntreset
+LABEL $0428 no10cntreset
+LABEL $0435 no20cntreset
+LABEL $0442 no25cntreset
+LABEL $0452 no50cntreset
+LABEL $0502 move_start
+LABEL $0546 next_bullet2
+LABEL $0540 moving_left
+LABEL $0524 destroy_bullet
+LABEL $0552 bullets_done2
+LABEL $055D bstart
+LABEL $05DD next_bullet
+LABEL $059F MLF31822
+LABEL $05CD MLF34522
+LABEL $05C2 MLF33B22
+LABEL $05C4 MLF33D22
+LABEL $05C8 MLF34122
+LABEL $05D1 moveto_d_done22
+LABEL $05D8 dwellcnt
+LABEL $05EA bullets_done
+LABEL $0604 *
 COMMENT_LINE $0000 ***************************************************************************
 COMMENT_LINE $0000 DEFINE SECTION
 COMMENT_LINE $0000 ***************************************************************************
@@ -649,10 +673,60 @@ COMMENT_LINE $0000 5 timer 2 interrupt enable
 COMMENT_LINE $0000 6 timer 1 interrupt enable
 COMMENT_LINE $0000 7 IER set/clear control
 COMMENT_LINE $0000 endif
-COMMENT_LINE $0000 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-COMMENT_LINE $0000 vim: ts=4
-COMMENT_LINE $0000 vim: syntax=asm6809
-COMMENT_LINE $0000 MACROS
+COMMENT_LINE $0000 ***************************************************************************
+COMMENT_LINE $0000 DATA SECTION
+COMMENT_LINE $0000 ***************************************************************************
+COMMENT $0000 lda #5 ; sta $C823 ; vector count
+COMMENT $000D lda #3 ; sta $C823
+COMMENT_LINE $0016 SHIP
+COMMENT $0016 fcb 0, +8, -12
+COMMENT $0029 fcb 0, +8, +12
+COMMENT_LINE $004C number of guys left
+COMMENT_LINE $0055 Enemy list
+COMMENT $00CE TOP
+COMMENT $00D7 GAP
+COMMENT $00DA Bottom
+COMMENT $00E4 sync and move to y, x
+COMMENT $00E7 draw, y, x
+COMMENT $00EA draw, y, x
+COMMENT $00ED draw, y, x
+COMMENT $00F0 draw, y, x
+COMMENT $00F3 draw, y, x
+COMMENT $00F6 draw, y, x
+COMMENT $00F9 draw, y, x
+COMMENT $00FC draw, y, x
+COMMENT $00FF draw, y, x
+COMMENT $0102 draw, y, x
+COMMENT_LINE $0105 fcb 0, -8, +11 ; sync and move to y, x
+COMMENT $0105 draw, y, x
+COMMENT $0108 draw, y, x
+COMMENT $010B draw, y, x
+COMMENT $010E draw, y, x
+COMMENT $0111 draw, y, x
+COMMENT $0114 draw, y, x
+COMMENT $0117 draw, y, x
+COMMENT $011A draw, y, x
+COMMENT $011D draw, y, x
+COMMENT $0120 draw, y, x
+COMMENT $0123 endmarker
+COMMENT_LINE $0216 TABLES
+COMMENT_LINE $0216 shippos_t:          fcb      -3*ALLEYWIDTH,-2*ALLEYWIDTH,-1*ALLEYWIDTH,0,1*ALLEYWIDTH,2*ALLEYWIDTH,3*ALLEYWIDTH ; Y pos of ship
+COMMENT $0216 Y pos of bullet/ship/enemy per alley
+COMMENT $021D exists TRUE/FALSE
+COMMENT $022B direction left/right
+COMMENT $0239 X position
+COMMENT_LINE $0271 enemy_t:            fdb      Arrow_t, Bow_t, Dash, Wedge_t, Ghost_t, Prize_t ;, CannonBall ;, Tank
+COMMENT $0271 example TODO
+COMMENT_LINE $0283 Enemy direction table, single entry means same graphics both ways
+COMMENT_LINE $0299 Animation tables counts must be mod 100 == 0 ie 1,2,4,5,10,20,25,50,100
+COMMENT $029D flippy 90 degree animation (2 frames)
+COMMENT $02A1 same, no animation (100 frames)
+COMMENT $02B7 same, no animation (100 frames)
+COMMENT $02BD big/small animation (10 frames)
+COMMENT_LINE $02E3 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+COMMENT_LINE $02E3 vim: ts=4
+COMMENT_LINE $02E3 vim: syntax=asm6809
+COMMENT_LINE $02E3 MACROS
 COMMENT_LINE $0000 adding bullet to alley if no other bullet is already there
 COMMENT $0000 set EXIST
 COMMENT_LINE $0000 left(0) or right(1)?
@@ -724,15 +798,28 @@ COMMENT_LINE $0000 *************************************************************
 COMMENT_LINE $0000 insert your variables (RAM usage) in the BSS section
 COMMENT_LINE $0000 user RAM starts at $c880
 COMMENT $0000 start of our ram space
-COMMENT_LINE $C880 variables to hold which frame for each shape enemy
-COMMENT_LINE $C880 Arrow_t, Bow_t, Dash, Wedge_t, Ghost_t, Prize_t ;, CannonBall ;, Tank
-COMMENT_LINE $C880 CONSTANTS place after VARIABLES
-COMMENT_LINE $C880 FALSE               equ      0
-COMMENT_LINE $C880 TRUE                equ      1
-COMMENT_LINE $C880 ***************************************************************************
-COMMENT_LINE $C880 HEADER SECTION
-COMMENT_LINE $C880 ***************************************************************************
-COMMENT_LINE $C880 The cartridge ROM starts at address 0
+COMMENT $C880 7 bytes
+COMMENT $C887 7 bytes
+COMMENT $C893 shit Exists in alley
+COMMENT $C89A travel direction
+COMMENT $C8A1 location on X axis
+COMMENT $C8A7 is there a monster in the alley? (Exists?)
+COMMENT $C8AE which way is the monster moving?
+COMMENT $C8B5 where monster is on x axis
+COMMENT $C8BC 1 byte
+COMMENT $C8BD 1 byte
+COMMENT_LINE $C8C0 variables to hold which frame for each shape enemy some might not have an animation...
+COMMENT $C8C8 generic shape used when something is destroyed
+COMMENT_LINE $C8C9 frame counts for animations
+COMMENT $C8D0 generic 1 byte temp
+COMMENT $C8D1 rotation list temp
+COMMENT_LINE $C8E0 CONSTANTS place after VARIABLES
+COMMENT_LINE $C8E0 FALSE              =     0
+COMMENT_LINE $C8E0 TRUE               =      1
+COMMENT_LINE $C8E0 ***************************************************************************
+COMMENT_LINE $C8E0 HEADER SECTION
+COMMENT_LINE $C8E0 ***************************************************************************
+COMMENT_LINE $C8E0 The cartridge ROM starts at address 0
 COMMENT_LINE $0000 the first few bytes are mandatory, otherwise the BIOS will not load
 COMMENT_LINE $0000 the ROM file, and will start MineStorm instead
 COMMENT $0000 'g' is copyright sign
@@ -744,633 +831,816 @@ COMMENT_LINE $001A *************************************************************
 COMMENT_LINE $001A CODE SECTION
 COMMENT_LINE $001A ***************************************************************************
 COMMENT_LINE $001A here the cartridge program starts off
+FORCE_SYMBOL $001A setup
+FORCE_NO_SYMBOL $001D
+FORCE_SYMBOL $001F shippos
+FORCE_SYMBOL $0022 shipXpos
+FORCE_SYMBOL $0025 in_alley
+FORCE_SYMBOL $0028 LEFT
+FORCE_SYMBOL $002A shipdir
+FORCE_SYMBOL $002D score
+FORCE_SYMBOL $0030 Clear_Score
+FORCE_NO_SYMBOL $0033
+FORCE_SYMBOL $0035 ships_left
+FORCE_SYMBOL $0038 Wait_Recal
+FORCE_SYMBOL $003B Joy_Digital
 COMMENT $003E inside an alley
+FORCE_SYMBOL $003E in_alley
 COMMENT $0041 disable Y position poll
+FORCE_SYMBOL $0043 Vec_Joy_1_Y
 COMMENT $0046 no Y motion
+FORCE_SYMBOL $004A shippos
 COMMENT $004D slot 6 as far up as u can go
+FORCE_NO_SYMBOL $004D
+FORCE_SYMBOL $0051 shippos
+FORCE_SYMBOL $0056 shippos
+FORCE_SYMBOL $005B shippos
 COMMENT_LINE $005E now test X first test should be if there is a prize in this alley.
 COMMENT $005E is X basically in the middle alley? unset in_alley flag
+FORCE_SYMBOL $005E shipXpos
+FORCE_SYMBOL $0061 Abs_b
+FORCE_NO_SYMBOL $0064
 COMMENT $0066 if b-3 > 0 then clr in_alley
 COMMENT $0068 clear in alley flag when in middle
+FORCE_SYMBOL $0068 in_alley
+FORCE_SYMBOL $006B Vec_Joy_1_X
+FORCE_NO_SYMBOL $0072
+FORCE_SYMBOL $0074 in_alley
+FORCE_SYMBOL $0077 RIGHT
+FORCE_SYMBOL $0079 shipdir
+FORCE_NO_SYMBOL $007C
 COMMENT_LINE $007E adda     shipXpos
+FORCE_NO_SYMBOL $0082
 COMMENT_LINE $0084 sta      shipXpos
+FORCE_NO_SYMBOL $0086
+FORCE_SYMBOL $0088 in_alley
+FORCE_SYMBOL $008B LEFT
+FORCE_SYMBOL $008D shipdir
+FORCE_SYMBOL $0090 shipXpos
+FORCE_NO_SYMBOL $0093
 COMMENT_LINE $009B sta      shipXpos
+FORCE_NO_SYMBOL $009B
 COMMENT $009D Store intensity in D/A
+FORCE_SYMBOL $009D VIA_port_a
 COMMENT $009F Save intensity in $C827
+FORCE_SYMBOL $009F Vec_Brightness
 COMMENT $00A2 mux disabled channel 2
+FORCE_NO_SYMBOL $00A2
+FORCE_SYMBOL $00A5 VIA_port_b
 COMMENT $00A7 mux enabled channel 2
+FORCE_SYMBOL $00A7 VIA_port_b
 COMMENT $00A9 do it again just because
+FORCE_SYMBOL $00A9 VIA_port_b
+FORCE_NO_SYMBOL $00AB
 COMMENT $00AD turn off mux
+FORCE_SYMBOL $00AD VIA_port_b
 COMMENT_LINE $00AF jmp no_walls ; skip printing walls to save cycles
 COMMENT_LINE $00AF bottom wall
 COMMENT_LINE $00AF lda #5
 COMMENT_LINE $00AF sta $C823 ; vector count
 COMMENT $00B3 Store Y in D/A register
+FORCE_SYMBOL $00B3 VIA_port_a
 COMMENT $00B5 Enable mux
+FORCE_SYMBOL $00B5 VIA_port_b
 COMMENT $00B7 Save D-register on stack
 COMMENT $00B9 Blank low, zero high?
+FORCE_NO_SYMBOL $00B9
+FORCE_SYMBOL $00BB VIA_cntl
 COMMENT $00BD Clear shift regigster
+FORCE_SYMBOL $00BD VIA_shift_reg
 COMMENT $00BF Disable mux
+FORCE_SYMBOL $00BF VIA_port_b
 COMMENT $00C1 Store X in D/A register
+FORCE_SYMBOL $00C1 VIA_port_a
 COMMENT $00C3 timer 1 count high
+FORCE_SYMBOL $00C3 VIA_t1_cnt_hi
 COMMENT $00C5 Get back D-reg
+FORCE_SYMBOL $00C7 Abs_a_b
+FORCE_NO_SYMBOL $00CE
+FORCE_NO_SYMBOL $00D0
+FORCE_NO_SYMBOL $00D4
+FORCE_NO_SYMBOL $00D8
 COMMENT $00DC Wait for timer 1
+FORCE_NO_SYMBOL $00DC
+FORCE_SYMBOL $00DE VIA_int_flags
 COMMENT $00E2 Delay a moment
 COMMENT $00E7 Wait for timer 1
+FORCE_SYMBOL $00E7 VIA_int_flags
+FORCE_SYMBOL $00EB Full_Wall_nomode
 COMMENT $00EE jsr Draw_VLc
+FORCE_NO_SYMBOL $00F0
+FORCE_NO_SYMBOL $00F3
 COMMENT $00F5 Send Y to A/D
+FORCE_SYMBOL $00F5 VIA_port_a
 COMMENT $00F7 Enable mux
+FORCE_SYMBOL $00F7 VIA_port_b
 COMMENT $00F9 Point to next coordinate pair
+FORCE_NO_SYMBOL $00F9
 COMMENT $00FB Wait a moment
 COMMENT $00FC Disable mux
+FORCE_SYMBOL $00FC VIA_port_b
 COMMENT $00FE Send X to A/D
+FORCE_SYMBOL $00FE VIA_port_a
 COMMENT $0100 Shift reg=$FF (solid line), T1H=0
+FORCE_NO_SYMBOL $0100
 COMMENT $0103 Put pattern in shift register
+FORCE_SYMBOL $0103 VIA_shift_reg
 COMMENT $0105 Set T1H (scale factor?)
+FORCE_SYMBOL $0105 VIA_t1_cnt_hi
 COMMENT $0107 B-reg = T1 interrupt bit
+FORCE_NO_SYMBOL $0107
 COMMENT $010A Wait for T1 to time out
+FORCE_SYMBOL $010A VIA_int_flags
 COMMENT $010E Wait a moment more
 COMMENT $010F Clear shift register (blank output)
+FORCE_SYMBOL $010F VIA_shift_reg
 COMMENT $0111 Decrement line count
+FORCE_NO_SYMBOL $0111
 COMMENT $0115 Go back for more points
 COMMENT_LINE $0117 jmp Check0Ref ;Reset zero reference if necessary
-COMMENT_LINE $011A top wall
-COMMENT $011D /BLANK low and /ZERO low
-COMMENT $011F clear shift register
-COMMENT $0124 clear D/A register
-COMMENT $0126 mux=1, disable mux
-COMMENT $0128 mux=1, enable mux
-COMMENT $012A do it again
-COMMENT $012E disable mu
-COMMENT $0134 Store Y in D/A register
-COMMENT $0136 Enable mux
-COMMENT $0138 Save D-register on stack
-COMMENT $013A Blank low, zero high?
-COMMENT $013E Clear shift regigster
-COMMENT $0140 Disable mux
-COMMENT $0142 Store X in D/A register
-COMMENT $0144 timer 1 count high
-COMMENT $0146 Get back D-reg
-COMMENT $015D Wait for timer 1
-COMMENT $0163 Delay a moment
-COMMENT $0168 Wait for timer 1
-COMMENT $016F jsr Draw_VLc
-COMMENT $0176 Send Y to A/D
-COMMENT $0178 Enable mux
-COMMENT $017A Point to next coordinate pair
-COMMENT $017C Wait a moment
-COMMENT $017D Disable mux
-COMMENT $017F Send X to A/D
-COMMENT $0181 Shift reg=$FF (solid line), T1H=0
-COMMENT $0184 Put pattern in shift register
-COMMENT $0186 Set T1H (scale factor?)
-COMMENT $0188 B-reg = T1 interrupt bit
-COMMENT $018B Wait for T1 to time out
-COMMENT $018F Wait a moment more
-COMMENT $0190 Clear shift register (blank output)
-COMMENT $0192 Decrement line count
-COMMENT $0196 Go back for more points
-COMMENT_LINE $0198 jmp Check0Ref ;Reset zero reference if necessary
-COMMENT_LINE $0198 draw ship
-COMMENT $019B /BLANK low and /ZERO low
-COMMENT $019D clear shift register
-COMMENT $01A2 clear D/A register
-COMMENT $01A4 mux=1, disable mux
-COMMENT $01A6 mux=1, enable mux
-COMMENT $01A8 do it again
-COMMENT $01AC disable mu
-COMMENT $01B0 controls "scale"
-COMMENT_LINE $01B6 ldx #shippos_t
-COMMENT $01B9 get pos from shippos_t table
-COMMENT $01BB small offset
-COMMENT_LINE $01BD ldb #0 ; pointing LEFT stay as-is
-COMMENT $01BD testing for 0|LEFT 1|RIGHT
-COMMENT_LINE $01C2 ldb shipXpos ;#-17 ; pointing RIGHT move to the left to center
-COMMENT $01C5 Store Y in D/A register
-COMMENT $01C7 Enable mux
-COMMENT $01C9 Save D-register on stack
-COMMENT $01CB Blank low, zero high?
-COMMENT $01CF Clear shift regigster
-COMMENT $01D1 Disable mux
-COMMENT $01D3 Store X in D/A register
-COMMENT $01D5 timer 1 count high
-COMMENT $01D7 Get back D-reg
-COMMENT $01EE Wait for timer 1
-COMMENT $01F4 Delay a moment
-COMMENT $01F9 Wait for timer 1
-COMMENT $0200 testing for 0|LEFT 1|RIGHT
-COMMENT $0208 jsr Draw_VLc ;_mode
-COMMENT $020F Send Y to A/D
-COMMENT $0211 Enable mux
-COMMENT $0213 Point to next coordinate pair
-COMMENT $0215 Wait a moment
-COMMENT $0216 Disable mux
-COMMENT $0218 Send X to A/D
-COMMENT $021A Shift reg=$FF (solid line), T1H=0
-COMMENT $021D Put pattern in shift register
-COMMENT $021F Set T1H (scale factor?)
-COMMENT $0221 B-reg = T1 interrupt bit
-COMMENT $0224 Wait for T1 to time out
-COMMENT $0228 Wait a moment more
-COMMENT $0229 Clear shift register (blank output)
-COMMENT $022B Decrement line count
-COMMENT $022F Go back for more points
-COMMENT_LINE $0231 jmp Check0Ref ;Reset zero reference if necessary
-COMMENT_LINE $0231 place bullets
-COMMENT_LINE $0243 adding bullet to alley if no other bullet is already there
-COMMENT $0252 set EXIST
-COMMENT_LINE $0254 left(0) or right(1)?
-COMMENT $0260 set DIRECTION
-COMMENT_LINE $0262 starting x coordinates
-COMMENT $0272 set start X
-COMMENT $0278 set start -X
-COMMENT $027F Store intensity in D/A
-COMMENT $0281 Save intensity in $C827
-COMMENT $0284 mux disabled channel 2
-COMMENT $0289 mux enabled channel 2
-COMMENT $028B do it again just because
-COMMENT $028F turn off mux
-COMMENT $0296 Store intensity in D/A
-COMMENT $0298 Save intensity in $C827
-COMMENT $029B mux disabled channel 2
-COMMENT $02A0 mux enabled channel 2
-COMMENT $02A2 do it again just because
-COMMENT $02A6 turn off mux
-COMMENT_LINE $02A8 jmp main ; don't print scores
-COMMENT_LINE $02A8 display score and ships left
-COMMENT $02AB /BLANK low and /ZERO low
-COMMENT $02AD clear shift register
-COMMENT $02B2 clear D/A register
-COMMENT $02B4 mux=1, disable mux
-COMMENT $02B6 mux=1, enable mux
-COMMENT $02B8 do it again
-COMMENT $02BC disable mu
-COMMENT $02CE Store Y in D/A register
-COMMENT $02D0 Enable mux
-COMMENT $02D2 Save D-register on stack
-COMMENT $02D4 Blank low, zero high?
-COMMENT $02D8 Clear shift regigster
-COMMENT $02DA Disable mux
-COMMENT $02DC Store X in D/A register
-COMMENT $02DE timer 1 count high
-COMMENT $02E0 Get back D-reg
-COMMENT $02F7 Wait for timer 1
-COMMENT $02FD Delay a moment
-COMMENT $0302 Wait for timer 1
-COMMENT $0306 vector draw ships remaining routine TEST
-COMMENT $0316 Send Y to A/D
-COMMENT $0318 Enable mux
-COMMENT $031A Point to next coordinate pair
-COMMENT $031C Wait a moment
-COMMENT $031D Disable mux
-COMMENT $031F Send X to A/D
-COMMENT $0321 Shift reg=$FF (solid line), T1H=0
-COMMENT $0324 Put pattern in shift register
-COMMENT $0326 Set T1H (scale factor?)
-COMMENT $0328 B-reg = T1 interrupt bit
-COMMENT $032B Wait for T1 to time out
-COMMENT $032F Wait a moment more
-COMMENT $0330 Clear shift register (blank output)
-COMMENT $0332 Decrement line count
-COMMENT $0336 Go back for more points
-COMMENT_LINE $0338 jmp Check0Ref ;Reset zero reference if necessary
-COMMENT_LINE $033D end score+ship count
-COMMENT_LINE $033D ;;; DRAW VARIOUS STUFF TEST ZONE
-COMMENT $0340 /BLANK low and /ZERO low
-COMMENT $0342 clear shift register
-COMMENT $0347 clear D/A register
-COMMENT $0349 mux=1, disable mux
-COMMENT $034B mux=1, enable mux
-COMMENT $034D do it again
-COMMENT $0351 disable mu
-COMMENT $0358 Y
-COMMENT $035A X
-COMMENT $035C Store Y in D/A register
-COMMENT $035E Enable mux
-COMMENT $0360 Save D-register on stack
-COMMENT $0362 Blank low, zero high?
-COMMENT $0366 Clear shift regigster
-COMMENT $0368 Disable mux
-COMMENT $036A Store X in D/A register
-COMMENT $036C timer 1 count high
-COMMENT $036E Get back D-reg
-COMMENT $0385 Wait for timer 1
-COMMENT $038B Delay a moment
-COMMENT $0390 Wait for timer 1
-COMMENT $039B animation Primitive, switch every 100 frames
-COMMENT $03A9 /BLANK low and /ZERO low
-COMMENT $03AB clear shift register
-COMMENT $03B0 clear D/A register
-COMMENT $03B2 mux=1, disable mux
-COMMENT $03B4 mux=1, enable mux
-COMMENT $03B6 do it again
-COMMENT $03BA disable mu
-COMMENT $03C1 Y
-COMMENT_LINE $03C3 clra
-COMMENT_LINE $03C3 clrb ; X
-COMMENT $03C5 Store Y in D/A register
-COMMENT $03C7 Enable mux
-COMMENT $03C9 Save D-register on stack
-COMMENT $03CB Blank low, zero high?
-COMMENT $03CF Clear shift regigster
-COMMENT $03D1 Disable mux
-COMMENT $03D3 Store X in D/A register
-COMMENT $03D5 timer 1 count high
-COMMENT $03D7 Get back D-reg
-COMMENT $03EE Wait for timer 1
-COMMENT $03F4 Delay a moment
-COMMENT $03F9 Wait for timer 1
-COMMENT_LINE $0403 increment then Test frame counter
-COMMENT $0410 and repeat forever
-COMMENT_LINE $0413 ###########################################################################
-COMMENT_LINE $0413 SUBROUTINES/FUNCTIONS
-COMMENT_LINE $0413 ###########################################################################
-COMMENT $0413 enable
-COMMENT $041D disable for Joy Mux's
-COMMENT_LINE $0425 jsr Joy_Digital ; set joymode, not analog.
-COMMENT $0431 set a bunch of variables to 0
-COMMENT $04A2 don't do motion on non-existant bullets X
-COMMENT $04A7 shift left == multiply by 2 table is 2 byte entry
-COMMENT $04AB get pointer from table
-COMMENT $04AD read from resolved address bulletNx
-COMMENT $04B3 if moving goes out of bounds destroy_bullet
-COMMENT $04D7 if moving goes out of bounds destroy_bullet
-COMMENT $04EA trying to make bullet brighter
-COMMENT $04F5 shift left == multiply by 2 table is 2 byte entry
-COMMENT $04FD Doesn't EXIST
-COMMENT $04FF reset before positioning beam
-COMMENT $0502 /BLANK low and /ZERO low
-COMMENT $0504 clear shift register
-COMMENT $0509 clear D/A register
-COMMENT $050B mux=1, disable mux
-COMMENT $050D mux=1, enable mux
-COMMENT $050F do it again
-COMMENT $0513 disable mu
-COMMENT_LINE $0515 find Y pos
-COMMENT $0518 single mbyte table no asla
-COMMENT $051B do look up for Y pos from table TODO
-COMMENT_LINE $0520 find X pos
-COMMENT $0523 shift left == multiply by 2 table is 2 byte entry
-COMMENT $0527 get pointer from table
-COMMENT $0529 read from resolved address bulletNx
-COMMENT $052E Store Y in D/A register
-COMMENT $0530 Enable mux
-COMMENT $0532 Save D-register on stack
-COMMENT $0534 Blank low, zero high?
-COMMENT $0538 Clear shift regigster
-COMMENT $053A Disable mux
-COMMENT $053C Store X in D/A register
-COMMENT $053E timer 1 count high
-COMMENT $0540 Get back D-reg
-COMMENT $0557 Wait for timer 1
-COMMENT $055D Delay a moment
-COMMENT $0562 Wait for timer 1
-COMMENT_LINE $0566 ldx #Shot
-COMMENT_LINE $0566 jsr Draw_VL_mode
-COMMENT_LINE $0566 jsr Dot_here
-COMMENT_LINE $0566 draw dot code inlined
-COMMENT $0566 Set pattern to all 1's
-COMMENT $0568 Store in VIA shift register
-COMMENT $056A Get dot dwell (brightness)
-COMMENT $056D Delay leaving beam in place
-COMMENT $0570 Blank beam in VIA shift register
-COMMENT_LINE $0572 END draw dot inline END
-COMMENT $0586 Store intensity in D/A
-COMMENT $0588 Save intensity in $C827
-COMMENT $058B mux disabled channel 2
-COMMENT $0590 mux enabled channel 2
-COMMENT $0592 do it again just because
-COMMENT $0596 turn off mux
-COMMENT_LINE $0599 ***************************************************************************
-COMMENT_LINE $0599 DATA SECTION
-COMMENT_LINE $0599 ***************************************************************************
-COMMENT_LINE $0599 ***************************************************************************
-COMMENT_LINE $0599 DATA SECTION
-COMMENT_LINE $0599 ***************************************************************************
-COMMENT $0599 lda #5 ; sta $C823 ; vector count
-COMMENT $05A6 lda #3 ; sta $C823
-COMMENT_LINE $05AF SHIP
-COMMENT $05AF fcb 0, +8, -12
-COMMENT $05C2 fcb 0, +8, +12
-COMMENT_LINE $05E5 number of guys left
-COMMENT_LINE $05EE Enemy list
-COMMENT $0667 TOP
-COMMENT $0670 GAP
-COMMENT $0673 Bottom
-COMMENT $067D sync and move to y, x
-COMMENT $0680 draw, y, x
-COMMENT $0683 draw, y, x
-COMMENT $0686 draw, y, x
-COMMENT $0689 draw, y, x
-COMMENT $068C draw, y, x
-COMMENT $068F draw, y, x
-COMMENT $0692 draw, y, x
-COMMENT $0695 draw, y, x
-COMMENT $0698 draw, y, x
-COMMENT $069B draw, y, x
-COMMENT_LINE $069E fcb 0, -8, +11 ; sync and move to y, x
-COMMENT $069E draw, y, x
-COMMENT $06A1 draw, y, x
-COMMENT $06A4 draw, y, x
-COMMENT $06A7 draw, y, x
-COMMENT $06AA draw, y, x
-COMMENT $06AD draw, y, x
-COMMENT $06B0 draw, y, x
-COMMENT $06B3 draw, y, x
-COMMENT $06B6 draw, y, x
-COMMENT $06B9 draw, y, x
-COMMENT $06BC endmarker
-COMMENT_LINE $06DE TABLES
-COMMENT_LINE $06DE shippos_t:          fcb      -3*ALLEYWIDTH,-2*ALLEYWIDTH,-1*ALLEYWIDTH,0,1*ALLEYWIDTH,2*ALLEYWIDTH,3*ALLEYWIDTH ; Y pos of ship
-COMMENT $06DE Y pos of bullet/ship/enemy per alley
-COMMENT $06E5 exists TRUE/FALSE
-COMMENT $06F3 direction left/right
-COMMENT $0701 X position
-COMMENT $0739 , CannonBall ;, Tank
-COMMENT $0745 example
-COMMENT $0757 same, flippy 90 degree animation
-COMMENT $075B Right, Left
-COMMENT $075F Right, Left
-COMMENT $0763 same, no animation
-COMMENT $0765 same, no animation
-COMMENT $0767 Right/left
-COMMENT $076B big/small animation
-COMMENT_LINE $078D JUNK below
-COMMENT_LINE $078D ***************************************************************************
-COMMENT_LINE $078D SCRATCH AREA
-COMMENT_LINE $078D example
-COMMENT_LINE $078D ldu      #vData                       ; address of list
-COMMENT_LINE $078D LDA      #$0                          ; Text position relative Y
-COMMENT_LINE $078D LDB      #-$0                         ; Text position relative X
-COMMENT_LINE $078D tfr      d,x                          ; in x position of list
-COMMENT_LINE $078D lda      #$40                         ; scale positioning
-COMMENT_LINE $078D ldb      #$40                         ; scale move in list
-COMMENT_LINE $078D jsr      draw_synced_list
-COMMENT_LINE $078D BRA      main                         ; and repeat forever
-COMMENT_LINE $078D ;***************************************************************************
-COMMENT_LINE $078D ; SUBROUTINE SECTION
-COMMENT_LINE $078D ;***************************************************************************
-COMMENT_LINE $078D ;ZERO ing the integrators takes time. Measures at my vectrex show e.g.:
-COMMENT_LINE $078D ;If you move the beam with a to x = -127 and y = -127 at diffferent scale values, the time to reach zero:
-COMMENT_LINE $078D ;- scale $ff -> zero 110 cycles
-COMMENT_LINE $078D ;- scale $7f -> zero 75 cycles
-COMMENT_LINE $078D ;- scale $40 -> zero 57 cycles
-COMMENT_LINE $078D ;- scale $20 -> zero 53 cycles
-COMMENT_LINE $078D ZERO_DELAY          EQU      7                            ; delay 7 counter is exactly 111 cycles delay between zero SETTING and zero unsetting (in moveto_d)
-COMMENT_LINE $078D ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-COMMENT_LINE $078D ;U = address of vectorlist
-COMMENT_LINE $078D ;X = (y,x) position of vectorlist (this will be point 0,0), positioning on screen
-COMMENT_LINE $078D ;A = scalefactor "Move" (after sync)
-COMMENT_LINE $078D ;B = scalefactor "Vector" (vectors in vectorlist)
-COMMENT_LINE $078D ;
-COMMENT_LINE $078D ;     mode, rel y, rel x,
-COMMENT_LINE $078D ;     mode, rel y, rel x,
-COMMENT_LINE $078D ;     .      .      .
-COMMENT_LINE $078D ;     .      .      .
-COMMENT_LINE $078D ;     mode, rel y, rel x,
-COMMENT_LINE $078D ;     0x02
-COMMENT_LINE $078D ; where mode has the following meaning:
-COMMENT_LINE $078D ; negative draw line
-COMMENT_LINE $078D ; 0 move to specified endpoint
-COMMENT_LINE $078D ; 1 sync (and move to list start and than to place in vectorlist)
-COMMENT_LINE $078D ; 2 end
-COMMENT_LINE $078D ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-COMMENT_LINE $078D draw_synced_list:
-COMMENT_LINE $078D pshs     a                            ; remember out different scale factors
-COMMENT_LINE $078D pshs     b
-COMMENT_LINE $078D ; first list entry (first will be a sync + moveto_d, so we just stay here!)
-COMMENT_LINE $078D lda      ,u+                          ; this will be a "1"
-COMMENT_LINE $078D sync:
-COMMENT_LINE $078D deca                                  ; test if real sync - or end of list (2)
-COMMENT_LINE $078D lbne     drawdone                     ; if end of list -> jump
-COMMENT_LINE $078D ; zero integrators
-COMMENT_LINE $078D ldb      #$CC                         ; zero the integrators
-COMMENT_LINE $078D stb      <VIA_cntl                    ; store zeroing values to cntl
-COMMENT_LINE $078D ldb      #ZERO_DELAY                  ; and wait for zeroing to be actually done
-COMMENT_LINE $078D ; reset integrators
-COMMENT_LINE $078D clr      <VIA_port_a                  ; reset integrator offset
-COMMENT_LINE $078D lda      #%10000010
-COMMENT_LINE $078D ; wait that zeroing surely has the desired effect!
-COMMENT_LINE $078D zeroLoop:
-COMMENT_LINE $078D sta      <VIA_port_b                  ; while waiting, zero offsets
-COMMENT_LINE $078D decb
-COMMENT_LINE $078D bne      zeroLoop
-COMMENT_LINE $078D inc      <VIA_port_b
-COMMENT_LINE $078D ; unzero is done by moveto_d
-COMMENT_LINE $078D lda      1,s                          ; scalefactor move
-COMMENT_LINE $078D sta      <VIA_t1_cnt_lo               ; to timer t1 (lo=
-COMMENT_LINE $078D tfr      x,d                          ; load our coordinates of "entry" of vectorlist
-COMMENT_LINE $078D MOVETO_D                              ; move there
-COMMENT_LINE $078D lda      ,s                           ; scale factor vector
-COMMENT_LINE $078D sta      <VIA_t1_cnt_lo               ; to timer T1 (lo)
-COMMENT_LINE $078D moveTo:
-COMMENT_LINE $078D ldd      ,u++                         ; do our "internal" moveto d
-COMMENT_LINE $078D beq      nextListEntry                ; there was a move 0,0, if so
-COMMENT_LINE $078D MOVETO_D
-COMMENT_LINE $078D nextListEntry:
-COMMENT_LINE $078D lda      ,u+                          ; load next "mode" byte
-COMMENT_LINE $078D beq      moveTo                       ; if 0, than we should move somewhere
-COMMENT_LINE $078D bpl      sync                         ; if still positive it is a 1 pr 2 _> goto sync
-COMMENT_LINE $078D ; now we should draw a vector
-COMMENT_LINE $078D ldd      ,u++                         ;Get next coordinate pair
-COMMENT_LINE $078D STA      <VIA_port_a                  ;Send Y to A/D
-COMMENT_LINE $078D CLR      <VIA_port_b                  ;Enable mux
-COMMENT_LINE $078D LDA      #$ff                         ;Get pattern byte
-COMMENT_LINE $078D INC      <VIA_port_b                  ;Disable mux
-COMMENT_LINE $078D STB      <VIA_port_a                  ;Send X to A/D
-COMMENT_LINE $078D LDB      #$40                         ;B-reg = T1 interrupt bit
-COMMENT_LINE $078D CLR      <VIA_t1_cnt_hi               ;Clear T1H
-COMMENT_LINE $078D STA      <VIA_shift_reg               ;Store pattern in shift register
-COMMENT_LINE $078D setPatternLoop:
-COMMENT_LINE $078D BITB     <VIA_int_flags               ;Wait for T1 to time out
-COMMENT_LINE $078D beq      setPatternLoop               ; wait till line is finished
-COMMENT_LINE $078D CLR      <VIA_shift_reg               ; switch the light off (for sure)
-COMMENT_LINE $078D bra      nextListEntry
-COMMENT_LINE $078D drawdone:
-COMMENT_LINE $078D puls     d                            ; correct stack and go back
-COMMENT_LINE $078D rts
-COMMENT_LINE $078D ;***************************************************************************
-COMMENT_LINE $078D ; DATA SECTION
-COMMENT_LINE $078D ;***************************************************************************
-COMMENT_LINE $078D vData               =        Tank
-COMMENT_LINE $078D Tank:
-COMMENT_LINE $078D fcb      +1, +8, -10                  ; sync and move to y, x
-COMMENT_LINE $078D fcb      -1, +0, +21                  ; draw, y, x
-COMMENT_LINE $078D fcb      -1, -4, +0                   ; draw, y, x
-COMMENT_LINE $078D fcb      -1, +0, -9                   ; draw, y, x
-COMMENT_LINE $078D fcb      -1, -3, +0                   ; draw, y, x
-COMMENT_LINE $078D fcb      -1, +0, +9                   ; draw, y, x
-COMMENT_LINE $078D fcb      -1, -2, +0                   ; draw, y, x
-COMMENT_LINE $078D fcb      -1, +0, -9                   ; draw, y, x
-COMMENT_LINE $078D fcb      -1, -3, +0                   ; draw, y, x
-COMMENT_LINE $078D fcb      -1, +0, +9                   ; draw, y, x
-COMMENT_LINE $078D fcb      -1, -4, +0                   ; draw, y, x
-COMMENT_LINE $078D fcb      +1, -8, +11                  ; sync and move to y, x
-COMMENT_LINE $078D fcb      -1, +0, -21                  ; draw, y, x
-COMMENT_LINE $078D fcb      -1, +5, +0                   ; draw, y, x
-COMMENT_LINE $078D fcb      -1, +0, +2                   ; draw, y, x
-COMMENT_LINE $078D fcb      -1, +2, +0                   ; draw, y, x
-COMMENT_LINE $078D fcb      -1, +0, -2                   ; draw, y, x
-COMMENT_LINE $078D fcb      -1, +2, +0                   ; draw, y, x
-COMMENT_LINE $078D fcb      -1, +0, +2                   ; draw, y, x
-COMMENT_LINE $078D fcb      -1, +2, +0                   ; draw, y, x
-COMMENT_LINE $078D fcb      -1, +0, -2                   ; draw, y, x
-COMMENT_LINE $078D fcb      -1, +5, +0                   ; draw, y, x
-COMMENT_LINE $078D fcb      +2                           ; endmarker
+COMMENT_LINE $0117 jmp      no_walls
+COMMENT_LINE $0117 no_walls:
+COMMENT_LINE $0117 top wall
+FORCE_NO_SYMBOL $0117
+COMMENT $011A /BLANK low and /ZERO low
+FORCE_SYMBOL $011A VIA_cntl
+COMMENT $011C clear shift register
+FORCE_SYMBOL $011C VIA_shift_reg
+FORCE_NO_SYMBOL $011E
+COMMENT $0121 clear D/A register
+FORCE_SYMBOL $0121 VIA_port_a
+COMMENT $0123 mux=1, disable mux
+FORCE_SYMBOL $0123 VIA_port_b
+COMMENT $0125 mux=1, enable mux
+FORCE_SYMBOL $0125 VIA_port_b
+COMMENT $0127 do it again
+FORCE_SYMBOL $0127 VIA_port_b
+FORCE_NO_SYMBOL $0129
+COMMENT $012B disable mu
+FORCE_SYMBOL $012B VIA_port_b
+FORCE_NO_SYMBOL $012D
+COMMENT $0131 Store Y in D/A register
+FORCE_SYMBOL $0131 VIA_port_a
+COMMENT $0133 Enable mux
+FORCE_SYMBOL $0133 VIA_port_b
+COMMENT $0135 Save D-register on stack
+COMMENT $0137 Blank low, zero high?
+FORCE_NO_SYMBOL $0137
+FORCE_SYMBOL $0139 VIA_cntl
+COMMENT $013B Clear shift regigster
+FORCE_SYMBOL $013B VIA_shift_reg
+COMMENT $013D Disable mux
+FORCE_SYMBOL $013D VIA_port_b
+COMMENT $013F Store X in D/A register
+FORCE_SYMBOL $013F VIA_port_a
+COMMENT $0141 timer 1 count high
+FORCE_SYMBOL $0141 VIA_t1_cnt_hi
+COMMENT $0143 Get back D-reg
+FORCE_SYMBOL $0145 Abs_a_b
+FORCE_NO_SYMBOL $014C
+FORCE_NO_SYMBOL $014E
+FORCE_NO_SYMBOL $0152
+FORCE_NO_SYMBOL $0156
+COMMENT $015A Wait for timer 1
+FORCE_NO_SYMBOL $015A
+FORCE_SYMBOL $015C VIA_int_flags
+COMMENT $0160 Delay a moment
+COMMENT $0165 Wait for timer 1
+FORCE_SYMBOL $0165 VIA_int_flags
+FORCE_SYMBOL $0169 Full_Wall_nomode
+COMMENT $016C jsr Draw_VLc
+FORCE_NO_SYMBOL $016E
+FORCE_NO_SYMBOL $0171
+COMMENT $0173 Send Y to A/D
+FORCE_SYMBOL $0173 VIA_port_a
+COMMENT $0175 Enable mux
+FORCE_SYMBOL $0175 VIA_port_b
+COMMENT $0177 Point to next coordinate pair
+FORCE_NO_SYMBOL $0177
+COMMENT $0179 Wait a moment
+COMMENT $017A Disable mux
+FORCE_SYMBOL $017A VIA_port_b
+COMMENT $017C Send X to A/D
+FORCE_SYMBOL $017C VIA_port_a
+COMMENT $017E Shift reg=$FF (solid line), T1H=0
+FORCE_NO_SYMBOL $017E
+COMMENT $0181 Put pattern in shift register
+FORCE_SYMBOL $0181 VIA_shift_reg
+COMMENT $0183 Set T1H (scale factor?)
+FORCE_SYMBOL $0183 VIA_t1_cnt_hi
+COMMENT $0185 B-reg = T1 interrupt bit
+FORCE_NO_SYMBOL $0185
+COMMENT $0188 Wait for T1 to time out
+FORCE_SYMBOL $0188 VIA_int_flags
+COMMENT $018C Wait a moment more
+COMMENT $018D Clear shift register (blank output)
+FORCE_SYMBOL $018D VIA_shift_reg
+COMMENT $018F Decrement line count
+FORCE_NO_SYMBOL $018F
+COMMENT $0193 Go back for more points
+COMMENT_LINE $0195 jmp Check0Ref ;Reset zero reference if necessary
+COMMENT_LINE $0195 draw ship
+FORCE_NO_SYMBOL $0195
+COMMENT $0198 /BLANK low and /ZERO low
+FORCE_SYMBOL $0198 VIA_cntl
+COMMENT $019A clear shift register
+FORCE_SYMBOL $019A VIA_shift_reg
+FORCE_NO_SYMBOL $019C
+COMMENT $019F clear D/A register
+FORCE_SYMBOL $019F VIA_port_a
+COMMENT $01A1 mux=1, disable mux
+FORCE_SYMBOL $01A1 VIA_port_b
+COMMENT $01A3 mux=1, enable mux
+FORCE_SYMBOL $01A3 VIA_port_b
+COMMENT $01A5 do it again
+FORCE_SYMBOL $01A5 VIA_port_b
+FORCE_NO_SYMBOL $01A7
+COMMENT $01A9 disable mu
+FORCE_SYMBOL $01A9 VIA_port_b
+FORCE_NO_SYMBOL $01AB
+COMMENT $01AD controls "scale"
+FORCE_SYMBOL $01AD VIA_t1_cnt_lo
+FORCE_SYMBOL $01B0 shippos
+COMMENT_LINE $01B3 ldx #shippos_t
+FORCE_SYMBOL $01B3 bulletYpos_t
+COMMENT $01B6 get pos from shippos_t table
+COMMENT $01B8 small offset
+COMMENT_LINE $01BA ldb #0 ; pointing LEFT stay as-is
+COMMENT $01BA testing for 0|LEFT 1|RIGHT
+FORCE_SYMBOL $01BA shipdir
+COMMENT_LINE $01BF ldb shipXpos ;#-17 ; pointing RIGHT move to the left to center
+FORCE_SYMBOL $01BF shipXpos
+COMMENT $01C2 Store Y in D/A register
+FORCE_SYMBOL $01C2 VIA_port_a
+COMMENT $01C4 Enable mux
+FORCE_SYMBOL $01C4 VIA_port_b
+COMMENT $01C6 Save D-register on stack
+COMMENT $01C8 Blank low, zero high?
+FORCE_NO_SYMBOL $01C8
+FORCE_SYMBOL $01CA VIA_cntl
+COMMENT $01CC Clear shift regigster
+FORCE_SYMBOL $01CC VIA_shift_reg
+COMMENT $01CE Disable mux
+FORCE_SYMBOL $01CE VIA_port_b
+COMMENT $01D0 Store X in D/A register
+FORCE_SYMBOL $01D0 VIA_port_a
+COMMENT $01D2 timer 1 count high
+FORCE_SYMBOL $01D2 VIA_t1_cnt_hi
+COMMENT $01D4 Get back D-reg
+FORCE_SYMBOL $01D6 Abs_a_b
+FORCE_NO_SYMBOL $01DD
+FORCE_NO_SYMBOL $01DF
+FORCE_NO_SYMBOL $01E3
+FORCE_NO_SYMBOL $01E7
+COMMENT $01EB Wait for timer 1
+FORCE_NO_SYMBOL $01EB
+FORCE_SYMBOL $01ED VIA_int_flags
+COMMENT $01F1 Delay a moment
+COMMENT $01F6 Wait for timer 1
+FORCE_SYMBOL $01F6 VIA_int_flags
+FORCE_SYMBOL $01FA ShipL_nomode
+COMMENT $01FD testing for 0|LEFT 1|RIGHT
+FORCE_SYMBOL $01FD shipdir
+FORCE_SYMBOL $0202 ShipR_nomode
+COMMENT $0205 jsr Draw_VLc ;_mode
+FORCE_NO_SYMBOL $0207
+FORCE_NO_SYMBOL $020A
+COMMENT $020C Send Y to A/D
+FORCE_SYMBOL $020C VIA_port_a
+COMMENT $020E Enable mux
+FORCE_SYMBOL $020E VIA_port_b
+COMMENT $0210 Point to next coordinate pair
+FORCE_NO_SYMBOL $0210
+COMMENT $0212 Wait a moment
+COMMENT $0213 Disable mux
+FORCE_SYMBOL $0213 VIA_port_b
+COMMENT $0215 Send X to A/D
+FORCE_SYMBOL $0215 VIA_port_a
+COMMENT $0217 Shift reg=$FF (solid line), T1H=0
+FORCE_NO_SYMBOL $0217
+COMMENT $021A Put pattern in shift register
+FORCE_SYMBOL $021A VIA_shift_reg
+COMMENT $021C Set T1H (scale factor?)
+FORCE_SYMBOL $021C VIA_t1_cnt_hi
+COMMENT $021E B-reg = T1 interrupt bit
+FORCE_NO_SYMBOL $021E
+COMMENT $0221 Wait for T1 to time out
+FORCE_SYMBOL $0221 VIA_int_flags
+COMMENT $0225 Wait a moment more
+COMMENT $0226 Clear shift register (blank output)
+FORCE_SYMBOL $0226 VIA_shift_reg
+COMMENT $0228 Decrement line count
+FORCE_NO_SYMBOL $0228
+COMMENT $022C Go back for more points
+COMMENT_LINE $022E jmp Check0Ref ;Reset zero reference if necessary
+COMMENT_LINE $022E place bullets
+FORCE_SYMBOL $022E Read_Btns
+FORCE_SYMBOL $0231 Vec_Button_1_2
+FORCE_NO_SYMBOL $0236
+FORCE_SYMBOL $0238 Ship_Dead
+FORCE_SYMBOL $023B Vec_Btn_State
+COMMENT_LINE $0240 adding bullet to alley if no other bullet is already there
+FORCE_SYMBOL $0240 shippos
+FORCE_SYMBOL $0244 bullete_t
+FORCE_NO_SYMBOL $0249
+FORCE_NO_SYMBOL $024D
+COMMENT $024F set EXIST
+FORCE_NO_SYMBOL $024F
+COMMENT_LINE $0251 left(0) or right(1)?
+FORCE_SYMBOL $0251 shippos
+FORCE_SYMBOL $0255 bulletd_t
+FORCE_SYMBOL $0258 shipdir
+COMMENT $025D set DIRECTION
+FORCE_NO_SYMBOL $025D
+COMMENT_LINE $025F starting x coordinates
+FORCE_SYMBOL $025F shippos
+FORCE_SYMBOL $0263 bulletx_t
+FORCE_SYMBOL $0268 shipdir
+FORCE_NO_SYMBOL $026D
+COMMENT $026F set start X
+FORCE_NO_SYMBOL $026F
+COMMENT $0275 set start -X
+FORCE_NO_SYMBOL $0275
+FORCE_SYMBOL $0277 move_bullets
+FORCE_NO_SYMBOL $027A
+COMMENT $027C Store intensity in D/A
+FORCE_SYMBOL $027C VIA_port_a
+COMMENT $027E Save intensity in $C827
+FORCE_SYMBOL $027E Vec_Brightness
+COMMENT $0281 mux disabled channel 2
+FORCE_NO_SYMBOL $0281
+FORCE_SYMBOL $0284 VIA_port_b
+COMMENT $0286 mux enabled channel 2
+FORCE_SYMBOL $0286 VIA_port_b
+COMMENT $0288 do it again just because
+FORCE_SYMBOL $0288 VIA_port_b
+FORCE_NO_SYMBOL $028A
+COMMENT $028C turn off mux
+FORCE_SYMBOL $028C VIA_port_b
+FORCE_SYMBOL $028E draw_bullets
+FORCE_NO_SYMBOL $0291
+COMMENT $0293 Store intensity in D/A
+FORCE_SYMBOL $0293 VIA_port_a
+COMMENT $0295 Save intensity in $C827
+FORCE_SYMBOL $0295 Vec_Brightness
+COMMENT $0298 mux disabled channel 2
+FORCE_NO_SYMBOL $0298
+FORCE_SYMBOL $029B VIA_port_b
+COMMENT $029D mux enabled channel 2
+FORCE_SYMBOL $029D VIA_port_b
+COMMENT $029F do it again just because
+FORCE_SYMBOL $029F VIA_port_b
+FORCE_NO_SYMBOL $02A1
+COMMENT $02A3 turn off mux
+FORCE_SYMBOL $02A3 VIA_port_b
+COMMENT_LINE $02A5 jmp main ; don't print scores
+COMMENT_LINE $02A5 display score and ships left
+FORCE_NO_SYMBOL $02A5
+COMMENT $02A8 /BLANK low and /ZERO low
+FORCE_SYMBOL $02A8 VIA_cntl
+COMMENT $02AA clear shift register
+FORCE_SYMBOL $02AA VIA_shift_reg
+FORCE_NO_SYMBOL $02AC
+COMMENT $02AF clear D/A register
+FORCE_SYMBOL $02AF VIA_port_a
+COMMENT $02B1 mux=1, disable mux
+FORCE_SYMBOL $02B1 VIA_port_b
+COMMENT $02B3 mux=1, enable mux
+FORCE_SYMBOL $02B3 VIA_port_b
+COMMENT $02B5 do it again
+FORCE_SYMBOL $02B5 VIA_port_b
+FORCE_NO_SYMBOL $02B7
+COMMENT $02B9 disable mu
+FORCE_SYMBOL $02B9 VIA_port_b
+FORCE_SYMBOL $02BB score
+FORCE_NO_SYMBOL $02C0
+FORCE_SYMBOL $02C2 Print_Str_d
+FORCE_NO_SYMBOL $02C8
+COMMENT $02CB Store Y in D/A register
+FORCE_SYMBOL $02CB VIA_port_a
+COMMENT $02CD Enable mux
+FORCE_SYMBOL $02CD VIA_port_b
+COMMENT $02CF Save D-register on stack
+COMMENT $02D1 Blank low, zero high?
+FORCE_NO_SYMBOL $02D1
+FORCE_SYMBOL $02D3 VIA_cntl
+COMMENT $02D5 Clear shift regigster
+FORCE_SYMBOL $02D5 VIA_shift_reg
+COMMENT $02D7 Disable mux
+FORCE_SYMBOL $02D7 VIA_port_b
+COMMENT $02D9 Store X in D/A register
+FORCE_SYMBOL $02D9 VIA_port_a
+COMMENT $02DB timer 1 count high
+FORCE_SYMBOL $02DB VIA_t1_cnt_hi
+COMMENT $02DD Get back D-reg
+FORCE_SYMBOL $02DF Abs_a_b
+FORCE_NO_SYMBOL $02E6
+FORCE_NO_SYMBOL $02E8
+FORCE_NO_SYMBOL $02EC
+FORCE_NO_SYMBOL $02F0
+COMMENT $02F4 Wait for timer 1
+FORCE_NO_SYMBOL $02F4
+FORCE_SYMBOL $02F6 VIA_int_flags
+COMMENT $02FA Delay a moment
+COMMENT $02FF Wait for timer 1
+FORCE_SYMBOL $02FF VIA_int_flags
+COMMENT $0303 vector draw ships remaining routine TEST
+FORCE_SYMBOL $0303 ships_left
+FORCE_SYMBOL $0306 temp
+FORCE_SYMBOL $0309 Ship_Marker
+FORCE_NO_SYMBOL $030E
+FORCE_NO_SYMBOL $0311
+COMMENT $0313 Send Y to A/D
+FORCE_SYMBOL $0313 VIA_port_a
+COMMENT $0315 Enable mux
+FORCE_SYMBOL $0315 VIA_port_b
+COMMENT $0317 Point to next coordinate pair
+FORCE_NO_SYMBOL $0317
+COMMENT $0319 Wait a moment
+COMMENT $031A Disable mux
+FORCE_SYMBOL $031A VIA_port_b
+COMMENT $031C Send X to A/D
+FORCE_SYMBOL $031C VIA_port_a
+COMMENT $031E Shift reg=$FF (solid line), T1H=0
+FORCE_NO_SYMBOL $031E
+COMMENT $0321 Put pattern in shift register
+FORCE_SYMBOL $0321 VIA_shift_reg
+COMMENT $0323 Set T1H (scale factor?)
+FORCE_SYMBOL $0323 VIA_t1_cnt_hi
+COMMENT $0325 B-reg = T1 interrupt bit
+FORCE_NO_SYMBOL $0325
+COMMENT $0328 Wait for T1 to time out
+FORCE_SYMBOL $0328 VIA_int_flags
+COMMENT $032C Wait a moment more
+COMMENT $032D Clear shift register (blank output)
+FORCE_SYMBOL $032D VIA_shift_reg
+COMMENT $032F Decrement line count
+FORCE_NO_SYMBOL $032F
+COMMENT $0333 Go back for more points
+COMMENT_LINE $0335 jmp Check0Ref ;Reset zero reference if necessary
+FORCE_SYMBOL $0335 temp
+COMMENT_LINE $033A end score+ship count
+COMMENT_LINE $033A ;;; DRAW VARIOUS STUFF TEST ZONE
+FORCE_NO_SYMBOL $033A
+COMMENT $033D /BLANK low and /ZERO low
+FORCE_SYMBOL $033D VIA_cntl
+COMMENT $033F clear shift register
+FORCE_SYMBOL $033F VIA_shift_reg
+FORCE_NO_SYMBOL $0341
+COMMENT $0344 clear D/A register
+FORCE_SYMBOL $0344 VIA_port_a
+COMMENT $0346 mux=1, disable mux
+FORCE_SYMBOL $0346 VIA_port_b
+COMMENT $0348 mux=1, enable mux
+FORCE_SYMBOL $0348 VIA_port_b
+COMMENT $034A do it again
+FORCE_SYMBOL $034A VIA_port_b
+FORCE_NO_SYMBOL $034C
+COMMENT $034E disable mu
+FORCE_SYMBOL $034E VIA_port_b
+FORCE_SYMBOL $0350 bulletYpos_t
+FORCE_NO_SYMBOL $0353
+COMMENT $0355 Y
+COMMENT $0357 X
+COMMENT $0359 Store Y in D/A register
+FORCE_SYMBOL $0359 VIA_port_a
+COMMENT $035B Enable mux
+FORCE_SYMBOL $035B VIA_port_b
+COMMENT $035D Save D-register on stack
+COMMENT $035F Blank low, zero high?
+FORCE_NO_SYMBOL $035F
+FORCE_SYMBOL $0361 VIA_cntl
+COMMENT $0363 Clear shift regigster
+FORCE_SYMBOL $0363 VIA_shift_reg
+COMMENT $0365 Disable mux
+FORCE_SYMBOL $0365 VIA_port_b
+COMMENT $0367 Store X in D/A register
+FORCE_SYMBOL $0367 VIA_port_a
+COMMENT $0369 timer 1 count high
+FORCE_SYMBOL $0369 VIA_t1_cnt_hi
+COMMENT $036B Get back D-reg
+FORCE_SYMBOL $036D Abs_a_b
+FORCE_NO_SYMBOL $0374
+FORCE_NO_SYMBOL $0376
+FORCE_NO_SYMBOL $037A
+FORCE_NO_SYMBOL $037E
+COMMENT $0382 Wait for timer 1
+FORCE_NO_SYMBOL $0382
+FORCE_SYMBOL $0384 VIA_int_flags
+COMMENT $0388 Delay a moment
+COMMENT $038D Wait for timer 1
+FORCE_SYMBOL $038D VIA_int_flags
+FORCE_SYMBOL $0391 frm100cnt
+FORCE_NO_SYMBOL $0394
+FORCE_SYMBOL $0398 Prize_t
+FORCE_NO_SYMBOL $039B
+COMMENT_LINE $039F ldx #Prize_1 ; animation Primitive, switch every 100 frames
+FORCE_SYMBOL $03A1 Prize_t
+FORCE_NO_SYMBOL $03A4
+FORCE_SYMBOL $03A8 Draw_VL_mode
+FORCE_NO_SYMBOL $03AB
+COMMENT $03AE /BLANK low and /ZERO low
+FORCE_SYMBOL $03AE VIA_cntl
+COMMENT $03B0 clear shift register
+FORCE_SYMBOL $03B0 VIA_shift_reg
+FORCE_NO_SYMBOL $03B2
+COMMENT $03B5 clear D/A register
+FORCE_SYMBOL $03B5 VIA_port_a
+COMMENT $03B7 mux=1, disable mux
+FORCE_SYMBOL $03B7 VIA_port_b
+COMMENT $03B9 mux=1, enable mux
+FORCE_SYMBOL $03B9 VIA_port_b
+COMMENT $03BB do it again
+FORCE_SYMBOL $03BB VIA_port_b
+FORCE_NO_SYMBOL $03BD
+COMMENT $03BF disable mu
+FORCE_SYMBOL $03BF VIA_port_b
+FORCE_SYMBOL $03C1 bulletYpos_t
+FORCE_NO_SYMBOL $03C4
+COMMENT $03C6 Y
+COMMENT_LINE $03C8 clra
+COMMENT_LINE $03C8 clrb ; X
+COMMENT $03CA Store Y in D/A register
+FORCE_SYMBOL $03CA VIA_port_a
+COMMENT $03CC Enable mux
+FORCE_SYMBOL $03CC VIA_port_b
+COMMENT $03CE Save D-register on stack
+COMMENT $03D0 Blank low, zero high?
+FORCE_NO_SYMBOL $03D0
+FORCE_SYMBOL $03D2 VIA_cntl
+COMMENT $03D4 Clear shift regigster
+FORCE_SYMBOL $03D4 VIA_shift_reg
+COMMENT $03D6 Disable mux
+FORCE_SYMBOL $03D6 VIA_port_b
+COMMENT $03D8 Store X in D/A register
+FORCE_SYMBOL $03D8 VIA_port_a
+COMMENT $03DA timer 1 count high
+FORCE_SYMBOL $03DA VIA_t1_cnt_hi
+COMMENT $03DC Get back D-reg
+FORCE_SYMBOL $03DE Abs_a_b
+FORCE_NO_SYMBOL $03E5
+FORCE_NO_SYMBOL $03E7
+FORCE_NO_SYMBOL $03EB
+FORCE_NO_SYMBOL $03EF
+COMMENT $03F3 Wait for timer 1
+FORCE_NO_SYMBOL $03F3
+FORCE_SYMBOL $03F5 VIA_int_flags
+COMMENT $03F9 Delay a moment
+COMMENT $03FE Wait for timer 1
+FORCE_SYMBOL $03FE VIA_int_flags
+FORCE_SYMBOL $0402 Wedge_R
+COMMENT_LINE $0405 lda #90
+COMMENT_LINE $0405 ldu #rottemp
+COMMENT_LINE $0405 jsr Rot_VL_Mode
+COMMENT_LINE $0405 ldx #rottemp
+FORCE_SYMBOL $0405 Draw_VL_mode
+COMMENT_LINE $0408 increment the Test frame counter
+COMMENT_LINE $0408 add more logic to set/increment SHAPE_f counters for desired animations
+COMMENT_LINE $0408 ANIMATION PSEUDOCODE
+COMMENT_LINE $0408 lda #10
+COMMENT_LINE $0408 cmpa Arrow_f
+COMMENT_LINE $0408 bne label
+COMMENT_LINE $0408 inc Arrow_f
+COMMENT_LINE $0408 bra donearrowf
+COMMENT_LINE $0408 label:
+COMMENT_LINE $0408 clr Arrow_f
+COMMENT_LINE $0408 donearrowf
+COMMENT_LINE $0408 PSEUDOCODE ABOVE
+FORCE_NO_SYMBOL $0408
+FORCE_SYMBOL $040A frm5cnt
+FORCE_SYMBOL $040D frm5cnt
+FORCE_SYMBOL $0412 frm5cnt
+FORCE_SYMBOL $0415 Explode_f
+FORCE_NO_SYMBOL $0418
+FORCE_SYMBOL $041A frm10cnt
+FORCE_SYMBOL $041D frm10cnt
+FORCE_SYMBOL $0422 frm10cnt
+FORCE_SYMBOL $0425 Bow_f
+FORCE_NO_SYMBOL $0428
+FORCE_SYMBOL $042A frm20cnt
+FORCE_SYMBOL $042D frm20cnt
+FORCE_SYMBOL $0432 frm20cnt
+FORCE_NO_SYMBOL $0435
+FORCE_SYMBOL $0437 frm25cnt
+FORCE_SYMBOL $043A frm25cnt
+FORCE_SYMBOL $043F frm25cnt
+FORCE_NO_SYMBOL $0442
+FORCE_SYMBOL $0444 frm50cnt
+FORCE_SYMBOL $0447 frm50cnt
+FORCE_SYMBOL $044C frm50cnt
+FORCE_SYMBOL $044F Prize_f
+COMMENT $0452 frame count 100=2 seconds (at full speed) 0-99 == 100
+FORCE_NO_SYMBOL $0452
+COMMENT_LINE $0454 frame freq 1, 2, 4, 5, 10, 20, 25,50, 100
+COMMENT_LINE $0454 frame len .02, .04, .08, .1, .2, .4, .5, 1, 2
+FORCE_SYMBOL $0454 frm100cnt
+FORCE_SYMBOL $0457 frm100cnt
+FORCE_SYMBOL $045D frm100cnt
+COMMENT_LINE $0460 Reset all frame counts
+COMMENT_LINE $0460 sta Arrow_f
+FORCE_SYMBOL $0460 Bow_f
+COMMENT_LINE $0463 sta Dash_f
+COMMENT_LINE $0463 sta Wedge_f
+COMMENT_LINE $0463 sta Ghost_f
+FORCE_SYMBOL $0463 Prize_f
+COMMENT_LINE $0466 sta Cannonball_f
+FORCE_SYMBOL $0466 Tank_f
+FORCE_SYMBOL $0469 Explode_f
+COMMENT $046C and repeat forever
+FORCE_SYMBOL $046C main
+COMMENT_LINE $046F ###########################################################################
+COMMENT_LINE $046F SUBROUTINES/FUNCTIONS
+COMMENT_LINE $046F ###########################################################################
+COMMENT $046F enable
+FORCE_NO_SYMBOL $046F
+FORCE_SYMBOL $0471 Vec_Joy_Mux_1_X
+FORCE_NO_SYMBOL $0474
+FORCE_SYMBOL $0476 Vec_Joy_Mux_1_Y
+COMMENT $0479 disable for Joy Mux's
+FORCE_NO_SYMBOL $0479
+FORCE_SYMBOL $047B Vec_Joy_Mux_2_X
+FORCE_SYMBOL $047E Vec_Joy_Mux_2_Y
+COMMENT_LINE $0481 jsr Joy_Digital ; set joymode, not analog.
+FORCE_SYMBOL $0481 highscore
+FORCE_SYMBOL $0484 Clear_Score
+FORCE_SYMBOL $0487 score
+FORCE_SYMBOL $048A Clear_Score
+COMMENT $048D set a bunch of variables to 0
+FORCE_NO_SYMBOL $048D
+FORCE_SYMBOL $048F bullet0e
+FORCE_SYMBOL $0492 bullet1e
+FORCE_SYMBOL $0495 bullet2e
+FORCE_SYMBOL $0498 bullet3e
+FORCE_SYMBOL $049B bullet4e
+FORCE_SYMBOL $049E bullet5e
+FORCE_SYMBOL $04A1 bullet6e
+FORCE_SYMBOL $04A4 bullet0d
+FORCE_SYMBOL $04A7 bullet1d
+FORCE_SYMBOL $04AA bullet2d
+FORCE_SYMBOL $04AD bullet3d
+FORCE_SYMBOL $04B0 bullet4d
+FORCE_SYMBOL $04B3 bullet5d
+FORCE_SYMBOL $04B6 bullet6d
+FORCE_SYMBOL $04B9 bullet0x
+FORCE_SYMBOL $04BC bullet1x
+FORCE_SYMBOL $04BF bullet2x
+FORCE_SYMBOL $04C2 bullet3x
+FORCE_SYMBOL $04C5 bullet4x
+FORCE_SYMBOL $04C8 bullet5x
+FORCE_SYMBOL $04CB bullet6x
+FORCE_SYMBOL $04CE frm100cnt
+FORCE_SYMBOL $04D1 frm50cnt
+FORCE_SYMBOL $04D4 frm25cnt
+FORCE_SYMBOL $04D7 frm20cnt
+FORCE_SYMBOL $04DA frm10cnt
+FORCE_SYMBOL $04DD frm5cnt
+FORCE_SYMBOL $04E0 Arrow_f
+FORCE_SYMBOL $04E3 Bow_f
+FORCE_SYMBOL $04E6 Dash_f
+FORCE_SYMBOL $04E9 Wedge_f
+FORCE_SYMBOL $04EC Ghost_f
+FORCE_SYMBOL $04EF Prize_f
+FORCE_SYMBOL $04F2 Cannonball_f
+FORCE_SYMBOL $04F5 Tank_f
+FORCE_NO_SYMBOL $04F9
+FORCE_SYMBOL $04FB VIA_t1_cnt_lo
+FORCE_SYMBOL $04FF bullet_count
+FORCE_SYMBOL $0502 bullet_count
+FORCE_SYMBOL $0506 bullete_t
+FORCE_NO_SYMBOL $050B
+COMMENT $050D don't do motion on non-existant bullets X
+FORCE_SYMBOL $050F bullet_count
+COMMENT $0512 shift left == multiply by 2 table is 2 byte entry
+FORCE_SYMBOL $0513 bulletx_t
+COMMENT $0516 get pointer from table
+COMMENT $0518 read from resolved address bulletNx
+FORCE_NO_SYMBOL $0518
+FORCE_SYMBOL $051C MOVEAMOUNT
+COMMENT $051E if moving goes out of bounds destroy_bullet
+FORCE_NO_SYMBOL $0520
+FORCE_SYMBOL $0524 bullet_count
+FORCE_SYMBOL $0528 bullete_t
+FORCE_NO_SYMBOL $052D
+FORCE_NO_SYMBOL $052F
+FORCE_SYMBOL $0531 bullet_count
+FORCE_SYMBOL $0535 bulletx_t
+FORCE_NO_SYMBOL $053A
+FORCE_NO_SYMBOL $053C
+FORCE_SYMBOL $0540 MOVEAMOUNT
+COMMENT $0542 if moving goes out of bounds destroy_bullet
+FORCE_NO_SYMBOL $0544
+FORCE_SYMBOL $0546 bullet_count
+FORCE_SYMBOL $0549 bullet_count
+FORCE_NO_SYMBOL $054C
+FORCE_NO_SYMBOL $0553
+COMMENT $0555 trying to make bullet brighter
+FORCE_SYMBOL $0555 Vec_Dot_Dwell
+FORCE_NO_SYMBOL $0558
+FORCE_SYMBOL $055A bullet_count
+FORCE_SYMBOL $055D bullet_count
+COMMENT $0560 shift left == multiply by 2 table is 2 byte entry
+FORCE_SYMBOL $0561 bullete_t
+FORCE_NO_SYMBOL $0566
+COMMENT $0568 Doesn't EXIST
+COMMENT $056A reset before positioning beam
+FORCE_NO_SYMBOL $056A
+COMMENT $056D /BLANK low and /ZERO low
+FORCE_SYMBOL $056D VIA_cntl
+COMMENT $056F clear shift register
+FORCE_SYMBOL $056F VIA_shift_reg
+FORCE_NO_SYMBOL $0571
+COMMENT $0574 clear D/A register
+FORCE_SYMBOL $0574 VIA_port_a
+COMMENT $0576 mux=1, disable mux
+FORCE_SYMBOL $0576 VIA_port_b
+COMMENT $0578 mux=1, enable mux
+FORCE_SYMBOL $0578 VIA_port_b
+COMMENT $057A do it again
+FORCE_SYMBOL $057A VIA_port_b
+FORCE_NO_SYMBOL $057C
+COMMENT $057E disable mu
+FORCE_SYMBOL $057E VIA_port_b
+COMMENT_LINE $0580 find Y pos
+FORCE_SYMBOL $0580 bullet_count
+COMMENT $0583 single mbyte table no asla
+FORCE_SYMBOL $0583 bulletYpos_t
+COMMENT $0586 do look up for Y pos from table TODO
+FORCE_SYMBOL $0588 bulletYtemp
+COMMENT_LINE $058B find X pos
+FORCE_SYMBOL $058B bullet_count
+COMMENT $058E shift left == multiply by 2 table is 2 byte entry
+FORCE_SYMBOL $058F bulletx_t
+COMMENT $0592 get pointer from table
+COMMENT $0594 read from resolved address bulletNx
+FORCE_NO_SYMBOL $0594
+FORCE_SYMBOL $0596 bulletYtemp
+COMMENT $0599 Store Y in D/A register
+FORCE_SYMBOL $0599 VIA_port_a
+COMMENT $059B Enable mux
+FORCE_SYMBOL $059B VIA_port_b
+COMMENT $059D Save D-register on stack
+COMMENT $059F Blank low, zero high?
+FORCE_NO_SYMBOL $059F
+FORCE_SYMBOL $05A1 VIA_cntl
+COMMENT $05A3 Clear shift regigster
+FORCE_SYMBOL $05A3 VIA_shift_reg
+COMMENT $05A5 Disable mux
+FORCE_SYMBOL $05A5 VIA_port_b
+COMMENT $05A7 Store X in D/A register
+FORCE_SYMBOL $05A7 VIA_port_a
+COMMENT $05A9 timer 1 count high
+FORCE_SYMBOL $05A9 VIA_t1_cnt_hi
+COMMENT $05AB Get back D-reg
+FORCE_SYMBOL $05AD Abs_a_b
+FORCE_NO_SYMBOL $05B4
+FORCE_NO_SYMBOL $05B6
+FORCE_NO_SYMBOL $05BA
+FORCE_NO_SYMBOL $05BE
+COMMENT $05C2 Wait for timer 1
+FORCE_NO_SYMBOL $05C2
+FORCE_SYMBOL $05C4 VIA_int_flags
+COMMENT $05C8 Delay a moment
+COMMENT $05CD Wait for timer 1
+FORCE_SYMBOL $05CD VIA_int_flags
+COMMENT_LINE $05D1 ldx #Shot
+COMMENT_LINE $05D1 jsr Draw_VL_mode
+COMMENT_LINE $05D1 jsr Dot_here
+COMMENT_LINE $05D1 draw dot code inlined
+COMMENT $05D1 Set pattern to all 1's
+FORCE_NO_SYMBOL $05D1
+COMMENT $05D3 Store in VIA shift register
+FORCE_SYMBOL $05D3 VIA_shift_reg
+COMMENT $05D5 Get dot dwell (brightness)
+FORCE_SYMBOL $05D5 Vec_Dot_Dwell
+COMMENT $05D8 Delay leaving beam in place
+COMMENT $05DB Blank beam in VIA shift register
+FORCE_SYMBOL $05DB VIA_shift_reg
+COMMENT_LINE $05DD END draw dot inline END
+FORCE_SYMBOL $05DD bullet_count
+FORCE_SYMBOL $05E0 bullet_count
+FORCE_NO_SYMBOL $05E3
+FORCE_SYMBOL $05E7 bstart
+FORCE_NO_SYMBOL $05EA
+FORCE_SYMBOL $05EC Vec_Dot_Dwell
+FORCE_NO_SYMBOL $05EF
+COMMENT $05F1 Store intensity in D/A
+FORCE_SYMBOL $05F1 VIA_port_a
+COMMENT $05F3 Save intensity in $C827
+FORCE_SYMBOL $05F3 Vec_Brightness
+COMMENT $05F6 mux disabled channel 2
+FORCE_NO_SYMBOL $05F6
+FORCE_SYMBOL $05F9 VIA_port_b
+COMMENT $05FB mux enabled channel 2
+FORCE_SYMBOL $05FB VIA_port_b
+COMMENT $05FD do it again just because
+FORCE_SYMBOL $05FD VIA_port_b
+FORCE_NO_SYMBOL $05FF
+COMMENT $0601 turn off mux
+FORCE_SYMBOL $0601 VIA_port_b
 RANGE $0000-$000B CHAR_DATA 11
 RANGE $000B-$000D DW_DATA 1
 RANGE $000D-$0011 DB_DATA 4
 RANGE $0011-$0019 CHAR_DATA 8
 RANGE $0019-$001A DB_DATA 1
-RANGE $001A-$0119 CODE
-RANGE $011A-$0599 CODE
-RANGE $0599-$059A DB_DATA 1
-RANGE $059A-$059C DB_DATA 2
-RANGE $059C-$059E DB_DATA 2
-RANGE $059E-$05A0 DB_DATA 2
-RANGE $05A0-$05A2 DB_DATA 2
-RANGE $05A2-$05A4 DB_DATA 2
-RANGE $05A4-$05A6 DB_DATA 2
-RANGE $05A6-$05A7 DB_DATA 1
-RANGE $05A7-$05A9 DB_DATA 2
-RANGE $05A9-$05AB DB_DATA 2
-RANGE $05AB-$05AD DB_DATA 2
-RANGE $05AD-$05AF DB_DATA 2
-RANGE $05AF-$05B0 DB_DATA 1
-RANGE $05B0-$05B2 DB_DATA 2
-RANGE $05B2-$05B4 DB_DATA 2
-RANGE $05B4-$05B6 DB_DATA 2
-RANGE $05B6-$05B8 DB_DATA 2
-RANGE $05B8-$05BA DB_DATA 2
-RANGE $05BA-$05BC DB_DATA 2
-RANGE $05BC-$05BE DB_DATA 2
-RANGE $05BE-$05C0 DB_DATA 2
-RANGE $05C0-$05C2 DB_DATA 2
-RANGE $05C2-$05C3 DB_DATA 1
-RANGE $05C3-$05C5 DB_DATA 2
-RANGE $05C5-$05C7 DB_DATA 2
-RANGE $05C7-$05C9 DB_DATA 2
-RANGE $05C9-$05CB DB_DATA 2
-RANGE $05CB-$05CD DB_DATA 2
-RANGE $05CD-$05CF DB_DATA 2
-RANGE $05CF-$05D1 DB_DATA 2
-RANGE $05D1-$05D3 DB_DATA 2
-RANGE $05D3-$05D5 DB_DATA 2
-RANGE $05D5-$05D8 DB_DATA 3
-RANGE $05D8-$05DB DB_DATA 3
-RANGE $05DB-$05DE DB_DATA 3
-RANGE $05DE-$05E1 DB_DATA 3
-RANGE $05E1-$05E4 DB_DATA 3
-RANGE $05E4-$05E5 DB_DATA 1
-RANGE $05E5-$05E6 DB_DATA 1
-RANGE $05E6-$05E8 DB_DATA 2
-RANGE $05E8-$05EA DB_DATA 2
-RANGE $05EA-$05EC DB_DATA 2
-RANGE $05EC-$05EE DB_DATA 2
-RANGE $05EE-$05F1 DB_DATA 3
-RANGE $05F1-$05F4 DB_DATA 3
-RANGE $05F4-$05F7 DB_DATA 3
-RANGE $05F7-$05FA DB_DATA 3
-RANGE $05FA-$05FD DB_DATA 3
-RANGE $05FD-$05FE DB_DATA 1
-RANGE $05FE-$0601 DB_DATA 3
-RANGE $0601-$0604 DB_DATA 3
-RANGE $0604-$0607 DB_DATA 3
-RANGE $0607-$060A DB_DATA 3
-RANGE $060A-$060D DB_DATA 3
-RANGE $060D-$060E DB_DATA 1
-RANGE $060E-$0611 DB_DATA 3
-RANGE $0611-$0614 DB_DATA 3
-RANGE $0614-$0617 DB_DATA 3
-RANGE $0617-$061A DB_DATA 3
-RANGE $061A-$061D DB_DATA 3
-RANGE $061D-$061E DB_DATA 1
-RANGE $061E-$0621 DB_DATA 3
-RANGE $0621-$0624 DB_DATA 3
-RANGE $0624-$0627 DB_DATA 3
-RANGE $0627-$062A DB_DATA 3
-RANGE $062A-$062D DB_DATA 3
-RANGE $062D-$062E DB_DATA 1
-RANGE $062E-$0631 DB_DATA 3
-RANGE $0631-$0634 DB_DATA 3
-RANGE $0634-$0637 DB_DATA 3
-RANGE $0637-$063A DB_DATA 3
-RANGE $063A-$063D DB_DATA 3
-RANGE $063D-$0640 DB_DATA 3
-RANGE $0640-$0643 DB_DATA 3
-RANGE $0643-$0646 DB_DATA 3
-RANGE $0646-$0649 DB_DATA 3
-RANGE $0649-$064A DB_DATA 1
-RANGE $064A-$064D DB_DATA 3
-RANGE $064D-$0650 DB_DATA 3
-RANGE $0650-$0653 DB_DATA 3
-RANGE $0653-$0656 DB_DATA 3
-RANGE $0656-$0657 DB_DATA 1
-RANGE $0657-$065A DB_DATA 3
-RANGE $065A-$065D DB_DATA 3
-RANGE $065D-$0660 DB_DATA 3
-RANGE $0660-$0663 DB_DATA 3
-RANGE $0663-$0664 DB_DATA 1
-RANGE $0664-$0667 DB_DATA 3
-RANGE $0667-$066A DB_DATA 3
-RANGE $066A-$066D DB_DATA 3
-RANGE $066D-$0670 DB_DATA 3
-RANGE $0670-$0673 DB_DATA 3
-RANGE $0673-$0676 DB_DATA 3
-RANGE $0676-$0679 DB_DATA 3
-RANGE $0679-$067C DB_DATA 3
-RANGE $067C-$067D DB_DATA 1
-RANGE $067D-$0680 DB_DATA 3
-RANGE $0680-$0683 DB_DATA 3
-RANGE $0683-$0686 DB_DATA 3
-RANGE $0686-$0689 DB_DATA 3
-RANGE $0689-$068C DB_DATA 3
-RANGE $068C-$068F DB_DATA 3
-RANGE $068F-$0692 DB_DATA 3
-RANGE $0692-$0695 DB_DATA 3
-RANGE $0695-$0698 DB_DATA 3
-RANGE $0698-$069B DB_DATA 3
-RANGE $069B-$069E DB_DATA 3
-RANGE $069E-$06A1 DB_DATA 3
-RANGE $06A1-$06A4 DB_DATA 3
-RANGE $06A4-$06A7 DB_DATA 3
-RANGE $06A7-$06AA DB_DATA 3
-RANGE $06AA-$06AD DB_DATA 3
-RANGE $06AD-$06B0 DB_DATA 3
-RANGE $06B0-$06B3 DB_DATA 3
-RANGE $06B3-$06B6 DB_DATA 3
-RANGE $06B6-$06B9 DB_DATA 3
-RANGE $06B9-$06BC DB_DATA 3
-RANGE $06BC-$06BD DB_DATA 1
-RANGE $06BD-$06C0 DB_DATA 3
-RANGE $06C0-$06C3 DB_DATA 3
-RANGE $06C3-$06C6 DB_DATA 3
-RANGE $06C6-$06C9 DB_DATA 3
-RANGE $06C9-$06CC DB_DATA 3
-RANGE $06CC-$06CD DB_DATA 1
-RANGE $06CD-$06D0 DB_DATA 3
-RANGE $06D0-$06D3 DB_DATA 3
-RANGE $06D3-$06D6 DB_DATA 3
-RANGE $06D6-$06D9 DB_DATA 3
-RANGE $06D9-$06DC DB_DATA 3
-RANGE $06DC-$06DD DB_DATA 1
-RANGE $06DD-$06DE DB_DATA 1
-RANGE $06DE-$06E5 DB_DATA 7
-RANGE $06E5-$06F3 DW_DATA 7
-RANGE $06F3-$0701 DW_DATA 7
-RANGE $0701-$070F DW_DATA 7
-RANGE $070F-$071D DW_DATA 7
-RANGE $071D-$072B DW_DATA 7
-RANGE $072B-$0739 DW_DATA 7
-RANGE $0739-$0745 DW_DATA 6
-RANGE $0745-$0755 DW_DATA 8
-RANGE $0755-$0757 DW_DATA 1
-RANGE $0757-$075B DW_DATA 2
-RANGE $075B-$075F DW_DATA 2
-RANGE $075F-$0763 DW_DATA 2
-RANGE $0763-$0765 DW_DATA 1
-RANGE $0765-$0767 DW_DATA 1
-RANGE $0767-$076B DW_DATA 2
-RANGE $076B-$076F DW_DATA 2
-RANGE $076F-$078D CHAR_DATA 30
+RANGE $001A-$0604 CODE
 
