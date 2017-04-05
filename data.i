@@ -147,8 +147,7 @@ Prize_2:            fcb      0, +3, 0
                     fcb      2, +3, -5 
                     fcb      2, +3, +5 
                     fcb      1 
-Cannonball: 
-                    fcb      1 
+Cannonball          fcb      1 
 Explode_0: 
                     fcb      0, -8, -5 
                     fcb      2, +16, +5 
@@ -246,28 +245,36 @@ bulletx_t:          fdb      bullet0x,bullet1x,bullet2x,bullet3x,bullet4x,bullet
 alleye_t:           fdb      alley0e,alley1e,alley2e,alley3e,alley4e,alley5e,alley6e 
 alleyd_t:           fdb      alley0d,alley1d,alley2d,alley3d,alley4d,alley5d,alley6d 
 alleyx_t:           fdb      alley0x,alley1x,alley2x,alley3x,alley4x,alley5x,alley6x 
-;enemy_t:            fdb      Arrow_t, Bow_t, Dash, Wedge_t, Ghost_t, Prize_t ;, CannonBall ;, Tank 
 enemy_speed_t       fdb      5,5,6,7,8,9,0,20             ; example TODO 
 enemy_stuff_t       fdb      0 
-; Enemy direction table, single entry means same graphics both ways
+; SPAWNABLE enemy table
+enemyspawn_t:            fdb      Arrow_D, Bow_D, Dash_D, Wedge_D, Prize_D 
+; Enemy direction table, single entry means same graphics both ways;  _D = direction
+; Arrow -> Tank
+; Prize -> Cannonball
+; Ghost only spawns when player captures prize OR lingers in alley too long (??)
 Arrow_D             fdb      Arrow_L_t, Arrow_R_t 
 Bow_D               fdb      Bow_t 
+Cannonball_D        fdb      Cannonball_t 
 Dash_D              fdb      Dash_t 
 Explode_D           fdb      Explode_t 
 Ghost_D             fdb      Ghost_t 
 Prize_D             fdb      Prize_t 
 Tank_D              fdb      Tank_L_t, Tank_R_t 
 Wedge_D             fdb      Wedge_L_t, Wedge_R_t 
-; Animation tables counts must be mod 100 == 0 ie 1,2,4,5,10,20,25,50,100
+; Animation tables counts must be mod 100 == 0 ie 1,2,4,5,10,20,25,50,100 
 Arrow_L_t           fdb      Arrow_L 
 Arrow_R_t           fdb      Arrow_R 
 Bow_t               fdb      Bow_1, Bow_2                 ; flippy 90 degree animation (2 frames) 
+Cannonball_t        fdb      Cannonball 
 Dash_t              fdb      Dash                         ; same, no animation (100 frames) 
-Explode_t           fdb      Explode_1 ,Explode_2 ,Explode_3 ,Explode_4 ,Explode_5 
-                    fdb      Explode_6 ,Explode_7 ,Explode_8 ,Explode_9 ,Explode_10 
+Explode_t           fdb      Explode_0 ,Explode_2 ,Explode_3 ,Explode_4 ,Explode_5 
+                    fdb      Explode_6 ,Explode_7 ,Explode_8 ,Explode_9 ,Explode_9 
+                    fdb      Explode_0 ,Explode_2 ,Explode_3 ,Explode_4 ,Explode_5 
+                    fdb      Explode_6 ,Explode_7 ,Explode_8 ,Explode_9 ,Explode_9 
 Ghost_t             fdb      Ghost                        ; same, no animation (100 frames) 
-Tank_L_t            fdb      Tank_L                      
-Tank_R_t            fdb      Tank_R                      
+Tank_L_t            fdb      Tank_L 
+Tank_R_t            fdb      Tank_R 
 Prize_t             fdb      Prize_1,Prize_2              ; big/small animation (10 frames) 
 Wedge_L_t           fdb      Wedge_L 
 Wedge_R_t           fdb      Wedge_R 

@@ -3,7 +3,6 @@
 ;***************************************************************************
 ; load vectrex bios routine definitions
                     include  "VECTREX.I"                  ; vectrex function includes
-                    include  "data.i"
                     include  "macros.i"
 ;***************************************************************************
 ; Variable / RAM SECTION
@@ -89,6 +88,7 @@ rottemp             ds       15                           ; rotation list temp
 ALLEYWIDTH          =        17 
 LEFT                =        0 
 RIGHT               =        1 
+SCORE               =        10 
 ;FALSE              =     0 
 ;TRUE               =      1 
 MOVEAMOUNT          =        8                            ; how many 'pixels per frame' TOD/FIX/something 
@@ -191,28 +191,20 @@ ships_left_loop
                     DRAW_VLC  
                     dec      temp 
                     bne      ships_left_loop 
+                                                          ; jmp main 
 ; end score+ship count
 ;;;; DRAW VARIOUS STUFF TEST ZONE
                     RESET0REF  
                     ldx      #bulletYpos_t 
                     lda      #6 
                     lda      a,x                          ; Y 
-                    ldb      #-80                         ; X 
+                    ldb      #-30                         ; X 
                     MOVETO_D  
-                    lda      frm100cnt 
-                    cmpa     #25 
-                    bgt      bowl 
-                    ldx      #Prize_t 
-                    lda      #0 
+                    ldx      #Explode_D 
+                    clra     
+                    ldx      a,x                          ; get table lookup Left=0 
+                    lda      Explode_f 
                     ldx      a,x 
-                                                          ; ldx #Prize_1 ; animation Primitive, switch every 100 frames 
-                    bra      dobowdraw 
-
-bowl 
-                    ldx      #Prize_t 
-                    lda      #2 
-                    ldx      a,x 
-dobowdraw 
                     jsr      Draw_VL_mode 
                     RESET0REF  
                     ldx      #bulletYpos_t 
@@ -220,13 +212,11 @@ dobowdraw
                     lda      a,x                          ; Y 
                                                           ; clra 
                                                           ; clrb ; X 
-                    ldb      #-80 
+                    ldb      #-30 
                     MOVETO_D  
-                    ldx      #Wedge_R 
-                                                          ; lda #90 
-                                                          ; ldu #rottemp 
-                                                          ; jsr Rot_VL_Mode 
-                                                          ; ldx #rottemp 
+                    ldx      #Wedge_R_t 
+                    lda      Wedge_f 
+                    ldx      a,x 
                     jsr      Draw_VL_mode 
 ; increment the Test frame counter
 ; add more logic to set/increment SHAPE_f counters for desired animations
@@ -243,15 +233,16 @@ dobowdraw
                     lda      #5 
                     inc      frm5cnt 
                     cmpa     frm5cnt 
-                    bne      no100cntreset 
+                    bne      no5cntreset 
                     clr      frm5cnt 
                     inc      Explode_f 
+                    inc      Explode_f 
+no5cntreset 
                     lda      #10 
                     inc      frm10cnt 
                     cmpa     frm10cnt 
                     bne      no10cntreset 
                     clr      frm10cnt 
-                    inc      Bow_f 
 no10cntreset 
                     lda      #20 
                     inc      frm20cnt 
@@ -271,6 +262,9 @@ no25cntreset
                     bne      no50cntreset 
                     clr      frm50cnt 
                     inc      Prize_f 
+                    inc      Prize_f                      ; add 2 for next table entry 
+                    lda      #2 
+                    sta      Bow_f 
 no50cntreset 
                     lda      #100                         ; frame count 100=2 seconds (at full speed) 0-99 == 100 
                                                           ; frame freq 1, 2, 4, 5, 10, 20, 25,50, 100 
@@ -340,6 +334,7 @@ setup:                                                    ;        setting up ha
                     sta      Arrow_f 
                     sta      Bow_f 
                     sta      Dash_f 
+                    sta      Explode_f 
                     sta      Wedge_f 
                     sta      Ghost_f 
                     sta      Prize_f 
@@ -449,3 +444,7 @@ bullets_done
                     lda      #$5F 
                     INTENSITY_A  
                     rts      
+
+; must go at bottom or fills up RAM instead of ROM ??
+                    include  "data.i"
+end 
