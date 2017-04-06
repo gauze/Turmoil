@@ -13,6 +13,7 @@
                     org      $c880                        ; start of our ram space 
 score               ds       7                            ; 7 bytes 
 highscore           ds       7                            ; 7 bytes 
+level               ds       1
 shipdir             ds       1 
 shippos             ds       1 
 shipXpos            ds       1 
@@ -59,6 +60,13 @@ alley3x             ds       1
 alley4x             ds       1 
 alley5x             ds       1 
 alley6x             ds       1 
+alley0s             ds       1                            ; speed of monster 1-9 
+alley1s             ds       1 
+alley2s             ds       1 
+alley3s             ds       1 
+alley4s             ds       1 
+alley5s             ds       1 
+alley6s             ds       1 
 bullet_count        ds       1                            ; 1 byte 
 ships_left          ds       1                            ; 1 byte 
 bulletYtemp         ds       1 
@@ -72,6 +80,7 @@ Ghost_f             ds       1
 Prize_f             ds       1 
 Cannonball_f        ds       1 
 Tank_f              ds       1 
+None_f              ds       1 
 Explode_f           ds       1                            ; generic shape used when something is destroyed 
 ; frame counts for animations
 frm100cnt           ds       1 
@@ -85,7 +94,7 @@ temp                ds       1                            ; generic 1 byte temp
 rottemp             ds       15                           ; rotation list temp 
 ;
 ; CONSTANTS place after VARIABLES
-ALLEYWIDTH          =        17 
+;ALLEYWIDTH          =        17 
 LEFT                =        0 
 RIGHT               =        1 
 SCORE               =        10 
@@ -194,30 +203,43 @@ ships_left_loop
                                                           ; jmp main 
 ; end score+ship count
 ;;;; DRAW VARIOUS STUFF TEST ZONE
-                    RESET0REF  
-                    ldx      #bulletYpos_t 
-                    lda      #6 
-                    lda      a,x                          ; Y 
-                    ldb      #-30                         ; X 
-                    MOVETO_D  
-                    ldx      #Explode_D 
-                    clra     
-                    ldx      a,x                          ; get table lookup Left=0 
-                    lda      Explode_f 
-                    ldx      a,x 
-                    jsr      Draw_VL_mode 
+                    NEW_MONSTER  
                     RESET0REF  
                     ldx      #bulletYpos_t 
                     lda      #0 
                     lda      a,x                          ; Y 
-                                                          ; clra 
-                                                          ; clrb ; X 
-                    ldb      #-30 
+                    ldb      alley0x                      ; X 
                     MOVETO_D  
-                    ldx      #Wedge_R_t 
-                    lda      Wedge_f 
+; *_D -> index 0|1 (0=Left, 1=Right)
+                    ldx      #enemy_t 
+                    lda      alley0e 
+                    lsla     
+                    ldx      a,x                          ; sets *_D 
+                    lda      alley0d 
+                    lsla     
+                    ldx      a,x                          ; gets *_t 
+                    pshs     x                            ; store it 
+; *_f  frame count -> index list of frames, see definition in data.i 
+                    lda      alley0e 
+                    lsla     
+                    ldx      #enemyframe_t 
+                    ldx      a,x 
+                    lda      ,x                           ; A = *_f var 
+                    lsla     
+                    puls     x                            ; pull X back 
                     ldx      a,x 
                     jsr      Draw_VL_mode 
+;
+                                                          ; RESET0REF 
+                                                          ; ldx #bulletYpos_t 
+                                                          ; lda #0 
+                                                          ; lda a,x 
+                                                          ; ldb #-30 
+                                                          ; MOVETO_D 
+                                                          ; ldx #Wedge_R_t 
+                                                          ; lda Wedge_f 
+                                                          ; ldx a,x 
+                                                          ; jsr Draw_VL_mode 
 ; increment the Test frame counter
 ; add more logic to set/increment SHAPE_f counters for desired animations
 ; ANIMATION PSEUDOCODE
@@ -235,8 +257,8 @@ ships_left_loop
                     cmpa     frm5cnt 
                     bne      no5cntreset 
                     clr      frm5cnt 
-                    inc      Explode_f 
-                    inc      Explode_f 
+                    lda      #2 
+                    sta      Explode_f 
 no5cntreset 
                     lda      #10 
                     inc      frm10cnt 
@@ -261,8 +283,8 @@ no25cntreset
                     cmpa     frm50cnt 
                     bne      no50cntreset 
                     clr      frm50cnt 
-                    inc      Prize_f 
-                    inc      Prize_f                      ; add 2 for next table entry 
+                    lda      #2 
+                    sta      Prize_f                      ; add 2 for next table entry 
                     lda      #2 
                     sta      Bow_f 
 no50cntreset 
@@ -303,6 +325,8 @@ setup:                                                    ;        setting up ha
                     jsr      Clear_Score 
                     ldx      #score 
                     jsr      Clear_Score 
+                    lda      #1
+                    sta      level
                     lda      #0                           ; set a bunch of variables to 0 
                     sta      bullet0e 
                     sta      bullet1e 
@@ -325,6 +349,33 @@ setup:                                                    ;        setting up ha
                     sta      bullet4x 
                     sta      bullet5x 
                     sta      bullet6x 
+                    sta      alley0e 
+                    sta      alley1e 
+                    sta      alley2e 
+                    sta      alley3e 
+                    sta      alley4e 
+                    sta      alley5e 
+                    sta      alley6e 
+                    sta      alley0d 
+                    sta      alley1d 
+                    sta      alley2d 
+                    sta      alley3d 
+                    sta      alley4d 
+                    sta      alley5d 
+                    sta      alley6d 
+                    sta      alley0x 
+                    sta      alley1x 
+                    sta      alley2x 
+                    sta      alley3x 
+                    sta      alley4x 
+                    sta      alley5x 
+                    sta      alley6x 
+                    sta      alley1s 
+                    sta      alley2s 
+                    sta      alley3s 
+                    sta      alley4s 
+                    sta      alley5s 
+                    sta      alley6s 
                     sta      frm100cnt 
                     sta      frm50cnt 
                     sta      frm25cnt 
@@ -337,6 +388,7 @@ setup:                                                    ;        setting up ha
                     sta      Explode_f 
                     sta      Wedge_f 
                     sta      Ghost_f 
+                    sta      None_f 
                     sta      Prize_f 
                     sta      Cannonball_f 
                     sta      Tank_f 

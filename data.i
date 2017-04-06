@@ -236,43 +236,52 @@ Explode_10:
                     fcb      2, +0, +15 
                     fcb      2, -11, -12 
                     fcb      1 
+None:               fcb      1
 ; TABLES
 ;shippos_t:          fcb      -3*ALLEYWIDTH,-2*ALLEYWIDTH,-1*ALLEYWIDTH,0,1*ALLEYWIDTH,2*ALLEYWIDTH,3*ALLEYWIDTH ; Y pos of ship 
 bulletYpos_t:       fcb      -98,-64,-31,3,37,70, 104     ; Y pos of bullet/ship/enemy per alley 
-bullete_t:          fdb      bullet0e,bullet1e,bullet2e,bullet3e,bullet4e,bullet5e,bullet6e ; exists TRUE/FALSE 
+bullete_t:          fdb      bullet0e,bullet1e,bullet2e,bullet3e,bullet4e,bullet5e,bullet6e ; exists 0=false, !0= true
 bulletd_t:          fdb      bullet0d,bullet1d,bullet2d,bullet3d,bullet4d,bullet5d,bullet6d ; direction left/right 
 bulletx_t:          fdb      bullet0x,bullet1x,bullet2x,bullet3x,bullet4x,bullet5x,bullet6x ; X position 
 alleye_t:           fdb      alley0e,alley1e,alley2e,alley3e,alley4e,alley5e,alley6e 
 alleyd_t:           fdb      alley0d,alley1d,alley2d,alley3d,alley4d,alley5d,alley6d 
 alleyx_t:           fdb      alley0x,alley1x,alley2x,alley3x,alley4x,alley5x,alley6x 
+alleys_t:           fdb      alley0s,alley1s,alley2s,alley3s,alley4s,alley5s,alley6s
 enemy_speed_t       fdb      5,5,6,7,8,9,0,20             ; example TODO 
 enemy_stuff_t       fdb      0 
 ; SPAWNABLE enemy table
-enemyspawn_t:            fdb      Arrow_D, Bow_D, Dash_D, Wedge_D, Prize_D 
-; Enemy direction table, single entry means same graphics both ways;  _D = direction
+;                                0,       1,     2,     3,        4,       5,     6,             7,       8  
+enemyspawn_t       fdb      None_D, Arrow_D, Bow_D, Dash_D, Wedge_D, Prize_D 
+; Possible Enemys 
+enemy_t            fdb      None_D, Arrow_D, Bow_D, Dash_D, Wedge_D, Prize_D, Tank_D, Cannonball_D, Ghost_D
+;                                0,       1,     2,     3,        4,       5,     6,             7,       8 
+enemyframe_t       fdb      None_f, Arrow_f, Bow_f, Dash_f, Wedge_f, Prize_f, Tank_f, Cannonball_f, Ghost_f
+; Enemy direction table, dupe entry means same graphics both ways;  _D = direction
 ; Arrow -> Tank
 ; Prize -> Cannonball
 ; Ghost only spawns when player captures prize OR lingers in alley too long (??)
+None_D              fdb      None_t, None_t                         ; No enemy
 Arrow_D             fdb      Arrow_L_t, Arrow_R_t 
-Bow_D               fdb      Bow_t 
-Cannonball_D        fdb      Cannonball_t 
-Dash_D              fdb      Dash_t 
-Explode_D           fdb      Explode_t 
-Ghost_D             fdb      Ghost_t 
-Prize_D             fdb      Prize_t 
+Bow_D               fdb      Bow_t, Bow_t 
+Cannonball_D        fdb      Cannonball_t, Cannonball_t 
+Dash_D              fdb      Dash_t, Dash_t 
+Explode_D           fdb      Explode_t, Explode_t 
+Ghost_D             fdb      Ghost_t, Ghost_t 
+Prize_D             fdb      Prize_t, Prize_t 
 Tank_D              fdb      Tank_L_t, Tank_R_t 
 Wedge_D             fdb      Wedge_L_t, Wedge_R_t 
 ; Animation tables counts must be mod 100 == 0 ie 1,2,4,5,10,20,25,50,100 
 Arrow_L_t           fdb      Arrow_L 
 Arrow_R_t           fdb      Arrow_R 
-Bow_t               fdb      Bow_1, Bow_2                 ; flippy 90 degree animation (2 frames) 
+Bow_t               fdb      Bow_1, Bow_2                 ; flippy 90 degree animation (100/2 frames each) 
 Cannonball_t        fdb      Cannonball 
 Dash_t              fdb      Dash                         ; same, no animation (100 frames) 
-Explode_t           fdb      Explode_0 ,Explode_2 ,Explode_3 ,Explode_4 ,Explode_5 
+Explode_t           fdb      Explode_0 ,Explode_2 ,Explode_3 ,Explode_4 ,Explode_5 ; (100/20 frames each) 
                     fdb      Explode_6 ,Explode_7 ,Explode_8 ,Explode_9 ,Explode_9 
                     fdb      Explode_0 ,Explode_2 ,Explode_3 ,Explode_4 ,Explode_5 
                     fdb      Explode_6 ,Explode_7 ,Explode_8 ,Explode_9 ,Explode_9 
 Ghost_t             fdb      Ghost                        ; same, no animation (100 frames) 
+None_t              fdb      None 
 Tank_L_t            fdb      Tank_L 
 Tank_R_t            fdb      Tank_R 
 Prize_t             fdb      Prize_1,Prize_2              ; big/small animation (10 frames) 

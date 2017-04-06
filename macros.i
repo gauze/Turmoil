@@ -45,18 +45,35 @@ newshotdone
 no_press 
 already_exists 
                     endm                                  ; rts 
+
+
 NEW_MONSTER         macro    
-                    jsr      Random 
-                    sta      temp
-                    anda     %00001111                    ; mask off low 4 bits to limit answer 0-7
-                    sta      alley0e
+                    lda     alley0e
+                    bne     mon_done
+                    jsr      Random_3  
+                    sta      temp                        
+                    anda     #%00000011                    ; mask off top 5 bits to limit answer 0-3
+                    adda     #1                           ; and add 1, use with enemyspawn_t table
+                    sta      alley0e                        
+
+                    ; figure out speed stuff here
                     lda      temp
-                    anda     %00010000                    ; mask some other random bit to derive start direction
+                    anda     #%11110000
+                    lsra
+                    lsra
+                    lsra
+                    lsra
+                    lsra                                  ; mask top 4 bits, shift til 3 bits 0-7             
+                    sta      alley0s
+
+                    lda      temp
+                    anda     #%00010000                    ; mask some other random bit to derive start direction
                     lsra    
                     lsra 
                     lsra 
                     lsra  
                     sta      alley0d
+
                     beq      set_mon_going_left
                     lda      #-127
                     sta      alley0x
@@ -68,7 +85,9 @@ mon_done
 ; need code to generate new random monster OR prize ?? in random alley
 ; monster type, and direction, direction decidesd initial X placement
 ; store answer in (bool)alleyNe (always 1), (bool)alleyNd (0 left, 1 right), (signed int)alleyNx (-127 or 127 )
-                    endm     
+                    endm   
+
+  
 RESET0REF           macro    
                     ldd      #$00CC 
                     stb      <VIA_cntl                    ;/BLANK low and /ZERO low 
