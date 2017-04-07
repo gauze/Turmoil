@@ -287,4 +287,11 @@ Tank_R_t            fdb      Tank_R
 Prize_t             fdb      Prize_1,Prize_2              ; big/small animation (10 frames) 
 Wedge_L_t           fdb      Wedge_L 
 Wedge_R_t           fdb      Wedge_R 
+
+; SOUND data
+EXP1:               db       $19,$3F,$00,$02 
+EXP2:               db       $3F,$00,$00,$01 
+EXP3:               db       $01,-1,1,$04 
+
+
 credits             fcc      "PROGRAMMED BY GAUZE 2016-2017",$80 

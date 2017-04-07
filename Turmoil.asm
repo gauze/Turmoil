@@ -1,3 +1,12 @@
+; vim: ts=4
+; vim: syntax=asm6809
+                    title    "Turmoil"
+; DESCRIPTION
+; Port of 20th Century Fox Atari 2600 game Turmoil
+;
+;#TOOLS USED
+; Editing, graphic drawing, assembly: VIDE  http://vide.malban.de
+; Testing on real hardware: VecFever
 ;***************************************************************************
 ; DEFINE SECTION
 ;***************************************************************************
@@ -13,11 +22,12 @@
                     org      $c880                        ; start of our ram space 
 score               ds       7                            ; 7 bytes 
 highscore           ds       7                            ; 7 bytes 
-level               ds       1
+level               ds       1 
 shipdir             ds       1 
 shippos             ds       1 
 shipXpos            ds       1 
 in_alley            ds       1 
+enemycnt            ds       1 
 bullet0e            ds       1 
 bullet1e            ds       1                            ; shit Exists in alley 
 bullet2e            ds       1 
@@ -92,6 +102,7 @@ frm5cnt             ds       1
 frm2cnt             ds       1 
 temp                ds       1                            ; generic 1 byte temp 
 rottemp             ds       15                           ; rotation list temp 
+titlescreen_y       ds       1 
 ;
 ; CONSTANTS place after VARIABLES
 ;ALLEYWIDTH          =        17 
@@ -128,8 +139,9 @@ start
                     stb      shipdir 
                     ldx      #score 
                     jsr      Clear_Score 
-                    lda      #3 
+                    lda      #5 
                     sta      ships_left 
+                                                          ; jsr explodetest 
 main: 
                     jsr      Wait_Recal 
                     JOYSTICK_TEST  
@@ -203,7 +215,7 @@ ships_left_loop
                                                           ; jmp main 
 ; end score+ship count
 ;;;; DRAW VARIOUS STUFF TEST ZONE
-                    NEW_MONSTER  
+                    NEW_ENEMY  
                     RESET0REF  
                     ldx      #bulletYpos_t 
                     lda      #0 
@@ -307,6 +319,78 @@ no50cntreset
                     sta      Tank_f 
                     sta      Explode_f 
 no100cntreset 
+; move enemies0
+                    lda      alley0x
+                    ldb      alley0d
+                    bne      add0                 
+                    suba     alley0s
+                    bra      subdone0
+add0
+                    adda     alley0s 
+subdone0
+                    sta      alley0x 
+; move enemies1
+                    lda      alley1x
+                    ldb      alley1d
+                    bne      add1                 
+                    suba     alley1s
+                    bra      subdone1
+add1
+                    adda     alley1s 
+subdone1
+                    sta      alley1x
+; move enemies2
+                    lda      alley2x
+                    ldb      alley2d
+                    bne      add2                 
+                    suba     alley2s
+                    bra      subdone2
+add2
+                    adda     alley2s 
+subdone2
+                    sta      alley2x
+; move enemies3
+                    lda      alley3x
+                    ldb      alley3d
+                    bne      add3                 
+                    suba     alley3s
+                    bra      subdone3
+add3
+                    adda     alley3s 
+subdone3
+                    sta      alley3x
+; move enemies4
+                    lda      alley4x
+                    ldb      alley4d
+                    bne      add4                 
+                    suba     alley4s
+                    bra      subdone4
+add4
+                    adda     alley4s 
+subdone4
+                    sta      alley4x
+; move enemies5
+                    lda      alley5x
+                    ldb      alley5d
+                    bne      add5                 
+                    suba     alley5s
+                    bra      subdone5
+add5
+                    adda     alley5s 
+subdone5
+                    sta      alley5x
+; move enemies6
+                    lda      alley6x
+                    ldb      alley6d
+                    bne      add6                 
+                    suba     alley6s
+                    bra      subdone6
+add6
+                    adda     alley6s 
+subdone6
+                    sta      alley6x
+
+
                     jmp      main                         ; and repeat forever 
 
 ;###########################################################################
@@ -325,8 +409,8 @@ setup:                                                    ;        setting up ha
                     jsr      Clear_Score 
                     ldx      #score 
                     jsr      Clear_Score 
-                    lda      #1
-                    sta      level
+                    lda      #1 
+                    sta      level 
                     lda      #0                           ; set a bunch of variables to 0 
                     sta      bullet0e 
                     sta      bullet1e 
@@ -392,6 +476,7 @@ setup:                                                    ;        setting up ha
                     sta      Prize_f 
                     sta      Cannonball_f 
                     sta      Tank_f 
+                    sta      enemycnt 
                     rts      
 
 move_bullets: 
@@ -496,6 +581,58 @@ bullets_done
                     lda      #$5F 
                     INTENSITY_A  
                     rts      
+
+titlescreen 
+                    clr      titlescreen_y 
+tsstart 
+                    jsr      Wait_Recal 
+                    clr      Vec_Misc_Count 
+                    lda      #$80 
+                    sta      VIA_t1_cnt_lo 
+                    jsr      Intensity_7F 
+                    RESET0REF  
+                    lda      titlescreen_y 
+                    ldb      #0 
+                    jsr      Moveto_d 
+                    lda      #0 
+                    ldb      #30 
+                    jsr      Draw_Line_d 
+                    RESET0REF  
+                    lda      titlescreen_y 
+                    inca     
+                    ldb      #0 
+                    jsr      Moveto_d 
+                    lda      #0 
+                    ldb      #30 
+                    jsr      Draw_Line_d 
+                    RESET0REF  
+                    lda      titlescreen_y 
+                    inca     
+                    inca     
+                    ldb      #0 
+                    jsr      Moveto_d 
+                    lda      #0 
+                    ldb      #30 
+                    jsr      Draw_Line_d 
+                    inc      titlescreen_y 
+                    lda      titlescreen_y 
+                    cmpa     #10 
+                    bne      tsstart 
+                    clr      titlescreen_y 
+                    bra      tsstart 
+
+                    rts      
+
+explodetest: 
+                    lda      #-1                          ; high bit set by any negative number 
+                    sta      Vec_Expl_Flag                ; set high bit for Explosion flag 
+loop 
+                    jsr      DP_to_C8                     ; DP to RAM 
+                    ldu      #EXP3                        ; point to explosion table entry 
+                    jsr      Explosion_Snd                ; 
+                    jsr      Wait_Recal                   ; call frame 
+                    jsr      Do_Sound                     ; this actually plays the sound 
+                    jmp      loop 
 
 ; must go at bottom or fills up RAM instead of ROM ??
                     include  "data.i"

@@ -47,9 +47,15 @@ already_exists
                     endm                                  ; rts 
 
 
-NEW_MONSTER         macro    
+NEW_ENEMY         macro    
+; need code to generate new random enemy OR prize in random alley
+; type, and direction, direction decides initial X placement
+; store answer in alleyNe (value from enemy_t offset), (bool)alleyNd (0 left, 1 right), (signed int)alleyNx (-127 or 127 )
+                    lda     enemycnt
+                    
+
                     lda     alley0e
-                    bne     mon_done
+                    bne     enemy_done
                     jsr      Random_3  
                     sta      temp                        
                     anda     #%00000011                    ; mask off top 5 bits to limit answer 0-3
@@ -74,17 +80,15 @@ NEW_MONSTER         macro
                     lsra  
                     sta      alley0d
 
-                    beq      set_mon_going_left
-                    lda      #-127
+                    beq      set_enemy_going_left
+                    lda      #-126
                     sta      alley0x
-                    bra      mon_done
-set_mon_going_left
-                    lda      #127
+                    bra      enemy_done
+set_enemy_going_left
+                    lda      #126
                     sta      alley0x
-mon_done
-; need code to generate new random monster OR prize ?? in random alley
-; monster type, and direction, direction decidesd initial X placement
-; store answer in (bool)alleyNe (always 1), (bool)alleyNd (0 left, 1 right), (signed int)alleyNx (-127 or 127 )
+enemy_done
+
                     endm   
 
   
