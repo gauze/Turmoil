@@ -28,6 +28,7 @@ shippos             ds       1
 shipXpos            ds       1 
 in_alley            ds       1 
 enemycnt            ds       1 
+stallcnt            ds       1 
 bullet0e            ds       1 
 bullet1e            ds       1                            ; shit Exists in alley 
 bullet2e            ds       1 
@@ -320,77 +321,82 @@ no50cntreset
                     sta      Explode_f 
 no100cntreset 
 ; move enemies0
-                    lda      alley0x
-                    ldb      alley0d
-                    bne      add0                 
-                    suba     alley0s
-                    bra      subdone0
-add0
+                    lda      alley0x 
+                    ldb      alley0d 
+                    bne      add0 
+                    suba     alley0s 
+                    bra      subdone0 
+
+add0 
                     adda     alley0s 
-subdone0
+subdone0 
                     sta      alley0x 
 ; move enemies1
-                    lda      alley1x
-                    ldb      alley1d
-                    bne      add1                 
-                    suba     alley1s
-                    bra      subdone1
-add1
+                    lda      alley1x 
+                    ldb      alley1d 
+                    bne      add1 
+                    suba     alley1s 
+                    bra      subdone1 
+
+add1 
                     adda     alley1s 
-subdone1
-                    sta      alley1x
+subdone1 
+                    sta      alley1x 
 ; move enemies2
-                    lda      alley2x
-                    ldb      alley2d
-                    bne      add2                 
-                    suba     alley2s
-                    bra      subdone2
-add2
+                    lda      alley2x 
+                    ldb      alley2d 
+                    bne      add2 
+                    suba     alley2s 
+                    bra      subdone2 
+
+add2 
                     adda     alley2s 
-subdone2
-                    sta      alley2x
+subdone2 
+                    sta      alley2x 
 ; move enemies3
-                    lda      alley3x
-                    ldb      alley3d
-                    bne      add3                 
-                    suba     alley3s
-                    bra      subdone3
-add3
+                    lda      alley3x 
+                    ldb      alley3d 
+                    bne      add3 
+                    suba     alley3s 
+                    bra      subdone3 
+
+add3 
                     adda     alley3s 
-subdone3
-                    sta      alley3x
+subdone3 
+                    sta      alley3x 
 ; move enemies4
-                    lda      alley4x
-                    ldb      alley4d
-                    bne      add4                 
-                    suba     alley4s
-                    bra      subdone4
-add4
+                    lda      alley4x 
+                    ldb      alley4d 
+                    bne      add4 
+                    suba     alley4s 
+                    bra      subdone4 
+
+add4 
                     adda     alley4s 
-subdone4
-                    sta      alley4x
+subdone4 
+                    sta      alley4x 
 ; move enemies5
-                    lda      alley5x
-                    ldb      alley5d
-                    bne      add5                 
-                    suba     alley5s
-                    bra      subdone5
-add5
+                    lda      alley5x 
+                    ldb      alley5d 
+                    bne      add5 
+                    suba     alley5s 
+                    bra      subdone5 
+
+add5 
                     adda     alley5s 
-subdone5
-                    sta      alley5x
+subdone5 
+                    sta      alley5x 
 ; move enemies6
-                    lda      alley6x
-                    ldb      alley6d
-                    bne      add6                 
-                    suba     alley6s
-                    bra      subdone6
-add6
+                    lda      alley6x 
+                    ldb      alley6d 
+                    bne      add6 
+                    suba     alley6s 
+                    bra      subdone6 
+
+add6 
                     adda     alley6s 
-subdone6
-                    sta      alley6x
-
-
+subdone6 
+                    sta      alley6x 
                     jmp      main                         ; and repeat forever 
 
 ;###########################################################################

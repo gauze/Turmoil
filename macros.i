@@ -51,7 +51,14 @@ NEW_ENEMY         macro
 ; need code to generate new random enemy OR prize in random alley
 ; type, and direction, direction decides initial X placement
 ; store answer in alleyNe (value from enemy_t offset), (bool)alleyNd (0 left, 1 right), (signed int)alleyNx (-127 or 127 )
-                    lda     enemycnt
+                    
+
+                    ; don't even do spawn logic if maximum enemies are out
+                    lda     level
+                    ldx     max_enemys_t
+                    lda     a,x
+                    cmpa     enemycnt
+                    bge     enemy_done    
                     
 
                     lda     alley0e
@@ -64,14 +71,14 @@ NEW_ENEMY         macro
 
                     ; figure out speed stuff here
                     lda      temp
-                    anda     #%11110000
+                    anda     #%11100000
                     lsra
                     lsra
                     lsra
                     lsra
-                    lsra                                  ; mask top 4 bits, shift til 3 bits 0-7             
+                    lsra                                  ; mask top 3 bits, shift til 3 bits 0-7             
                     sta      alley0s
-
+                    ; initial direction which sets initial X pos
                     lda      temp
                     anda     #%00010000                    ; mask some other random bit to derive start direction
                     lsra    
