@@ -2,6 +2,39 @@
 ; vim: ts=4
 ; vim: syntax=asm6809
 ; MACROS
+COLLISION_DETECT    macro    
+                    lda      bullet0e 
+                    beq      bullet0_done 
+                    lda      bullet0d 
+                    beq      bullet0d_l 
+                    lda      alley0x 
+                    suba     bullet0x 
+                    bge      bullet0_miss 
+; destroy bullet and enemy
+                    clr      alley0e 
+                    clr      alley0x 
+                    clr      alley0d 
+                    clr      alley0s 
+                    clr      bullet0e 
+                    clr      bullet0x 
+                    clr      bullet0d 
+bullet0d_l 
+                    lda      alley0x 
+                    suba     bullet0x 
+                    ble      bullet0_miss 
+; destroy bullet and enemy
+                    clr      alley0e 
+                    clr      alley0x 
+                    clr      alley0d 
+                    clr      alley0s 
+                    clr      bullet0e 
+                    clr      bullet0x 
+                    clr      bullet0d 
+bullet0_done 
+bullet0_miss 
+                    endm  
+
+   
 READ_BUTTONS        macro    
                     jsr      Read_Btns 
                     lda      Vec_Button_1_2 
@@ -45,60 +78,52 @@ newshotdone
 no_press 
 already_exists 
                     endm                                  ; rts 
-
-
-NEW_ENEMY         macro    
+NEW_ENEMY           macro    
 ; need code to generate new random enemy OR prize in random alley
 ; type, and direction, direction decides initial X placement
 ; store answer in alleyNe (value from enemy_t offset), (bool)alleyNd (0 left, 1 right), (signed int)alleyNx (-127 or 127 )
-                    
+                                                          ; don't even do spawn logic if maximum enemies are out 
+                    lda      level 
+                    ldx      max_enemys_t 
+                    lda      a,x 
+                    cmpa     enemycnt 
+                    ble      enemy_done 
+; spawn new enemy
+                    lda      alley0e 
+                    bne      enemy_done 
+                    jsr      Random_3 
+                    sta      temp 
+                    anda     #%00000011                   ; mask off top 5 bits to limit answer 0-3 
+                    adda     #1                           ; and add 1, use with enemyspawn_t table 
+                    sta      alley0e 
+                                                          ; figure out speed stuff here 
+                    lda      temp 
+                    anda     #%11100000 
+                    lsra     
+                    lsra     
+                    lsra     
+                    lsra     
+                    lsra                                  ; mask top 3 bits, shift til 3 bits 0-7 
+                    adda     #1 
+                    sta      alley0s 
+                                                          ; initial direction which sets initial X pos 
+                    lda      temp 
+                    anda     #%00010000                   ; mask some other random bit to derive start direction 
+                    lsra     
+                    lsra     
+                    lsra     
+                    lsra     
+                    sta      alley0d 
+                    beq      set_enemy_going_left 
+                    lda      #-126 
+                    sta      alley0x 
+                    bra      enemy_done 
 
-                    ; don't even do spawn logic if maximum enemies are out
-                    lda     level
-                    ldx     max_enemys_t
-                    lda     a,x
-                    cmpa     enemycnt
-                    bge     enemy_done    
-                    
-
-                    lda     alley0e
-                    bne     enemy_done
-                    jsr      Random_3  
-                    sta      temp                        
-                    anda     #%00000011                    ; mask off top 5 bits to limit answer 0-3
-                    adda     #1                           ; and add 1, use with enemyspawn_t table
-                    sta      alley0e                        
-
-                    ; figure out speed stuff here
-                    lda      temp
-                    anda     #%11100000
-                    lsra
-                    lsra
-                    lsra
-                    lsra
-                    lsra                                  ; mask top 3 bits, shift til 3 bits 0-7             
-                    sta      alley0s
-                    ; initial direction which sets initial X pos
-                    lda      temp
-                    anda     #%00010000                    ; mask some other random bit to derive start direction
-                    lsra    
-                    lsra 
-                    lsra 
-                    lsra  
-                    sta      alley0d
-
-                    beq      set_enemy_going_left
-                    lda      #-126
-                    sta      alley0x
-                    bra      enemy_done
-set_enemy_going_left
-                    lda      #126
-                    sta      alley0x
-enemy_done
-
-                    endm   
-
-  
+set_enemy_going_left 
+                    lda      #126 
+                    sta      alley0x 
+enemy_done 
+                    endm     
 RESET0REF           macro    
                     ldd      #$00CC 
                     stb      <VIA_cntl                    ;/BLANK low and /ZERO low 
@@ -166,37 +191,39 @@ JOYSTICK_TEST       macro
                     cmpa     #6                           ; slot 6 as far up as u can go 
                     beq      jsdoneY 
                     inc      shippos 
+                    clr      stallcnt 
                     bra      jsdoneY 
 
 going_down 
                     lda      shippos 
                     beq      jsdoneY 
                     dec      shippos 
+                    clr      stallcnt 
 jsdoneY 
-                
 ; now test X first test should be if there is a prize in this alley.
-                    ldb      shipXpos                ; is X basically in the middle alley? unset in_alley flag
-                    jsr      Abs_b
-                    cmpb     #3
-                    bpl      leave_flag              ; if b-3 > 0 then clr in_alley 
-                    clr      in_alley                ; clear in alley flag when in middle
-leave_flag
+                    ldb      shipXpos                     ; is X basically in the middle alley? unset in_alley flag 
+                    jsr      Abs_b 
+                    cmpb     #3 
+                    bpl      leave_flag                   ; if b-3 > 0 then clr in_alley 
+                    clr      in_alley                     ; clear in alley flag when in middle 
+leave_flag 
                     lda      Vec_Joy_1_X 
                     beq      jsdoneX 
                     bmi      going_left 
-going_right
+going_right 
                     lda      #1 
                     sta      in_alley 
                     lda      #RIGHT 
                     sta      shipdir 
                     lda      #4 
-                   ; adda     shipXpos 
-                    bvs      setMaxRight
-                    bra      setRightDone
-setMaxRight
-                    lda      #110
-setRightDone
-                  ;  sta      shipXpos 
+                                                          ; adda shipXpos 
+                    bvs      setMaxRight 
+                    bra      setRightDone 
+
+setMaxRight 
+                    lda      #110 
+setRightDone 
+                                                          ; sta shipXpos 
                     bra      jsdoneX 
 
 going_left 
@@ -204,20 +231,19 @@ going_left
                     sta      in_alley 
                     lda      #LEFT 
                     sta      shipdir 
-                    lda     shipXpos
-                    suba    #4
-                    bvs      setMaxLeft
-                    bra      setLeftDone
-setMaxLeft
-                    lda      #-110
-setLeftDone 
-                  ;  sta      shipXpos 
-jsdoneX 
-                    endm
+                    lda      shipXpos 
+                    suba     #4 
+                    bvs      setMaxLeft 
+                    bra      setLeftDone 
 
-     
+setMaxLeft 
+                    lda      #-110 
+setLeftDone 
+                                                          ; sta shipXpos 
+jsdoneX 
+                    endm     
 DRAW_VLC            macro    
-                    local    LF3F4,Draw_VLa
+                    local    LF3F4,Draw_VLa 
                     lda      ,x+ 
 Draw_VLa 
                     sta      $C823 

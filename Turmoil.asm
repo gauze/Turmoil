@@ -396,7 +396,12 @@ subdone5
 add6 
                     adda     alley6s 
 subdone6 
-                    sta      alley6x 
+                    sta      alley6x
+
+                    inc      stallcnt 
+
+                    COLLISION_DETECT
+ 
                     jmp      main                         ; and repeat forever 
 
 ;###########################################################################
@@ -625,9 +630,7 @@ tsstart
                     cmpa     #10 
                     bne      tsstart 
                     clr      titlescreen_y 
-                    bra      tsstart 
-
-                    rts      
+                    bra      tsstart     
 
 explodetest: 
                     lda      #-1                          ; high bit set by any negative number 
