@@ -7,9 +7,11 @@ COLLISION_DETECT    macro
                     beq      bullet0_done 
                     lda      bullet0d 
                     beq      bullet0d_l 
+                    ldb      bullet0x                     ; test bullet going right 0-127 possible hit range 
+                    bmi      bullet0_miss                 ; bullet going wrong direction can't hit. 
                     lda      alley0x 
-                    suba     bullet0x 
-                    bge      bullet0_miss 
+                    cmpa     bullet0x 
+                    ble      bullet0_miss 
 ; destroy bullet and enemy
                     clr      alley0e 
                     clr      alley0x 
@@ -19,9 +21,11 @@ COLLISION_DETECT    macro
                     clr      bullet0x 
                     clr      bullet0d 
 bullet0d_l 
-                    lda      alley0x 
-                    suba     bullet0x 
-                    ble      bullet0_miss 
+                    ldb      bullet0x                     ; test bullet going left (-127)-0 possible hit range 
+                    bpl      bullet0_miss                 ; bullet on wrong side can't hit 
+                    lda      alley0x                  
+                    cmpa     bullet0x 
+                    bge      bullet0_miss 
 ; destroy bullet and enemy
                     clr      alley0e 
                     clr      alley0x 
@@ -32,9 +36,7 @@ bullet0d_l
                     clr      bullet0d 
 bullet0_done 
 bullet0_miss 
-                    endm  
-
-   
+                    endm     
 READ_BUTTONS        macro    
                     jsr      Read_Btns 
                     lda      Vec_Button_1_2 
@@ -57,8 +59,8 @@ toad
                     lda      shippos 
                     asla     
                     ldx      #bulletd_t 
+                    ldx      a,x
                     ldb      shipdir 
-                    ldx      b,x 
                     stb      ,x                           ; set DIRECTION 
 ; starting x coordinates
                     lda      shippos 
@@ -104,6 +106,7 @@ NEW_ENEMY           macro
                     lsra     
                     lsra     
                     lsra                                  ; mask top 3 bits, shift til 3 bits 0-7 
+                    clra                                  ; TESTING setting speed to 1 for all 
                     adda     #1 
                     sta      alley0s 
                                                           ; initial direction which sets initial X pos 
