@@ -79,7 +79,7 @@ alley4s             ds       1
 alley5s             ds       1 
 alley6s             ds       1 
 bullet_count        ds       1                            ; 1 byte 
-ships_left          ds       1                            ; 1 byte 
+shipcnt             ds       1                            ; 1 byte 
 bulletYtemp         ds       1 
 Ship_Dead           ds       1 
 ; variables to hold which frame for each shape enemy some might not have an animation...
@@ -141,7 +141,7 @@ start
                     ldx      #score 
                     jsr      Clear_Score 
                     lda      #5 
-                    sta      ships_left 
+                    sta      shipcnt 
                                                           ; jsr explodetest 
 main: 
                     jsr      Wait_Recal 
@@ -206,7 +206,7 @@ donuthin2
                     lda      -50 
                     ldb      65 
                     MOVETO_D  
-                    lda      ships_left                   ; vector draw ships remaining routine TEST 
+                    lda      shipcnt                      ; vector draw ships remaining routine TEST 
                     sta      temp 
 ships_left_loop 
                     ldx      #Ship_Marker 
@@ -296,9 +296,9 @@ no25cntreset
                     cmpa     frm50cnt 
                     bne      no50cntreset 
                     clr      frm50cnt 
-                    lda      #2 
+                    lda      #1 
                     sta      Prize_f                      ; add 2 for next table entry 
-                    lda      #2 
+                    lda      #1 
                     sta      Bow_f 
 no50cntreset 
                     lda      #100                         ; frame count 100=2 seconds (at full speed) 0-99 == 100 
@@ -320,88 +320,14 @@ no50cntreset
                     sta      Tank_f 
                     sta      Explode_f 
 no100cntreset 
-; move enemies0
-                    lda      alley0x 
-                    ldb      alley0d 
-                    bne      add0 
-                    suba     alley0s 
-                    bra      subdone0 
-
-add0 
-                    adda     alley0s 
-subdone0 
-                    sta      alley0x 
-; move enemies1
-                    lda      alley1x 
-                    ldb      alley1d 
-                    bne      add1 
-                    suba     alley1s 
-                    bra      subdone1 
-
-add1 
-                    adda     alley1s 
-subdone1 
-                    sta      alley1x 
-; move enemies2
-                    lda      alley2x 
-                    ldb      alley2d 
-                    bne      add2 
-                    suba     alley2s 
-                    bra      subdone2 
-
-add2 
-                    adda     alley2s 
-subdone2 
-                    sta      alley2x 
-; move enemies3
-                    lda      alley3x 
-                    ldb      alley3d 
-                    bne      add3 
-                    suba     alley3s 
-                    bra      subdone3 
-
-add3 
-                    adda     alley3s 
-subdone3 
-                    sta      alley3x 
-; move enemies4
-                    lda      alley4x 
-                    ldb      alley4d 
-                    bne      add4 
-                    suba     alley4s 
-                    bra      subdone4 
-
-add4 
-                    adda     alley4s 
-subdone4 
-                    sta      alley4x 
-; move enemies5
-                    lda      alley5x 
-                    ldb      alley5d 
-                    bne      add5 
-                    suba     alley5s 
-                    bra      subdone5 
-
-add5 
-                    adda     alley5s 
-subdone5 
-                    sta      alley5x 
-; move enemies6
-                    lda      alley6x 
-                    ldb      alley6d 
-                    bne      add6 
-                    suba     alley6s 
-                    bra      subdone6 
-
-add6 
-                    adda     alley6s 
-subdone6 
-                    sta      alley6x
-
+                    MOVE_ENEMYS
+                    SHOT_COLLISION_DETECT  
+                    SHIP_COLLISION_DETECT  
+                    lda      shipcnt 
+                    bne      notgameover 
+                    jsr      gameover 
+notgameover 
                     inc      stallcnt 
-
-                    COLLISION_DETECT
- 
                     jmp      main                         ; and repeat forever 
 
 ;###########################################################################
@@ -593,15 +519,20 @@ bullets_done
                     INTENSITY_A  
                     rts      
 
+gameover 
 titlescreen 
                     clr      titlescreen_y 
 tsstart 
                     jsr      Wait_Recal 
+
                     clr      Vec_Misc_Count 
                     lda      #$80 
                     sta      VIA_t1_cnt_lo 
                     jsr      Intensity_7F 
                     RESET0REF  
+                    ldd      $0000 
+                    ldu      #gameoverstr 
+                    jsr      Print_Str_d 
                     lda      titlescreen_y 
                     ldb      #0 
                     jsr      Moveto_d 
@@ -630,7 +561,10 @@ tsstart
                     cmpa     #10 
                     bne      tsstart 
                     clr      titlescreen_y 
-                    bra      tsstart     
+                    ldd      $0000 
+                    ldu      #gameoverstr 
+                    jsr      Print_Str_d 
+                    bra      tsstart 
 
 explodetest: 
                     lda      #-1                          ; high bit set by any negative number 

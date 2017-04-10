@@ -239,6 +239,7 @@ Explode_10:
 None:               fcb      1 
 ; TABLES
 ;shippos_t          fcb      -3*ALLEYWIDTH,-2*ALLEYWIDTH,-1*ALLEYWIDTH,0,1*ALLEYWIDTH,2*ALLEYWIDTH,3*ALLEYWIDTH ; Y pos of ship 
+shippos_t:
 bulletYpos_t        fcb      -98,-64,-31,3,37,70, 104     ; Y pos of bullet/ship/enemy per alley 
 bullete_t           fdb      bullet0e,bullet1e,bullet2e,bullet3e,bullet4e,bullet5e,bullet6e ; exists 0=false, !0= true 
 bulletd_t           fdb      bullet0d,bullet1d,bullet2d,bullet3d,bullet4d,bullet5d,bullet6d ; direction left/right 
@@ -292,4 +293,7 @@ Wedge_R_t           fdb      Wedge_R
 EXP1:               db       $19,$3F,$00,$02 
 EXP2:               db       $3F,$00,$00,$01 
 EXP3:               db       $01,-1,1,$04 
+
+; TEXT STRINGS
+gameoverstr         fcc      "GAME OVER",$80
 credits             fcc      "PROGRAMMED BY GAUZE 2016-2017",$80 

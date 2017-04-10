@@ -2,7 +2,149 @@
 ; vim: ts=4
 ; vim: syntax=asm6809
 ; MACROS
-COLLISION_DETECT    macro    
+MOVE_ENEMYS         macro
+; move enemies0
+                    lda      alley0x 
+                    ldb      alley0d 
+                    bne      add0 
+                    suba     alley0s 
+                    bra      subdone0 
+
+add0 
+                    adda     alley0s 
+subdone0 
+                    sta      alley0x 
+; move enemies1
+                    lda      alley1x 
+                    ldb      alley1d 
+                    bne      add1 
+                    suba     alley1s 
+                    bra      subdone1 
+
+add1 
+                    adda     alley1s 
+subdone1 
+                    sta      alley1x 
+; move enemies2
+                    lda      alley2x 
+                    ldb      alley2d 
+                    bne      add2 
+                    suba     alley2s 
+                    bra      subdone2 
+
+add2 
+                    adda     alley2s 
+subdone2 
+                    sta      alley2x 
+; move enemies3
+                    lda      alley3x 
+                    ldb      alley3d 
+                    bne      add3 
+                    suba     alley3s 
+                    bra      subdone3 
+
+add3 
+                    adda     alley3s 
+subdone3 
+                    sta      alley3x 
+; move enemies4
+                    lda      alley4x 
+                    ldb      alley4d 
+                    bne      add4 
+                    suba     alley4s 
+                    bra      subdone4 
+
+add4 
+                    adda     alley4s 
+subdone4 
+                    sta      alley4x 
+; move enemies5
+                    lda      alley5x 
+                    ldb      alley5d 
+                    bne      add5 
+                    suba     alley5s 
+                    bra      subdone5 
+
+add5 
+                    adda     alley5s 
+subdone5 
+                    sta      alley5x 
+; move enemies6
+                    lda      alley6x 
+                    ldb      alley6d 
+                    bne      add6 
+                    suba     alley6s 
+                    bra      subdone6 
+
+add6 
+                    adda     alley6s 
+subdone6 
+                    sta      alley6x 
+                    endm
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+SHIP_COLLISION_DETECT  macro 
+                ;    bra     skipme
+                    lda     shippos
+                    lsla
+                    ldx     #alleye_t
+                    ldx     a,x
+                    lda     ,x
+                    beq     no_hit
+                    lda     shippos
+                    lsla
+                    ldx     #alleyx_t
+                    ldx     a,x
+                    ldb     ,x
+                    jsr     Abs_b 
+                    cmpb    #10
+                    bgt     no_hit
+                    dec     shipcnt            ; lose one ship 
+                    lda     shippos            ; clear e exist flag for this alley, ie destroy it
+                    lsla
+                    ldx     #alleye_t
+                    ldx     a,x
+                    clra 
+                    sta     ,x     
+;skipme
+no_hit
+                    endm   
+;^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  
+SHOT_COLLISION_DETECT    macro    
+; save next 32 lines for now JUST IN CASE
+;                    lda      bullet0e 
+;                    beq      bullet0_done 
+;                    lda      bullet0d 
+;                    beq      bullet0d_l 
+;                    ldb      bullet0x                     ; test bullet going right 0-127 possible hit range 
+;                    bmi      bullet0_miss                 ; bullet going wrong direction can't hit. 
+;                    lda      alley0x 
+;                    cmpa     bullet0x 
+;                    ble      bullet0_miss 
+;                    bra      bullhit0                     ; hit
+;bullet0d_l 
+;                    ldb      bullet0x                     ; test bullet going left (-127)-0 possible hit range 
+;                    bpl      bullet0_miss                 ; bullet on wrong side can't hit 
+;                    lda      alley0x 
+;                    cmpa     bullet0x 
+;                    bge      bullet0_miss 
+; add to score then destroy bullet and enemy
+;bullhit0
+;                    ldx      #score 
+;                    lda      alley0s 
+;                    ldb      #SCORE 
+;                    mul      
+;                    jsr      Add_Score_d
+;                    clra 
+;                    sta      alley0e 
+;                    sta      alley0x 
+;                    sta      alley0d 
+;                    sta      alley0s 
+;                    sta      bullet0e 
+;                   sta      bullet0x 
+;                    sta      bullet0d 
+;bullet0_done 
+;bullet0_miss 
+
                     lda      bullet0e 
                     beq      bullet0_done 
                     lda      bullet0d 
@@ -12,31 +154,234 @@ COLLISION_DETECT    macro
                     lda      alley0x 
                     cmpa     bullet0x 
                     ble      bullet0_miss 
-; destroy bullet and enemy
-                    clr      alley0e 
-                    clr      alley0x 
-                    clr      alley0d 
-                    clr      alley0s 
-                    clr      bullet0e 
-                    clr      bullet0x 
-                    clr      bullet0d 
+                    bra      bullhit0                     ; hit
 bullet0d_l 
                     ldb      bullet0x                     ; test bullet going left (-127)-0 possible hit range 
                     bpl      bullet0_miss                 ; bullet on wrong side can't hit 
-                    lda      alley0x                  
+                    lda      alley0x 
                     cmpa     bullet0x 
                     bge      bullet0_miss 
-; destroy bullet and enemy
-                    clr      alley0e 
-                    clr      alley0x 
-                    clr      alley0d 
-                    clr      alley0s 
-                    clr      bullet0e 
-                    clr      bullet0x 
-                    clr      bullet0d 
+; add to score then destroy bullet and enemy
+bullhit0
+                    ldx      #score 
+                    lda      alley0s 
+                    ldb      #SCORE 
+                    mul      
+                    jsr      Add_Score_d
+                    clra 
+                    sta      alley0e 
+                    sta      alley0x 
+                    sta      alley0d 
+                    sta      alley0s 
+                    sta      bullet0e 
+                    sta      bullet0x 
+                    sta      bullet0d 
 bullet0_done 
 bullet0_miss 
+                    lda      bullet1e 
+                    beq      bullet1_done 
+                    lda      bullet1d 
+                    beq      bullet1d_l 
+                    ldb      bullet1x                     ; test bullet going right 0-127 possible hit range 
+                    bmi      bullet1_miss                 ; bullet going wrong direction can't hit. 
+                    lda      alley1x 
+                    cmpa     bullet1x 
+                    ble      bullet1_miss 
+                    bra      bullhit1                     ; hit
+bullet1d_l 
+                    ldb      bullet1x                     ; test bullet going left (-127)-0 possible hit range 
+                    bpl      bullet1_miss                 ; bullet on wrong side can't hit 
+                    lda      alley1x 
+                    cmpa     bullet1x 
+                    bge      bullet1_miss 
+; add to score then destroy bullet and enemy
+bullhit1
+                    ldx      #score 
+                    lda      alley1s 
+                    ldb      #SCORE 
+                    mul      
+                    jsr      Add_Score_d
+                    clra 
+                    sta      alley1e 
+                    sta      alley1x 
+                    sta      alley1d 
+                    sta      alley1s 
+                    sta      bullet1e 
+                    sta      bullet1x 
+                    sta      bullet1d 
+bullet1_done 
+bullet1_miss 
+                    lda      bullet2e 
+                    beq      bullet2_done 
+                    lda      bullet2d 
+                    beq      bullet2d_l 
+                    ldb      bullet2x                     ; test bullet going right 0-127 possible hit range 
+                    bmi      bullet2_miss                 ; bullet going wrong direction can't hit. 
+                    lda      alley2x 
+                    cmpa     bullet2x 
+                    ble      bullet2_miss 
+                    bra      bullhit2                     ; hit
+bullet2d_l 
+                    ldb      bullet2x                     ; test bullet going left (-127)-0 possible hit range 
+                    bpl      bullet2_miss                 ; bullet on wrong side can't hit 
+                    lda      alley2x 
+                    cmpa     bullet2x 
+                    bge      bullet2_miss 
+; add to score then destroy bullet and enemy
+bullhit2
+                    ldx      #score 
+                    lda      alley2s 
+                    ldb      #SCORE 
+                    mul      
+                    jsr      Add_Score_d
+                    clra 
+                    sta      alley2e 
+                    sta      alley2x 
+                    sta      alley2d 
+                    sta      alley2s 
+                    sta      bullet2e 
+                    sta      bullet2x 
+                    sta      bullet2d 
+bullet2_done 
+bullet2_miss 
+                    lda      bullet3e 
+                    beq      bullet3_done 
+                    lda      bullet3d 
+                    beq      bullet3d_l 
+                    ldb      bullet3x                     ; test bullet going right 0-127 possible hit range 
+                    bmi      bullet3_miss                 ; bullet going wrong direction can't hit. 
+                    lda      alley3x 
+                    cmpa     bullet3x 
+                    ble      bullet3_miss 
+                    bra      bullhit3                     ; hit
+bullet3d_l 
+                    ldb      bullet3x                     ; test bullet going left (-127)-0 possible hit range 
+                    bpl      bullet3_miss                 ; bullet on wrong side can't hit 
+                    lda      alley3x 
+                    cmpa     bullet3x 
+                    bge      bullet3_miss 
+; add to score then destroy bullet and enemy
+bullhit3
+                    ldx      #score 
+                    lda      alley3s 
+                    ldb      #SCORE 
+                    mul      
+                    jsr      Add_Score_d
+                    clra 
+                    sta      alley3e 
+                    sta      alley3x 
+                    sta      alley3d 
+                    sta      alley3s 
+                    sta      bullet3e 
+                    sta      bullet3x 
+                    sta      bullet3d 
+bullet3_done 
+bullet3_miss 
+                    lda      bullet4e 
+                    beq      bullet4_done 
+                    lda      bullet4d 
+                    beq      bullet4d_l 
+                    ldb      bullet4x                     ; test bullet going right 0-127 possible hit range 
+                    bmi      bullet4_miss                 ; bullet going wrong direction can't hit. 
+                    lda      alley4x 
+                    cmpa     bullet4x 
+                    ble      bullet4_miss 
+                    bra      bullhit4                     ; hit
+bullet4d_l 
+                    ldb      bullet4x                     ; test bullet going left (-127)-0 possible hit range 
+                    bpl      bullet4_miss                 ; bullet on wrong side can't hit 
+                    lda      alley4x 
+                    cmpa     bullet4x 
+                    bge      bullet4_miss 
+; add to score then destroy bullet and enemy
+bullhit4
+                    ldx      #score 
+                    lda      alley4s 
+                    ldb      #SCORE 
+                    mul      
+                    jsr      Add_Score_d
+                    clra 
+                    sta      alley4e 
+                    sta      alley4x 
+                    sta      alley4d 
+                    sta      alley4s 
+                    sta      bullet4e 
+                    sta      bullet4x 
+                    sta      bullet4d 
+bullet4_done 
+bullet4_miss 
+                    lda      bullet5e 
+                    beq      bullet5_done 
+                    lda      bullet5d 
+                    beq      bullet5d_l 
+                    ldb      bullet5x                     ; test bullet going right 0-127 possible hit range 
+                    bmi      bullet5_miss                 ; bullet going wrong direction can't hit. 
+                    lda      alley5x 
+                    cmpa     bullet5x 
+                    ble      bullet5_miss 
+                    bra      bullhit5                     ; hit
+bullet5d_l 
+                    ldb      bullet5x                     ; test bullet going left (-127)-0 possible hit range 
+                    bpl      bullet5_miss                 ; bullet on wrong side can't hit 
+                    lda      alley5x 
+                    cmpa     bullet5x 
+                    bge      bullet5_miss 
+; add to score then destroy bullet and enemy
+bullhit5
+                    ldx      #score 
+                    lda      alley5s 
+                    ldb      #SCORE 
+                    mul      
+                    jsr      Add_Score_d
+                    clra 
+                    sta      alley5e 
+                    sta      alley5x 
+                    sta      alley5d 
+                    sta      alley5s 
+                    sta      bullet5e 
+                    sta      bullet5x 
+                    sta      bullet5d 
+bullet5_done 
+bullet5_miss 
+                    lda      bullet6e 
+                    beq      bullet6_done 
+                    lda      bullet6d 
+                    beq      bullet6d_l 
+                    ldb      bullet6x                     ; test bullet going right 0-127 possible hit range 
+                    bmi      bullet6_miss                 ; bullet going wrong direction can't hit. 
+                    lda      alley6x 
+                    cmpa     bullet6x 
+                    ble      bullet6_miss 
+                    bra      bullhit6                     ; hit
+bullet6d_l 
+                    ldb      bullet6x                     ; test bullet going left (-127)-0 possible hit range 
+                    bpl      bullet6_miss                 ; bullet on wrong side can't hit 
+                    lda      alley6x 
+                    cmpa     bullet6x 
+                    bge      bullet6_miss 
+; add to score then destroy bullet and enemy
+bullhit6
+                    ldx      #score 
+                    lda      alley6s 
+                    ldb      #SCORE 
+                    mul      
+                    jsr      Add_Score_d
+                    clra 
+                    sta      alley6e 
+                    sta      alley6x 
+                    sta      alley6d 
+                    sta      alley6s 
+                    sta      bullet6e 
+                    sta      bullet6x 
+                    sta      bullet6d 
+bullet6_done 
+bullet6_miss 
+
+
+
+
                     endm     
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 READ_BUTTONS        macro    
                     jsr      Read_Btns 
                     lda      Vec_Button_1_2 
@@ -54,14 +399,14 @@ toad
                     lda      ,x 
                     bne      already_exists 
                     ldb      #1 
-                    stb      ,x                           ; set EXIST 
+                    stb      ,x                           ; set EXIST (int) 
 ; left(0) or right(1)?
                     lda      shippos 
                     asla     
                     ldx      #bulletd_t 
-                    ldx      a,x
+                    ldx      a,x 
                     ldb      shipdir 
-                    stb      ,x                           ; set DIRECTION 
+                    stb      ,x                           ; set DIRECTION (bool) 
 ; starting x coordinates
                     lda      shippos 
                     asla     
@@ -80,6 +425,7 @@ newshotdone
 no_press 
 already_exists 
                     endm                                  ; rts 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 NEW_ENEMY           macro    
 ; need code to generate new random enemy OR prize in random alley
 ; type, and direction, direction decides initial X placement
@@ -127,6 +473,7 @@ set_enemy_going_left
                     sta      alley0x 
 enemy_done 
                     endm     
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 RESET0REF           macro    
                     ldd      #$00CC 
                     stb      <VIA_cntl                    ;/BLANK low and /ZERO low 
@@ -139,6 +486,7 @@ RESET0REF           macro
                     ldb      #$01 
                     stb      <VIA_port_b                  ;disable mu 
                     endm     
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 MOVETO_D            macro    
                     local    MLF318, MLF33B,MLF33D,MLF341,MLF345,moveto_d_done 
                     sta      <VIA_port_a                  ;Store Y in D/A register 
@@ -173,6 +521,7 @@ MLF345:             bitb     <VIA_int_flags               ;Wait for timer 1
                     beq      MLF345 
 moveto_d_done 
                     endm     
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 INTENSITY_A         macro    
                     sta      <VIA_port_a                  ;Store intensity in D/A 
                     sta      Vec_Brightness               ;Save intensity in $C827 
@@ -183,6 +532,7 @@ INTENSITY_A         macro
                     ldb      #$01 
                     stb      <VIA_port_b                  ;turn off mux 
                     endm     
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 JOYSTICK_TEST       macro    
                     jsr      Joy_Digital 
                     lda      in_alley                     ; inside an alley 
@@ -245,6 +595,7 @@ setLeftDone
                                                           ; sta shipXpos 
 jsdoneX 
                     endm     
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 DRAW_VLC            macro    
                     local    LF3F4,Draw_VLa 
                     lda      ,x+ 
