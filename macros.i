@@ -2,7 +2,7 @@
 ; vim: ts=4
 ; vim: syntax=asm6809
 ; MACROS
-MOVE_ENEMYS         macro
+MOVE_ENEMYS         macro    
 ; move enemies0
                     lda      alley0x 
                     ldb      alley0d 
@@ -80,36 +80,36 @@ add6
                     adda     alley6s 
 subdone6 
                     sta      alley6x 
-                    endm
+                    endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-SHIP_COLLISION_DETECT  macro 
-                ;    bra     skipme
-                    lda     shippos
-                    lsla
-                    ldx     #alleye_t
-                    ldx     a,x
-                    lda     ,x
-                    beq     no_hit
-                    lda     shippos
-                    lsla
-                    ldx     #alleyx_t
-                    ldx     a,x
-                    ldb     ,x
-                    jsr     Abs_b 
-                    cmpb    #10
-                    bgt     no_hit
-                    dec     shipcnt            ; lose one ship 
-                    lda     shippos            ; clear e exist flag for this alley, ie destroy it
-                    lsla
-                    ldx     #alleye_t
-                    ldx     a,x
-                    clra 
-                    sta     ,x     
+SHIP_COLLISION_DETECT  macro  
+                                                          ; bra skipme 
+                    lda      shippos 
+                    lsla     
+                    ldx      #alleye_t 
+                    ldx      a,x 
+                    lda      ,x 
+                    beq      no_hit 
+                    lda      shippos 
+                    lsla     
+                    ldx      #alleyx_t 
+                    ldx      a,x 
+                    ldb      ,x 
+                    jsr      Abs_b 
+                    cmpb     #10 
+                    bgt      no_hit 
+                    dec      shipcnt                      ; lose one ship 
+                    lda      shippos                      ; clear e exist flag for this alley, ie destroy it 
+                    lsla     
+                    ldx      #alleye_t 
+                    ldx      a,x 
+                    clra     
+                    sta      ,x 
 ;skipme
-no_hit
-                    endm   
+no_hit 
+                    endm     
 ;^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  
-SHOT_COLLISION_DETECT    macro    
+SHOT_COLLISION_DETECT  macro  
 ; save next 32 lines for now JUST IN CASE
 ;                    lda      bullet0e 
 ;                    beq      bullet0_done 
@@ -144,7 +144,6 @@ SHOT_COLLISION_DETECT    macro
 ;                    sta      bullet0d 
 ;bullet0_done 
 ;bullet0_miss 
-
                     lda      bullet0e 
                     beq      bullet0_done 
                     lda      bullet0d 
@@ -154,7 +153,8 @@ SHOT_COLLISION_DETECT    macro
                     lda      alley0x 
                     cmpa     bullet0x 
                     ble      bullet0_miss 
-                    bra      bullhit0                     ; hit
+                    bra      bullhit0                     ; hit 
+
 bullet0d_l 
                     ldb      bullet0x                     ; test bullet going left (-127)-0 possible hit range 
                     bpl      bullet0_miss                 ; bullet on wrong side can't hit 
@@ -162,13 +162,13 @@ bullet0d_l
                     cmpa     bullet0x 
                     bge      bullet0_miss 
 ; add to score then destroy bullet and enemy
-bullhit0
+bullhit0 
                     ldx      #score 
                     lda      alley0s 
                     ldb      #SCORE 
                     mul      
-                    jsr      Add_Score_d
-                    clra 
+                    jsr      Add_Score_d 
+                    clra     
                     sta      alley0e 
                     sta      alley0x 
                     sta      alley0d 
@@ -187,7 +187,8 @@ bullet0_miss
                     lda      alley1x 
                     cmpa     bullet1x 
                     ble      bullet1_miss 
-                    bra      bullhit1                     ; hit
+                    bra      bullhit1                     ; hit 
+
 bullet1d_l 
                     ldb      bullet1x                     ; test bullet going left (-127)-0 possible hit range 
                     bpl      bullet1_miss                 ; bullet on wrong side can't hit 
@@ -195,13 +196,13 @@ bullet1d_l
                     cmpa     bullet1x 
                     bge      bullet1_miss 
 ; add to score then destroy bullet and enemy
-bullhit1
+bullhit1 
                     ldx      #score 
                     lda      alley1s 
                     ldb      #SCORE 
                     mul      
-                    jsr      Add_Score_d
-                    clra 
+                    jsr      Add_Score_d 
+                    clra     
                     sta      alley1e 
                     sta      alley1x 
                     sta      alley1d 
@@ -220,7 +221,8 @@ bullet1_miss
                     lda      alley2x 
                     cmpa     bullet2x 
                     ble      bullet2_miss 
-                    bra      bullhit2                     ; hit
+                    bra      bullhit2                     ; hit 
+
 bullet2d_l 
                     ldb      bullet2x                     ; test bullet going left (-127)-0 possible hit range 
                     bpl      bullet2_miss                 ; bullet on wrong side can't hit 
@@ -228,13 +230,13 @@ bullet2d_l
                     cmpa     bullet2x 
                     bge      bullet2_miss 
 ; add to score then destroy bullet and enemy
-bullhit2
+bullhit2 
                     ldx      #score 
                     lda      alley2s 
                     ldb      #SCORE 
                     mul      
-                    jsr      Add_Score_d
-                    clra 
+                    jsr      Add_Score_d 
+                    clra     
                     sta      alley2e 
                     sta      alley2x 
                     sta      alley2d 
@@ -253,7 +255,8 @@ bullet2_miss
                     lda      alley3x 
                     cmpa     bullet3x 
                     ble      bullet3_miss 
-                    bra      bullhit3                     ; hit
+                    bra      bullhit3                     ; hit 
+
 bullet3d_l 
                     ldb      bullet3x                     ; test bullet going left (-127)-0 possible hit range 
                     bpl      bullet3_miss                 ; bullet on wrong side can't hit 
@@ -261,13 +264,13 @@ bullet3d_l
                     cmpa     bullet3x 
                     bge      bullet3_miss 
 ; add to score then destroy bullet and enemy
-bullhit3
+bullhit3 
                     ldx      #score 
                     lda      alley3s 
                     ldb      #SCORE 
                     mul      
-                    jsr      Add_Score_d
-                    clra 
+                    jsr      Add_Score_d 
+                    clra     
                     sta      alley3e 
                     sta      alley3x 
                     sta      alley3d 
@@ -286,7 +289,8 @@ bullet3_miss
                     lda      alley4x 
                     cmpa     bullet4x 
                     ble      bullet4_miss 
-                    bra      bullhit4                     ; hit
+                    bra      bullhit4                     ; hit 
+
 bullet4d_l 
                     ldb      bullet4x                     ; test bullet going left (-127)-0 possible hit range 
                     bpl      bullet4_miss                 ; bullet on wrong side can't hit 
@@ -294,13 +298,13 @@ bullet4d_l
                     cmpa     bullet4x 
                     bge      bullet4_miss 
 ; add to score then destroy bullet and enemy
-bullhit4
+bullhit4 
                     ldx      #score 
                     lda      alley4s 
                     ldb      #SCORE 
                     mul      
-                    jsr      Add_Score_d
-                    clra 
+                    jsr      Add_Score_d 
+                    clra     
                     sta      alley4e 
                     sta      alley4x 
                     sta      alley4d 
@@ -319,7 +323,8 @@ bullet4_miss
                     lda      alley5x 
                     cmpa     bullet5x 
                     ble      bullet5_miss 
-                    bra      bullhit5                     ; hit
+                    bra      bullhit5                     ; hit 
+
 bullet5d_l 
                     ldb      bullet5x                     ; test bullet going left (-127)-0 possible hit range 
                     bpl      bullet5_miss                 ; bullet on wrong side can't hit 
@@ -327,13 +332,13 @@ bullet5d_l
                     cmpa     bullet5x 
                     bge      bullet5_miss 
 ; add to score then destroy bullet and enemy
-bullhit5
+bullhit5 
                     ldx      #score 
                     lda      alley5s 
                     ldb      #SCORE 
                     mul      
-                    jsr      Add_Score_d
-                    clra 
+                    jsr      Add_Score_d 
+                    clra     
                     sta      alley5e 
                     sta      alley5x 
                     sta      alley5d 
@@ -352,7 +357,8 @@ bullet5_miss
                     lda      alley6x 
                     cmpa     bullet6x 
                     ble      bullet6_miss 
-                    bra      bullhit6                     ; hit
+                    bra      bullhit6                     ; hit 
+
 bullet6d_l 
                     ldb      bullet6x                     ; test bullet going left (-127)-0 possible hit range 
                     bpl      bullet6_miss                 ; bullet on wrong side can't hit 
@@ -360,13 +366,13 @@ bullet6d_l
                     cmpa     bullet6x 
                     bge      bullet6_miss 
 ; add to score then destroy bullet and enemy
-bullhit6
+bullhit6 
                     ldx      #score 
                     lda      alley6s 
                     ldb      #SCORE 
                     mul      
-                    jsr      Add_Score_d
-                    clra 
+                    jsr      Add_Score_d 
+                    clra     
                     sta      alley6e 
                     sta      alley6x 
                     sta      alley6d 
@@ -376,10 +382,6 @@ bullhit6
                     sta      bullet6d 
 bullet6_done 
 bullet6_miss 
-
-
-
-
                     endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 READ_BUTTONS        macro    
@@ -430,20 +432,39 @@ NEW_ENEMY           macro
 ; need code to generate new random enemy OR prize in random alley
 ; type, and direction, direction decides initial X placement
 ; store answer in alleyNe (value from enemy_t offset), (bool)alleyNd (0 left, 1 right), (signed int)alleyNx (-127 or 127 )
-                                                          ; don't even do spawn logic if maximum enemies are out 
+;
+; don't even do spawn logic if maximum enemies are out 
                     lda      level 
+                    lsla     
                     ldx      max_enemys_t 
                     lda      a,x 
                     cmpa     enemycnt 
                     ble      enemy_done 
+; check spawn throttle count logic
+; TODO
 ; spawn new enemy
-                    lda      alley0e 
-                    bne      enemy_done 
-                    jsr      Random_3 
-                    sta      temp 
+randloop 
+                    jsr      Random                       ; choose random alley, loop until found 
+                    anda     #%00000111                   ; 0-7 if occupied or 7 try again 
+                    cmpa     #7 
+                    beq      randloop 
+                    sta      spawntemp 
+                    ldx      #alleye_t 
+                    lsla     
+                    ldx      a,x
+                    ldb      ,x 
+                    bne      randloop 
+; else fall through ACCA (a) holds valid alley index
+                    lda      spawntemp 
+                    lsla     
+                    ldx      #alleye_t 
+                    ldx      a,x                          ; ldx alleyNe 
+                    jsr      Random 
+                    sta      temp                         ; keep for later 
                     anda     #%00000011                   ; mask off top 5 bits to limit answer 0-3 
                     adda     #1                           ; and add 1, use with enemyspawn_t table 
-                    sta      alley0e 
+                    lsla                                  ; and shift over for 2-byte table index 
+                    sta      ,x                           ; set alleyNe enemy type 
                                                           ; figure out speed stuff here 
                     lda      temp 
                     anda     #%11100000 
@@ -452,9 +473,13 @@ NEW_ENEMY           macro
                     lsra     
                     lsra     
                     lsra                                  ; mask top 3 bits, shift til 3 bits 0-7 
-                    clra                                  ; TESTING setting speed to 1 for all 
-                    adda     #1 
-                    sta      alley0s 
+                                                          ; clra ; TESTING setting speed to 1 for all 
+                    adda     #1                           ; in case of zero result 
+                    ldx      #alleys_t 
+                    ldb      spawntemp 
+                    lslb     
+                    ldx      b,x                          ; ldx alleyNs 
+                    sta      ,x 
                                                           ; initial direction which sets initial X pos 
                     lda      temp 
                     anda     #%00010000                   ; mask some other random bit to derive start direction 
@@ -462,15 +487,27 @@ NEW_ENEMY           macro
                     lsra     
                     lsra     
                     lsra     
-                    sta      alley0d 
+                    ldx      #alleyd_t 
+                    ldb      spawntemp 
+                    lslb     
+                    ldx      b,x                          ; ldx alleyNd 
+                    sta      ,x 
                     beq      set_enemy_going_left 
-                    lda      #-126 
-                    sta      alley0x 
+                    lda      #-127 
+                    ldx      #alleyx_t 
+                    ldb      spawntemp
+                    lslb 
+                    ldx      b,x 
+                    sta      ,x 
                     bra      enemy_done 
 
 set_enemy_going_left 
-                    lda      #126 
-                    sta      alley0x 
+                    lda      #127 
+                    ldx      #alleyx_t 
+                    ldb      spawntemp
+                    lslb 
+                    ldx      b,x 
+                    sta      ,x 
 enemy_done 
                     endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

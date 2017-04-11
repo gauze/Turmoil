@@ -102,6 +102,7 @@ frm10cnt            ds       1
 frm5cnt             ds       1 
 frm2cnt             ds       1 
 temp                ds       1                            ; generic 1 byte temp 
+spawntemp           ds       1 
 rottemp             ds       15                           ; rotation list temp 
 titlescreen_y       ds       1 
 ;
@@ -320,7 +321,7 @@ no50cntreset
                     sta      Tank_f 
                     sta      Explode_f 
 no100cntreset 
-                    MOVE_ENEMYS
+                    MOVE_ENEMYS  
                     SHOT_COLLISION_DETECT  
                     SHIP_COLLISION_DETECT  
                     lda      shipcnt 
@@ -524,7 +525,6 @@ titlescreen
                     clr      titlescreen_y 
 tsstart 
                     jsr      Wait_Recal 
-
                     clr      Vec_Misc_Count 
                     lda      #$80 
                     sta      VIA_t1_cnt_lo 
