@@ -103,6 +103,7 @@ frm5cnt             ds       1
 frm2cnt             ds       1 
 temp                ds       1                            ; generic 1 byte temp 
 spawntemp           ds       1 
+masktemp            ds       1
 rottemp             ds       15                           ; rotation list temp 
 titlescreen_y       ds       1 
 ;
@@ -217,32 +218,8 @@ ships_left_loop
                                                           ; jmp main 
 ; end score+ship count
 ;;;; DRAW VARIOUS STUFF TEST ZONE
-                    NEW_ENEMY  
-                    RESET0REF  
-                    ldx      #bulletYpos_t 
-                    lda      #0 
-                    lda      a,x                          ; Y 
-                    ldb      alley0x                      ; X 
-                    MOVETO_D  
-; *_D -> index 0|1 (0=Left, 1=Right)
-                    ldx      #enemy_t 
-                    lda      alley0e 
-                    lsla     
-                    ldx      a,x                          ; sets *_D 
-                    lda      alley0d 
-                    lsla     
-                    ldx      a,x                          ; gets *_t 
-                    pshs     x                            ; store it 
-; *_f  frame count -> index list of frames, see definition in data.i 
-                    lda      alley0e 
-                    lsla     
-                    ldx      #enemyframe_t 
-                    ldx      a,x 
-                    lda      ,x                           ; A = *_f var 
-                    lsla     
-                    puls     x                            ; pull X back 
-                    ldx      a,x 
-                    jsr      Draw_VL_mode 
+                    NEW_ENEMY   
+                    DRAW_ENEMYS
 ;
                                                           ; RESET0REF 
                                                           ; ldx #bulletYpos_t 
@@ -563,6 +540,10 @@ tsstart
                     clr      titlescreen_y 
                     ldd      $0000 
                     ldu      #gameoverstr 
+                    jsr      Print_Str_d
+                    lda      -50
+                    ldb      -50
+                    ldu      #score
                     jsr      Print_Str_d 
                     bra      tsstart 
 

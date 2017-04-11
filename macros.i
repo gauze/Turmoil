@@ -2,6 +2,206 @@
 ; vim: ts=4
 ; vim: syntax=asm6809
 ; MACROS
+DRAW_ENEMYS         macro      
+; *_D -> index 0|1 (0=Left, 1=Right)
+                    RESET0REF
+                    lda      alley0e
+                    beq      skip0a
+                    ldx      #enemy_t 
+                    lda      alley0e 
+                    lsla     
+                    ldx      a,x                          ; sets *_D 
+                    lda      alley0d 
+                    lsla     
+                    ldx      a,x                          ; gets *_t 
+                    pshs     x                            ; store it 
+                    ldx      #bulletYpos_t 
+                    lda      #0 
+                    lda      a,x                          ; Y 
+                    ldb      alley0x                      ; X 
+                    MOVETO_D
+; *_f  frame count -> index list of frames, see definition in data.i 
+                    lda      alley0e 
+                    lsla     
+                    ldx      #enemyframe_t 
+                    ldx      a,x 
+                    lda      ,x                           ; A = *_f var 
+                    lsla     
+                    puls     x                            ; pull X back 
+                    ldx      a,x 
+                    jsr      Draw_VL_mode
+skip0a 
+;################################################################################################
+                    RESET0REF
+                    lda      alley1e
+                    beq      skip1a
+                    ldx      #enemy_t 
+                    lda      alley1e 
+                    lsla     
+                    ldx      a,x                          ; sets *_D 
+                    lda      alley1d 
+                    lsla     
+                    ldx      a,x                          ; gets *_t 
+                    pshs     x                            ; store it 
+                    ldx      #bulletYpos_t 
+                    lda      #1 
+                    lda      a,x                          ; Y 
+                    ldb      alley1x                      ; X 
+                    MOVETO_D
+; *_f  frame count -> index list of frames, see definition in data.i 
+                    lda      alley1e 
+                    lsla     
+                    ldx      #enemyframe_t 
+                    ldx      a,x 
+                    lda      ,x                           ; A = *_f var 
+                    lsla     
+                    puls     x                            ; pull X back 
+                    ldx      a,x 
+                    jsr      Draw_VL_mode
+skip1a
+;###########################################################################
+                    RESET0REF
+                    lda      alley2e
+                    beq      skip2a
+                    ldx      #enemy_t 
+                    lda      alley2e 
+                    lsla     
+                    ldx      a,x                          ; sets *_D 
+                    lda      alley2d 
+                    lsla     
+                    ldx      a,x                          ; gets *_t 
+                    pshs     x                            ; store it 
+                    ldx      #bulletYpos_t 
+                    lda      #2 
+                    lda      a,x                          ; Y 
+                    ldb      alley2x                      ; X 
+                    MOVETO_D
+; *_f  frame count -> index list of frames, see definition in data.i 
+                    lda      alley2e 
+                    lsla     
+                    ldx      #enemyframe_t 
+                    ldx      a,x 
+                    lda      ,x                           ; A = *_f var 
+                    lsla     
+                    puls     x                            ; pull X back 
+                    ldx      a,x 
+                    jsr      Draw_VL_mode
+skip2a
+;###########################################################################
+                    RESET0REF
+                    lda      alley3e
+                    beq      skip3a
+                    ldx      #enemy_t 
+                    lda      alley3e 
+                    lsla     
+                    ldx      a,x                          ; sets *_D 
+                    lda      alley3d 
+                    lsla     
+                    ldx      a,x                          ; gets *_t 
+                    pshs     x                            ; store it 
+                    ldx      #bulletYpos_t 
+                    lda      #3 
+                    lda      a,x                          ; Y 
+                    ldb      alley3x                      ; X 
+                    MOVETO_D
+; *_f  frame count -> index list of frames, see definition in data.i 
+                    lda      alley3e 
+                    lsla     
+                    ldx      #enemyframe_t 
+                    ldx      a,x 
+                    lda      ,x                           ; A = *_f var 
+                    lsla     
+                    puls     x                            ; pull X back 
+                    ldx      a,x 
+                    jsr      Draw_VL_mode
+skip3a
+;###########################################################################
+                    RESET0REF
+                    lda      alley4e
+                    beq      skip4a
+                    ldx      #enemy_t 
+                    lda      alley4e 
+                    lsla     
+                    ldx      a,x                          ; sets *_D 
+                    lda      alley4d 
+                    lsla     
+                    ldx      a,x                          ; gets *_t 
+                    pshs     x                            ; store it 
+                    ldx      #bulletYpos_t 
+                    lda      #4 
+                    lda      a,x                          ; Y 
+                    ldb      alley4x                      ; X 
+                    MOVETO_D
+; *_f  frame count -> index list of frames, see definition in data.i 
+                    lda      alley4e 
+                    lsla     
+                    ldx      #enemyframe_t 
+                    ldx      a,x 
+                    lda      ,x                           ; A = *_f var 
+                    lsla     
+                    puls     x                            ; pull X back 
+                    ldx      a,x 
+                    jsr      Draw_VL_mode
+skip4a
+;###########################################################################
+                    RESET0REF
+                    lda      alley5e
+                    beq      skip5a
+                    ldx      #enemy_t 
+                    lda      alley5e 
+                    lsla     
+                    ldx      a,x                          ; sets *_D 
+                    lda      alley5d 
+                    lsla     
+                    ldx      a,x                          ; gets *_t 
+                    pshs     x                            ; store it 
+                    ldx      #bulletYpos_t 
+                    lda      #5 
+                    lda      a,x                          ; Y 
+                    ldb      alley5x                      ; X 
+                    MOVETO_D
+; *_f  frame count -> index list of frames, see definition in data.i 
+                    lda      alley5e 
+                    lsla     
+                    ldx      #enemyframe_t 
+                    ldx      a,x 
+                    lda      ,x                           ; A = *_f var 
+                    lsla     
+                    puls     x                            ; pull X back 
+                    ldx      a,x 
+                    jsr      Draw_VL_mode
+skip5a
+;###########################################################################
+                    RESET0REF
+                    lda      alley6e
+                    beq      skip6a
+                    ldx      #enemy_t 
+                    lda      alley6e 
+                    lsla     
+                    ldx      a,x                          ; sets *_D 
+                    lda      alley6d 
+                    lsla     
+                    ldx      a,x                          ; gets *_t 
+                    pshs     x                            ; store it 
+                    ldx      #bulletYpos_t 
+                    lda      #6 
+                    lda      a,x                          ; Y 
+                    ldb      alley6x                      ; X 
+                    MOVETO_D
+; *_f  frame count -> index list of frames, see definition in data.i 
+                    lda      alley6e 
+                    lsla     
+                    ldx      #enemyframe_t 
+                    ldx      a,x 
+                    lda      ,x                           ; A = *_f var 
+                    lsla     
+                    puls     x                            ; pull X back 
+                    ldx      a,x 
+                    jsr      Draw_VL_mode
+skip6a
+;###########################################################################
+                    endm     
+;&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 MOVE_ENEMYS         macro    
 ; move enemies0
                     lda      alley0x 
@@ -176,6 +376,7 @@ bullhit0
                     sta      bullet0e 
                     sta      bullet0x 
                     sta      bullet0d 
+                    dec      enemycnt 
 bullet0_done 
 bullet0_miss 
                     lda      bullet1e 
@@ -210,6 +411,7 @@ bullhit1
                     sta      bullet1e 
                     sta      bullet1x 
                     sta      bullet1d 
+                    dec      enemycnt 
 bullet1_done 
 bullet1_miss 
                     lda      bullet2e 
@@ -244,6 +446,7 @@ bullhit2
                     sta      bullet2e 
                     sta      bullet2x 
                     sta      bullet2d 
+                    dec      enemycnt 
 bullet2_done 
 bullet2_miss 
                     lda      bullet3e 
@@ -278,6 +481,7 @@ bullhit3
                     sta      bullet3e 
                     sta      bullet3x 
                     sta      bullet3d 
+                    dec      enemycnt 
 bullet3_done 
 bullet3_miss 
                     lda      bullet4e 
@@ -312,6 +516,7 @@ bullhit4
                     sta      bullet4e 
                     sta      bullet4x 
                     sta      bullet4d 
+                    dec      enemycnt 
 bullet4_done 
 bullet4_miss 
                     lda      bullet5e 
@@ -346,6 +551,7 @@ bullhit5
                     sta      bullet5e 
                     sta      bullet5x 
                     sta      bullet5d 
+                    dec      enemycnt 
 bullet5_done 
 bullet5_miss 
                     lda      bullet6e 
@@ -380,6 +586,7 @@ bullhit6
                     sta      bullet6e 
                     sta      bullet6x 
                     sta      bullet6d 
+                    dec      enemycnt 
 bullet6_done 
 bullet6_miss 
                     endm     
@@ -435,11 +642,10 @@ NEW_ENEMY           macro
 ;
 ; don't even do spawn logic if maximum enemies are out 
                     lda      level 
-                    lsla     
-                    ldx      max_enemys_t 
+                    ldx      #max_enemys_t 
                     lda      a,x 
                     cmpa     enemycnt 
-                    ble      enemy_done 
+                    lble      no_new_enemy 
 ; check spawn throttle count logic
 ; TODO
 ; spawn new enemy
@@ -451,7 +657,7 @@ randloop
                     sta      spawntemp 
                     ldx      #alleye_t 
                     lsla     
-                    ldx      a,x
+                    ldx      a,x 
                     ldb      ,x 
                     bne      randloop 
 ; else fall through ACCA (a) holds valid alley index
@@ -466,8 +672,12 @@ randloop
                     lsla                                  ; and shift over for 2-byte table index 
                     sta      ,x                           ; set alleyNe enemy type 
                                                           ; figure out speed stuff here 
+                    ldx      #max_speed_mask_t
+                    lda      level
+                    ldb      a,x
+                    stb      masktemp
                     lda      temp 
-                    anda     #%11100000 
+                    anda     masktemp 
                     lsra     
                     lsra     
                     lsra     
@@ -495,8 +705,8 @@ randloop
                     beq      set_enemy_going_left 
                     lda      #-127 
                     ldx      #alleyx_t 
-                    ldb      spawntemp
-                    lslb 
+                    ldb      spawntemp 
+                    lslb     
                     ldx      b,x 
                     sta      ,x 
                     bra      enemy_done 
@@ -504,11 +714,13 @@ randloop
 set_enemy_going_left 
                     lda      #127 
                     ldx      #alleyx_t 
-                    ldb      spawntemp
-                    lslb 
+                    ldb      spawntemp 
+                    lslb     
                     ldx      b,x 
                     sta      ,x 
 enemy_done 
+                    inc      enemycnt 
+no_new_enemy 
                     endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 RESET0REF           macro    
