@@ -2,11 +2,11 @@
 ; vim: ts=4
 ; vim: syntax=asm6809
 ; MACROS
-DRAW_ENEMYS         macro      
+DRAW_ENEMYS         macro    
 ; *_D -> index 0|1 (0=Left, 1=Right)
-                    RESET0REF
-                    lda      alley0e
-                    beq      skip0a
+                    RESET0REF  
+                    lda      alley0e 
+                    beq      skip0a 
                     ldx      #enemy_t 
                     lda      alley0e 
                     lsla     
@@ -19,7 +19,7 @@ DRAW_ENEMYS         macro
                     lda      #0 
                     lda      a,x                          ; Y 
                     ldb      alley0x                      ; X 
-                    MOVETO_D
+                    MOVETO_D  
 ; *_f  frame count -> index list of frames, see definition in data.i 
                     lda      alley0e 
                     lsla     
@@ -29,12 +29,12 @@ DRAW_ENEMYS         macro
                     lsla     
                     puls     x                            ; pull X back 
                     ldx      a,x 
-                    jsr      Draw_VL_mode
+                    jsr      Draw_VL_mode 
 skip0a 
 ;################################################################################################
-                    RESET0REF
-                    lda      alley1e
-                    beq      skip1a
+                    RESET0REF  
+                    lda      alley1e 
+                    beq      skip1a 
                     ldx      #enemy_t 
                     lda      alley1e 
                     lsla     
@@ -47,7 +47,7 @@ skip0a
                     lda      #1 
                     lda      a,x                          ; Y 
                     ldb      alley1x                      ; X 
-                    MOVETO_D
+                    MOVETO_D  
 ; *_f  frame count -> index list of frames, see definition in data.i 
                     lda      alley1e 
                     lsla     
@@ -57,12 +57,12 @@ skip0a
                     lsla     
                     puls     x                            ; pull X back 
                     ldx      a,x 
-                    jsr      Draw_VL_mode
-skip1a
+                    jsr      Draw_VL_mode 
+skip1a 
 ;###########################################################################
-                    RESET0REF
-                    lda      alley2e
-                    beq      skip2a
+                    RESET0REF  
+                    lda      alley2e 
+                    beq      skip2a 
                     ldx      #enemy_t 
                     lda      alley2e 
                     lsla     
@@ -75,7 +75,7 @@ skip1a
                     lda      #2 
                     lda      a,x                          ; Y 
                     ldb      alley2x                      ; X 
-                    MOVETO_D
+                    MOVETO_D  
 ; *_f  frame count -> index list of frames, see definition in data.i 
                     lda      alley2e 
                     lsla     
@@ -85,12 +85,12 @@ skip1a
                     lsla     
                     puls     x                            ; pull X back 
                     ldx      a,x 
-                    jsr      Draw_VL_mode
-skip2a
+                    jsr      Draw_VL_mode 
+skip2a 
 ;###########################################################################
-                    RESET0REF
-                    lda      alley3e
-                    beq      skip3a
+                    RESET0REF  
+                    lda      alley3e 
+                    beq      skip3a 
                     ldx      #enemy_t 
                     lda      alley3e 
                     lsla     
@@ -103,7 +103,7 @@ skip2a
                     lda      #3 
                     lda      a,x                          ; Y 
                     ldb      alley3x                      ; X 
-                    MOVETO_D
+                    MOVETO_D  
 ; *_f  frame count -> index list of frames, see definition in data.i 
                     lda      alley3e 
                     lsla     
@@ -113,12 +113,12 @@ skip2a
                     lsla     
                     puls     x                            ; pull X back 
                     ldx      a,x 
-                    jsr      Draw_VL_mode
-skip3a
+                    jsr      Draw_VL_mode 
+skip3a 
 ;###########################################################################
-                    RESET0REF
-                    lda      alley4e
-                    beq      skip4a
+                    RESET0REF  
+                    lda      alley4e 
+                    beq      skip4a 
                     ldx      #enemy_t 
                     lda      alley4e 
                     lsla     
@@ -131,7 +131,7 @@ skip3a
                     lda      #4 
                     lda      a,x                          ; Y 
                     ldb      alley4x                      ; X 
-                    MOVETO_D
+                    MOVETO_D  
 ; *_f  frame count -> index list of frames, see definition in data.i 
                     lda      alley4e 
                     lsla     
@@ -141,12 +141,12 @@ skip3a
                     lsla     
                     puls     x                            ; pull X back 
                     ldx      a,x 
-                    jsr      Draw_VL_mode
-skip4a
+                    jsr      Draw_VL_mode 
+skip4a 
 ;###########################################################################
-                    RESET0REF
-                    lda      alley5e
-                    beq      skip5a
+                    RESET0REF  
+                    lda      alley5e 
+                    beq      skip5a 
                     ldx      #enemy_t 
                     lda      alley5e 
                     lsla     
@@ -159,7 +159,7 @@ skip4a
                     lda      #5 
                     lda      a,x                          ; Y 
                     ldb      alley5x                      ; X 
-                    MOVETO_D
+                    MOVETO_D  
 ; *_f  frame count -> index list of frames, see definition in data.i 
                     lda      alley5e 
                     lsla     
@@ -169,12 +169,12 @@ skip4a
                     lsla     
                     puls     x                            ; pull X back 
                     ldx      a,x 
-                    jsr      Draw_VL_mode
-skip5a
+                    jsr      Draw_VL_mode 
+skip5a 
 ;###########################################################################
-                    RESET0REF
-                    lda      alley6e
-                    beq      skip6a
+                    RESET0REF  
+                    lda      alley6e 
+                    beq      skip6a 
                     ldx      #enemy_t 
                     lda      alley6e 
                     lsla     
@@ -187,7 +187,7 @@ skip5a
                     lda      #6 
                     lda      a,x                          ; Y 
                     ldb      alley6x                      ; X 
-                    MOVETO_D
+                    MOVETO_D  
 ; *_f  frame count -> index list of frames, see definition in data.i 
                     lda      alley6e 
                     lsla     
@@ -197,23 +197,54 @@ skip5a
                     lsla     
                     puls     x                            ; pull X back 
                     ldx      a,x 
-                    jsr      Draw_VL_mode
-skip6a
+                    jsr      Draw_VL_mode 
+skip6a 
 ;###########################################################################
                     endm     
 ;&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 MOVE_ENEMYS         macro    
 ; move enemies0
                     lda      alley0x 
+                    sta      temp 
                     ldb      alley0d 
                     bne      add0 
                     suba     alley0s 
+                    bvs      alley0of 
+                    sta      alley0x 
                     bra      subdone0 
 
 add0 
                     adda     alley0s 
-subdone0 
+                    bvs      alley0of 
                     sta      alley0x 
+                    bra      subdone0 
+
+alley0of                                                  ;        object hit the wall, destroy or bounce? 
+                                                          ; bra bounce0 ; TEST always bounce 
+                    lda      alley0e 
+                    cmpa     #6                           ; Tank 
+                    beq      bounce0 
+                    cmpa     #7                           ; Cannonball 
+                    beq      bounce0 
+                    cmpa     #1                           ; Arrow 
+                    beq      dotank0 
+                    clr      alley0e                      ; else destroy 
+                    bra      subdone0 
+
+dotank0                                                   ;        change type from arrow to tank 
+                    lda      #6 
+                    sta      alley0e 
+bounce0 
+                    lda      temp                         ; pull pre-overflow coords 
+                    sta      alley0x                      ; and restore 
+                    lda      alley0d 
+                    beq      setDto1_0 
+                    clr      alley0d 
+                    bra      subdone0 
+
+setDto1_0 
+                    inc      alley0d 
+subdone0 
 ; move enemies1
                     lda      alley1x 
                     ldb      alley1d 
@@ -305,6 +336,7 @@ SHIP_COLLISION_DETECT  macro
                     ldx      a,x 
                     clra     
                     sta      ,x 
+                    dec      enemycnt 
 ;skipme
 no_hit 
                     endm     
@@ -344,8 +376,22 @@ SHOT_COLLISION_DETECT  macro
 ;                    sta      bullet0d 
 ;bullet0_done 
 ;bullet0_miss 
-                    lda      bullet0e 
+                    lda      bullet0e                     ; no bullet to test
                     beq      bullet0_done 
+                    lda      alley0e                      ; can't destroy Ghost 
+                    cmpa     #8 
+                    beq      bullet0_done 
+;                    cmpa     #6                           ; Tank can only destroy hitting BACK SIDE so bulletNd == alleyNd
+;                    bne      nottank_0
+;                    lda      bullet0d
+;                    cmpa     alley0d
+;                    beq      nottank_0                    ; MOVE this bit farther into bullet vs  array X testing otherwise bullet doesn't move
+;                    clr      bullet0e                     ; hit tank keep tank where it is
+;                    lda      alley0x  
+;                    suba     alley0s
+;                    sta      alley0x 
+;                    bra      bullet0_miss
+;nottank_0
                     lda      bullet0d 
                     beq      bullet0d_l 
                     ldb      bullet0x                     ; test bullet going right 0-127 possible hit range 
@@ -380,6 +426,9 @@ bullhit0
 bullet0_done 
 bullet0_miss 
                     lda      bullet1e 
+                    beq      bullet1_done 
+                    lda      alley1e                      ; can't destroy Ghost 
+                    cmpa     #8 
                     beq      bullet1_done 
                     lda      bullet1d 
                     beq      bullet1d_l 
@@ -416,6 +465,9 @@ bullet1_done
 bullet1_miss 
                     lda      bullet2e 
                     beq      bullet2_done 
+                    lda      alley2e                      ; can't destroy Ghost 
+                    cmpa     #8 
+                    beq      bullet2_done 
                     lda      bullet2d 
                     beq      bullet2d_l 
                     ldb      bullet2x                     ; test bullet going right 0-127 possible hit range 
@@ -450,6 +502,9 @@ bullhit2
 bullet2_done 
 bullet2_miss 
                     lda      bullet3e 
+                    beq      bullet3_done 
+                    lda      alley3e                      ; can't destroy Ghost 
+                    cmpa     #8 
                     beq      bullet3_done 
                     lda      bullet3d 
                     beq      bullet3d_l 
@@ -486,6 +541,9 @@ bullet3_done
 bullet3_miss 
                     lda      bullet4e 
                     beq      bullet4_done 
+                    lda      alley4e                      ; can't destroy Ghost 
+                    cmpa     #8 
+                    beq      bullet4_done 
                     lda      bullet4d 
                     beq      bullet4d_l 
                     ldb      bullet4x                     ; test bullet going right 0-127 possible hit range 
@@ -521,6 +579,9 @@ bullet4_done
 bullet4_miss 
                     lda      bullet5e 
                     beq      bullet5_done 
+                    lda      alley5e                      ; can't destroy Ghost 
+                    cmpa     #8 
+                    beq      bullet5_done 
                     lda      bullet5d 
                     beq      bullet5d_l 
                     ldb      bullet5x                     ; test bullet going right 0-127 possible hit range 
@@ -555,6 +616,9 @@ bullhit5
 bullet5_done 
 bullet5_miss 
                     lda      bullet6e 
+                    beq      bullet6_done 
+                    lda      alley6e                      ; can't destroy Ghost 
+                    cmpa     #8 
                     beq      bullet6_done 
                     lda      bullet6d 
                     beq      bullet6d_l 
@@ -645,9 +709,11 @@ NEW_ENEMY           macro
                     ldx      #max_enemys_t 
                     lda      a,x 
                     cmpa     enemycnt 
-                    lble      no_new_enemy 
-; check spawn throttle count logic
-; TODO
+                    lble     no_new_enemy 
+; check spawn throttle count logic 
+                    lda      frm100cnt 
+                    cmpa     #20 
+                    lbeq     no_new_enemy 
 ; spawn new enemy
 randloop 
                     jsr      Random                       ; choose random alley, loop until found 
@@ -660,7 +726,7 @@ randloop
                     ldx      a,x 
                     ldb      ,x 
                     bne      randloop 
-; else fall through ACCA (a) holds valid alley index
+; else fall through ACCA (a) holds valid (empty) alley index
                     lda      spawntemp 
                     lsla     
                     ldx      #alleye_t 
@@ -668,14 +734,13 @@ randloop
                     jsr      Random 
                     sta      temp                         ; keep for later 
                     anda     #%00000011                   ; mask off top 5 bits to limit answer 0-3 
-                    adda     #1                           ; and add 1, use with enemyspawn_t table 
-                    lsla                                  ; and shift over for 2-byte table index 
+                    adda     #1                           ; and add 1, use with enemy_t table 
                     sta      ,x                           ; set alleyNe enemy type 
                                                           ; figure out speed stuff here 
-                    ldx      #max_speed_mask_t
-                    lda      level
-                    ldb      a,x
-                    stb      masktemp
+                    ldx      #max_speed_mask_t 
+                    lda      level 
+                    ldb      a,x 
+                    stb      masktemp 
                     lda      temp 
                     anda     masktemp 
                     lsra     
@@ -869,4 +934,40 @@ LF3F4:              bitb     <VIA_int_flags               ;Wait for T1 to time o
                     deca     
                     bpl      Draw_VLa                     ;Go back for more points 
                                                           ; jmp Check0Ref ;Reset zero reference if necessary 
+                    endm     
+STALL_CHECK         macro    
+;; Add Ghost if stall in single alley for too long!
+                    inc      stallcnt 
+                    lda      #250 
+                    cmpa     stallcnt 
+                    bne      done_main 
+                    jsr      Random 
+                    anda     #%00000001 
+                    sta      temp                         ; direction bit
+
+                    lda      shippos 
+                    lsla     
+                    ldx      #alleye_t 
+                    ldx      a,x 
+                    ldb      #8                           ; Ghost! 
+                    stb      ,x 
+                    ldx      #alleyd_t 
+                    ldx      a,x 
+                    ldb      temp
+                    stb      ,x
+                    cmpb     #1
+                    bne      ghost_l
+                    ldb      #-127
+                    bra      ghost_d_done
+ghost_l 
+                    ldb      #127
+ghost_d_done
+                    ldx      #alleyx_t 
+                    ldx      a,x 
+                    stb      ,x 
+                    ldx      #alleys_t 
+                    ldx      a,x 
+                    ldb      #2 
+                    stb      ,x 
+;  END add ghost stuff, must tweak
                     endm     

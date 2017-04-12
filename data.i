@@ -48,19 +48,33 @@ Ship_Marker:
                     fcb      -9, +3 
                     fcb      +7, +0 
 ; Enemy list
-Arrow_R: 
+Arrow_R_1: 
                     fcb      0, 3, 0 
                     fcb      2, -5, +5 
                     fcb      2, +0, -17 
                     fcb      2, +0, +17 
                     fcb      2, -5, -5 
                     fcb      1 
-Arrow_L: 
+Arrow_R_2: 
+                    fcb      0, 5, 0 
+                    fcb      2, -3, +5 
+                    fcb      2, +0, -17 
+                    fcb      2, +0, +17 
+                    fcb      2, -3, -5 
+                    fcb      1 
+Arrow_L_1: 
                     fcb      0, 3, 0 
                     fcb      2, +5, -5 
                     fcb      2, +0, +17 
                     fcb      2, +0, -17 
                     fcb      2, +5, +5 
+                    fcb      1 
+Arrow_L_2: 
+                    fcb      0, 5, 0 
+                    fcb      2, +3, -5 
+                    fcb      2, +0, +17 
+                    fcb      2, +0, -17 
+                    fcb      2, +3, +5 
                     fcb      1 
 Bow_1: 
                     fcb      0, +8, -10 
@@ -70,13 +84,13 @@ Bow_1:
                     fcb      2, +13, -17 
                     fcb      1 
 Bow_2: 
-                    fcb      0, -10, -8 
-                    fcb      2, +17, +0 
-                    fcb      2, -17, +13 
-                    fcb      2, +17, +0 
-                    fcb      2, -17, -13 
+                    fcb      0, +8, -10 
+                    fcb      2, -13, +0 
+                    fcb      2, +13, +17 
+                    fcb      2, -13, +0 
+                    fcb      2, +13, -17 
                     fcb      1 
-Dash: 
+Dash_1: 
                     fcb      0, +2, -5 
                     fcb      2, +0, +20 
                     fcb      2, -1, +0 
@@ -85,6 +99,17 @@ Dash:
                     fcb      2, +0, +20 
                     fcb      2, -1, +0 
                     fcb      2, +0, -20 
+                    fcb      2, +3, +0 
+                    fcb      1 
+Dash_2: 
+                    fcb      0, +2, -5 
+                    fcb      2, +0, +18 
+                    fcb      2, -1, +0 
+                    fcb      2, +0, -18 
+                    fcb      2, -1, +0 
+                    fcb      2, +0, +18 
+                    fcb      2, -1, +0 
+                    fcb      2, +0, -18 
                     fcb      2, +3, +0 
                     fcb      1 
 Wedge_R: 
@@ -109,32 +134,37 @@ Ghost:
                     fcb      2, -6, -11 
                     fcb      2, +6, -11 
                     fcb      1 
-Tank_R: 
-Tank_L: 
-Tank_doh: 
+Tank_R:  
                     fcb      0, +8, -10                   ; sync and move to y, x 
-                    fcb      2, +0, +21                   ; draw, y, x 
-                    fcb      2, -4, +0                    ; draw, y, x 
-                    fcb      2, +0, -9                    ; draw, y, x 
-                    fcb      2, -3, +0                    ; draw, y, x 
-                    fcb      2, +0, +12                   ; draw, y, x 
-                    fcb      2, -3, +0                    ; draw, y, x 
-                    fcb      2, +0, -12                   ; draw, y, x 
-                    fcb      2, -3, +0                    ; draw, y, x 
-                    fcb      2, +0, +9                    ; draw, y, x 
-                    fcb      2, -4, +0                    ; draw, y, x 
-; fcb 0, -8, +11 ; sync and move to y, x
-                    fcb      2, +0, -21                   ; draw, y, x 
+                    fcb      2, +0, -17                   ; draw, y, x 
+                    fcb      2, -20, +0                    ; draw, y, x 
+                    fcb      2, +0, +17                   ; draw, y, x 
                     fcb      2, +4, +0                    ; draw, y, x 
-                    fcb      2, +0, +2                    ; draw, y, x 
-                    fcb      2, +2, +0                    ; draw, y, x 
-                    fcb      2, +0, -2                    ; draw, y, x 
-                    fcb      2, +5, +0                    ; draw, y, x 
-                    fcb      2, +0, +2                    ; draw, y, x 
-                    fcb      2, +2, +0                    ; draw, y, x 
-                    fcb      2, +0, -2                    ; draw, y, x 
+                    fcb      2, +0, -6                    ; draw, y, x 
+                    fcb      2, +4, +0                    ; draw, y, x 
+                    fcb      2, +0, +13                    ; draw, y, x 
+                    fcb      2, +4, +0                    ; draw, y, x 
+                    fcb      2, +0, -13                    ; draw, y, x 
+                    fcb      2, +4, +0                    ; draw, y, x 
+                    fcb      2, +0, +6                    ; draw, y, x 
                     fcb      2, +4, +0                    ; draw, y, x 
                     fcb      1                            ; endmarker 
+Tank_L:
+                    fcb      0, +8, -10                   ; sync and move to y, x 
+                    fcb      2, +0, +17                   ; draw, y, x 
+                    fcb      2, -20, +0                    ; draw, y, x 
+                    fcb      2, +0, -17                   ; draw, y, x 
+                    fcb      2, +4, +0                    ; draw, y, x 
+                    fcb      2, +0, +6                    ; draw, y, x 
+                    fcb      2, +4, +0                    ; draw, y, x 
+                    fcb      2, +0, -13                    ; draw, y, x 
+                    fcb      2, +4, +0                    ; draw, y, x 
+                    fcb      2, +0, +13                    ; draw, y, x 
+                    fcb      2, +4, +0                    ; draw, y, x 
+                    fcb      2, +0, -6                    ; draw, y, x 
+                    fcb      2, +4, +0                    ; draw, y, x 
+                    fcb      1 
+
 Prize_1:            fcb      0, +5, 0 
                     fcb      2, -5, +7 
                     fcb      2, -5, -7 
@@ -274,11 +304,12 @@ Prize_D             fdb      Prize_t, Prize_t
 Tank_D              fdb      Tank_L_t, Tank_R_t 
 Wedge_D             fdb      Wedge_L_t, Wedge_R_t 
 ; Animation tables counts must be mod 100 == 0 ie 1,2,4,5,10,20,25,50,100 
-Arrow_L_t           fdb      Arrow_L 
-Arrow_R_t           fdb      Arrow_R 
-Bow_t               fdb      Bow_1, Bow_2                 ; flippy 90 degree animation (100/2 frames each) 
+Arrow_L_t           fdb      Arrow_L_1, Arrow_L_2
+Arrow_R_t           fdb      Arrow_R_1, Arrow_R_2 
+Bow_t               fdb      Bow_1, Bow_2, Bow_1, Bow_2, Bow_1, Bow_2, Bow_1, Bow_2, Bow_1, Bow_2                ; 
+                    fdb      Bow_1, Bow_2, Bow_1, Bow_2, Bow_1, Bow_2, Bow_1, Bow_2, Bow_1, Bow_2                ; flippy 90 degree animation (100/2 frames each) 
 Cannonball_t        fdb      Cannonball 
-Dash_t              fdb      Dash                         ; same, no animation (100 frames) 
+Dash_t              fdb      Dash_1, Dash_2                         ; same, no animation (100 frames) 
 Explode_t           fdb      Explode_0 ,Explode_2 ,Explode_3 ,Explode_4 ,Explode_5 ; (100/20 frames each) 
                     fdb      Explode_6 ,Explode_7 ,Explode_8 ,Explode_9 ,Explode_9 
                     fdb      Explode_0 ,Explode_2 ,Explode_3 ,Explode_4 ,Explode_5 

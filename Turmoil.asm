@@ -103,7 +103,7 @@ frm5cnt             ds       1
 frm2cnt             ds       1 
 temp                ds       1                            ; generic 1 byte temp 
 spawntemp           ds       1 
-masktemp            ds       1
+masktemp            ds       1 
 rottemp             ds       15                           ; rotation list temp 
 titlescreen_y       ds       1 
 ;
@@ -112,8 +112,6 @@ titlescreen_y       ds       1
 LEFT                =        0 
 RIGHT               =        1 
 SCORE               =        10 
-;FALSE              =     0 
-;TRUE               =      1 
 MOVEAMOUNT          =        8                            ; how many 'pixels per frame' TOD/FIX/something 
 ;***************************************************************************
 ; HEADER SECTION
@@ -132,6 +130,7 @@ MOVEAMOUNT          =        8                            ; how many 'pixels per
 ; CODE SECTION
 ;***************************************************************************
 ; here the cartridge program starts off
+restart 
                     jsr      setup 
 start 
                     lda      #0 
@@ -202,8 +201,8 @@ donuthin2
 ; display score and ships left
                     RESET0REF  
                     ldu      #score 
-                    lda      #-127 
-                    ldb      #0 
+                    lda      #137 
+                    ldb      #-40 
                     jsr      Print_Str_d 
                     lda      -50 
                     ldb      65 
@@ -217,39 +216,19 @@ ships_left_loop
                     bne      ships_left_loop 
                                                           ; jmp main 
 ; end score+ship count
-;;;; DRAW VARIOUS STUFF TEST ZONE
-                    NEW_ENEMY   
-                    DRAW_ENEMYS
-;
-                                                          ; RESET0REF 
-                                                          ; ldx #bulletYpos_t 
-                                                          ; lda #0 
-                                                          ; lda a,x 
-                                                          ; ldb #-30 
-                                                          ; MOVETO_D 
-                                                          ; ldx #Wedge_R_t 
-                                                          ; lda Wedge_f 
-                                                          ; ldx a,x 
-                                                          ; jsr Draw_VL_mode 
+
+                    NEW_ENEMY  
+                    DRAW_ENEMYS  
+
 ; increment the Test frame counter
 ; add more logic to set/increment SHAPE_f counters for desired animations
-; ANIMATION PSEUDOCODE
-; lda #10 
-; cmpa Arrow_f
-; bne label
-; inc Arrow_f
-; bra donearrowf
-; label:
-; clr Arrow_f
-; donearrowf 
-; PSEUDOCODE ABOVE
+
                     lda      #5 
                     inc      frm5cnt 
                     cmpa     frm5cnt 
                     bne      no5cntreset 
                     clr      frm5cnt 
-                    lda      #2 
-                    sta      Explode_f 
+                    inc      Bow_f 
 no5cntreset 
                     lda      #10 
                     inc      frm10cnt 
@@ -268,6 +247,7 @@ no20cntreset
                     cmpa     frm25cnt 
                     bne      no25cntreset 
                     clr      frm25cnt 
+                    jsr      chkenemycnt                  ; check number of enemies spawned every .4 seconds 
 no25cntreset 
                     lda      #50 
                     inc      frm50cnt 
@@ -275,9 +255,9 @@ no25cntreset
                     bne      no50cntreset 
                     clr      frm50cnt 
                     lda      #1 
-                    sta      Prize_f                      ; add 2 for next table entry 
-                    lda      #1 
-                    sta      Bow_f 
+                    sta      Arrow_f 
+                    sta      Prize_f 
+                    sta      Dash_f 
 no50cntreset 
                     lda      #100                         ; frame count 100=2 seconds (at full speed) 0-99 == 100 
                                                           ; frame freq 1, 2, 4, 5, 10, 20, 25,50, 100 
@@ -288,9 +268,9 @@ no50cntreset
                     clra     
                     sta      frm100cnt 
                                                           ; Reset all frame counts 
-                                                          ; sta Arrow_f 
+                    sta      Arrow_f 
                     sta      Bow_f 
-                                                          ; sta Dash_f 
+                    sta      Dash_f 
                                                           ; sta Wedge_f 
                                                           ; sta Ghost_f 
                     sta      Prize_f 
@@ -305,7 +285,8 @@ no100cntreset
                     bne      notgameover 
                     jsr      gameover 
 notgameover 
-                    inc      stallcnt 
+                    STALL_CHECK  
+done_main 
                     jmp      main                         ; and repeat forever 
 
 ;###########################################################################
@@ -507,8 +488,13 @@ tsstart
                     sta      VIA_t1_cnt_lo 
                     jsr      Intensity_7F 
                     RESET0REF  
-                    ldd      $0000 
+                    lda      -70 
+                    ldb      -50 
                     ldu      #gameoverstr 
+                    jsr      Print_Str_d 
+                    lda      -50 
+                    ldb      -50 
+                    ldu      #score 
                     jsr      Print_Str_d 
                     lda      titlescreen_y 
                     ldb      #0 
@@ -538,13 +524,9 @@ tsstart
                     cmpa     #10 
                     bne      tsstart 
                     clr      titlescreen_y 
-                    ldd      $0000 
-                    ldu      #gameoverstr 
-                    jsr      Print_Str_d
-                    lda      -50
-                    ldb      -50
-                    ldu      #score
-                    jsr      Print_Str_d 
+                    jsr      Read_Btns 
+                    lda      Vec_Button_1_3 
+                    bne      restart 
                     bra      tsstart 
 
 explodetest: 
@@ -557,6 +539,40 @@ loop
                     jsr      Wait_Recal                   ; call frame 
                     jsr      Do_Sound                     ; this actually plays the sound 
                     jmp      loop 
+
+chkenemycnt: 
+                    clr      temp 
+                    lda      alley0e 
+                    beq      nextE0 
+                    inc      temp 
+nextE0 
+                    lda      alley1e 
+                    beq      nextE1 
+                    inc      temp 
+nextE1 
+                    lda      alley2e 
+                    beq      nextE2 
+                    inc      temp 
+nextE2 
+                    lda      alley3e 
+                    beq      nextE3 
+                    inc      temp 
+nextE3 
+                    lda      alley4e 
+                    beq      nextE4 
+                    inc      temp 
+nextE4 
+                    lda      alley5e 
+                    beq      nextE5 
+                    inc      temp 
+nextE5 
+                    lda      alley6e 
+                    beq      nextE6 
+                    inc      temp 
+nextE6 
+                    lda      temp 
+                    sta      enemycnt 
+                    rts      
 
 ; must go at bottom or fills up RAM instead of ROM ??
                     include  "data.i"
