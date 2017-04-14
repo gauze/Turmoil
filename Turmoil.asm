@@ -104,8 +104,7 @@ frm2cnt             ds       1
 temp                ds       1                            ; generic 1 byte temp 
 spawntemp           ds       1 
 masktemp            ds       1 
-rottemp             ds       15                           ; rotation list temp 
-titlescreen_y       ds       1 
+enemylvlcnt         ds       1 
 ;
 ; CONSTANTS place after VARIABLES
 ;ALLEYWIDTH          =        17 
@@ -132,6 +131,7 @@ MOVEAMOUNT          =        8                            ; how many 'pixels per
 ; here the cartridge program starts off
 restart 
                     jsr      setup 
+                    jsr      levelsplash 
 start 
                     lda      #0 
                     sta      shippos 
@@ -216,68 +216,9 @@ ships_left_loop
                     bne      ships_left_loop 
                                                           ; jmp main 
 ; end score+ship count
-
                     NEW_ENEMY  
                     DRAW_ENEMYS  
-
-; increment the Test frame counter
-; add more logic to set/increment SHAPE_f counters for desired animations
-
-                    lda      #5 
-                    inc      frm5cnt 
-                    cmpa     frm5cnt 
-                    bne      no5cntreset 
-                    clr      frm5cnt 
-                    inc      Bow_f 
-no5cntreset 
-                    lda      #10 
-                    inc      frm10cnt 
-                    cmpa     frm10cnt 
-                    bne      no10cntreset 
-                    clr      frm10cnt 
-no10cntreset 
-                    lda      #20 
-                    inc      frm20cnt 
-                    cmpa     frm20cnt 
-                    bne      no20cntreset 
-                    clr      frm20cnt 
-no20cntreset 
-                    lda      #25 
-                    inc      frm25cnt 
-                    cmpa     frm25cnt 
-                    bne      no25cntreset 
-                    clr      frm25cnt 
-                    jsr      chkenemycnt                  ; check number of enemies spawned every .4 seconds 
-no25cntreset 
-                    lda      #50 
-                    inc      frm50cnt 
-                    cmpa     frm50cnt 
-                    bne      no50cntreset 
-                    clr      frm50cnt 
-                    lda      #1 
-                    sta      Arrow_f 
-                    sta      Prize_f 
-                    sta      Dash_f 
-no50cntreset 
-                    lda      #100                         ; frame count 100=2 seconds (at full speed) 0-99 == 100 
-                                                          ; frame freq 1, 2, 4, 5, 10, 20, 25,50, 100 
-                                                          ; frame len .02, .04, .08, .1, .2, .4, .5, 1, 2 
-                    inc      frm100cnt 
-                    cmpa     frm100cnt 
-                    bne      no100cntreset 
-                    clra     
-                    sta      frm100cnt 
-                                                          ; Reset all frame counts 
-                    sta      Arrow_f 
-                    sta      Bow_f 
-                    sta      Dash_f 
-                                                          ; sta Wedge_f 
-                                                          ; sta Ghost_f 
-                    sta      Prize_f 
-                                                          ; sta Cannonball_f 
-                    sta      Tank_f 
-                    sta      Explode_f 
-no100cntreset 
+                    FRAME_CNTS  
                     MOVE_ENEMYS  
                     SHOT_COLLISION_DETECT  
                     SHIP_COLLISION_DETECT  
@@ -286,7 +227,6 @@ no100cntreset
                     jsr      gameover 
 notgameover 
                     STALL_CHECK  
-done_main 
                     jmp      main                         ; and repeat forever 
 
 ;###########################################################################
@@ -479,9 +419,6 @@ bullets_done
                     rts      
 
 gameover 
-titlescreen 
-                    clr      titlescreen_y 
-tsstart 
                     jsr      Wait_Recal 
                     clr      Vec_Misc_Count 
                     lda      #$80 
@@ -496,49 +433,10 @@ tsstart
                     ldb      -50 
                     ldu      #score 
                     jsr      Print_Str_d 
-                    lda      titlescreen_y 
-                    ldb      #0 
-                    jsr      Moveto_d 
-                    lda      #0 
-                    ldb      #30 
-                    jsr      Draw_Line_d 
-                    RESET0REF  
-                    lda      titlescreen_y 
-                    inca     
-                    ldb      #0 
-                    jsr      Moveto_d 
-                    lda      #0 
-                    ldb      #30 
-                    jsr      Draw_Line_d 
-                    RESET0REF  
-                    lda      titlescreen_y 
-                    inca     
-                    inca     
-                    ldb      #0 
-                    jsr      Moveto_d 
-                    lda      #0 
-                    ldb      #30 
-                    jsr      Draw_Line_d 
-                    inc      titlescreen_y 
-                    lda      titlescreen_y 
-                    cmpa     #10 
-                    bne      tsstart 
-                    clr      titlescreen_y 
                     jsr      Read_Btns 
                     lda      Vec_Button_1_3 
                     bne      restart 
-                    bra      tsstart 
-
-explodetest: 
-                    lda      #-1                          ; high bit set by any negative number 
-                    sta      Vec_Expl_Flag                ; set high bit for Explosion flag 
-loop 
-                    jsr      DP_to_C8                     ; DP to RAM 
-                    ldu      #EXP3                        ; point to explosion table entry 
-                    jsr      Explosion_Snd                ; 
-                    jsr      Wait_Recal                   ; call frame 
-                    jsr      Do_Sound                     ; this actually plays the sound 
-                    jmp      loop 
+                    bra      gameover
 
 chkenemycnt: 
                     clr      temp 
@@ -572,6 +470,29 @@ nextE5
 nextE6 
                     lda      temp 
                     sta      enemycnt 
+                    rts      
+
+levelsplash 
+                    clr      stallcnt
+splashloop
+                    jsr      Wait_Recal 
+                    clr      Vec_Misc_Count 
+                    lda      #$80 
+                    sta      VIA_t1_cnt_lo 
+                    jsr      Intensity_7F 
+                    ldx      #levelstr_t
+                    lda      level
+                    lsla
+                    ldu      a,x
+                    lda      -20 
+                    ldb      -10 
+                    jsr      Print_Str_d 
+                    inc      stallcnt
+                    lda      stallcnt 
+                    cmpa     #100
+                    beq      donesplash
+                    bra      splashloop
+donesplash
                     rts      
 
 ; must go at bottom or fills up RAM instead of ROM ??

@@ -238,79 +238,265 @@ bounce0
                     lda      temp                         ; pull pre-overflow coords 
                     sta      alley0x                      ; and restore 
                     lda      alley0d 
-                    beq      setDto1_0 
+                    beq      setDtoR_0 
                     clr      alley0d 
                     bra      subdone0 
 
-setDto1_0 
+setDtoR_0 
                     inc      alley0d 
 subdone0 
 ; move enemies1
                     lda      alley1x 
+                    sta      temp 
                     ldb      alley1d 
                     bne      add1 
                     suba     alley1s 
+                    bvs      alley1of 
+                    sta      alley1x 
                     bra      subdone1 
 
 add1 
                     adda     alley1s 
-subdone1 
+                    bvs      alley1of 
                     sta      alley1x 
+                    bra      subdone1 
+
+alley1of                                                  ;        object hit the wall, destroy or bounce? 
+                                                          ; bra bounce1 ; TEST always bounce 
+                    lda      alley1e 
+                    cmpa     #6                           ; Tank 
+                    beq      bounce1 
+                    cmpa     #7                           ; Cannonball 
+                    beq      bounce1 
+                    cmpa     #1                           ; Arrow 
+                    beq      dotank1 
+                    clr      alley1e                      ; else destroy 
+                    bra      subdone1 
+
+dotank1                                                   ;        change type from arrow to tank 
+                    lda      #6 
+                    sta      alley1e 
+bounce1 
+                    lda      temp                         ; pull pre-overflow coords 
+                    sta      alley1x                      ; and restore 
+                    lda      alley1d 
+                    beq      setDtoR_1 
+                    clr      alley1d 
+                    bra      subdone1 
+
+setDtoR_1 
+                    inc      alley1d 
+subdone1 
 ; move enemies2
                     lda      alley2x 
+                    sta      temp 
                     ldb      alley2d 
                     bne      add2 
                     suba     alley2s 
+                    bvs      alley2of 
+                    sta      alley2x 
                     bra      subdone2 
 
 add2 
                     adda     alley2s 
-subdone2 
+                    bvs      alley2of 
                     sta      alley2x 
+                    bra      subdone2 
+
+alley2of                                                  ;        object hit the wall, destroy or bounce? 
+                                                          ; bra bounce2 ; TEST always bounce 
+                    lda      alley2e 
+                    cmpa     #6                           ; Tank 
+                    beq      bounce2 
+                    cmpa     #7                           ; Cannonball 
+                    beq      bounce2 
+                    cmpa     #1                           ; Arrow 
+                    beq      dotank2 
+                    clr      alley2e                      ; else destroy 
+                    bra      subdone2 
+
+dotank2                                                   ;        change type from arrow to tank 
+                    lda      #6 
+                    sta      alley2e 
+bounce2 
+                    lda      temp                         ; pull pre-overflow coords 
+                    sta      alley2x                      ; and restore 
+                    lda      alley2d 
+                    beq      setDtoR_2 
+                    clr      alley2d 
+                    bra      subdone2 
+
+setDtoR_2 
+                    inc      alley2d 
+subdone2 
 ; move enemies3
                     lda      alley3x 
+                    sta      temp 
                     ldb      alley3d 
                     bne      add3 
                     suba     alley3s 
+                    bvs      alley3of 
+                    sta      alley3x 
                     bra      subdone3 
 
 add3 
                     adda     alley3s 
-subdone3 
+                    bvs      alley3of 
                     sta      alley3x 
+                    bra      subdone3 
+
+alley3of                                                  ;        object hit the wall, destroy or bounce? 
+                                                          ; bra bounce3 ; TEST always bounce 
+                    lda      alley3e 
+                    cmpa     #6                           ; Tank 
+                    beq      bounce3 
+                    cmpa     #7                           ; Cannonball 
+                    beq      bounce3 
+                    cmpa     #1                           ; Arrow 
+                    beq      dotank3 
+                    clr      alley3e                      ; else destroy 
+                    bra      subdone3 
+
+dotank3                                                   ;        change type from arrow to tank 
+                    lda      #6 
+                    sta      alley3e 
+bounce3 
+                    lda      temp                         ; pull pre-overflow coords 
+                    sta      alley3x                      ; and restore 
+                    lda      alley3d 
+                    beq      setDtoR_3 
+                    clr      alley3d 
+                    bra      subdone3 
+
+setDtoR_3 
+                    inc      alley3d 
+subdone3 
 ; move enemies4
                     lda      alley4x 
+                    sta      temp 
                     ldb      alley4d 
                     bne      add4 
                     suba     alley4s 
+                    bvs      alley4of 
+                    sta      alley4x 
                     bra      subdone4 
 
 add4 
                     adda     alley4s 
-subdone4 
+                    bvs      alley4of 
                     sta      alley4x 
+                    bra      subdone4 
+
+alley4of                                                  ;        object hit the wall, destroy or bounce? 
+                                                          ; bra bounce4 ; TEST always bounce 
+                    lda      alley4e 
+                    cmpa     #6                           ; Tank 
+                    beq      bounce4 
+                    cmpa     #7                           ; Cannonball 
+                    beq      bounce4 
+                    cmpa     #1                           ; Arrow 
+                    beq      dotank4 
+                    clr      alley4e                      ; else destroy 
+                    bra      subdone4 
+
+dotank4                                                   ;        change type from arrow to tank 
+                    lda      #6 
+                    sta      alley4e 
+bounce4 
+                    lda      temp                         ; pull pre-overflow coords 
+                    sta      alley4x                      ; and restore 
+                    lda      alley4d 
+                    beq      setDtoR_4 
+                    clr      alley4d 
+                    bra      subdone4 
+
+setDtoR_4 
+                    inc      alley4d 
+subdone4 
 ; move enemies5
                     lda      alley5x 
+                    sta      temp 
                     ldb      alley5d 
                     bne      add5 
                     suba     alley5s 
+                    bvs      alley5of 
+                    sta      alley5x 
                     bra      subdone5 
 
 add5 
                     adda     alley5s 
-subdone5 
+                    bvs      alley5of 
                     sta      alley5x 
+                    bra      subdone5 
+
+alley5of                                                  ;        object hit the wall, destroy or bounce? 
+                                                          ; bra bounce5 ; TEST always bounce 
+                    lda      alley5e 
+                    cmpa     #6                           ; Tank 
+                    beq      bounce5 
+                    cmpa     #7                           ; Cannonball 
+                    beq      bounce5 
+                    cmpa     #1                           ; Arrow 
+                    beq      dotank5 
+                    clr      alley5e                      ; else destroy 
+                    bra      subdone5 
+
+dotank5                                                   ;        change type from arrow to tank 
+                    lda      #6 
+                    sta      alley5e 
+bounce5 
+                    lda      temp                         ; pull pre-overflow coords 
+                    sta      alley5x                      ; and restore 
+                    lda      alley5d 
+                    beq      setDtoR_5 
+                    clr      alley5d 
+                    bra      subdone5 
+
+setDtoR_5 
+                    inc      alley5d 
+subdone5 
 ; move enemies6
                     lda      alley6x 
+                    sta      temp 
                     ldb      alley6d 
                     bne      add6 
                     suba     alley6s 
+                    bvs      alley6of 
+                    sta      alley6x 
                     bra      subdone6 
 
 add6 
                     adda     alley6s 
-subdone6 
+                    bvs      alley6of 
                     sta      alley6x 
+                    bra      subdone6 
+
+alley6of                                                  ;        object hit the wall, destroy or bounce? 
+                                                          ; bra bounce6 ; TEST always bounce 
+                    lda      alley6e 
+                    cmpa     #6                           ; Tank 
+                    beq      bounce6 
+                    cmpa     #7                           ; Cannonball 
+                    beq      bounce6 
+                    cmpa     #1                           ; Arrow 
+                    beq      dotank6 
+                    clr      alley6e                      ; else destroy 
+                    bra      subdone6 
+
+dotank6                                                   ;        change type from arrow to tank 
+                    lda      #6 
+                    sta      alley6e 
+bounce6 
+                    lda      temp                         ; pull pre-overflow coords 
+                    sta      alley6x                      ; and restore 
+                    lda      alley6d 
+                    beq      setDtoR_6 
+                    clr      alley6d 
+                    bra      subdone6 
+
+setDtoR_6 
+                    inc      alley6d 
+subdone6 
                     endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 SHIP_COLLISION_DETECT  macro  
@@ -337,6 +523,7 @@ SHIP_COLLISION_DETECT  macro
                     clra     
                     sta      ,x 
                     dec      enemycnt 
+                    jsr      levelsplash
 ;skipme
 no_hit 
                     endm     
@@ -393,7 +580,8 @@ SHOT_COLLISION_DETECT  macro
 ;                    bra      bullet0_miss
 ;nottank_0
                     lda      bullet0d 
-                    beq      bullet0d_l 
+                    beq      bullet0d_l
+ 
                     ldb      bullet0x                     ; test bullet going right 0-127 possible hit range 
                     bmi      bullet0_miss                 ; bullet going wrong direction can't hit. 
                     lda      alley0x 
@@ -409,6 +597,13 @@ bullet0d_l
                     bge      bullet0_miss 
 ; add to score then destroy bullet and enemy
 bullhit0 
+                    lda      alley0d
+                    cmpa     bullet0d 
+                    beq      eventankdies0
+                    lda      alley0e
+                    cmpa     #6
+                    beq      tank0
+eventankdies0
                     ldx      #score 
                     lda      alley0s 
                     ldb      #SCORE 
@@ -422,7 +617,20 @@ bullhit0
                     sta      bullet0e 
                     sta      bullet0x 
                     sta      bullet0d 
-                    dec      enemycnt 
+                    dec      enemycnt
+                    bra      bullet0_done
+tank0               
+                    lda      alley0x 
+                    ldb      alley0d
+                    beq      tankleft0  
+                    suba     alley0s
+                    deca
+                    bra      tankright0
+tankleft0
+                    adda     alley0s
+                    inca     
+tankright0
+                    sta      alley0x 
 bullet0_done 
 bullet0_miss 
                     lda      bullet1e 
@@ -940,7 +1148,8 @@ STALL_CHECK         macro
                     inc      stallcnt 
                     lda      #250 
                     cmpa     stallcnt 
-                    bne      done_main 
+                    bne      noghost 
+;
                     jsr      Random 
                     anda     #%00000001 
                     sta      temp                         ; direction bit
@@ -949,6 +1158,10 @@ STALL_CHECK         macro
                     lsla     
                     ldx      #alleye_t 
                     ldx      a,x 
+                    ldb      ,x                           
+                    cmpb     #0                           ; don't spawn if existing enemy in alley.
+                    bne      noghost
+  
                     ldb      #8                           ; Ghost! 
                     stb      ,x 
                     ldx      #alleyd_t 
@@ -970,4 +1183,66 @@ ghost_d_done
                     ldb      #2 
                     stb      ,x 
 ;  END add ghost stuff, must tweak
+noghost
                     endm     
+
+FRAME_CNTS          macro
+; increment the Test frame counter
+; add more logic to set/increment SHAPE_f counters for desired animations
+
+                    lda      #5 
+                    inc      frm5cnt 
+                    cmpa     frm5cnt 
+                    bne      no5cntreset 
+                    clr      frm5cnt 
+                    inc      Bow_f 
+no5cntreset 
+                    lda      #10 
+                    inc      frm10cnt 
+                    cmpa     frm10cnt 
+                    bne      no10cntreset 
+                    clr      frm10cnt 
+no10cntreset 
+                    lda      #20 
+                    inc      frm20cnt 
+                    cmpa     frm20cnt 
+                    bne      no20cntreset 
+                    clr      frm20cnt 
+no20cntreset 
+                    lda      #25 
+                    inc      frm25cnt 
+                    cmpa     frm25cnt 
+                    bne      no25cntreset 
+                    clr      frm25cnt 
+                    jsr      chkenemycnt                  ; check number of enemies spawned every .4 seconds 
+no25cntreset 
+                    lda      #50 
+                    inc      frm50cnt 
+                    cmpa     frm50cnt 
+                    bne      no50cntreset 
+                    clr      frm50cnt 
+                    lda      #1 
+                    sta      Arrow_f 
+                    sta      Prize_f 
+                    sta      Dash_f 
+no50cntreset 
+                    lda      #100                         ; frame count 100=2 seconds (at full speed) 0-99 == 100 
+                                                          ; frame freq 1, 2, 4, 5, 10, 20, 25,50, 100 
+                                                          ; frame len .02, .04, .08, .1, .2, .4, .5, 1, 2 
+                    inc      frm100cnt 
+                    cmpa     frm100cnt 
+                    bne      no100cntreset 
+                    clra     
+                    sta      frm100cnt 
+                                                          ; Reset all frame counts 
+                    sta      Arrow_f 
+                    sta      Bow_f 
+                    sta      Dash_f 
+                                                          ; sta Wedge_f 
+                                                          ; sta Ghost_f 
+                    sta      Prize_f 
+                                                          ; sta Cannonball_f 
+                    sta      Tank_f 
+                    sta      Explode_f 
+no100cntreset 
+                    endm

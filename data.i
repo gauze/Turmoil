@@ -50,17 +50,17 @@ Ship_Marker:
 ; Enemy list
 Arrow_R_1: 
                     fcb      0, 3, 0 
-                    fcb      2, -5, +5 
+                    fcb      2, +5, +5 
                     fcb      2, +0, -17 
                     fcb      2, +0, +17 
-                    fcb      2, -5, -5 
+                    fcb      2, +5, -5 
                     fcb      1 
 Arrow_R_2: 
                     fcb      0, 5, 0 
-                    fcb      2, -3, +5 
+                    fcb      2, +3, +5 
                     fcb      2, +0, -17 
                     fcb      2, +0, +17 
-                    fcb      2, -3, -5 
+                    fcb      2, +3, -5 
                     fcb      1 
 Arrow_L_1: 
                     fcb      0, 3, 0 
@@ -103,13 +103,13 @@ Dash_1:
                     fcb      1 
 Dash_2: 
                     fcb      0, +2, -5 
-                    fcb      2, +0, +18 
+                    fcb      2, +0, +16 
                     fcb      2, -1, +0 
-                    fcb      2, +0, -18 
+                    fcb      2, +0, -16 
                     fcb      2, -1, +0 
-                    fcb      2, +0, +18 
+                    fcb      2, +0, +16 
                     fcb      2, -1, +0 
-                    fcb      2, +0, -18 
+                    fcb      2, +0, -16 
                     fcb      2, +3, +0 
                     fcb      1 
 Wedge_R: 
@@ -134,37 +134,38 @@ Ghost:
                     fcb      2, -6, -11 
                     fcb      2, +6, -11 
                     fcb      1 
-Tank_R:  
+Tank_R: 
                     fcb      0, +8, -10                   ; sync and move to y, x 
                     fcb      2, +0, -17                   ; draw, y, x 
-                    fcb      2, -20, +0                    ; draw, y, x 
+                    fcb      2, -10, +2                   ; draw, y, x 
+                    fcb      2, -10, -2                   ; draw, y, x 
                     fcb      2, +0, +17                   ; draw, y, x 
                     fcb      2, +4, +0                    ; draw, y, x 
                     fcb      2, +0, -6                    ; draw, y, x 
                     fcb      2, +4, +0                    ; draw, y, x 
-                    fcb      2, +0, +13                    ; draw, y, x 
+                    fcb      2, +0, +13                   ; draw, y, x 
                     fcb      2, +4, +0                    ; draw, y, x 
-                    fcb      2, +0, -13                    ; draw, y, x 
+                    fcb      2, +0, -13                   ; draw, y, x 
                     fcb      2, +4, +0                    ; draw, y, x 
                     fcb      2, +0, +6                    ; draw, y, x 
                     fcb      2, +4, +0                    ; draw, y, x 
                     fcb      1                            ; endmarker 
-Tank_L:
+Tank_L: 
                     fcb      0, +8, -10                   ; sync and move to y, x 
                     fcb      2, +0, +17                   ; draw, y, x 
-                    fcb      2, -20, +0                    ; draw, y, x 
+                    fcb      2, -10, -2                   ; draw, y, x 
+                    fcb      2, -10, +2                   ; draw, y, x 
                     fcb      2, +0, -17                   ; draw, y, x 
                     fcb      2, +4, +0                    ; draw, y, x 
                     fcb      2, +0, +6                    ; draw, y, x 
                     fcb      2, +4, +0                    ; draw, y, x 
-                    fcb      2, +0, -13                    ; draw, y, x 
+                    fcb      2, +0, -13                   ; draw, y, x 
                     fcb      2, +4, +0                    ; draw, y, x 
-                    fcb      2, +0, +13                    ; draw, y, x 
+                    fcb      2, +0, +13                   ; draw, y, x 
                     fcb      2, +4, +0                    ; draw, y, x 
                     fcb      2, +0, -6                    ; draw, y, x 
                     fcb      2, +4, +0                    ; draw, y, x 
                     fcb      1 
-
 Prize_1:            fcb      0, +5, 0 
                     fcb      2, -5, +7 
                     fcb      2, -5, -7 
@@ -269,7 +270,7 @@ Explode_10:
 None:               fcb      1 
 ; TABLES
 ;shippos_t          fcb      -3*ALLEYWIDTH,-2*ALLEYWIDTH,-1*ALLEYWIDTH,0,1*ALLEYWIDTH,2*ALLEYWIDTH,3*ALLEYWIDTH ; Y pos of ship 
-shippos_t:
+shippos_t: 
 bulletYpos_t        fcb      -98,-64,-31,3,37,70, 104     ; Y pos of bullet/ship/enemy per alley 
 bullete_t           fdb      bullet0e,bullet1e,bullet2e,bullet3e,bullet4e,bullet5e,bullet6e ; exists 0=false, !0= true 
 bulletd_t           fdb      bullet0d,bullet1d,bullet2d,bullet3d,bullet4d,bullet5d,bullet6d ; direction left/right 
@@ -278,10 +279,10 @@ alleye_t            fdb      alley0e,alley1e,alley2e,alley3e,alley4e,alley5e,all
 alleyd_t            fdb      alley0d,alley1d,alley2d,alley3d,alley4d,alley5d,alley6d 
 alleyx_t            fdb      alley0x,alley1x,alley2x,alley3x,alley4x,alley5x,alley6x 
 alleys_t            fdb      alley0s,alley1s,alley2s,alley3s,alley4s,alley5s,alley6s 
-max_enemys_t        fcb      -1,4,5,6,7,7,7,7,7,7            ; maximum number of occupied alleys per level, repeat after 4 
-enemy_speed_t       fcb      -1,5,5,6,7,8,9,0,20             ; example TODO
-max_speed_mask_t   fcb      1,1,3,3,3,7,7,7,7,7,7 
-enemy_stuff_t       fcb      0 
+max_enemys_t        fcb      -1,4,5,6,7,7,7,7,7,7         ; maximum number of occupied alleys per level, repeat after 4 
+enemy_speed_t       fcb      -1,5,5,6,7,8,9,0,20          ; example TODO 
+max_speed_mask_t    fcb      1,1,3,3,3,7,7,7,7,7,7 
+enemylvlcnt_t       fcb       50,60,70,75,80,90,100,100,100,100,100
 ; SPAWNABLE enemy table
 ;                                0,       1,     2,     3,        4,       5,     6,             7,       8  
 enemyspawn_t        fdb      None_D, Arrow_D, Bow_D, Dash_D, Wedge_D, Prize_D 
@@ -304,12 +305,12 @@ Prize_D             fdb      Prize_t, Prize_t
 Tank_D              fdb      Tank_L_t, Tank_R_t 
 Wedge_D             fdb      Wedge_L_t, Wedge_R_t 
 ; Animation tables counts must be mod 100 == 0 ie 1,2,4,5,10,20,25,50,100 
-Arrow_L_t           fdb      Arrow_L_1, Arrow_L_2
+Arrow_L_t           fdb      Arrow_L_1, Arrow_L_2 
 Arrow_R_t           fdb      Arrow_R_1, Arrow_R_2 
-Bow_t               fdb      Bow_1, Bow_2, Bow_1, Bow_2, Bow_1, Bow_2, Bow_1, Bow_2, Bow_1, Bow_2                ; 
-                    fdb      Bow_1, Bow_2, Bow_1, Bow_2, Bow_1, Bow_2, Bow_1, Bow_2, Bow_1, Bow_2                ; flippy 90 degree animation (100/2 frames each) 
+Bow_t               fdb      Bow_1, Bow_2, Bow_1, Bow_2, Bow_1, Bow_2, Bow_1, Bow_2, Bow_1, Bow_2 ; 
+                    fdb      Bow_1, Bow_2, Bow_1, Bow_2, Bow_1, Bow_2, Bow_1, Bow_2, Bow_1, Bow_2 ; flippy 90 degree animation (100/2 frames each) 
 Cannonball_t        fdb      Cannonball 
-Dash_t              fdb      Dash_1, Dash_2                         ; same, no animation (100 frames) 
+Dash_t              fdb      Dash_1, Dash_2               ; same, no animation (100 frames) 
 Explode_t           fdb      Explode_0 ,Explode_2 ,Explode_3 ,Explode_4 ,Explode_5 ; (100/20 frames each) 
                     fdb      Explode_6 ,Explode_7 ,Explode_8 ,Explode_9 ,Explode_9 
                     fdb      Explode_0 ,Explode_2 ,Explode_3 ,Explode_4 ,Explode_5 
@@ -321,11 +322,14 @@ Tank_R_t            fdb      Tank_R
 Prize_t             fdb      Prize_1,Prize_2              ; big/small animation (10 frames) 
 Wedge_L_t           fdb      Wedge_L 
 Wedge_R_t           fdb      Wedge_R 
+levelstr_t          fdb      $0000,level1str,level2str,level3str
 ; SOUND data
 EXP1:               db       $19,$3F,$00,$02 
 EXP2:               db       $3F,$00,$00,$01 
 EXP3:               db       $01,-1,1,$04 
-
 ; TEXT STRINGS
+level1str            fcc      "LEVEL 1",$80
+level2str            fcc      "LEVEL 2",$80
+level3str            fcc      "LEVEL 3",$80
 gameoverstr         fcc      "GAME OVER",$80
-credits             fcc      "PROGRAMMED BY GAUZE 2016-2017",$80 
+credits             fcc      "PROGRAMMED BY GAUZE 2016-201?",$80 
