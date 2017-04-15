@@ -2,6 +2,48 @@
 ; vim: ts=4
 ; vim: syntax=asm6809
 ; MACROS
+DRAW_SHIP           macro
+
+; draw ship 
+                    RESET0REF  
+                    lda      #127 
+                    sta      VIA_t1_cnt_lo                ; controls "scale" 
+                    lda      shippos 
+                                                          ; ldx #shippos_t 
+                    ldx      #bulletYpos_t 
+                    lda      a,x                          ; get pos from shippos_t table 
+                    adda     #2+6                         ; small offset 
+                    ldb      shipXpos 
+                    MOVETO_D  
+                    ldx      #ShipL_nomode 
+                    ldb      shipdir                      ; testing for 0|LEFT 1|RIGHT 
+                    beq      donuthin1 
+                    ldx      #ShipR_nomode 
+donuthin1 
+                    DRAW_VLC                              ; jsr Draw_VLc ;_mode 
+                    endm
+;::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+DRAW_WALLS          macro
+                                                          ; jmp no_walls ; skip printing walls to save cycles 
+; bottom wall     
+                                                          ; lda #5 
+                                                          ; sta $C823 ; vector count 
+                    lda      #-60 
+                    ldb      #-127 
+                    MOVETO_D  
+                    ldx      #Full_Wall_nomode 
+                    DRAW_VLC                              ;jsr Draw_VLc 
+;                    jmp      no_walls 
+;no_walls: 
+; top wall
+                    RESET0REF  
+                    lda      #60 
+                    ldb      #-127 
+                    MOVETO_D  
+                    ldx      #Full_Wall_nomode 
+                    DRAW_VLC                              ; jsr Draw_VLc 
+                    endm
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 DRAW_ENEMYS         macro    
 ; *_D -> index 0|1 (0=Left, 1=Right)
                     RESET0REF  
@@ -228,7 +270,11 @@ alley0of                                                  ;        object hit th
                     beq      bounce0 
                     cmpa     #1                           ; Arrow 
                     beq      dotank0 
-                    clr      alley0e                      ; else destroy 
+                    clra
+                    sta      alley0e                      ; else destroy 
+                    sta      alley0x
+                    sta      alley0d
+                    sta      alley0s
                     bra      subdone0 
 
 dotank0                                                   ;        change type from arrow to tank 
@@ -270,7 +316,11 @@ alley1of                                                  ;        object hit th
                     beq      bounce1 
                     cmpa     #1                           ; Arrow 
                     beq      dotank1 
-                    clr      alley1e                      ; else destroy 
+                    clra
+                    sta      alley1e                      ; else destroy 
+                    sta      alley1x
+                    sta      alley1d
+                    sta      alley1s
                     bra      subdone1 
 
 dotank1                                                   ;        change type from arrow to tank 
@@ -312,7 +362,11 @@ alley2of                                                  ;        object hit th
                     beq      bounce2 
                     cmpa     #1                           ; Arrow 
                     beq      dotank2 
-                    clr      alley2e                      ; else destroy 
+                    clra
+                    sta      alley2e                      ; else destroy 
+                    sta      alley2x
+                    sta      alley2d
+                    sta      alley2s
                     bra      subdone2 
 
 dotank2                                                   ;        change type from arrow to tank 
@@ -354,7 +408,11 @@ alley3of                                                  ;        object hit th
                     beq      bounce3 
                     cmpa     #1                           ; Arrow 
                     beq      dotank3 
-                    clr      alley3e                      ; else destroy 
+                    clra
+                    sta      alley3e                      ; else destroy 
+                    sta      alley3x
+                    sta      alley3d
+                    sta      alley3s
                     bra      subdone3 
 
 dotank3                                                   ;        change type from arrow to tank 
@@ -396,7 +454,11 @@ alley4of                                                  ;        object hit th
                     beq      bounce4 
                     cmpa     #1                           ; Arrow 
                     beq      dotank4 
-                    clr      alley4e                      ; else destroy 
+                    clra
+                    sta      alley4e                      ; else destroy 
+                    sta      alley4x
+                    sta      alley4d
+                    sta      alley4s
                     bra      subdone4 
 
 dotank4                                                   ;        change type from arrow to tank 
@@ -438,7 +500,11 @@ alley5of                                                  ;        object hit th
                     beq      bounce5 
                     cmpa     #1                           ; Arrow 
                     beq      dotank5 
-                    clr      alley5e                      ; else destroy 
+                    clra
+                    sta      alley5e                      ; else destroy 
+                    sta      alley5x
+                    sta      alley5d
+                    sta      alley5s 
                     bra      subdone5 
 
 dotank5                                                   ;        change type from arrow to tank 
@@ -480,7 +546,11 @@ alley6of                                                  ;        object hit th
                     beq      bounce6 
                     cmpa     #1                           ; Arrow 
                     beq      dotank6 
-                    clr      alley6e                      ; else destroy 
+                    clra
+                    sta      alley6e                      ; else destroy 
+                    sta      alley6x
+                    sta      alley6d
+                    sta      alley6s
                     bra      subdone6 
 
 dotank6                                                   ;        change type from arrow to tank 
@@ -609,26 +679,27 @@ eventankdies0
                     ldb      #SCORE 
                     mul      
                     jsr      Add_Score_d 
-                    clra     
-                    sta      alley0e 
-                    sta      alley0x 
+                    lda      #9                  ; change monster into explosion graphic
+                    sta      alley0e  
+                    lda      bullet0d            ; take bullets dir, str to explosions dir
                     sta      alley0d 
+                    lda      #2
                     sta      alley0s 
+                    clra     
                     sta      bullet0e 
                     sta      bullet0x 
                     sta      bullet0d 
                     dec      enemycnt
                     bra      bullet0_done
 tank0               
+                    clr      bullet0e          ; destroy bullet on nondestructive hit
                     lda      alley0x 
                     ldb      alley0d
                     beq      tankleft0  
                     suba     alley0s
-                    deca
                     bra      tankright0
 tankleft0
-                    adda     alley0s
-                    inca     
+                    adda     alley0s    
 tankright0
                     sta      alley0x 
 bullet0_done 
@@ -870,6 +941,17 @@ READ_BUTTONS        macro
                     lda      #1 
                     sta      Ship_Dead 
 toad 
+; don't shoot at Prize or explosion
+                    lda      shippos
+                    asla     
+                    ldx      #alleye_t 
+                    ldx      a,x
+                    lda      ,x
+                    cmpa     #9
+                    beq      noshootexplode
+                    cmpa     #5
+                    beq      noshootprize
+;
                     lda      Vec_Btn_State 
                     beq      no_press 
                                                           ; adding bullet to alley if no other bullet is already there 
@@ -905,6 +987,8 @@ negstart
 newshotdone 
 no_press 
 already_exists 
+noshootexplode
+noshootprize
                     endm                                  ; rts 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 NEW_ENEMY           macro    
@@ -1143,6 +1227,7 @@ LF3F4:              bitb     <VIA_int_flags               ;Wait for T1 to time o
                     bpl      Draw_VLa                     ;Go back for more points 
                                                           ; jmp Check0Ref ;Reset zero reference if necessary 
                     endm     
+; @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 STALL_CHECK         macro    
 ;; Add Ghost if stall in single alley for too long!
                     inc      stallcnt 
@@ -1195,7 +1280,8 @@ FRAME_CNTS          macro
                     cmpa     frm5cnt 
                     bne      no5cntreset 
                     clr      frm5cnt 
-                    inc      Bow_f 
+                    inc      Bow_f
+                    inc      Explode_f
 no5cntreset 
                     lda      #10 
                     inc      frm10cnt 
@@ -1225,6 +1311,7 @@ no25cntreset
                     sta      Arrow_f 
                     sta      Prize_f 
                     sta      Dash_f 
+                    sta      Tank_f 
 no50cntreset 
                     lda      #100                         ; frame count 100=2 seconds (at full speed) 0-99 == 100 
                                                           ; frame freq 1, 2, 4, 5, 10, 20, 25,50, 100 

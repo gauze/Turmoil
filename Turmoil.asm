@@ -149,53 +149,15 @@ main:
                     JOYSTICK_TEST  
                     lda      #$5F 
                     INTENSITY_A  
-                                                          ; jmp no_walls ; skip printing walls to save cycles 
-; bottom wall     
-                                                          ; lda #5 
-                                                          ; sta $C823 ; vector count 
-                    lda      #-60 
-                    ldb      #-127 
-                    MOVETO_D  
-                    ldx      #Full_Wall_nomode 
-                    DRAW_VLC                              ;jsr Draw_VLc 
-;                    jmp      no_walls 
-;no_walls: 
-; top wall
-                    RESET0REF  
-                    lda      #60 
-                    ldb      #-127 
-                    MOVETO_D  
-                    ldx      #Full_Wall_nomode 
-                    DRAW_VLC                              ; jsr Draw_VLc 
-; draw ship 
-                    RESET0REF  
-                    lda      #127 
-                    sta      VIA_t1_cnt_lo                ; controls "scale" 
-                    lda      shippos 
-                                                          ; ldx #shippos_t 
-                    ldx      #bulletYpos_t 
-                    lda      a,x                          ; get pos from shippos_t table 
-                    adda     #2+6                         ; small offset 
-                                                          ; ldb #0 ; pointing LEFT stay as-is 
-                    ldb      shipdir                      ; testing for 0|LEFT 1|RIGHT 
-                    beq      donuthin1 
-                                                          ; ldb shipXpos ;#-17 ; pointing RIGHT move to the left to center 
-donuthin1 
-                    ldb      shipXpos 
-                    MOVETO_D  
-                    ldx      #ShipL_nomode 
-                    ldb      shipdir                      ; testing for 0|LEFT 1|RIGHT 
-                    beq      donuthin2 
-                    ldx      #ShipR_nomode 
-donuthin2 
-                    DRAW_VLC                              ; jsr Draw_VLc ;_mode 
+                    DRAW_WALLS
+                    DRAW_SHIP
 ; place bullets
                     READ_BUTTONS  
                     jsr      move_bullets 
                     lda      #$7F 
                     INTENSITY_A  
                     jsr      draw_bullets 
-                    lda      #$5F 
+                    lda      #$6F 
                     INTENSITY_A  
                                                           ; jmp main ; don't print scores 
 ; display score and ships left
@@ -435,7 +397,7 @@ gameover
                     jsr      Print_Str_d 
                     jsr      Read_Btns 
                     lda      Vec_Button_1_3 
-                    bne      restart 
+                    lbne      restart 
                     bra      gameover
 
 chkenemycnt: 

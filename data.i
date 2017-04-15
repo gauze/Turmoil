@@ -134,37 +134,69 @@ Ghost:
                     fcb      2, -6, -11 
                     fcb      2, +6, -11 
                     fcb      1 
-Tank_R: 
-                    fcb      0, +8, -10                   ; sync and move to y, x 
-                    fcb      2, +0, -17                   ; draw, y, x 
-                    fcb      2, -10, +2                   ; draw, y, x 
-                    fcb      2, -10, -2                   ; draw, y, x 
-                    fcb      2, +0, +17                   ; draw, y, x 
-                    fcb      2, +4, +0                    ; draw, y, x 
-                    fcb      2, +0, -6                    ; draw, y, x 
-                    fcb      2, +4, +0                    ; draw, y, x 
-                    fcb      2, +0, +13                   ; draw, y, x 
-                    fcb      2, +4, +0                    ; draw, y, x 
-                    fcb      2, +0, -13                   ; draw, y, x 
-                    fcb      2, +4, +0                    ; draw, y, x 
-                    fcb      2, +0, +6                    ; draw, y, x 
-                    fcb      2, +4, +0                    ; draw, y, x 
-                    fcb      1                            ; endmarker 
-Tank_L: 
-                    fcb      0, +8, -10                   ; sync and move to y, x 
-                    fcb      2, +0, +17                   ; draw, y, x 
-                    fcb      2, -10, -2                   ; draw, y, x 
-                    fcb      2, -10, +2                   ; draw, y, x 
-                    fcb      2, +0, -17                   ; draw, y, x 
-                    fcb      2, +4, +0                    ; draw, y, x 
-                    fcb      2, +0, +6                    ; draw, y, x 
-                    fcb      2, +4, +0                    ; draw, y, x 
-                    fcb      2, +0, -13                   ; draw, y, x 
-                    fcb      2, +4, +0                    ; draw, y, x 
-                    fcb      2, +0, +13                   ; draw, y, x 
-                    fcb      2, +4, +0                    ; draw, y, x 
-                    fcb      2, +0, -6                    ; draw, y, x 
-                    fcb      2, +4, +0                    ; draw, y, x 
+Tank_R_1: 
+                    fcb      0, +8, -10                    
+                    fcb      2, +0, -17                    
+                    fcb      2, -10, +2                    
+                    fcb      2, -10, -2                    
+                    fcb      2, +0, +17                    
+                    fcb      2, +4, +0                     
+                    fcb      2, +0, -6                     
+                    fcb      2, +4, +0                     
+                    fcb      2, +0, +13                    
+                    fcb      2, +4, +0                     
+                    fcb      2, +0, -13                    
+                    fcb      2, +4, +0                     
+                    fcb      2, +0, +6                     
+                    fcb      2, +4, +0                     
+                    fcb      1       
+Tank_R_2: 
+                    fcb      0, +8, -8                    
+                    fcb      2, +0, -17                    
+                    fcb      2, -10, +2                    
+                    fcb      2, -10, -2                    
+                    fcb      2, +0, +17                    
+                    fcb      2, +4, +0                     
+                    fcb      2, +0, -6                     
+                    fcb      2, +4, +0                     
+                    fcb      2, +0, +13                    
+                    fcb      2, +4, +0                     
+                    fcb      2, +0, -13                    
+                    fcb      2, +4, +0                     
+                    fcb      2, +0, +6                     
+                    fcb      2, +4, +0                     
+                    fcb      1                       ; endmarker 
+Tank_L_1: 
+                    fcb      0, +8, -10                    
+                    fcb      2, +0, +17                    
+                    fcb      2, -10, -2                    
+                    fcb      2, -10, +2                    
+                    fcb      2, +0, -17                    
+                    fcb      2, +4, +0                     
+                    fcb      2, +0, +6                     
+                    fcb      2, +4, +0                     
+                    fcb      2, +0, -13                    
+                    fcb      2, +4, +0                     
+                    fcb      2, +0, +13                    
+                    fcb      2, +4, +0                     
+                    fcb      2, +0, -6                     
+                    fcb      2, +4, +0                     
+                    fcb      1 
+Tank_L_2: 
+                    fcb      0, +8, -8                    
+                    fcb      2, +0, +17                    
+                    fcb      2, -10, -2                    
+                    fcb      2, -10, +2                    
+                    fcb      2, +0, -17                    
+                    fcb      2, +4, +0                     
+                    fcb      2, +0, +6                     
+                    fcb      2, +4, +0                     
+                    fcb      2, +0, -13                    
+                    fcb      2, +4, +0                     
+                    fcb      2, +0, +13                    
+                    fcb      2, +4, +0                     
+                    fcb      2, +0, -6                     
+                    fcb      2, +4, +0                     
                     fcb      1 
 Prize_1:            fcb      0, +5, 0 
                     fcb      2, -5, +7 
@@ -287,9 +319,9 @@ enemylvlcnt_t       fcb       50,60,70,75,80,90,100,100,100,100,100
 ;                                0,       1,     2,     3,        4,       5,     6,             7,       8  
 enemyspawn_t        fdb      None_D, Arrow_D, Bow_D, Dash_D, Wedge_D, Prize_D 
 ; Possible Enemys 
-enemy_t             fdb      None_D, Arrow_D, Bow_D, Dash_D, Wedge_D, Prize_D, Tank_D, Cannonball_D, Ghost_D 
-;                                0,       1,     2,     3,        4,       5,     6,             7,       8 
-enemyframe_t        fdb      None_f, Arrow_f, Bow_f, Dash_f, Wedge_f, Prize_f, Tank_f, Cannonball_f, Ghost_f 
+enemy_t             fdb      None_D, Arrow_D, Bow_D, Dash_D, Wedge_D, Prize_D, Tank_D, Cannonball_D, Ghost_D, Explode_D 
+;                                0,       1,     2,     3,        4,       5,      6,             7,       8,         9
+enemyframe_t        fdb      None_f, Arrow_f, Bow_f, Dash_f, Wedge_f, Prize_f, Tank_f, Cannonball_f, Ghost_f, Explode_f 
 ; Enemy direction table, dupe entry means same graphics both ways;  _D = direction
 ; Arrow -> Tank
 ; Prize -> Cannonball
@@ -317,8 +349,8 @@ Explode_t           fdb      Explode_0 ,Explode_2 ,Explode_3 ,Explode_4 ,Explode
                     fdb      Explode_6 ,Explode_7 ,Explode_8 ,Explode_9 ,Explode_9 
 Ghost_t             fdb      Ghost                        ; same, no animation (100 frames) 
 None_t              fdb      None 
-Tank_L_t            fdb      Tank_L 
-Tank_R_t            fdb      Tank_R 
+Tank_L_t            fdb      Tank_L_1,Tank_L_2 
+Tank_R_t            fdb      Tank_R_1,Tank_R_2 
 Prize_t             fdb      Prize_1,Prize_2              ; big/small animation (10 frames) 
 Wedge_L_t           fdb      Wedge_L 
 Wedge_R_t           fdb      Wedge_R 
