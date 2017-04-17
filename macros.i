@@ -17,7 +17,7 @@ DRAW_SHIP           macro
                     MOVETO_D  
                     ldx      #ShipL_nomode 
                     ldb      shipdir                      ; testing for 0|LEFT 1|RIGHT 
-                    beq      donuthin1 
+                    beq      donuthin1
                     ldx      #ShipR_nomode 
 donuthin1 
                     DRAW_VLC                              ; jsr Draw_VLc ;_mode 
@@ -264,7 +264,7 @@ add0
 alley0of                                                  ;        object hit the wall, destroy or bounce? 
                                                           ; bra bounce0 ; TEST always bounce 
                     lda      alley0e 
-                    cmpa     #6                           ; Tank 
+                    cmpa     #TANK                           ; Tank 
                     beq      bounce0 
                     cmpa     #7                           ; Cannonball 
                     beq      bounce0 
@@ -278,7 +278,7 @@ alley0of                                                  ;        object hit th
                     bra      subdone0 
 
 dotank0                                                   ;        change type from arrow to tank 
-                    lda      #6 
+                    lda      #TANK 
                     sta      alley0e 
 bounce0 
                     lda      temp                         ; pull pre-overflow coords 
@@ -310,7 +310,7 @@ add1
 alley1of                                                  ;        object hit the wall, destroy or bounce? 
                                                           ; bra bounce1 ; TEST always bounce 
                     lda      alley1e 
-                    cmpa     #6                           ; Tank 
+                    cmpa     #TANK                           ; Tank 
                     beq      bounce1 
                     cmpa     #7                           ; Cannonball 
                     beq      bounce1 
@@ -324,7 +324,7 @@ alley1of                                                  ;        object hit th
                     bra      subdone1 
 
 dotank1                                                   ;        change type from arrow to tank 
-                    lda      #6 
+                    lda      #TANK 
                     sta      alley1e 
 bounce1 
                     lda      temp                         ; pull pre-overflow coords 
@@ -356,7 +356,7 @@ add2
 alley2of                                                  ;        object hit the wall, destroy or bounce? 
                                                           ; bra bounce2 ; TEST always bounce 
                     lda      alley2e 
-                    cmpa     #6                           ; Tank 
+                    cmpa     #TANK                           ; Tank 
                     beq      bounce2 
                     cmpa     #7                           ; Cannonball 
                     beq      bounce2 
@@ -370,7 +370,7 @@ alley2of                                                  ;        object hit th
                     bra      subdone2 
 
 dotank2                                                   ;        change type from arrow to tank 
-                    lda      #6 
+                    lda      #TANK 
                     sta      alley2e 
 bounce2 
                     lda      temp                         ; pull pre-overflow coords 
@@ -402,7 +402,7 @@ add3
 alley3of                                                  ;        object hit the wall, destroy or bounce? 
                                                           ; bra bounce3 ; TEST always bounce 
                     lda      alley3e 
-                    cmpa     #6                           ; Tank 
+                    cmpa     #TANK                           ; Tank 
                     beq      bounce3 
                     cmpa     #7                           ; Cannonball 
                     beq      bounce3 
@@ -416,7 +416,7 @@ alley3of                                                  ;        object hit th
                     bra      subdone3 
 
 dotank3                                                   ;        change type from arrow to tank 
-                    lda      #6 
+                    lda      #TANK 
                     sta      alley3e 
 bounce3 
                     lda      temp                         ; pull pre-overflow coords 
@@ -448,7 +448,7 @@ add4
 alley4of                                                  ;        object hit the wall, destroy or bounce? 
                                                           ; bra bounce4 ; TEST always bounce 
                     lda      alley4e 
-                    cmpa     #6                           ; Tank 
+                    cmpa     #TANK                          ; Tank 
                     beq      bounce4 
                     cmpa     #7                           ; Cannonball 
                     beq      bounce4 
@@ -462,7 +462,7 @@ alley4of                                                  ;        object hit th
                     bra      subdone4 
 
 dotank4                                                   ;        change type from arrow to tank 
-                    lda      #6 
+                    lda      #TANK 
                     sta      alley4e 
 bounce4 
                     lda      temp                         ; pull pre-overflow coords 
@@ -494,7 +494,7 @@ add5
 alley5of                                                  ;        object hit the wall, destroy or bounce? 
                                                           ; bra bounce5 ; TEST always bounce 
                     lda      alley5e 
-                    cmpa     #6                           ; Tank 
+                    cmpa     #TANK                           ; Tank 
                     beq      bounce5 
                     cmpa     #7                           ; Cannonball 
                     beq      bounce5 
@@ -508,7 +508,7 @@ alley5of                                                  ;        object hit th
                     bra      subdone5 
 
 dotank5                                                   ;        change type from arrow to tank 
-                    lda      #6 
+                    lda      #TANK 
                     sta      alley5e 
 bounce5 
                     lda      temp                         ; pull pre-overflow coords 
@@ -540,7 +540,7 @@ add6
 alley6of                                                  ;        object hit the wall, destroy or bounce? 
                                                           ; bra bounce6 ; TEST always bounce 
                     lda      alley6e 
-                    cmpa     #6                           ; Tank 
+                    cmpa     #TANK                           ; Tank 
                     beq      bounce6 
                     cmpa     #7                           ; Cannonball 
                     beq      bounce6 
@@ -554,7 +554,7 @@ alley6of                                                  ;        object hit th
                     bra      subdone6 
 
 dotank6                                                   ;        change type from arrow to tank 
-                    lda      #6 
+                    lda      #TANK 
                     sta      alley6e 
 bounce6 
                     lda      temp                         ; pull pre-overflow coords 
@@ -593,7 +593,7 @@ SHIP_COLLISION_DETECT  macro
                     clra     
                     sta      ,x 
                     dec      enemycnt 
-                    jsr      levelsplash
+                    jsr      deathsplash
 ;skipme
 no_hit 
                     endm     
@@ -636,19 +636,9 @@ SHOT_COLLISION_DETECT  macro
                     lda      bullet0e                     ; no bullet to test
                     beq      bullet0_done 
                     lda      alley0e                      ; can't destroy Ghost 
-                    cmpa     #8 
+                    cmpa     #GHOST 
                     beq      bullet0_done 
-;                    cmpa     #6                           ; Tank can only destroy hitting BACK SIDE so bulletNd == alleyNd
-;                    bne      nottank_0
-;                    lda      bullet0d
-;                    cmpa     alley0d
-;                    beq      nottank_0                    ; MOVE this bit farther into bullet vs  array X testing otherwise bullet doesn't move
-;                    clr      bullet0e                     ; hit tank keep tank where it is
-;                    lda      alley0x  
-;                    suba     alley0s
-;                    sta      alley0x 
-;                    bra      bullet0_miss
-;nottank_0
+
                     lda      bullet0d 
                     beq      bullet0d_l
  
@@ -671,7 +661,7 @@ bullhit0
                     cmpa     bullet0d 
                     beq      eventankdies0
                     lda      alley0e
-                    cmpa     #6
+                    cmpa     #TANK
                     beq      tank0
 eventankdies0
                     ldx      #score 
@@ -704,14 +694,16 @@ tankright0
                     sta      alley0x 
 bullet0_done 
 bullet0_miss 
-                    lda      bullet1e 
+                    lda      bullet1e                     ; no bullet to test
                     beq      bullet1_done 
                     lda      alley1e                      ; can't destroy Ghost 
-                    cmpa     #8 
+                    cmpa     #GHOST 
                     beq      bullet1_done 
+
                     lda      bullet1d 
-                    beq      bullet1d_l 
-                    ldb      bullet1x                     ; test bullet going right 0-127 possible hit range 
+                    beq      bullet1d_l
+ 
+                    ldb      bullet1x                     ; test bullet going right 1-127 possible hit range 
                     bmi      bullet1_miss                 ; bullet going wrong direction can't hit. 
                     lda      alley1x 
                     cmpa     bullet1x 
@@ -719,37 +711,60 @@ bullet0_miss
                     bra      bullhit1                     ; hit 
 
 bullet1d_l 
-                    ldb      bullet1x                     ; test bullet going left (-127)-0 possible hit range 
+                    ldb      bullet1x                     ; test bullet going left (-127)-1 possible hit range 
                     bpl      bullet1_miss                 ; bullet on wrong side can't hit 
                     lda      alley1x 
                     cmpa     bullet1x 
                     bge      bullet1_miss 
 ; add to score then destroy bullet and enemy
 bullhit1 
+                    lda      alley1d
+                    cmpa     bullet1d 
+                    beq      eventankdies1
+                    lda      alley1e
+                    cmpa     #TANK
+                    beq      tank1
+eventankdies1
                     ldx      #score 
                     lda      alley1s 
                     ldb      #SCORE 
                     mul      
                     jsr      Add_Score_d 
-                    clra     
-                    sta      alley1e 
-                    sta      alley1x 
+                    lda      #9                  ; change monster into explosion graphic
+                    sta      alley1e  
+                    lda      bullet1d            ; take bullets dir, str to explosions dir
                     sta      alley1d 
+                    lda      #2
                     sta      alley1s 
+                    clra     
                     sta      bullet1e 
                     sta      bullet1x 
                     sta      bullet1d 
-                    dec      enemycnt 
+                    dec      enemycnt
+                    bra      bullet1_done
+tank1               
+                    clr      bullet1e          ; destroy bullet on nondestructive hit
+                    lda      alley1x 
+                    ldb      alley1d
+                    beq      tankleft1  
+                    suba     alley1s
+                    bra      tankright1
+tankleft1
+                    adda     alley1s    
+tankright1
+                    sta      alley1x 
 bullet1_done 
 bullet1_miss 
-                    lda      bullet2e 
+                    lda      bullet2e                     ; no bullet to test
                     beq      bullet2_done 
                     lda      alley2e                      ; can't destroy Ghost 
-                    cmpa     #8 
+                    cmpa     #GHOST 
                     beq      bullet2_done 
+
                     lda      bullet2d 
-                    beq      bullet2d_l 
-                    ldb      bullet2x                     ; test bullet going right 0-127 possible hit range 
+                    beq      bullet2d_l
+ 
+                    ldb      bullet2x                     ; test bullet going right 2-127 possible hit range 
                     bmi      bullet2_miss                 ; bullet going wrong direction can't hit. 
                     lda      alley2x 
                     cmpa     bullet2x 
@@ -757,37 +772,60 @@ bullet1_miss
                     bra      bullhit2                     ; hit 
 
 bullet2d_l 
-                    ldb      bullet2x                     ; test bullet going left (-127)-0 possible hit range 
+                    ldb      bullet2x                     ; test bullet going left (-127)-2 possible hit range 
                     bpl      bullet2_miss                 ; bullet on wrong side can't hit 
                     lda      alley2x 
                     cmpa     bullet2x 
                     bge      bullet2_miss 
 ; add to score then destroy bullet and enemy
 bullhit2 
+                    lda      alley2d
+                    cmpa     bullet2d 
+                    beq      eventankdies2
+                    lda      alley2e
+                    cmpa     #TANK
+                    beq      tank2
+eventankdies2
                     ldx      #score 
                     lda      alley2s 
                     ldb      #SCORE 
                     mul      
                     jsr      Add_Score_d 
-                    clra     
-                    sta      alley2e 
-                    sta      alley2x 
+                    lda      #9                  ; change monster into explosion graphic
+                    sta      alley2e  
+                    lda      bullet2d            ; take bullets dir, str to explosions dir
                     sta      alley2d 
+                    lda      #2
                     sta      alley2s 
+                    clra     
                     sta      bullet2e 
                     sta      bullet2x 
                     sta      bullet2d 
-                    dec      enemycnt 
+                    dec      enemycnt
+                    bra      bullet2_done
+tank2               
+                    clr      bullet2e          ; destroy bullet on nondestructive hit
+                    lda      alley2x 
+                    ldb      alley2d
+                    beq      tankleft2  
+                    suba     alley2s
+                    bra      tankright2
+tankleft2
+                    adda     alley2s    
+tankright2
+                    sta      alley2x 
 bullet2_done 
 bullet2_miss 
-                    lda      bullet3e 
+                    lda      bullet3e                     ; no bullet to test
                     beq      bullet3_done 
                     lda      alley3e                      ; can't destroy Ghost 
-                    cmpa     #8 
+                    cmpa     #GHOST 
                     beq      bullet3_done 
+
                     lda      bullet3d 
-                    beq      bullet3d_l 
-                    ldb      bullet3x                     ; test bullet going right 0-127 possible hit range 
+                    beq      bullet3d_l
+ 
+                    ldb      bullet3x                     ; test bullet going right 3-127 possible hit range 
                     bmi      bullet3_miss                 ; bullet going wrong direction can't hit. 
                     lda      alley3x 
                     cmpa     bullet3x 
@@ -795,37 +833,60 @@ bullet2_miss
                     bra      bullhit3                     ; hit 
 
 bullet3d_l 
-                    ldb      bullet3x                     ; test bullet going left (-127)-0 possible hit range 
+                    ldb      bullet3x                     ; test bullet going left (-127)-3 possible hit range 
                     bpl      bullet3_miss                 ; bullet on wrong side can't hit 
                     lda      alley3x 
                     cmpa     bullet3x 
                     bge      bullet3_miss 
 ; add to score then destroy bullet and enemy
 bullhit3 
+                    lda      alley3d
+                    cmpa     bullet3d 
+                    beq      eventankdies3
+                    lda      alley3e
+                    cmpa     #TANK
+                    beq      tank3
+eventankdies3
                     ldx      #score 
                     lda      alley3s 
                     ldb      #SCORE 
                     mul      
                     jsr      Add_Score_d 
-                    clra     
-                    sta      alley3e 
-                    sta      alley3x 
+                    lda      #9                  ; change monster into explosion graphic
+                    sta      alley3e  
+                    lda      bullet3d            ; take bullets dir, str to explosions dir
                     sta      alley3d 
+                    lda      #2
                     sta      alley3s 
+                    clra     
                     sta      bullet3e 
                     sta      bullet3x 
                     sta      bullet3d 
-                    dec      enemycnt 
+                    dec      enemycnt
+                    bra      bullet3_done
+tank3               
+                    clr      bullet3e          ; destroy bullet on nondestructive hit
+                    lda      alley3x 
+                    ldb      alley3d
+                    beq      tankleft3  
+                    suba     alley3s
+                    bra      tankright3
+tankleft3
+                    adda     alley3s    
+tankright3
+                    sta      alley3x 
 bullet3_done 
 bullet3_miss 
-                    lda      bullet4e 
+                    lda      bullet4e                     ; no bullet to test
                     beq      bullet4_done 
                     lda      alley4e                      ; can't destroy Ghost 
-                    cmpa     #8 
+                    cmpa     #GHOST 
                     beq      bullet4_done 
+
                     lda      bullet4d 
-                    beq      bullet4d_l 
-                    ldb      bullet4x                     ; test bullet going right 0-127 possible hit range 
+                    beq      bullet4d_l
+ 
+                    ldb      bullet4x                     ; test bullet going right 4-127 possible hit range 
                     bmi      bullet4_miss                 ; bullet going wrong direction can't hit. 
                     lda      alley4x 
                     cmpa     bullet4x 
@@ -833,37 +894,60 @@ bullet3_miss
                     bra      bullhit4                     ; hit 
 
 bullet4d_l 
-                    ldb      bullet4x                     ; test bullet going left (-127)-0 possible hit range 
+                    ldb      bullet4x                     ; test bullet going left (-127)-4 possible hit range 
                     bpl      bullet4_miss                 ; bullet on wrong side can't hit 
                     lda      alley4x 
                     cmpa     bullet4x 
                     bge      bullet4_miss 
 ; add to score then destroy bullet and enemy
 bullhit4 
+                    lda      alley4d
+                    cmpa     bullet4d 
+                    beq      eventankdies4
+                    lda      alley4e
+                    cmpa     #TANK
+                    beq      tank4
+eventankdies4
                     ldx      #score 
                     lda      alley4s 
                     ldb      #SCORE 
                     mul      
                     jsr      Add_Score_d 
-                    clra     
-                    sta      alley4e 
-                    sta      alley4x 
+                    lda      #9                  ; change monster into explosion graphic
+                    sta      alley4e  
+                    lda      bullet4d            ; take bullets dir, str to explosions dir
                     sta      alley4d 
+                    lda      #2
                     sta      alley4s 
+                    clra     
                     sta      bullet4e 
                     sta      bullet4x 
                     sta      bullet4d 
-                    dec      enemycnt 
+                    dec      enemycnt
+                    bra      bullet4_done
+tank4               
+                    clr      bullet4e          ; destroy bullet on nondestructive hit
+                    lda      alley4x 
+                    ldb      alley4d
+                    beq      tankleft4  
+                    suba     alley4s
+                    bra      tankright4
+tankleft4
+                    adda     alley4s    
+tankright4
+                    sta      alley4x 
 bullet4_done 
 bullet4_miss 
-                    lda      bullet5e 
+                    lda      bullet5e                     ; no bullet to test
                     beq      bullet5_done 
                     lda      alley5e                      ; can't destroy Ghost 
-                    cmpa     #8 
+                    cmpa     #GHOST 
                     beq      bullet5_done 
+
                     lda      bullet5d 
-                    beq      bullet5d_l 
-                    ldb      bullet5x                     ; test bullet going right 0-127 possible hit range 
+                    beq      bullet5d_l
+ 
+                    ldb      bullet5x                     ; test bullet going right 5-127 possible hit range 
                     bmi      bullet5_miss                 ; bullet going wrong direction can't hit. 
                     lda      alley5x 
                     cmpa     bullet5x 
@@ -871,37 +955,60 @@ bullet4_miss
                     bra      bullhit5                     ; hit 
 
 bullet5d_l 
-                    ldb      bullet5x                     ; test bullet going left (-127)-0 possible hit range 
+                    ldb      bullet5x                     ; test bullet going left (-127)-5 possible hit range 
                     bpl      bullet5_miss                 ; bullet on wrong side can't hit 
                     lda      alley5x 
                     cmpa     bullet5x 
                     bge      bullet5_miss 
 ; add to score then destroy bullet and enemy
 bullhit5 
+                    lda      alley5d
+                    cmpa     bullet5d 
+                    beq      eventankdies5
+                    lda      alley5e
+                    cmpa     #TANK
+                    beq      tank5
+eventankdies5
                     ldx      #score 
                     lda      alley5s 
                     ldb      #SCORE 
                     mul      
                     jsr      Add_Score_d 
-                    clra     
-                    sta      alley5e 
-                    sta      alley5x 
+                    lda      #9                  ; change monster into explosion graphic
+                    sta      alley5e  
+                    lda      bullet5d            ; take bullets dir, str to explosions dir
                     sta      alley5d 
+                    lda      #2
                     sta      alley5s 
+                    clra     
                     sta      bullet5e 
                     sta      bullet5x 
                     sta      bullet5d 
-                    dec      enemycnt 
+                    dec      enemycnt
+                    bra      bullet5_done
+tank5               
+                    clr      bullet5e          ; destroy bullet on nondestructive hit
+                    lda      alley5x 
+                    ldb      alley5d
+                    beq      tankleft5  
+                    suba     alley5s
+                    bra      tankright5
+tankleft5
+                    adda     alley5s    
+tankright5
+                    sta      alley5x 
 bullet5_done 
 bullet5_miss 
-                    lda      bullet6e 
+                    lda      bullet6e                     ; no bullet to test
                     beq      bullet6_done 
                     lda      alley6e                      ; can't destroy Ghost 
-                    cmpa     #8 
+                    cmpa     #GHOST 
                     beq      bullet6_done 
+
                     lda      bullet6d 
-                    beq      bullet6d_l 
-                    ldb      bullet6x                     ; test bullet going right 0-127 possible hit range 
+                    beq      bullet6d_l
+ 
+                    ldb      bullet6x                     ; test bullet going right 6-127 possible hit range 
                     bmi      bullet6_miss                 ; bullet going wrong direction can't hit. 
                     lda      alley6x 
                     cmpa     bullet6x 
@@ -909,29 +1016,51 @@ bullet5_miss
                     bra      bullhit6                     ; hit 
 
 bullet6d_l 
-                    ldb      bullet6x                     ; test bullet going left (-127)-0 possible hit range 
+                    ldb      bullet6x                     ; test bullet going left (-127)-6 possible hit range 
                     bpl      bullet6_miss                 ; bullet on wrong side can't hit 
                     lda      alley6x 
                     cmpa     bullet6x 
                     bge      bullet6_miss 
 ; add to score then destroy bullet and enemy
 bullhit6 
+                    lda      alley6d
+                    cmpa     bullet6d 
+                    beq      eventankdies6
+                    lda      alley6e
+                    cmpa     #TANK
+                    beq      tank6
+eventankdies6
                     ldx      #score 
                     lda      alley6s 
                     ldb      #SCORE 
                     mul      
                     jsr      Add_Score_d 
-                    clra     
-                    sta      alley6e 
-                    sta      alley6x 
+                    lda      #9                  ; change monster into explosion graphic
+                    sta      alley6e  
+                    lda      bullet6d            ; take bullets dir, str to explosions dir
                     sta      alley6d 
+                    lda      #2
                     sta      alley6s 
+                    clra     
                     sta      bullet6e 
                     sta      bullet6x 
                     sta      bullet6d 
-                    dec      enemycnt 
+                    dec      enemycnt
+                    bra      bullet6_done
+tank6               
+                    clr      bullet6e          ; destroy bullet on nondestructive hit
+                    lda      alley6x 
+                    ldb      alley6d
+                    beq      tankleft6  
+                    suba     alley6s
+                    bra      tankright6
+tankleft6
+                    adda     alley6s    
+tankright6
+                    sta      alley6x 
 bullet6_done 
 bullet6_miss 
+
                     endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 READ_BUTTONS        macro    
@@ -1007,7 +1136,11 @@ NEW_ENEMY           macro
                     cmpa     #20 
                     lbeq     no_new_enemy 
 ; spawn new enemy
-randloop 
+                    lda      #15                          ; number of attempts to create new enemy
+                    sta      temp
+randloop
+                    dec      temp
+                    lbeq     no_new_enemy                 ; if it takes more than 14 loops, abort       
                     jsr      Random                       ; choose random alley, loop until found 
                     anda     #%00000111                   ; 0-7 if occupied or 7 try again 
                     cmpa     #7 
@@ -1141,7 +1274,7 @@ INTENSITY_A         macro
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 JOYSTICK_TEST       macro    
                     jsr      Joy_Digital 
-                    lda      in_alley                     ; inside an alley 
+                    lda      In_Alley                     ; inside an alley 
                     bne      jsdoneY                      ; disable Y position poll 
                     lda      Vec_Joy_1_Y 
                     beq      jsdoneY                      ; no Y motion 
@@ -1164,14 +1297,14 @@ jsdoneY
                     jsr      Abs_b 
                     cmpb     #3 
                     bpl      leave_flag                   ; if b-3 > 0 then clr in_alley 
-                    clr      in_alley                     ; clear in alley flag when in middle 
+                    clr      In_Alley                     ; clear in alley flag when in middle 
 leave_flag 
                     lda      Vec_Joy_1_X 
                     beq      jsdoneX 
                     bmi      going_left 
 going_right 
                     lda      #1 
-                    sta      in_alley 
+                    sta      In_Alley 
                     lda      #RIGHT 
                     sta      shipdir 
                     lda      #4 
@@ -1187,7 +1320,7 @@ setRightDone
 
 going_left 
                     lda      #1 
-                    sta      in_alley 
+                    sta      In_Alley 
                     lda      #LEFT 
                     sta      shipdir 
                     lda      shipXpos 
@@ -1300,7 +1433,7 @@ no20cntreset
                     cmpa     frm25cnt 
                     bne      no25cntreset 
                     clr      frm25cnt 
-                    jsr      chkenemycnt                  ; check number of enemies spawned every .4 seconds 
+                    jsr      chkenemycnt                  ; check number of enemies spawned every .5 seconds 
 no25cntreset 
                     lda      #50 
                     inc      frm50cnt 
@@ -1332,4 +1465,10 @@ no50cntreset
                     sta      Tank_f 
                     sta      Explode_f 
 no100cntreset 
+                    endm
+CHECK_GAMEOVER      macro
+                    lda      shipcnt 
+                    bne      notgameover 
+                    jsr      gameover 
+notgameover
                     endm

@@ -336,7 +336,7 @@ Ghost_D             fdb      Ghost_t, Ghost_t
 Prize_D             fdb      Prize_t, Prize_t 
 Tank_D              fdb      Tank_L_t, Tank_R_t 
 Wedge_D             fdb      Wedge_L_t, Wedge_R_t 
-; Animation tables counts must be mod 100 == 0 ie 1,2,4,5,10,20,25,50,100 
+; Animation tables counts must be mod 100 == 0 ie 1,2,4,5,10,20,25,50,100 see FRAME_CNTS macro
 Arrow_L_t           fdb      Arrow_L_1, Arrow_L_2 
 Arrow_R_t           fdb      Arrow_R_1, Arrow_R_2 
 Bow_t               fdb      Bow_1, Bow_2, Bow_1, Bow_2, Bow_1, Bow_2, Bow_1, Bow_2, Bow_1, Bow_2 ; 
@@ -363,5 +363,6 @@ EXP3:               db       $01,-1,1,$04
 level1str            fcc      "LEVEL 1",$80
 level2str            fcc      "LEVEL 2",$80
 level3str            fcc      "LEVEL 3",$80
+deadstring          fcc      "SHIP HIT!",$80
 gameoverstr         fcc      "GAME OVER",$80
 credits             fcc      "PROGRAMMED BY GAUZE 2016-201?",$80 
