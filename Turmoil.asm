@@ -53,15 +53,14 @@ main:
                     INTENSITY_A  
                     DRAW_WALLS  
                     DRAW_SHIP  
-; place bullets
                     READ_BUTTONS  
-                    jsr      move_bullets 
+                    MOVE_BULLETS
                     lda      #$7F 
                     INTENSITY_A  
-                    jsr      draw_bullets 
+                    DRAW_BULLETS
                     lda      #$6F 
                     INTENSITY_A  
-                    jmp      no_score 
+                 ;   jmp      no_score 
 
 ; display score and ships left
                     RESET0REF  
@@ -78,8 +77,16 @@ ships_left_loop
                     ldx      #Ship_Marker 
                     DRAW_VLC  
                     dec      temp 
-                    bne      ships_left_loop 
+                    bne      ships_left_loop
+
 no_score: 
+                    ldd      prizecnt 
+                    addd     #1 
+                    std      prizecnt
+                    lda      Is_Prize
+                    beq      noprizecntdown
+                    dec      prizecntdown
+noprizecntdown
 ; end score+ship count
                     NEW_ENEMY  
                     DRAW_ENEMYS  
@@ -88,7 +95,7 @@ no_score:
                     SHOT_COLLISION_DETECT  
                     SHIP_COLLISION_DETECT  
                     STALL_CHECK  
-                    jmp      main                         ; and repeat forever 
+                    jmp      main                         ; and repeat forever, sorta 
 
 ; must go at bottom or fills up RAM instead of ROM ??
                     include  "functions.i"

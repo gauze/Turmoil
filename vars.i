@@ -20,8 +20,10 @@ shipcnt             ds       1
 ; limits 
 enemycnt            ds       1 
 bulletcnt           ds       1                            ; 1  
-bulletYtemp         ds       1 
-stallcnt            ds       1 
+; counters for events
+stallcnt            ds       1
+prizecnt            ds       2                            ; 16 bit counter 
+prizecntdown        ds       1
 ; states and positions of all bullets and enemies
 bullet0e            ds       1 
 bullet1e            ds       1                            ; shit Exists in alley 
@@ -95,11 +97,14 @@ frm2cnt             ds       1
 temp                ds       1                            ; generic 1 byte temp 
 spawntemp           ds       1 
 masktemp            ds       1 
+bulletYtemp         ds       1 
+enemytemp           ds       1
 ;
 enemylvlcnt         ds       1 
 ; STATE FLAGS
 Ship_Dead           ds       1 
 In_Alley            ds       1 
+Is_Prize            ds       1
 ;
 ; CONSTANTS place after VARIABLES
 ;ALLEYWIDTH          =        17 
@@ -111,3 +116,5 @@ GHOST               =        8
 TANK                =        6 
 EXPLOSION           =        9 
 ARROW               =        1 
+PRIZE               =        5
+CANNONBALL          =        7

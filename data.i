@@ -210,7 +210,12 @@ Prize_2:            fcb      0, +3, 0
                     fcb      2, +3, -5 
                     fcb      2, +3, +5 
                     fcb      1 
-Cannonball          fcb      1 
+Cannonball          fcb      0, +3, 0 
+                    fcb      2, -3, +5 
+                    fcb      2, -3, -5 
+                    fcb      2, +3, -5 
+                    fcb      2, +3, +5 
+                    fcb      1 
 Explode_0: 
                     fcb      0, -8, -5 
                     fcb      2, +16, +5 
@@ -301,6 +306,7 @@ Explode_10:
                     fcb      1 
 None:               fcb      1 
 ; TABLES
+                   ; align $100
 ;shippos_t          fcb      -3*ALLEYWIDTH,-2*ALLEYWIDTH,-1*ALLEYWIDTH,0,1*ALLEYWIDTH,2*ALLEYWIDTH,3*ALLEYWIDTH ; Y pos of ship 
 shippos_t: 
 bulletYpos_t        fcb      -98,-64,-31,3,37,70, 104     ; Y pos of bullet/ship/enemy per alley 
@@ -341,7 +347,7 @@ Arrow_L_t           fdb      Arrow_L_1, Arrow_L_2
 Arrow_R_t           fdb      Arrow_R_1, Arrow_R_2 
 Bow_t               fdb      Bow_1, Bow_2, Bow_1, Bow_2, Bow_1, Bow_2, Bow_1, Bow_2, Bow_1, Bow_2 ; 
                     fdb      Bow_1, Bow_2, Bow_1, Bow_2, Bow_1, Bow_2, Bow_1, Bow_2, Bow_1, Bow_2 ; flippy 90 degree animation (100/2 frames each) 
-Cannonball_t        fdb      Cannonball 
+Cannonball_t        fdb      Cannonball, Cannonball 
 Dash_t              fdb      Dash_1, Dash_2               ; same, no animation (100 frames) 
 Explode_t           fdb      Explode_0 ,Explode_2 ,Explode_3 ,Explode_4 ,Explode_5 ; (100/20 frames each) 
                     fdb      Explode_6 ,Explode_7 ,Explode_8 ,Explode_9 ,Explode_9 
@@ -351,7 +357,7 @@ Ghost_t             fdb      Ghost                        ; same, no animation (
 None_t              fdb      None 
 Tank_L_t            fdb      Tank_L_1,Tank_L_2 
 Tank_R_t            fdb      Tank_R_1,Tank_R_2 
-Prize_t             fdb      Prize_1,Prize_2              ; big/small animation (10 frames) 
+Prize_t             fdb      Prize_1,Prize_2,Prize_1,Prize_2              ; big/small animation
 Wedge_L_t           fdb      Wedge_L 
 Wedge_R_t           fdb      Wedge_R 
 levelstr_t          fdb      $0000,level1str,level2str,level3str
