@@ -776,7 +776,8 @@ eventankdies0
                     lda      alley0s 
                     ldb      #SCORE 
                     mul      
-                    jsr      Add_Score_d 
+                    tfr      b,a
+                    jsr      Add_Score_a 
                     lda      #EXPLOSION                   ; change monster into explosion graphic 
                     sta      alley0e 
                     lda      bullet0d                     ; take bullets dir, str to explosions dir 
@@ -837,7 +838,8 @@ eventankdies1
                     lda      alley1s 
                     ldb      #SCORE 
                     mul      
-                    jsr      Add_Score_d 
+                    tfr      b,a
+                    jsr      Add_Score_a
                     lda      #EXPLOSION                   ; change monster into explosion graphic 
                     sta      alley1e 
                     lda      bullet1d                     ; take bullets dir, str to explosions dir 
@@ -898,7 +900,8 @@ eventankdies2
                     lda      alley2s 
                     ldb      #SCORE 
                     mul      
-                    jsr      Add_Score_d 
+                    tfr      b,a
+                    jsr      Add_Score_a 
                     lda      #EXPLOSION                   ; change monster into explosion graphic 
                     sta      alley2e 
                     lda      bullet2d                     ; take bullets dir, str to explosions dir 
@@ -959,7 +962,8 @@ eventankdies3
                     lda      alley3s 
                     ldb      #SCORE 
                     mul      
-                    jsr      Add_Score_d 
+                    tfr      b,a
+                    jsr      Add_Score_a 
                     lda      #EXPLOSION                   ; change monster into explosion graphic 
                     sta      alley3e 
                     lda      bullet3d                     ; take bullets dir, str to explosions dir 
@@ -1020,7 +1024,8 @@ eventankdies4
                     lda      alley4s 
                     ldb      #SCORE 
                     mul      
-                    jsr      Add_Score_d 
+                    tfr      b,a
+                    jsr      Add_Score_a 
                     lda      #EXPLOSION                   ; change monster into explosion graphic 
                     sta      alley4e 
                     lda      bullet4d                     ; take bullets dir, str to explosions dir 
@@ -1080,8 +1085,9 @@ eventankdies5
                     ldx      #score 
                     lda      alley5s 
                     ldb      #SCORE 
-                    mul      
-                    jsr      Add_Score_d 
+                    mul    
+                    tfr      b,a  
+                    jsr      Add_Score_a 
                     lda      #EXPLOSION                   ; change monster into explosion graphic 
                     sta      alley5e 
                     lda      bullet5d                     ; take bullets dir, str to explosions dir 
@@ -1142,7 +1148,8 @@ eventankdies6
                     lda      alley6s 
                     ldb      #SCORE 
                     mul      
-                    jsr      Add_Score_d 
+                    tfr      b,a
+                    jsr      Add_Score_a 
                     lda      #EXPLOSION                   ; change monster into explosion graphic 
                     sta      alley6e 
                     lda      bullet6d                     ; take bullets dir, str to explosions dir 

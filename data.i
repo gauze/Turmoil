@@ -135,68 +135,68 @@ Ghost:
                     fcb      2, +6, -11 
                     fcb      1 
 Tank_R_1: 
-                    fcb      0, +8, -10                    
-                    fcb      2, +0, -17                    
-                    fcb      2, -10, +2                    
-                    fcb      2, -10, -2                    
-                    fcb      2, +0, +17                    
-                    fcb      2, +4, +0                     
-                    fcb      2, +0, -6                     
-                    fcb      2, +4, +0                     
-                    fcb      2, +0, +13                    
-                    fcb      2, +4, +0                     
-                    fcb      2, +0, -13                    
-                    fcb      2, +4, +0                     
-                    fcb      2, +0, +6                     
-                    fcb      2, +4, +0                     
-                    fcb      1       
+                    fcb      0, +8, -10 
+                    fcb      2, +0, -17 
+                    fcb      2, -10, +2 
+                    fcb      2, -10, -2 
+                    fcb      2, +0, +17 
+                    fcb      2, +4, +0 
+                    fcb      2, +0, -6 
+                    fcb      2, +4, +0 
+                    fcb      2, +0, +13 
+                    fcb      2, +4, +0 
+                    fcb      2, +0, -13 
+                    fcb      2, +4, +0 
+                    fcb      2, +0, +6 
+                    fcb      2, +4, +0 
+                    fcb      1 
 Tank_R_2: 
-                    fcb      0, +8, -8                    
-                    fcb      2, +0, -17                    
-                    fcb      2, -10, +2                    
-                    fcb      2, -10, -2                    
-                    fcb      2, +0, +17                    
-                    fcb      2, +4, +0                     
-                    fcb      2, +0, -6                     
-                    fcb      2, +4, +0                     
-                    fcb      2, +0, +13                    
-                    fcb      2, +4, +0                     
-                    fcb      2, +0, -13                    
-                    fcb      2, +4, +0                     
-                    fcb      2, +0, +6                     
-                    fcb      2, +4, +0                     
-                    fcb      1                       ; endmarker 
+                    fcb      0, +8, -8 
+                    fcb      2, +0, -17 
+                    fcb      2, -10, +2 
+                    fcb      2, -10, -2 
+                    fcb      2, +0, +17 
+                    fcb      2, +4, +0 
+                    fcb      2, +0, -6 
+                    fcb      2, +4, +0 
+                    fcb      2, +0, +13 
+                    fcb      2, +4, +0 
+                    fcb      2, +0, -13 
+                    fcb      2, +4, +0 
+                    fcb      2, +0, +6 
+                    fcb      2, +4, +0 
+                    fcb      1                            ; endmarker 
 Tank_L_1: 
-                    fcb      0, +8, -10                    
-                    fcb      2, +0, +17                    
-                    fcb      2, -10, -2                    
-                    fcb      2, -10, +2                    
-                    fcb      2, +0, -17                    
-                    fcb      2, +4, +0                     
-                    fcb      2, +0, +6                     
-                    fcb      2, +4, +0                     
-                    fcb      2, +0, -13                    
-                    fcb      2, +4, +0                     
-                    fcb      2, +0, +13                    
-                    fcb      2, +4, +0                     
-                    fcb      2, +0, -6                     
-                    fcb      2, +4, +0                     
+                    fcb      0, +8, -10 
+                    fcb      2, +0, +17 
+                    fcb      2, -10, -2 
+                    fcb      2, -10, +2 
+                    fcb      2, +0, -17 
+                    fcb      2, +4, +0 
+                    fcb      2, +0, +6 
+                    fcb      2, +4, +0 
+                    fcb      2, +0, -13 
+                    fcb      2, +4, +0 
+                    fcb      2, +0, +13 
+                    fcb      2, +4, +0 
+                    fcb      2, +0, -6 
+                    fcb      2, +4, +0 
                     fcb      1 
 Tank_L_2: 
-                    fcb      0, +8, -8                    
-                    fcb      2, +0, +17                    
-                    fcb      2, -10, -2                    
-                    fcb      2, -10, +2                    
-                    fcb      2, +0, -17                    
-                    fcb      2, +4, +0                     
-                    fcb      2, +0, +6                     
-                    fcb      2, +4, +0                     
-                    fcb      2, +0, -13                    
-                    fcb      2, +4, +0                     
-                    fcb      2, +0, +13                    
-                    fcb      2, +4, +0                     
-                    fcb      2, +0, -6                     
-                    fcb      2, +4, +0                     
+                    fcb      0, +8, -8 
+                    fcb      2, +0, +17 
+                    fcb      2, -10, -2 
+                    fcb      2, -10, +2 
+                    fcb      2, +0, -17 
+                    fcb      2, +4, +0 
+                    fcb      2, +0, +6 
+                    fcb      2, +4, +0 
+                    fcb      2, +0, -13 
+                    fcb      2, +4, +0 
+                    fcb      2, +0, +13 
+                    fcb      2, +4, +0 
+                    fcb      2, +0, -6 
+                    fcb      2, +4, +0 
                     fcb      1 
 Prize_1:            fcb      0, +5, 0 
                     fcb      2, -5, +7 
@@ -305,8 +305,74 @@ Explode_10:
                     fcb      2, -11, -12 
                     fcb      1 
 None:               fcb      1 
-; TABLES
-                   ; align $100
+; NUMBERS all END at top right corner derive score from $c880 subtract $30 to get true value $20 == blank
+zero:               fcb      2, +0, +4           
+                    fcb      2, -5, +0 
+                    fcb      2, +0, -4 
+                    fcb      2, +5, +0
+                    fcb      0, +0, +6           ; move cursor slightly right before starting next number 
+                    fcb      1 
+one:                fcb      0, -5, +4 
+                    fcb      2, +5, 0 
+                    fcb      0, +0, +2
+                    fcb      1 
+two:                fcb      2, +0, +4
+                    fcb      2, -3, +0
+                    fcb      2, +0, -4
+                    fcb      2, -2, +0
+                    fcb      2, +0, +4
+                    fcb      0, +5, +2
+                    fcb      1 
+three:              fcb      2, +0, +4
+                    fcb      2, -2, +0
+                    fcb      2, +0, -4
+                    fcb      0, +0, +4
+                    fcb      2, -3, +0
+                    fcb      2, +0, -4
+                    fcb      0, +5, +6
+                    fcb      1    
+four:               fcb      0, -5, +4
+                    fcb      2, +5, 0
+                    fcb      2, -3, -4
+                    fcb      2, +0, +4
+                    fcb      0, +3, +2
+                    fcb      1
+five:               fcb      0, +0, +4
+                    fcb      2, +0, -4
+                    fcb      2, -3, +0
+                    fcb      2, +0, +4
+                    fcb      2, -2, +0
+                    fcb      2, +0, -4
+                    fcb      0, +5, +6
+                    fcb      1
+six:                fcb      2, -5, +0
+                    fcb      2, +0, +4
+                    fcb      2, +2, +0
+                    fcb      2, +0, -4
+                    fcb      0, +3, +6
+                    fcb      1
+seven:              fcb      0, -5, +4
+                    fcb      2, +5, +0
+                    fcb      2, +0, -4
+                    fcb      0, +0, +6
+                    fcb      1
+
+eight:              fcb      2, +0, +4
+                    fcb      2,  -5, -4
+                    fcb      2, +0, +4
+                    fcb      2, +5, -4
+                    fcb      0, +0, +6
+                    fcb      1
+
+nine:               fcb      0, -5, +4
+                    fcb      2, +5, +0
+                    fcb      2, +0, -4
+                    fcb      2, -2, +0
+                    fcb      2, +0, +4
+                    fcb      0, +2, +2
+                    fcb      1 
+; TABLES TABLES TABLES TABLES TABLES TABLES TABLES TABLES TABLES TABLES TABLES TABLES 
+                                                          ; align $100 
 ;shippos_t          fcb      -3*ALLEYWIDTH,-2*ALLEYWIDTH,-1*ALLEYWIDTH,0,1*ALLEYWIDTH,2*ALLEYWIDTH,3*ALLEYWIDTH ; Y pos of ship 
 shippos_t: 
 bulletYpos_t        fcb      -98,-64,-31,3,37,70, 104     ; Y pos of bullet/ship/enemy per alley 
@@ -320,7 +386,8 @@ alleys_t            fdb      alley0s,alley1s,alley2s,alley3s,alley4s,alley5s,all
 max_enemys_t        fcb      -1,4,5,6,7,7,7,7,7,7         ; maximum number of occupied alleys per level, repeat after 4 
 enemy_speed_t       fcb      -1,5,5,6,7,8,9,0,20          ; example TODO 
 max_speed_mask_t    fcb      1,1,3,3,3,7,7,7,7,7,7 
-enemylvlcnt_t       fcb       50,60,70,75,80,90,100,100,100,100,100
+enemylvlcnt_t       fcb      50,60,70,75,80,90,100,100,100,100,100 
+numbers_t           fdb      zero, one, two, three, four, five, six, seven, eight, nine, zero 
 ; SPAWNABLE enemy table
 ;                                0,       1,     2,     3,        4,       5,     6,             7,       8  
 enemyspawn_t        fdb      None_D, Arrow_D, Bow_D, Dash_D, Wedge_D, Prize_D 
@@ -357,18 +424,18 @@ Ghost_t             fdb      Ghost                        ; same, no animation (
 None_t              fdb      None 
 Tank_L_t            fdb      Tank_L_1,Tank_L_2 
 Tank_R_t            fdb      Tank_R_1,Tank_R_2 
-Prize_t             fdb      Prize_1,Prize_2,Prize_1,Prize_2              ; big/small animation
+Prize_t             fdb      Prize_1,Prize_2,Prize_1,Prize_2 ; big/small animation 
 Wedge_L_t           fdb      Wedge_L 
 Wedge_R_t           fdb      Wedge_R 
-levelstr_t          fdb      $0000,level1str,level2str,level3str
+levelstr_t          fdb      $0000,level1str,level2str,level3str 
 ; SOUND data
 EXP1:               db       $19,$3F,$00,$02 
 EXP2:               db       $3F,$00,$00,$01 
 EXP3:               db       $01,-1,1,$04 
 ; TEXT STRINGS
-level1str            fcc      "LEVEL 1",$80
-level2str            fcc      "LEVEL 2",$80
-level3str            fcc      "LEVEL 3",$80
+level1str           fcc      "LEVEL 1",$80
+level2str           fcc      "LEVEL 2",$80
+level3str           fcc      "LEVEL 3",$80
 deadstring          fcc      "SHIP HIT!",$80
 gameoverstr         fcc      "GAME OVER",$80
 credits             fcc      "PROGRAMMED BY GAUZE 2016-201?",$80 

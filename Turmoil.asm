@@ -6,7 +6,8 @@
 ;
 ;#TOOLS USED
 ; Editing, graphic drawing, assembly: VIDE  http://vide.malban.de
-; Testing on real hardware: VecFever
+; more sophisticated editing: VIM http://www.vim.org
+; Testing on real hardware: MVBD + VecFever
 ;***************************************************************************
 ; DEFINE SECTION
 ;***************************************************************************
@@ -64,17 +65,41 @@ main:
 
 ; display score and ships left
                     RESET0REF  
-                    ldu      #score 
+;                    ldy      #score
+;                    ldx      #numbers_t 
                     lda      #137 
                     ldb      #-40 
-                    jsr      Print_Str_d 
+                    MOVETO_D 
+                    ldu      #score
+                    jsr      Print_Str_d
+;scoreloop
+;                    lda      ,y+
+;                    cmpa     #$20
+;                    beq      is_zero
+;                    cmpa     #$80
+;                    beq      score_done
+;                    suba     #$30
+;                    lsla
+;                    ldx     #numbers_t
+;                    ldx     a,x
+;                    jsr     Draw_VL_mode
+;                    bra     scoreloop 
+;is_zero
+;                    ldx     #zero
+;                    jsr     Draw_VL_mode
+;                    ldx     #numbers_t
+;                    bra     scoreloop
+
+;score_done
+; 
+                    RESET0REF  
                     lda      -50 
                     ldb      65 
                     MOVETO_D  
                     lda      shipcnt                      ; vector draw ships remaining routine TEST 
                     sta      temp 
 ships_left_loop 
-                    ldx      #Ship_Marker 
+                    ldx      #Ship_Marker  
                     DRAW_VLC  
                     dec      temp 
                     bne      ships_left_loop
