@@ -87,12 +87,13 @@ setup:                                                    ;        setting up ha
                     sta      enemycnt
                     std      prizecnt 
                     sta      Is_Prize
+                    sta      Ship_Dead
                     rts      
 
      
 
 
-gameover 
+gameover            ; #isfunction
                     jsr      Wait_Recal 
                     clr      Vec_Misc_Count 
                     lda      #$80 

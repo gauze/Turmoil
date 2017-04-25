@@ -40,6 +40,7 @@ start
                     sta      shippos 
                     sta      shipXpos 
                     sta      In_Alley 
+                    sta      Ship_Dead
                     ldb      #LEFT 
                     stb      shipdir 
                     ldx      #score 
@@ -67,7 +68,7 @@ main:
                     RESET0REF  
 ;                    ldy      #score
 ;                    ldx      #numbers_t 
-                    lda      #137 
+                    lda      #-127 
                     ldb      #-40 
                     MOVETO_D 
                     ldu      #score
@@ -93,8 +94,8 @@ main:
 ;score_done
 ; 
                     RESET0REF  
-                    lda      -50 
-                    ldb      65 
+                    lda      #-127 
+                    ldb      #-70 
                     MOVETO_D  
                     lda      shipcnt                      ; vector draw ships remaining routine TEST 
                     sta      temp 

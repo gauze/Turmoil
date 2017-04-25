@@ -103,6 +103,8 @@ enemytemp           ds       1
 enemylvlcnt         ds       1 
 ; STATE FLAGS
 Ship_Dead           ds       1 
+Ship_Dead_Anim      ds       1
+Ship_Dead_Cnt       ds       1
 In_Alley            ds       1 
 Is_Prize            ds       1
 ;

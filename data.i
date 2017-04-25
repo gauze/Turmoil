@@ -14,8 +14,8 @@ Half_Wall:          fcb      3                            ; lda #3 ; sta $C823
                     fcb      0,-115 
                     fcb      -3,0 
 ; SHIP 
-ShipR_nomode:       fcb      8                            ; fcb 0, +8, -12 
-                    fcb      -16, +0 
+ShipR_nomode:       fcb      9                            ; fcb 0, +8, -12 
+                    fcb      -8, +0 
                     fcb      +0, +17 
                     fcb      +2, +0 
                     fcb      +0, -12 
@@ -23,9 +23,10 @@ ShipR_nomode:       fcb      8                            ; fcb 0, +8, -12
                     fcb      +6, -20 
                     fcb      +0, +12 
                     fcb      +2, +0 
-                    fcb      +0, -17 
-ShipL_nomode:       fcb      8                            ; fcb 0, +8, +12 
-                    fcb      -16, +0 
+                    fcb      +0, -17
+                    fcb      -8, +0 
+ShipL_nomode:       fcb      9                            ; fcb 0, +8, +12 
+                    fcb      -8, +0 
                     fcb      +0, -17 
                     fcb      +2, +0 
                     fcb      +0, +12 
@@ -33,7 +34,8 @@ ShipL_nomode:       fcb      8                            ; fcb 0, +8, +12
                     fcb      +6, +20 
                     fcb      +0, -12 
                     fcb      +2, +0 
-                    fcb      +0, +17 
+                    fcb      +0, +17
+                    fcb      -8, +0 
 Shot:               fcb      2,0,10 
                     fcb      2,1,0 
                     fcb      2,0,-10 
@@ -118,12 +120,37 @@ Wedge_R:
                     fcb      $FF, -5, -17 
                     fcb      $FF, +10, +0 
                     fcb      1 
+Wedge_R_1: 
+                    fcb      0, +5, -7 
+                    fcb      $FF, -5, +17 
+                    fcb      $FF, -5, -17 
+                    fcb      $FF, +10, +0 
+                    fcb      1 
+Wedge_R_2: 
+                    fcb      0, +3, -7 
+                    fcb      $FF, -3, +17 
+                    fcb      $FF, -3, -17 
+                    fcb      $FF, +6, +0 
+                    fcb      1 
 Wedge_L: 
                     fcb      0, +5, -7 
                     fcb      2, -5, -17 
                     fcb      2, -5, +17 
                     fcb      2, +10, +0 
                     fcb      1 
+Wedge_L_1: 
+                    fcb      0, +5, -7 
+                    fcb      2, -5, -17 
+                    fcb      2, -5, +17 
+                    fcb      2, +10, +0 
+                    fcb      1 
+Wedge_L_2: 
+                    fcb      0, +3, -7 
+                    fcb      2, -3, -17 
+                    fcb      2, -3, +17 
+                    fcb      2, +6, +0 
+                    fcb      1 
+
 Ghost: 
                     fcb      0, +1, -11 
                     fcb      2, +0, +22                   ; TOP 
@@ -425,8 +452,8 @@ None_t              fdb      None
 Tank_L_t            fdb      Tank_L_1,Tank_L_2 
 Tank_R_t            fdb      Tank_R_1,Tank_R_2 
 Prize_t             fdb      Prize_1,Prize_2,Prize_1,Prize_2 ; big/small animation 
-Wedge_L_t           fdb      Wedge_L 
-Wedge_R_t           fdb      Wedge_R 
+Wedge_L_t           fdb      Wedge_L_1, Wedge_L_2 
+Wedge_R_t           fdb      Wedge_R_1, Wedge_R_2 
 levelstr_t          fdb      $0000,level1str,level2str,level3str 
 ; SOUND data
 EXP1:               db       $19,$3F,$00,$02 

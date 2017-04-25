@@ -8,16 +8,49 @@ DRAW_SHIP           macro
                     lda      #127 
                     sta      VIA_t1_cnt_lo                ; controls "scale" 
                     lda      shippos 
-                                                          ; ldx #shippos_t 
                     ldx      #bulletYpos_t 
                     lda      a,x                          ; get pos from shippos_t table 
-                    adda     #2+6                         ; small offset 
+                 ;   adda     #2+6                         ; small offset 
                     ldb      shipXpos 
                     MOVETO_D  
+; test if we are dead.
+                    lda      Ship_Dead 
+                    bne      is_dead 
+                    bra      scale_done 
+
+is_dead 
+                                                          ; lda #127 
+                    ldb      Ship_Dead_Anim               ; 1 = shrink 
+                    bne      ship_shrink                  ; shrink 
+                    lda      Ship_Dead_Cnt 
+                    inc      Ship_Dead_Cnt 
+                    inc      Ship_Dead_Cnt 
+                    bra      ship_grow 
+
+ship_shrink 
+                    lda      Ship_Dead_Cnt 
+                    dec      Ship_Dead_Cnt 
+                    dec      Ship_Dead_Cnt 
+ship_grow 
+                    sta      VIA_t1_cnt_lo                ; controls "scale" 
+scale_done 
+                    lda      Ship_Dead_Cnt 
+                    bmi      change_dir 
+                    cmpa     #126 
+                    bne      shitballs                    ; animation done clear flags+counter 
+                    clr      Ship_Dead 
+                    clr      Ship_Dead_Cnt 
+change_dir 
+                    clr      Ship_Dead_Anim 
+                    clr      Ship_Dead_Cnt                ; don't let it go minus. UNSOIGNED
+shitballs 
+                    
                     ldx      #ShipL_nomode 
                     ldb      shipdir                      ; testing for 0|LEFT 1|RIGHT 
                     beq      donuthin1 
                     ldx      #ShipR_nomode 
+                    bra      donuthin1 
+
 donuthin1 
                     DRAW_VLC                              ; jsr Draw_VLc ;_mode 
                     endm     
@@ -245,12 +278,14 @@ skip6a
 ;&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 MOVE_ENEMYS         macro    
 ; move enemies0
-                    lda      alley0e
-                    cmpa     #PRIZE
-                    bne      noprize0
-                    lda      prizecntdown
-                    beq      prize2cannonball0
-noprize0
+                  ;  lda      Ship_Dead 
+                ;    lbne     subdone6 
+                    lda      alley0e 
+                    cmpa     #PRIZE 
+                    bne      noprize0 
+                    lda      prizecntdown 
+                    beq      prize2cannonball0 
+noprize0 
                     lda      alley0x 
                     sta      temp 
                     ldb      alley0d 
@@ -259,15 +294,16 @@ noprize0
                     bvs      alley0of 
                     sta      alley0x 
                     bra      subdone0 
-prize2cannonball0
-                    lda      #255
-                    sta      prizecntdown
-                    clr      Is_Prize
-                    lda      #CANNONBALL
-                    sta      alley0e                ; change enemy type and speed
-                    lda      #8
-                    sta      alley0s
-                    bra      subdone0
+
+prize2cannonball0 
+                    lda      #255 
+                    sta      prizecntdown 
+                    clr      Is_Prize 
+                    lda      #CANNONBALL 
+                    sta      alley0e                      ; change enemy type and speed 
+                    lda      #8 
+                    sta      alley0s 
+                    bra      subdone0 
 
 add0 
                     adda     alley0s 
@@ -306,12 +342,12 @@ setDtoR_0
                     inc      alley0d 
 subdone0 
 ; move enemies1
-                    lda      alley1e
-                    cmpa     #PRIZE
-                    bne      noprize1
-                    lda      prizecntdown
-                    beq      prize2cannonball1
-noprize1
+                    lda      alley1e 
+                    cmpa     #PRIZE 
+                    bne      noprize1 
+                    lda      prizecntdown 
+                    beq      prize2cannonball1 
+noprize1 
                     lda      alley1x 
                     sta      temp 
                     ldb      alley1d 
@@ -320,15 +356,16 @@ noprize1
                     bvs      alley1of 
                     sta      alley1x 
                     bra      subdone1 
-prize2cannonball1
-                    lda      #255
-                    sta      prizecntdown
-                    clr      Is_Prize
-                    lda      #CANNONBALL
-                    sta      alley1e                ; change enemy type and speed
-                    lda      #8
-                    sta      alley1s
-                    bra      subdone1
+
+prize2cannonball1 
+                    lda      #255 
+                    sta      prizecntdown 
+                    clr      Is_Prize 
+                    lda      #CANNONBALL 
+                    sta      alley1e                      ; change enemy type and speed 
+                    lda      #8 
+                    sta      alley1s 
+                    bra      subdone1 
 
 add1 
                     adda     alley1s 
@@ -367,12 +404,12 @@ setDtoR_1
                     inc      alley1d 
 subdone1 
 ; move enemies2
-                    lda      alley2e
-                    cmpa     #PRIZE
-                    bne      noprizey2
-                    lda      prizecntdown
-                    beq      prize2cannonball2
-noprizey2
+                    lda      alley2e 
+                    cmpa     #PRIZE 
+                    bne      noprizey2 
+                    lda      prizecntdown 
+                    beq      prize2cannonball2 
+noprizey2 
                     lda      alley2x 
                     sta      temp 
                     ldb      alley2d 
@@ -381,15 +418,16 @@ noprizey2
                     bvs      alley2of 
                     sta      alley2x 
                     bra      subdone2 
-prize2cannonball2
-                    lda      #255
-                    sta      prizecntdown
-                    clr      Is_Prize
-                    lda      #CANNONBALL
-                    sta      alley2e                ; change enemy type and speed
-                    lda      #8
-                    sta      alley2s
-                    bra      subdone2
+
+prize2cannonball2 
+                    lda      #255 
+                    sta      prizecntdown 
+                    clr      Is_Prize 
+                    lda      #CANNONBALL 
+                    sta      alley2e                      ; change enemy type and speed 
+                    lda      #8 
+                    sta      alley2s 
+                    bra      subdone2 
 
 add2 
                     adda     alley2s 
@@ -428,12 +466,12 @@ setDtoR_2
                     inc      alley2d 
 subdone2 
 ; move enemies3
-                    lda      alley3e
-                    cmpa     #PRIZE
-                    bne      noprize3
-                    lda      prizecntdown
-                    beq      prize2cannonball3
-noprize3
+                    lda      alley3e 
+                    cmpa     #PRIZE 
+                    bne      noprize3 
+                    lda      prizecntdown 
+                    beq      prize2cannonball3 
+noprize3 
                     lda      alley3x 
                     sta      temp 
                     ldb      alley3d 
@@ -442,15 +480,16 @@ noprize3
                     bvs      alley3of 
                     sta      alley3x 
                     bra      subdone3 
-prize2cannonball3
-                    lda      #255
-                    sta      prizecntdown
-                    clr      Is_Prize
-                    lda      #CANNONBALL
-                    sta      alley3e                ; change enemy type and speed
-                    lda      #8
-                    sta      alley3s
-                    bra      subdone3
+
+prize2cannonball3 
+                    lda      #255 
+                    sta      prizecntdown 
+                    clr      Is_Prize 
+                    lda      #CANNONBALL 
+                    sta      alley3e                      ; change enemy type and speed 
+                    lda      #8 
+                    sta      alley3s 
+                    bra      subdone3 
 
 add3 
                     adda     alley3s 
@@ -489,12 +528,12 @@ setDtoR_3
                     inc      alley3d 
 subdone3 
 ; move enemies4
-                    lda      alley4e
-                    cmpa     #PRIZE
-                    bne      noprize4
-                    lda      prizecntdown
-                    beq      prize2cannonball4
-noprize4
+                    lda      alley4e 
+                    cmpa     #PRIZE 
+                    bne      noprize4 
+                    lda      prizecntdown 
+                    beq      prize2cannonball4 
+noprize4 
                     lda      alley4x 
                     sta      temp 
                     ldb      alley4d 
@@ -503,15 +542,16 @@ noprize4
                     bvs      alley4of 
                     sta      alley4x 
                     bra      subdone4 
-prize2cannonball4
-                    lda      #255
-                    sta      prizecntdown
-                    clr      Is_Prize
-                    lda      #CANNONBALL
-                    sta      alley4e                ; change enemy type and speed
-                    lda      #8
-                    sta      alley4s
-                    bra      subdone4
+
+prize2cannonball4 
+                    lda      #255 
+                    sta      prizecntdown 
+                    clr      Is_Prize 
+                    lda      #CANNONBALL 
+                    sta      alley4e                      ; change enemy type and speed 
+                    lda      #8 
+                    sta      alley4s 
+                    bra      subdone4 
 
 add4 
                     adda     alley4s 
@@ -550,12 +590,12 @@ setDtoR_4
                     inc      alley4d 
 subdone4 
 ; move enemies5
-                    lda      alley5e
-                    cmpa     #PRIZE
-                    bne      noprize5
-                    lda      prizecntdown
-                    beq      prize2cannonball5
-noprize5
+                    lda      alley5e 
+                    cmpa     #PRIZE 
+                    bne      noprize5 
+                    lda      prizecntdown 
+                    beq      prize2cannonball5 
+noprize5 
                     lda      alley5x 
                     sta      temp 
                     ldb      alley5d 
@@ -564,16 +604,16 @@ noprize5
                     bvs      alley5of 
                     sta      alley5x 
                     bra      subdone5 
-prize2cannonball5
-                    lda      #255
-                    sta      prizecntdown
-                    clr      Is_Prize
-                    lda      #CANNONBALL
-                    sta      alley5e                ; change enemy type and speed
-                    lda      #8
-                    sta      alley5s
-                    bra      subdone5
 
+prize2cannonball5 
+                    lda      #255 
+                    sta      prizecntdown 
+                    clr      Is_Prize 
+                    lda      #CANNONBALL 
+                    sta      alley5e                      ; change enemy type and speed 
+                    lda      #8 
+                    sta      alley5s 
+                    bra      subdone5 
 
 add5 
                     adda     alley5s 
@@ -612,12 +652,12 @@ setDtoR_5
                     inc      alley5d 
 subdone5 
 ; move enemies6
-                    lda      alley6e
-                    cmpa     #PRIZE
-                    bne      noprize6
-                    lda      prizecntdown
-                    beq      prize2cannonball6
-noprize6
+                    lda      alley6e 
+                    cmpa     #PRIZE 
+                    bne      noprize6 
+                    lda      prizecntdown 
+                    beq      prize2cannonball6 
+noprize6 
                     lda      alley6x 
                     sta      temp 
                     ldb      alley6d 
@@ -626,15 +666,16 @@ noprize6
                     bvs      alley6of 
                     sta      alley6x 
                     bra      subdone6 
-prize2cannonball6
-                    lda      #255
-                    sta      prizecntdown
-                    clr      Is_Prize
-                    lda      #CANNONBALL
-                    sta      alley6e                ; change enemy type and speed
-                    lda      #8
-                    sta      alley6s
-                    bra      subdone6
+
+prize2cannonball6 
+                    lda      #255 
+                    sta      prizecntdown 
+                    clr      Is_Prize 
+                    lda      #CANNONBALL 
+                    sta      alley6e                      ; change enemy type and speed 
+                    lda      #8 
+                    sta      alley6s 
+                    bra      subdone6 
 
 add6 
                     adda     alley6s 
@@ -675,7 +716,8 @@ subdone6
                     endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 SHIP_COLLISION_DETECT  macro  
-                                                          ; bra skipme 
+                    lda      Ship_Dead                    ; if SHip_Dead do not do collision routine 
+                    bne      no_hit 
                     lda      shippos 
                     lsla     
                     ldx      #alleye_t 
@@ -703,7 +745,11 @@ SHIP_COLLISION_DETECT  macro
                     ldx      #alleyd_t 
                     stb      [a,x] 
                     dec      enemycnt 
-                    jsr      deathsplash 
+                                                          ; jsr deathsplash 
+                    lda      #127                         ; sets counter for 100 frames 2 seconds 
+                    sta      Ship_Dead_Cnt 
+                    inc      Ship_Dead 
+                    inc      Ship_Dead_Anim 
 ;skipme
 no_hit 
                     endm     
@@ -776,7 +822,7 @@ eventankdies0
                     lda      alley0s 
                     ldb      #SCORE 
                     mul      
-                    tfr      b,a
+                    tfr      b,a 
                     jsr      Add_Score_a 
                     lda      #EXPLOSION                   ; change monster into explosion graphic 
                     sta      alley0e 
@@ -838,8 +884,8 @@ eventankdies1
                     lda      alley1s 
                     ldb      #SCORE 
                     mul      
-                    tfr      b,a
-                    jsr      Add_Score_a
+                    tfr      b,a 
+                    jsr      Add_Score_a 
                     lda      #EXPLOSION                   ; change monster into explosion graphic 
                     sta      alley1e 
                     lda      bullet1d                     ; take bullets dir, str to explosions dir 
@@ -900,7 +946,7 @@ eventankdies2
                     lda      alley2s 
                     ldb      #SCORE 
                     mul      
-                    tfr      b,a
+                    tfr      b,a 
                     jsr      Add_Score_a 
                     lda      #EXPLOSION                   ; change monster into explosion graphic 
                     sta      alley2e 
@@ -962,7 +1008,7 @@ eventankdies3
                     lda      alley3s 
                     ldb      #SCORE 
                     mul      
-                    tfr      b,a
+                    tfr      b,a 
                     jsr      Add_Score_a 
                     lda      #EXPLOSION                   ; change monster into explosion graphic 
                     sta      alley3e 
@@ -1024,7 +1070,7 @@ eventankdies4
                     lda      alley4s 
                     ldb      #SCORE 
                     mul      
-                    tfr      b,a
+                    tfr      b,a 
                     jsr      Add_Score_a 
                     lda      #EXPLOSION                   ; change monster into explosion graphic 
                     sta      alley4e 
@@ -1085,8 +1131,8 @@ eventankdies5
                     ldx      #score 
                     lda      alley5s 
                     ldb      #SCORE 
-                    mul    
-                    tfr      b,a  
+                    mul      
+                    tfr      b,a 
                     jsr      Add_Score_a 
                     lda      #EXPLOSION                   ; change monster into explosion graphic 
                     sta      alley5e 
@@ -1148,7 +1194,7 @@ eventankdies6
                     lda      alley6s 
                     ldb      #SCORE 
                     mul      
-                    tfr      b,a
+                    tfr      b,a 
                     jsr      Add_Score_a 
                     lda      #EXPLOSION                   ; change monster into explosion graphic 
                     sta      alley6e 
@@ -1242,6 +1288,8 @@ NEW_ENEMY           macro
 ; store answer in alleyNe (value from enemy_t offset), (bool)alleyNd (0 left, 1 right), (signed int)alleyNx (-127 or 127 )
 ;
 ; don't even do spawn logic if maximum enemies are out 
+                    lda      Ship_Dead
+                    lbne      no_new_enemy 
                     lda      level 
                     ldx      #max_enemys_t 
                     lda      a,x 
@@ -1411,6 +1459,8 @@ INTENSITY_A         macro
                     endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 JOYSTICK_TEST       macro    
+                    lda      Ship_Dead 
+                    lbne     jsdoneX 
                     jsr      Joy_Digital 
                     lda      In_Alley                     ; inside an alley ? 
                     bne      jsdoneY                      ; disable Y position poll 
@@ -1431,6 +1481,10 @@ going_down
                     clr      stallcnt 
 jsdoneY 
 ; now test X first test should be if there is a prize in this alley.
+; prize score is done liek this:
+; ldd #2048
+; jsr Add_Score_d
+; #2048 = 10000000000 BCD value
                     lda      In_Alley 
                     bne      already_in 
                     lda      shippos 
@@ -1555,7 +1609,7 @@ bstart
                     lda      bulletcnt 
                     asla                                  ; shift left == multiply by 2 table is 2 byte entry 
                     ldx      #bullete_t 
-                   ; ldx      a,x 
+                                                          ; ldx a,x 
                     lda      [a,x] 
                     beq      next_bullet                  ; Doesn't EXIST 
                     RESET0REF                             ; reset before positioning beam 
@@ -1568,8 +1622,8 @@ bstart
                     lda      bulletcnt 
                     asla                                  ; shift left == multiply by 2 table is 2 byte entry 
                     ldx      #bulletx_t 
-                   ; ldx      a,x                          ; get pointer from table 
-                    ldb      [a,x]                           ; read from resolved address bulletNx 
+                                                          ; ldx a,x ; get pointer from table 
+                    ldb      [a,x]                        ; read from resolved address bulletNx 
                     lda      bulletYtemp 
                     MOVETO_D  
 ; draw dot code inlined
@@ -1702,7 +1756,8 @@ no25cntreset
                                                           ;sta Prize_f 
                     sta      Dash_f 
                     sta      Tank_f 
-                    CHKPRIZEEXIST                         ; check if prize exists every 1 second
+                    sta      Wedge_f 
+                    CHKPRIZEEXIST                         ; check if prize exists every 1 second 
 no50cntreset 
                     lda      #100                         ; frame count 100=2 seconds (at full speed) 0-99 == 100 
                                                           ; frame freq 1, 2, 4, 5, 10, 20, 25,50, 100 
@@ -1716,7 +1771,7 @@ no50cntreset
                     sta      Arrow_f 
                     sta      Bow_f 
                     sta      Dash_f 
-                                                          ; sta Wedge_f 
+                    sta      Wedge_f 
                                                           ; sta Ghost_f 
                     sta      Prize_f 
                                                           ; sta Cannonball_f 
@@ -1766,28 +1821,90 @@ nextE6
                     sta      enemycnt 
                     endm     
 ;###########################################################################################################
-CHKPRIZEEXIST         macro    
-                    lda      alley0e
+CHKPRIZEEXIST       macro    
+                    lda      alley0e 
                     cmpa     #PRIZE 
                     beq      prize_exist 
-                    lda      alley1e
+                    lda      alley1e 
                     cmpa     #PRIZE 
-                    beq      prize_exist
-                    lda      alley2e
+                    beq      prize_exist 
+                    lda      alley2e 
                     cmpa     #PRIZE 
-                    beq      prize_exist
-                    lda      alley3e
+                    beq      prize_exist 
+                    lda      alley3e 
                     cmpa     #PRIZE 
-                    beq      prize_exist
-                    lda      alley4e
+                    beq      prize_exist 
+                    lda      alley4e 
                     cmpa     #PRIZE 
-                    beq      prize_exist
-                    lda      alley5e
+                    beq      prize_exist 
+                    lda      alley5e 
                     cmpa     #PRIZE 
-                    beq      prize_exist
-                    lda      alley6e
+                    beq      prize_exist 
+                    lda      alley6e 
                     cmpa     #PRIZE 
-                    beq      prize_exist
-                    clr      Is_Prize                    ; fgail all tests, reset Is_Prize
-prize_exist
+                    beq      prize_exist 
+                    clr      Is_Prize                     ; fgail all tests, reset Is_Prize 
+prize_exist 
                     endm     
+
+;########################################################################################################
+;#########################################################################################################
+;########################DRAWING MACROS
+DRAW_VL_MODE		macro   
+			local next_byte, next_line, dvm_done
+next_byte:      lda     ,x+             ;Get the next mode byte
+	        bne     draw_solid
+                MOV_DRAW_VL     	;If =0, move to the next point
+                bra     next_byte
+
+draw_solid:     deca
+                beq     dvm_done        ;value was 1 which si end of packlet marker
+                DRAW_VL         	;If <>1, draw a solid line
+                bra     next_byte
+dvm_done
+		endm
+
+DRAW_VL         macro
+		local LF3ED, LF3F4
+	
+		ldd ,x
+		sta     <VIA_port_a     ;Send Y to A/D
+                clr     <VIA_port_b     ;Enable mux
+                leax    2,x             ;Point to next coordinate pair
+                nop                     ;Wait a moment
+                inc     <VIA_port_b     ;Disable mux
+                stb     <VIA_port_a     ;Send X to A/D
+                ldd     #$FF00          ;Shift reg=$FF (solid line), T1H=0
+LF3ED:          sta     <VIA_shift_reg  ;Put pattern in shift register
+                stb     <VIA_t1_cnt_hi  ;Set T1H (scale factor?)
+                ldd     #$0040          ;B-reg = T1 interrupt bit
+LF3F41:         bitb    <VIA_int_flags  ;Wait for T1 to time out
+                beq     LF3F41
+                nop                     ;Wait a moment more
+                sta     <VIA_shift_reg  ;Clear shift register (blank output)
+		endm
+
+MOV_DRAW_VL	macro
+		local  LF3F4
+
+                ldd     ,x              ;Get next coordinate pair
+  		sta     <VIA_port_a     ;Send Y to A/D
+                clr     <VIA_port_b     ;Enable mux
+                leax    2,x             ;Point to next coordinate pair
+                nop                     ;Wait a moment
+                inc     <VIA_port_b     ;Disable mux
+                stb     <VIA_port_a     ;Send X to A/D
+                ldd     #$0000          ;Shift reg=0 (no draw), T1H=0
+               ; BRA     LF3ED           ;A->D00A, B->D005
+		sta     <VIA_shift_reg  ;Put pattern in shift register
+                stb     <VIA_t1_cnt_hi  ;Set T1H (scale factor?)
+                ldd     #$0040          ;B-reg = T1 interrupt bit
+LF3F4:          bitb    <VIA_int_flags  ;Wait for T1 to time out
+                beq     LF3F4
+                nop                     ;Wait a moment more
+                sta     <VIA_shift_reg  ;Clear shift register (blank output)
+		; commented because not 'VL_c' which has vector line count
+               	; lda     $C823           ;Decrement line count
+               	; deca
+		endm
+
