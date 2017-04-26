@@ -9,7 +9,7 @@
                     org      $c880                        ; start of our ram space
 ; 
 score               ds       7                            ; 7 bytes 
-highscore           ds       7                            ; 7 bytes 
+;highscore           ds       7                            ; 7 bytes 
 level               ds       1 
 ;
 ; your ship related variables, X,Y position and direction facing L/R, and number left
@@ -107,6 +107,9 @@ Ship_Dead_Anim      ds       1
 Ship_Dead_Cnt       ds       1
 In_Alley            ds       1 
 Is_Prize            ds       1
+lvlstr              ds       6
+levelstr            ds       2
+lvlstrterm          ds       1
 ;
 ; CONSTANTS place after VARIABLES
 ;ALLEYWIDTH          =        17 

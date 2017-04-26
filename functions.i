@@ -13,12 +13,16 @@ setup:                                                    ;        setting up ha
                     sta      Vec_Joy_Mux_2_X 
                     sta      Vec_Joy_Mux_2_Y 
                                                           ; jsr Joy_Digital ; set joymode, not analog. 
-                    ldx      #highscore 
-                    jsr      Clear_Score 
+                                                          ; ldx #Vec_High_Score 
+                                                          ; jsr Clear_Score 
                     ldx      #score 
                     jsr      Clear_Score 
-                    lda      #1 
+                    lda      #43 
                     sta      level 
+                    jsr      setuplevel 
+                    rts      
+
+setuplevel 
                     ldd      #0                           ; set a bunch of variables to 0 
                     sta      bullet0e 
                     sta      bullet1e 
@@ -84,16 +88,13 @@ setup:                                                    ;        setting up ha
                     sta      Prize_f 
                     sta      Cannonball_f 
                     sta      Tank_f 
-                    sta      enemycnt
+                    sta      enemycnt 
                     std      prizecnt 
-                    sta      Is_Prize
-                    sta      Ship_Dead
+                    sta      Is_Prize 
+                    sta      Ship_Dead 
                     rts      
 
-     
-
-
-gameover            ; #isfunction
+gameover                                                  ;        #isfunction 
                     jsr      Wait_Recal 
                     clr      Vec_Misc_Count 
                     lda      #$80 
@@ -109,46 +110,106 @@ gameover            ; #isfunction
                     ldb      -50 
                     ldu      #score 
                     jsr      Print_Str_d 
+; high score stuff
+                    ldx      #score 
+                    ldu      #Vec_High_Score 
+                    jsr      New_High_Score 
+                    ldu      #Vec_High_Score 
+                    ldd      #$0030 
+                    jsr      Print_Str_d 
                     jsr      Read_Btns 
                     lda      Vec_Button_1_3 
-                    lbne      restart 
-                    bra      gameover
-
-
+                    lbne     restart 
+                    bra      gameover 
 
 levelsplash 
-                    clr      stallcnt
-splashloop
+                    clr      stallcnt 
+splashloop 
                     jsr      Wait_Recal 
                     clr      Vec_Misc_Count 
                     lda      #$80 
                     sta      VIA_t1_cnt_lo 
                     jsr      Intensity_7F 
-                    ldx      #levelstr_t
-                    lda      level
-                    lsla
-                    ldu      a,x
+                    lda      # "L"
+                    sta      lvlstr 
+                    lda      # "E"
+                    sta      lvlstr+1 
+                    lda      # "V"
+                    sta      lvlstr+2 
+                    lda      # "E"
+                    sta      lvlstr+3 
+                    lda      # "L"
+                    sta      lvlstr+4 
+                    lda      #$20 
+                    sta      lvlstr+5 
+                    lda      #$20 
+                    sta      levelstr 
+                    lda      level 
+                    cmpa     #100 
+                    blt      do_level 
+                    lda      #$6C                         ; infinity sign 
+                    sta      levelstr+1 
+                    bra      score_format_done 
+
+do_level 
+; parse level into chars  $30-$39 0-9
+                    lda      level 
+                    cmpa     #9 
+                    ble      one_digit 
+                    ldb      #$30 
+                    stb      levelstr 
+tens_digit 
+                    suba     #10 
+                    inc      levelstr 
+                    cmpa     #9 
+                    bgt      tens_digit 
+one_digit 
+                    adda     #$30 
+                    sta      levelstr+1 
+score_format_done 
+                    lda      #$80 
+                    sta      lvlstrterm 
+                    ldu      #lvlstr 
+                                                          ; ldx #levelstr_t 
+                                                          ; lda level 
+                                                          ; lsla 
+                                                          ; ldu a,x 
                     lda      -20 
                     ldb      -10 
                     jsr      Print_Str_d 
-                    inc      stallcnt
+                    inc      stallcnt 
                     lda      stallcnt 
-                    cmpa     #100
-                    beq      donesplash
-                    bra      splashloop
-donesplash
-                    rts  
+                    cmpa     #100 
+                    beq      donesplash 
+                    bra      splashloop 
+
+donesplash 
+                    lda      level
+                    cmpa     #30
+                    blt      do_cnt_tbl
+                    lda      #255
+                    bra      store_max_enemy_cnt
+do_cnt_tbl      
+                    ldx      #enemylvlcnt_t 
+                    lda      level 
+                    lda      a,x 
+store_max_enemy_cnt
+                    sta      enemylvlcnt 
+
+                    inc      shipcnt                      ; free ship 
+                    jsr      setuplevel 
+                    rts      
 
 deathsplash 
-                    clr      stallcnt
-deathloop
+                    clr      stallcnt 
+deathloop 
                     jsr      Wait_Recal 
                     clr      Vec_Misc_Count 
                     lda      #$80 
                     sta      VIA_t1_cnt_lo 
                     jsr      Intensity_7F 
 ; dead
-                    ldu      #deadstring
+                    ldu      #deadstring 
                     lda      -20 
                     ldb      -10 
                     jsr      Print_Str_d 
@@ -157,19 +218,19 @@ deathloop
                     ldb      65 
                     MOVETO_D  
                     lda      shipcnt                      ; vector draw ships remaining routine TEST 
-                    beq      no_ships
+                    beq      no_ships 
                     sta      temp 
-                
 ships_left_loop1 
                     ldx      #Ship_Marker 
                     DRAW_VLC  
                     dec      temp 
-                    bne      ships_left_loop1
+                    bne      ships_left_loop1 
 no_ships 
-                    inc      stallcnt
+                    inc      stallcnt 
                     lda      stallcnt 
-                    cmpa     #100               ; 2 seconds
-                    beq      donedeathloop
-                    jmp      deathloop
-donedeathloop
-                    rts  
+                    cmpa     #100                         ; 2 seconds 
+                    beq      donedeathloop 
+                    jmp      deathloop 
+
+donedeathloop 
+                    rts      

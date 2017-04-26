@@ -49,11 +49,12 @@ start
                     sta      shipcnt 
 main: 
                     jsr      Wait_Recal 
-                    CHECK_GAMEOVER  
+ 
                     JOYSTICK_TEST  
                     lda      #$5F 
                     INTENSITY_A  
-                    DRAW_WALLS  
+                ;    DRAW_WALLS 
+                ;    DRAW_LINE_WALLS 
                     DRAW_SHIP  
                     READ_BUTTONS  
                     MOVE_BULLETS
@@ -65,37 +66,12 @@ main:
                  ;   jmp      no_score 
 
 ; display score and ships left
-                    RESET0REF  
-;                    ldy      #score
-;                    ldx      #numbers_t 
-                    lda      #-127 
-                    ldb      #-40 
-                    MOVETO_D 
-                    ldu      #score
-                    jsr      Print_Str_d
-;scoreloop
-;                    lda      ,y+
-;                    cmpa     #$20
-;                    beq      is_zero
-;                    cmpa     #$80
-;                    beq      score_done
-;                    suba     #$30
-;                    lsla
-;                    ldx     #numbers_t
-;                    ldx     a,x
-;                    jsr     Draw_VL_mode
-;                    bra     scoreloop 
-;is_zero
-;                    ldx     #zero
-;                    jsr     Draw_VL_mode
-;                    ldx     #numbers_t
-;                    bra     scoreloop
-
-;score_done
+               ;     DRAW_VECTOR_SCORE_DONTUSEFONTSBROKEN
+                    DRAW_RASTER_SCORE
 ; 
                     RESET0REF  
                     lda      #-127 
-                    ldb      #-70 
+                    ldb      #-90 
                     MOVETO_D  
                     lda      shipcnt                      ; vector draw ships remaining routine TEST 
                     sta      temp 
@@ -121,8 +97,13 @@ noprizecntdown
                     SHOT_COLLISION_DETECT  
                     SHIP_COLLISION_DETECT  
                     STALL_CHECK  
+                    lda      enemylvlcnt
+                    bvs      newlevel 
                     jmp      main                         ; and repeat forever, sorta 
-
+newlevel
+                    inc      level
+                    jsr      levelsplash
+                    jmp      main
 ; must go at bottom or fills up RAM instead of ROM ??
                     include  "functions.i"
                     include  "data.i"

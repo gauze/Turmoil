@@ -10,7 +10,7 @@ DRAW_SHIP           macro
                     lda      shippos 
                     ldx      #bulletYpos_t 
                     lda      a,x                          ; get pos from shippos_t table 
-                 ;   adda     #2+6                         ; small offset 
+                                                          ; adda #2+6 ; small offset 
                     ldb      shipXpos 
                     MOVETO_D  
 ; test if we are dead.
@@ -42,9 +42,8 @@ scale_done
                     clr      Ship_Dead_Cnt 
 change_dir 
                     clr      Ship_Dead_Anim 
-                    clr      Ship_Dead_Cnt                ; don't let it go minus. UNSOIGNED
+                    clr      Ship_Dead_Cnt                ; don't let it go minus. UNSOIGNED 
 shitballs 
-                    
                     ldx      #ShipL_nomode 
                     ldb      shipdir                      ; testing for 0|LEFT 1|RIGHT 
                     beq      donuthin1 
@@ -75,12 +74,64 @@ DRAW_WALLS          macro
                     ldx      #Full_Wall_nomode 
                     DRAW_VLC                              ; jsr Draw_VLc 
                     endm     
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+DRAW_LINE_WALLS     macro
+                    clr      Vec_Misc_Count 
+                    RESET0REF  
+                    lda      #63 
+                    ldb      #15 
+                    MOVETO_D 
+                    ldd      #$007F
+                    jsr      Draw_Line_d
+                    RESET0REF
+                    lda      #63-17 
+                    ldb      #15 
+                    MOVETO_D 
+                    ldd      #$007F
+                    jsr      Draw_Line_d
+                    RESET0REF
+                    lda      #63-17-17 
+                    ldb      #15 
+                    MOVETO_D 
+                    ldd      #$007F
+                    jsr      Draw_Line_d
+                    RESET0REF
+                    lda      #63-17-17-17 
+                    ldb      #15 
+                    MOVETO_D 
+                    ldd      #$007F
+                    jsr      Draw_Line_d
+                    RESET0REF
+                    lda      #63-17-17-17-17
+                    ldb      #15 
+                    MOVETO_D 
+                    ldd      #$007F
+                    jsr      Draw_Line_d
+                    RESET0REF
+                    lda      #63-17-17-17-17-17 
+                    ldb      #15 
+                    MOVETO_D 
+                    ldd      #$007F
+                    jsr      Draw_Line_d
+                    RESET0REF
+                    lda      #63-17-17-17-17-17-17 
+                    ldb      #15 
+                    MOVETO_D 
+                    ldd      #$007F
+                    jsr      Draw_Line_d
+                    RESET0REF
+                    lda      #63-17-17-17-17-17-17-17 
+                    ldb      #15 
+                    MOVETO_D 
+                    ldd      #$007F
+                    jsr      Draw_Line_d
+                    endm
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 DRAW_ENEMYS         macro    
 ; *_D -> index 0|1 (0=Left, 1=Right)
                     RESET0REF  
                     lda      alley0e 
-                    beq      skip0a 
+                    lbeq     skip0a 
                     ldx      #enemy_t 
                     lda      alley0e 
                     lsla     
@@ -103,12 +154,13 @@ DRAW_ENEMYS         macro
                     lsla     
                     puls     x                            ; pull X back 
                     ldx      a,x 
-                    jsr      Draw_VL_mode 
+                                                          ; jsr Draw_VL_mode 
+                    DRAW_VL_MODE  
 skip0a 
 ;################################################################################################
                     RESET0REF  
                     lda      alley1e 
-                    beq      skip1a 
+                    lbeq     skip1a 
                     ldx      #enemy_t 
                     lda      alley1e 
                     lsla     
@@ -131,12 +183,13 @@ skip0a
                     lsla     
                     puls     x                            ; pull X back 
                     ldx      a,x 
-                    jsr      Draw_VL_mode 
+                                                          ; jsr Draw_VL_mode 
+                    DRAW_VL_MODE  
 skip1a 
 ;###########################################################################
                     RESET0REF  
                     lda      alley2e 
-                    beq      skip2a 
+                    lbeq     skip2a 
                     ldx      #enemy_t 
                     lda      alley2e 
                     lsla     
@@ -159,12 +212,13 @@ skip1a
                     lsla     
                     puls     x                            ; pull X back 
                     ldx      a,x 
-                    jsr      Draw_VL_mode 
+                                                          ; jsr Draw_VL_mode 
+                    DRAW_VL_MODE  
 skip2a 
 ;###########################################################################
                     RESET0REF  
                     lda      alley3e 
-                    beq      skip3a 
+                    lbeq     skip3a 
                     ldx      #enemy_t 
                     lda      alley3e 
                     lsla     
@@ -187,12 +241,13 @@ skip2a
                     lsla     
                     puls     x                            ; pull X back 
                     ldx      a,x 
-                    jsr      Draw_VL_mode 
+                                                          ; jsr Draw_VL_mode 
+                    DRAW_VL_MODE  
 skip3a 
 ;###########################################################################
                     RESET0REF  
                     lda      alley4e 
-                    beq      skip4a 
+                    lbeq     skip4a 
                     ldx      #enemy_t 
                     lda      alley4e 
                     lsla     
@@ -215,12 +270,13 @@ skip3a
                     lsla     
                     puls     x                            ; pull X back 
                     ldx      a,x 
-                    jsr      Draw_VL_mode 
+                                                          ; jsr Draw_VL_mode 
+                    DRAW_VL_MODE  
 skip4a 
 ;###########################################################################
                     RESET0REF  
                     lda      alley5e 
-                    beq      skip5a 
+                    lbeq     skip5a 
                     ldx      #enemy_t 
                     lda      alley5e 
                     lsla     
@@ -243,12 +299,13 @@ skip4a
                     lsla     
                     puls     x                            ; pull X back 
                     ldx      a,x 
-                    jsr      Draw_VL_mode 
+                                                          ;jsr Draw_VL_mode 
+                    DRAW_VL_MODE  
 skip5a 
 ;###########################################################################
                     RESET0REF  
                     lda      alley6e 
-                    beq      skip6a 
+                    lbeq     skip6a 
                     ldx      #enemy_t 
                     lda      alley6e 
                     lsla     
@@ -271,15 +328,16 @@ skip5a
                     lsla     
                     puls     x                            ; pull X back 
                     ldx      a,x 
-                    jsr      Draw_VL_mode 
+                                                          ; jsr Draw_VL_mode 
+                    DRAW_VL_MODE  
 skip6a 
 ;###########################################################################
                     endm     
 ;&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 MOVE_ENEMYS         macro    
 ; move enemies0
-                  ;  lda      Ship_Dead 
-                ;    lbne     subdone6 
+                                                          ; lda Ship_Dead 
+                                                          ; lbne subdone6 
                     lda      alley0e 
                     cmpa     #PRIZE 
                     bne      noprize0 
@@ -752,6 +810,7 @@ SHIP_COLLISION_DETECT  macro
                     inc      Ship_Dead_Anim 
 ;skipme
 no_hit 
+                    CHECK_GAMEOVER 
                     endm     
 ;^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  
 SHOT_COLLISION_DETECT  macro  
@@ -834,7 +893,8 @@ eventankdies0
                     sta      bullet0e 
                     sta      bullet0x 
                     sta      bullet0d 
-                    dec      enemycnt 
+                    dec      enemycnt
+                    dec      enemylvlcnt 
                     bra      bullet0_done 
 
 tank0 
@@ -897,6 +957,7 @@ eventankdies1
                     sta      bullet1x 
                     sta      bullet1d 
                     dec      enemycnt 
+                    dec      enemylvlcnt
                     bra      bullet1_done 
 
 tank1 
@@ -959,6 +1020,7 @@ eventankdies2
                     sta      bullet2x 
                     sta      bullet2d 
                     dec      enemycnt 
+                    dec      enemylvlcnt
                     bra      bullet2_done 
 
 tank2 
@@ -1021,6 +1083,7 @@ eventankdies3
                     sta      bullet3x 
                     sta      bullet3d 
                     dec      enemycnt 
+                    dec      enemylvlcnt
                     bra      bullet3_done 
 
 tank3 
@@ -1145,6 +1208,7 @@ eventankdies5
                     sta      bullet5x 
                     sta      bullet5d 
                     dec      enemycnt 
+                    dec      enemylvlcnt
                     bra      bullet5_done 
 
 tank5 
@@ -1207,6 +1271,7 @@ eventankdies6
                     sta      bullet6x 
                     sta      bullet6d 
                     dec      enemycnt 
+                    dec      enemylvlcnt
                     bra      bullet6_done 
 
 tank6 
@@ -1227,17 +1292,18 @@ bullet6_miss
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 READ_BUTTONS        macro    
                     jsr      Read_Btns 
-                    lda      Vec_Button_1_2 
-                    beq      toad 
-                    lda      #1 
-                    sta      Ship_Dead 
-toad 
+;                    lda      Vec_Button_1_2 
+;                    beq      toad 
+;                    lda      #1 
+;                    sta      Ship_Dead 
+;toad 
 ; don't shoot at Prize or explosion
                     lda      shippos 
                     asla     
                     ldx      #alleye_t 
-                    ldx      a,x 
-                    lda      ,x 
+               ;     ldx      a,x 
+                ;    lda      ,x
+                    lda      [a,x] 
                     cmpa     #EXPLOSION 
                     beq      noshootexplode 
                     cmpa     #PRIZE 
@@ -1268,12 +1334,12 @@ toad
                     ldx      a,x 
                     ldb      shipdir 
                     beq      negstart 
-                    ldb      #6 
+                    ldb      #17 
                     stb      ,x                           ; set start X 
                     bra      newshotdone 
 
 negstart 
-                    ldb      #-9 
+                    ldb      #-17 
                     stb      ,x                           ; set start -X 
 newshotdone 
 no_press 
@@ -1288,8 +1354,8 @@ NEW_ENEMY           macro
 ; store answer in alleyNe (value from enemy_t offset), (bool)alleyNd (0 left, 1 right), (signed int)alleyNx (-127 or 127 )
 ;
 ; don't even do spawn logic if maximum enemies are out 
-                    lda      Ship_Dead
-                    lbne      no_new_enemy 
+                    lda      Ship_Dead 
+                    lbne     no_new_enemy 
                     lda      level 
                     ldx      #max_enemys_t 
                     lda      a,x 
@@ -1737,6 +1803,7 @@ no10cntreset
                     cmpa     frm20cnt 
                     bne      no20cntreset 
                     clr      frm20cnt 
+
                     CHKENEMYCNT                           ; check number of enemies spawned every .4 seconds 
 no20cntreset 
                     lda      #25 
@@ -1745,6 +1812,8 @@ no20cntreset
                     bne      no25cntreset 
                     clr      frm25cnt 
                     inc      Prize_f 
+                    inc      Wedge_f
+
 no25cntreset 
                     lda      #50 
                     inc      frm50cnt 
@@ -1756,7 +1825,7 @@ no25cntreset
                                                           ;sta Prize_f 
                     sta      Dash_f 
                     sta      Tank_f 
-                    sta      Wedge_f 
+               
                     CHKPRIZEEXIST                         ; check if prize exists every 1 second 
 no50cntreset 
                     lda      #100                         ; frame count 100=2 seconds (at full speed) 0-99 == 100 
@@ -1846,65 +1915,89 @@ CHKPRIZEEXIST       macro
                     clr      Is_Prize                     ; fgail all tests, reset Is_Prize 
 prize_exist 
                     endm     
-
 ;########################################################################################################
 ;#########################################################################################################
 ;########################DRAWING MACROS
-DRAW_VL_MODE		macro   
-			local next_byte, next_line, dvm_done
-next_byte:      lda     ,x+             ;Get the next mode byte
-	        bne     draw_solid
-                MOV_DRAW_VL     	;If =0, move to the next point
-                bra     next_byte
+DRAW_VL_MODE        macro    
+                    local    next_byte, next_line, dvm_done ,dorgle, fuckle, draw_solid
+next_byte:          lda      ,x+                          ;Get the next mode byte 
+                    bne      draw_solid 
+                                                          ; MOV_DRAW_VL ;If =0, move to the next point 
+                    ldd      ,x                           ;Get next coordinate pair 
+                    sta      <VIA_port_a                  ;Send Y to A/D 
+                    clr      <VIA_port_b                  ;Enable mux 
+                    leax     2,x                          ;Point to next coordinate pair 
+                    nop                                   ;Wait a moment 
+                    inc      <VIA_port_b                  ;Disable mux 
+                    stb      <VIA_port_a                  ;Send X to A/D 
+                    ldd      #$0000                       ;Shift reg=0 (no draw), T1H=0 
+                                                          ; BRA LF3ED ;A->D00A, B->D005 
+                    sta      <VIA_shift_reg               ;Put pattern in shift register 
+                    stb      <VIA_t1_cnt_hi               ;Set T1H (scale factor?) 
+                    ldd      #$0040                       ;B-reg = T1 interrupt bit 
+fuckle:             bitb     <VIA_int_flags               ;Wait for T1 to time out 
+                    beq      fuckle 
+                    nop                                   ;Wait a moment more 
+                    sta      <VIA_shift_reg               ;Clear shift register (blank output) 
+                                                          ; commented because not 'VL_c' which has vector line count 
+                                                          ; lda $C823 ;Decrement line count 
+                                                          ; deca 
+                    bra      next_byte 
 
-draw_solid:     deca
-                beq     dvm_done        ;value was 1 which si end of packlet marker
-                DRAW_VL         	;If <>1, draw a solid line
-                bra     next_byte
-dvm_done
-		endm
+draw_solid:         deca     
+                    beq      dvm_done                     ;value was 1 which si end of packlet marker 
+                                                          ; DRAW_VL ;If <>1, draw a solid line 
+                    ldd      ,x 
+                    sta      <VIA_port_a                  ;Send Y to A/D 
+                    clr      <VIA_port_b                  ;Enable mux 
+                    leax     2,x                          ;Point to next coordinate pair 
+                    nop                                   ;Wait a moment 
+                    inc      <VIA_port_b                  ;Disable mux 
+                    stb      <VIA_port_a                  ;Send X to A/D 
+                    ldd      #$FF00                       ;Shift reg=$FF (solid line), T1H=0 
+                    sta      <VIA_shift_reg               ;Put pattern in shift register 
+                    stb      <VIA_t1_cnt_hi               ;Set T1H (scale factor?) 
+                    ldd      #$0040                       ;B-reg = T1 interrupt bit 
+dorgle:             bitb     <VIA_int_flags               ;Wait for T1 to time out 
+                    beq      dorgle 
+                    nop                                   ;Wait a moment more 
+                    sta      <VIA_shift_reg               ;Clear shift register (blank output) 
+                    bra      next_byte 
 
-DRAW_VL         macro
-		local LF3ED, LF3F4
-	
-		ldd ,x
-		sta     <VIA_port_a     ;Send Y to A/D
-                clr     <VIA_port_b     ;Enable mux
-                leax    2,x             ;Point to next coordinate pair
-                nop                     ;Wait a moment
-                inc     <VIA_port_b     ;Disable mux
-                stb     <VIA_port_a     ;Send X to A/D
-                ldd     #$FF00          ;Shift reg=$FF (solid line), T1H=0
-LF3ED:          sta     <VIA_shift_reg  ;Put pattern in shift register
-                stb     <VIA_t1_cnt_hi  ;Set T1H (scale factor?)
-                ldd     #$0040          ;B-reg = T1 interrupt bit
-LF3F41:         bitb    <VIA_int_flags  ;Wait for T1 to time out
-                beq     LF3F41
-                nop                     ;Wait a moment more
-                sta     <VIA_shift_reg  ;Clear shift register (blank output)
-		endm
-
-MOV_DRAW_VL	macro
-		local  LF3F4
-
-                ldd     ,x              ;Get next coordinate pair
-  		sta     <VIA_port_a     ;Send Y to A/D
-                clr     <VIA_port_b     ;Enable mux
-                leax    2,x             ;Point to next coordinate pair
-                nop                     ;Wait a moment
-                inc     <VIA_port_b     ;Disable mux
-                stb     <VIA_port_a     ;Send X to A/D
-                ldd     #$0000          ;Shift reg=0 (no draw), T1H=0
-               ; BRA     LF3ED           ;A->D00A, B->D005
-		sta     <VIA_shift_reg  ;Put pattern in shift register
-                stb     <VIA_t1_cnt_hi  ;Set T1H (scale factor?)
-                ldd     #$0040          ;B-reg = T1 interrupt bit
-LF3F4:          bitb    <VIA_int_flags  ;Wait for T1 to time out
-                beq     LF3F4
-                nop                     ;Wait a moment more
-                sta     <VIA_shift_reg  ;Clear shift register (blank output)
-		; commented because not 'VL_c' which has vector line count
-               	; lda     $C823           ;Decrement line count
-               	; deca
-		endm
-
+dvm_done 
+                    endm     
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+DRAW_VECTOR_SCORE   macro
+                    RESET0REF  
+                    lda      #-127 
+                    ldb      #50 
+                    MOVETO_D 
+                    ldy      #score
+scoreloop
+                    lda      ,y+
+                    cmpa     #$20                    ; space?
+                    beq      is_zero
+                    cmpa     #$80                    ; EOL?
+                    lbeq      score_done
+                    suba     #$30                    ; otherwise get DEC value 
+                    lsla
+                    ldx     #numbers_t
+                    ldx     a,x
+                    DRAW_VL_MODE
+                    bra     scoreloop 
+is_zero
+                    ldx     #zero
+                    DRAW_VL_MODE
+                    ldx     #numbers_t
+                    bra     scoreloop
+score_done
+                    endm
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+DRAW_RASTER_SCORE   macro
+                    RESET0REF  
+                    lda      #127 
+                    ldb      #-50 
+                 ;   MOVETO_D 
+                    ldu      #score
+                    jsr      Print_Str_d
+                    endm
