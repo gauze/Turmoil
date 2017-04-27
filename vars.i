@@ -74,6 +74,14 @@ alley3s             ds       1
 alley4s             ds       1 
 alley5s             ds       1 
 alley6s             ds       1 
+; timeout before respawn per alley
+alley0to            ds       1
+alley1to            ds       1
+alley2to            ds       1
+alley3to            ds       1
+alley4to            ds       1
+alley5to            ds       1
+alley6to            ds       1
 ; variables to hold which frame for each shape enemy some might not have an animation...
 Arrow_f             ds       1 
 Bow_f               ds       1 
@@ -110,6 +118,7 @@ Is_Prize            ds       1
 lvlstr              ds       6
 levelstr            ds       2
 lvlstrterm          ds       1
+Level_Done          ds       1
 ;
 ; CONSTANTS place after VARIABLES
 ;ALLEYWIDTH          =        17 

@@ -414,9 +414,10 @@ alleye_t            fdb      alley0e,alley1e,alley2e,alley3e,alley4e,alley5e,all
 alleyd_t            fdb      alley0d,alley1d,alley2d,alley3d,alley4d,alley5d,alley6d 
 alleyx_t            fdb      alley0x,alley1x,alley2x,alley3x,alley4x,alley5x,alley6x 
 alleys_t            fdb      alley0s,alley1s,alley2s,alley3s,alley4s,alley5s,alley6s 
-max_enemys_t        fcb      -1,4,5,6,7,7,7,7,7,7         ; maximum number of occupied alleys per level, repeat after 4 
-enemy_speed_t       fcb      -1,5,5,6,7,8,9,0,20          ; example TODO 
-max_speed_mask_t    fcb      1,1,3,3,3,7,7,7,7,7,7 
+alleyto_t           fdb      alley0to,alley1to,alley2to,alley3to,alley4to,alley5to,alley6to 
+max_enemys_t        fcb      -1,4,5,5,6,6,7,7,7,7,7         ; maximum number of occupied alleys per level, repeat after 6 
+;enemy_speed_t       fcb      -1,5,5,6,7,8,9,0,20          ; example TODO 
+max_speed_mask_t    fcb      1,1,3,3,3,7,7,7,7,7,7         ; masking to lower speed range 7 == 100%
 enemylvlcnt_t       fcb      50,60,70,75,80,90,100,100,100,100,100,110,120,130,140,150,160,170,180,190
                     fcb      200,210,220,230,235,240,245,250,255,255,255,255,255,255,255,255,255,255,255,255 
                     fcb      255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255 

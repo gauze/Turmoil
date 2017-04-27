@@ -75,57 +75,57 @@ DRAW_WALLS          macro
                     DRAW_VLC                              ; jsr Draw_VLc 
                     endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-DRAW_LINE_WALLS     macro
+DRAW_LINE_WALLS     macro    
                     clr      Vec_Misc_Count 
                     RESET0REF  
                     lda      #63 
                     ldb      #15 
-                    MOVETO_D 
-                    ldd      #$007F
-                    jsr      Draw_Line_d
-                    RESET0REF
+                    MOVETO_D  
+                    ldd      #$007F 
+                    jsr      Draw_Line_d 
+                    RESET0REF  
                     lda      #63-17 
                     ldb      #15 
-                    MOVETO_D 
-                    ldd      #$007F
-                    jsr      Draw_Line_d
-                    RESET0REF
+                    MOVETO_D  
+                    ldd      #$007F 
+                    jsr      Draw_Line_d 
+                    RESET0REF  
                     lda      #63-17-17 
                     ldb      #15 
-                    MOVETO_D 
-                    ldd      #$007F
-                    jsr      Draw_Line_d
-                    RESET0REF
+                    MOVETO_D  
+                    ldd      #$007F 
+                    jsr      Draw_Line_d 
+                    RESET0REF  
                     lda      #63-17-17-17 
                     ldb      #15 
-                    MOVETO_D 
-                    ldd      #$007F
-                    jsr      Draw_Line_d
-                    RESET0REF
-                    lda      #63-17-17-17-17
+                    MOVETO_D  
+                    ldd      #$007F 
+                    jsr      Draw_Line_d 
+                    RESET0REF  
+                    lda      #63-17-17-17-17 
                     ldb      #15 
-                    MOVETO_D 
-                    ldd      #$007F
-                    jsr      Draw_Line_d
-                    RESET0REF
+                    MOVETO_D  
+                    ldd      #$007F 
+                    jsr      Draw_Line_d 
+                    RESET0REF  
                     lda      #63-17-17-17-17-17 
                     ldb      #15 
-                    MOVETO_D 
-                    ldd      #$007F
-                    jsr      Draw_Line_d
-                    RESET0REF
+                    MOVETO_D  
+                    ldd      #$007F 
+                    jsr      Draw_Line_d 
+                    RESET0REF  
                     lda      #63-17-17-17-17-17-17 
                     ldb      #15 
-                    MOVETO_D 
-                    ldd      #$007F
-                    jsr      Draw_Line_d
-                    RESET0REF
+                    MOVETO_D  
+                    ldd      #$007F 
+                    jsr      Draw_Line_d 
+                    RESET0REF  
                     lda      #63-17-17-17-17-17-17-17 
                     ldb      #15 
-                    MOVETO_D 
-                    ldd      #$007F
-                    jsr      Draw_Line_d
-                    endm
+                    MOVETO_D  
+                    ldd      #$007F 
+                    jsr      Draw_Line_d 
+                    endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 DRAW_ENEMYS         macro    
 ; *_D -> index 0|1 (0=Left, 1=Right)
@@ -810,7 +810,7 @@ SHIP_COLLISION_DETECT  macro
                     inc      Ship_Dead_Anim 
 ;skipme
 no_hit 
-                    CHECK_GAMEOVER 
+                    CHECK_GAMEOVER  
                     endm     
 ;^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  
 SHOT_COLLISION_DETECT  macro  
@@ -849,10 +849,10 @@ SHOT_COLLISION_DETECT  macro
 ;bullet0_done 
 ;bullet0_miss 
                     lda      bullet0e                     ; no bullet to test 
-                    beq      bullet0_done 
+                    lbeq     bullet0_done 
                     lda      alley0e                      ; can't destroy Ghost 
                     cmpa     #GHOST 
-                    beq      bullet0_done 
+                    lbeq     bullet0_done 
                     lda      bullet0d 
                     beq      bullet0d_l 
                     ldb      bullet0x                     ; test bullet going right 0-127 possible hit range 
@@ -893,8 +893,15 @@ eventankdies0
                     sta      bullet0e 
                     sta      bullet0x 
                     sta      bullet0d 
-                    dec      enemycnt
+                    lda      #100 
+                    sta      alley0to 
+                    dec      enemycnt 
                     dec      enemylvlcnt 
+                    beq      set_level_done0 
+                    bra      bullet0_done 
+
+set_level_done0 
+                    inc      Level_Done 
                     bra      bullet0_done 
 
 tank0 
@@ -912,10 +919,10 @@ tankright0
 bullet0_done 
 bullet0_miss 
                     lda      bullet1e                     ; no bullet to test 
-                    beq      bullet1_done 
+                    lbeq     bullet1_done 
                     lda      alley1e                      ; can't destroy Ghost 
                     cmpa     #GHOST 
-                    beq      bullet1_done 
+                    lbeq     bullet1_done 
                     lda      bullet1d 
                     beq      bullet1d_l 
                     ldb      bullet1x                     ; test bullet going right 1-127 possible hit range 
@@ -956,8 +963,15 @@ eventankdies1
                     sta      bullet1e 
                     sta      bullet1x 
                     sta      bullet1d 
+                    lda      #100 
+                    sta      alley1to 
                     dec      enemycnt 
-                    dec      enemylvlcnt
+                    dec      enemylvlcnt 
+                    beq      set_level_done1 
+                    bra      bullet1_done 
+
+set_level_done1 
+                    inc      Level_Done 
                     bra      bullet1_done 
 
 tank1 
@@ -975,10 +989,10 @@ tankright1
 bullet1_done 
 bullet1_miss 
                     lda      bullet2e                     ; no bullet to test 
-                    beq      bullet2_done 
+                    lbeq     bullet2_done 
                     lda      alley2e                      ; can't destroy Ghost 
                     cmpa     #GHOST 
-                    beq      bullet2_done 
+                    lbeq     bullet2_done 
                     lda      bullet2d 
                     beq      bullet2d_l 
                     ldb      bullet2x                     ; test bullet going right 2-127 possible hit range 
@@ -1019,8 +1033,15 @@ eventankdies2
                     sta      bullet2e 
                     sta      bullet2x 
                     sta      bullet2d 
+                    lda      #100 
+                    sta      alley2to 
                     dec      enemycnt 
-                    dec      enemylvlcnt
+                    dec      enemylvlcnt 
+                    beq      set_level_done2 
+                    bra      bullet2_done 
+
+set_level_done2 
+                    inc      Level_Done 
                     bra      bullet2_done 
 
 tank2 
@@ -1038,12 +1059,12 @@ tankright2
 bullet2_done 
 bullet2_miss 
                     lda      bullet3e                     ; no bullet to test 
-                    beq      bullet3_done 
+                    lbeq     bullet3_done 
                     lda      alley3e                      ; can't destroy Ghost 
                     cmpa     #GHOST 
-                    beq      bullet3_done 
+                    lbeq      bullet3_done 
                     lda      bullet3d 
-                    beq      bullet3d_l 
+                    lbeq     bullet3d_l 
                     ldb      bullet3x                     ; test bullet going right 3-127 possible hit range 
                     bmi      bullet3_miss                 ; bullet going wrong direction can't hit. 
                     lda      alley3x 
@@ -1082,8 +1103,15 @@ eventankdies3
                     sta      bullet3e 
                     sta      bullet3x 
                     sta      bullet3d 
+                    lda      #100 
+                    sta      alley3to
                     dec      enemycnt 
-                    dec      enemylvlcnt
+                    dec      enemylvlcnt  
+                    beq      set_level_done3 
+                    bra      bullet3_done 
+
+set_level_done3 
+                    inc      Level_Done 
                     bra      bullet3_done 
 
 tank3 
@@ -1101,10 +1129,10 @@ tankright3
 bullet3_done 
 bullet3_miss 
                     lda      bullet4e                     ; no bullet to test 
-                    beq      bullet4_done 
+                    lbeq     bullet4_done 
                     lda      alley4e                      ; can't destroy Ghost 
                     cmpa     #GHOST 
-                    beq      bullet4_done 
+                    lbeq     bullet4_done 
                     lda      bullet4d 
                     beq      bullet4d_l 
                     ldb      bullet4x                     ; test bullet going right 4-127 possible hit range 
@@ -1145,7 +1173,14 @@ eventankdies4
                     sta      bullet4e 
                     sta      bullet4x 
                     sta      bullet4d 
+                    lda      #100 
+                    sta      alley4to 
                     dec      enemycnt 
+                    beq      set_level_done4 
+                    bra      bullet4_done 
+
+set_level_done4 
+                    inc      Level_Done 
                     bra      bullet4_done 
 
 tank4 
@@ -1163,10 +1198,10 @@ tankright4
 bullet4_done 
 bullet4_miss 
                     lda      bullet5e                     ; no bullet to test 
-                    beq      bullet5_done 
+                    lbeq     bullet5_done 
                     lda      alley5e                      ; can't destroy Ghost 
                     cmpa     #GHOST 
-                    beq      bullet5_done 
+                    lbeq     bullet5_done 
                     lda      bullet5d 
                     beq      bullet5d_l 
                     ldb      bullet5x                     ; test bullet going right 5-127 possible hit range 
@@ -1207,8 +1242,15 @@ eventankdies5
                     sta      bullet5e 
                     sta      bullet5x 
                     sta      bullet5d 
+                    lda      #100 
+                    sta      alley5to
                     dec      enemycnt 
-                    dec      enemylvlcnt
+                    dec      enemylvlcnt  
+                    beq      set_level_done5 
+                    bra      bullet5_done 
+
+set_level_done5 
+                    inc      Level_Done 
                     bra      bullet5_done 
 
 tank5 
@@ -1226,10 +1268,10 @@ tankright5
 bullet5_done 
 bullet5_miss 
                     lda      bullet6e                     ; no bullet to test 
-                    beq      bullet6_done 
+                    lbeq     bullet6_done 
                     lda      alley6e                      ; can't destroy Ghost 
                     cmpa     #GHOST 
-                    beq      bullet6_done 
+                    lbeq     bullet6_done 
                     lda      bullet6d 
                     beq      bullet6d_l 
                     ldb      bullet6x                     ; test bullet going right 6-127 possible hit range 
@@ -1270,8 +1312,15 @@ eventankdies6
                     sta      bullet6e 
                     sta      bullet6x 
                     sta      bullet6d 
+                    lda      #100 
+                    sta      alley6to 
                     dec      enemycnt 
-                    dec      enemylvlcnt
+                    dec      enemylvlcnt 
+                    beq      set_level_done6 
+                    bra      bullet6_done 
+
+set_level_done6 
+                    inc      Level_Done 
                     bra      bullet6_done 
 
 tank6 
@@ -1301,8 +1350,8 @@ READ_BUTTONS        macro
                     lda      shippos 
                     asla     
                     ldx      #alleye_t 
-               ;     ldx      a,x 
-                ;    lda      ,x
+                                                          ; ldx a,x 
+                                                          ; lda ,x 
                     lda      [a,x] 
                     cmpa     #EXPLOSION 
                     beq      noshootexplode 
@@ -1353,18 +1402,25 @@ NEW_ENEMY           macro
 ; type, and direction, direction decides initial X placement
 ; store answer in alleyNe (value from enemy_t offset), (bool)alleyNd (0 left, 1 right), (signed int)alleyNx (-127 or 127 )
 ;
-; don't even do spawn logic if maximum enemies are out 
+; don't even do spawn logic if maximum enemies are out or ship is dead
                     lda      Ship_Dead 
                     lbne     no_new_enemy 
                     lda      level 
+                    cmpa     #7 
+                    blt      dontfix 
+                    lda      #7                           ; after level 7 enemy count == 7, some logic to just set this and not rely on table 
+                    bra      doenemycntchk 
+
+dontfix 
                     ldx      #max_enemys_t 
                     lda      a,x 
+doenemycntchk 
                     cmpa     enemycnt 
                     lble     no_new_enemy 
-; check spawn throttle count logic 
-                    lda      frm100cnt 
-                    cmpa     #20 
-                    lbeq     no_new_enemy 
+; check spawn throttle count logic only allow one per second hm
+               ;     lda      frm100cnt 
+               ;     cmpa     #20 
+               ;     lbne     no_new_enemy 
 ; spawn new enemy
                     lda      #15                          ; number of attempts to create new enemy 
                     sta      temp 
@@ -1383,8 +1439,15 @@ randloop
                     ldb      ,x 
                     bne      randloop 
 ; else fall through ACCA (a) holds valid (empty) alley index
-                    lda      spawntemp 
-                    lsla     
+; next test "timeout" field if NOT 0 still counting down from last enemy destruction
+                    ldx      #alleyto_t
+                    lda      spawntemp
+                    lsla
+                    ldb      [a,x]
+                    lbne     no_new_enemy
+; 
+                  ;  lda      spawntemp 
+                  ;  lsla     
                     ldx      #alleye_t 
                     ldx      a,x                          ; ldx alleyNe 
                     jsr      Random 
@@ -1417,24 +1480,40 @@ noprize
 
 noprize2 
                                                           ; figure out speed stuff here 
-                    ldx      #max_speed_mask_t 
                     lda      level 
+                    cmpa     #5 
+                    blt      nofixmask 
+                    ldb      #7 
+                    stb      masktemp 
+                    bra      dofixmask 
+
+nofixmask 
+                    ldx      #max_speed_mask_t 
                     ldb      a,x 
                     stb      masktemp 
+dofixmask 
                     lda      temp 
-                    anda     masktemp 
                     lsra     
                     lsra     
                     lsra     
                     lsra     
-                    lsra                                  ; mask top 3 bits, shift til 3 bits 0-7 
-                                                          ; clra ; TESTING setting speed to 1 for all 
-                    adda     #1                           ; in case of zero result 
+                    lsra                                  ;shift til 3 bits 0-7 
+                    anda     masktemp                     ; then apply mask 
                     ldx      #alleys_t 
                     ldb      spawntemp 
                     lslb     
+                    tsta     
+                    beq      nozerospeed 
+addspdreturn 
                     sta      [b,x] 
+                    bra      speedset_done 
+
+nozerospeed 
+                    inca     
+                    bra      addspdreturn 
+
 nospeedcalc 
+speedset_done 
                                                           ; initial direction which sets initial X pos 
                     lda      temp 
                     anda     #%00010000                   ; mask some other random bit to derive start direction 
@@ -1803,7 +1882,6 @@ no10cntreset
                     cmpa     frm20cnt 
                     bne      no20cntreset 
                     clr      frm20cnt 
-
                     CHKENEMYCNT                           ; check number of enemies spawned every .4 seconds 
 no20cntreset 
                     lda      #25 
@@ -1812,8 +1890,7 @@ no20cntreset
                     bne      no25cntreset 
                     clr      frm25cnt 
                     inc      Prize_f 
-                    inc      Wedge_f
-
+                    inc      Wedge_f 
 no25cntreset 
                     lda      #50 
                     inc      frm50cnt 
@@ -1825,7 +1902,6 @@ no25cntreset
                                                           ;sta Prize_f 
                     sta      Dash_f 
                     sta      Tank_f 
-               
                     CHKPRIZEEXIST                         ; check if prize exists every 1 second 
 no50cntreset 
                     lda      #100                         ; frame count 100=2 seconds (at full speed) 0-99 == 100 
@@ -1919,7 +1995,7 @@ prize_exist
 ;#########################################################################################################
 ;########################DRAWING MACROS
 DRAW_VL_MODE        macro    
-                    local    next_byte, next_line, dvm_done ,dorgle, fuckle, draw_solid
+                    local    next_byte, next_line, dvm_done ,dorgle, fuckle, draw_solid 
 next_byte:          lda      ,x+                          ;Get the next mode byte 
                     bne      draw_solid 
                                                           ; MOV_DRAW_VL ;If =0, move to the next point 
@@ -1967,37 +2043,39 @@ dorgle:             bitb     <VIA_int_flags               ;Wait for T1 to time o
 dvm_done 
                     endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-DRAW_VECTOR_SCORE   macro
+DRAW_VECTOR_SCORE   macro    
                     RESET0REF  
                     lda      #-127 
                     ldb      #50 
-                    MOVETO_D 
-                    ldy      #score
-scoreloop
-                    lda      ,y+
-                    cmpa     #$20                    ; space?
-                    beq      is_zero
-                    cmpa     #$80                    ; EOL?
-                    lbeq      score_done
-                    suba     #$30                    ; otherwise get DEC value 
-                    lsla
-                    ldx     #numbers_t
-                    ldx     a,x
-                    DRAW_VL_MODE
-                    bra     scoreloop 
-is_zero
-                    ldx     #zero
-                    DRAW_VL_MODE
-                    ldx     #numbers_t
-                    bra     scoreloop
-score_done
-                    endm
+                    MOVETO_D  
+                    ldy      #score 
+scoreloop 
+                    lda      ,y+ 
+                    cmpa     #$20                         ; space? 
+                    beq      is_zero 
+                    cmpa     #$80                         ; EOL? 
+                    lbeq     score_done 
+                    suba     #$30                         ; otherwise get DEC value 
+                    lsla     
+                    ldx      #numbers_t 
+                    ldx      a,x 
+                    DRAW_VL_MODE  
+                    bra      scoreloop 
+
+is_zero 
+                    ldx      #zero 
+                    DRAW_VL_MODE  
+                    ldx      #numbers_t 
+                    bra      scoreloop 
+
+score_done 
+                    endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-DRAW_RASTER_SCORE   macro
+DRAW_RASTER_SCORE   macro    
                     RESET0REF  
                     lda      #127 
                     ldb      #-50 
-                 ;   MOVETO_D 
-                    ldu      #score
-                    jsr      Print_Str_d
-                    endm
+                                                          ; MOVETO_D 
+                    ldu      #score 
+                    jsr      Print_Str_d 
+                    endm     

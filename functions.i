@@ -17,7 +17,7 @@ setup:                                                    ;        setting up ha
                                                           ; jsr Clear_Score 
                     ldx      #score 
                     jsr      Clear_Score 
-                    lda      #43 
+                    lda      #1
                     sta      level 
                     jsr      setuplevel 
                     rts      
@@ -66,12 +66,20 @@ setuplevel
                     sta      alley4x 
                     sta      alley5x 
                     sta      alley6x 
+                    sta      alley0s
                     sta      alley1s 
                     sta      alley2s 
                     sta      alley3s 
                     sta      alley4s 
                     sta      alley5s 
                     sta      alley6s 
+                    sta      alley0to
+                    sta      alley1to 
+                    sta      alley2to 
+                    sta      alley3to 
+                    sta      alley4to 
+                    sta      alley5to 
+                    sta      alley6to
                     sta      frm100cnt 
                     sta      frm50cnt 
                     sta      frm25cnt 
@@ -92,8 +100,14 @@ setuplevel
                     std      prizecnt 
                     sta      Is_Prize 
                     sta      Ship_Dead 
+                    sta      Level_Done
+                ;    lda      #1
+                ;    sta      level
                     rts      
-
+newlevel
+                    inc      level
+                    jsr      levelsplash
+                    rts
 gameover                                                  ;        #isfunction 
                     jsr      Wait_Recal 
                     clr      Vec_Misc_Count 
