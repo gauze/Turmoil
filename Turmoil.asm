@@ -23,10 +23,15 @@
                     org      0 
 ; the first few bytes are mandatory, otherwise the BIOS will not load
 ; the ROM file, and will start MineStorm instead
-                    db       "g GCE gggg", $80 ; 'g' is copyright sign
-                    dw       music1                       ; music from the rom 
-                    db       $F8, $50, $20, -$35          ; hight, width, rel y, rel x (from 0,0) 
-                    db       "TURMOIL", $80               ; some game information, ending with $80
+                    fcc       "g GCE gggg", $80 ; 'g' is copyright sign
+                    fdb       music1                       ; music from the rom 
+                    fdb       $F850
+                    fcb      $20, -$35          ; hight, width, rel y, rel x (from 0,0) 
+                    fcc       "TURMOIL", $80               ; some game information, ending with $80
+                    fdb       $F850
+                    fcb       -$40, -$30          ; hight, width, rel y, rel x (from 0,0) 
+                    fcc       "XXX", $80               ; some game information, ending with $80
+
                     db       0                            ; end of game header 
 ;***************************************************************************
 ; CODE SECTION
@@ -66,18 +71,10 @@ main:
 ; display score and ships left
                                                           ; DRAW_VECTOR_SCORE_DONTUSEFONTSBROKEN 
                     DRAW_RASTER_SCORE  
-; 
-                    RESET0REF  
-                    lda      #-127 
-                    ldb      #-90 
-                    MOVETO_D  
-                    lda      shipcnt                      ; vector draw ships remaining routine TEST 
-                    sta      temp 
-ships_left_loop 
-                    ldx      #Ship_Marker 
-                    DRAW_VLC  
-                    dec      temp 
-                    bne      ships_left_loop 
+peepee:
+                    PRINT_SHIPS
+                    ;PRINT_SHIPS_VECTOR
+ 
 no_score: 
                     ldd      prizecnt 
                     addd     #1 
