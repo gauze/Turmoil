@@ -2079,3 +2079,27 @@ DRAW_RASTER_SCORE   macro
                     ldu      #score 
                     jsr      Print_Str_d 
                     endm     
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+PRINT_SHIPS_VECTOR  macro
+                    RESET0REF  
+                    lda      #-127 
+                    ldb      #-90 
+                    MOVETO_D  
+                    lda      shipcnt                      ; vector draw ships remaining routine TEST 
+                    sta      temp 
+ships_left_loop 
+                    ldx      #Ship_Marker 
+                    DRAW_VLC  
+                    dec      temp 
+                    bne      ships_left_loop
+                    endm
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+PRINT_SHIPS         macro
+                    RESET0REF  
+                    lda      #-127 
+                    ldb      #0 
+                    MOVETO_D
+                    lda      #$68                          ; asteroids ship  
+                    ldb      shipcnt
+                    jsr      Print_Ships
+                    endm
