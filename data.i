@@ -410,11 +410,11 @@ bulletYpos_t        fcb      -98,-64,-31,3,37,70, 104     ; Y pos of bullet/ship
 bullete_t           fdb      bullet0e,bullet1e,bullet2e,bullet3e,bullet4e,bullet5e,bullet6e ; exists 0=false, !0= true 
 bulletd_t           fdb      bullet0d,bullet1d,bullet2d,bullet3d,bullet4d,bullet5d,bullet6d ; direction left/right 
 bulletx_t           fdb      bullet0x,bullet1x,bullet2x,bullet3x,bullet4x,bullet5x,bullet6x ; X position 
-alleye_t            fdb      alley0e,alley1e,alley2e,alley3e,alley4e,alley5e,alley6e 
-alleyd_t            fdb      alley0d,alley1d,alley2d,alley3d,alley4d,alley5d,alley6d 
-alleyx_t            fdb      alley0x,alley1x,alley2x,alley3x,alley4x,alley5x,alley6x 
-alleys_t            fdb      alley0s,alley1s,alley2s,alley3s,alley4s,alley5s,alley6s 
-alleyto_t           fdb      alley0to,alley1to,alley2to,alley3to,alley4to,alley5to,alley6to 
+alleye_t            fdb      alley0e,alley1e,alley2e,alley3e,alley4e,alley5e,alley6e      ; exists + type code
+alleyd_t            fdb      alley0d,alley1d,alley2d,alley3d,alley4d,alley5d,alley6d      ; direction
+alleyx_t            fdb      alley0x,alley1x,alley2x,alley3x,alley4x,alley5x,alley6x      ; X pos
+alleys_t            fdb      alley0s,alley1s,alley2s,alley3s,alley4s,alley5s,alley6s      ; speed
+alleyto_t           fdb      alley0to,alley1to,alley2to,alley3to,alley4to,alley5to,alley6to  ; timeout before next spawn
 max_enemys_t        fcb      -1,4,5,5,6,6,7,7,7,7,7         ; maximum number of occupied alleys per level, repeat after 6 
 ;enemy_speed_t       fcb      -1,5,5,6,7,8,9,0,20          ; example TODO 
 max_speed_mask_t    fcb      1,1,3,3,3,7,7,7,7,7,7         ; masking to lower speed range 7 == 100%

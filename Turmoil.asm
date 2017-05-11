@@ -14,7 +14,7 @@
 ; load vectrex bios routine definitions
                     include  "VECTREX.I"                  ; vectrex bios function include
                     include  "vars.i"
-                    include  "macros.i"
+                    include  "macros.i"             
 ;***************************************************************************
 ; HEADER SECTION
 ;***************************************************************************
@@ -32,7 +32,18 @@
                     fcb       -$40, -$30          ; hight, width, rel y, rel x (from 0,0) 
                     fcc       "XXX", $80               ; some game information, ending with $80
 
-                    db       0                            ; end of game header 
+                    db       0                            ; end of game header
+                    bra restart
+;***************************************************************************
+; MAGIC CARTHEADER SECTION
+;      DO NOT CHANGE THIS STRUCT
+;***************************************************************************
+                ORG     $30
+                fcb     "ThGS"                  ; magic handshake marker
+v4ecartversion  fdb     $0001                   ; I always have a version
+;                                                ; in comm. structs
+v4ecartflags    fdb     $4000      
+
 ;***************************************************************************
 ; CODE SECTION
 ;***************************************************************************
@@ -40,7 +51,7 @@
 restart 
                     jsr      setup 
                     jsr      levelsplash 
-start 
+;start 
                     lda      #0 
                     sta      shippos 
                     sta      shipXpos 
@@ -110,7 +121,7 @@ nolevel
                     jmp      main                         ; and repeat forever, sorta 
 
 
-; must go at bottom or fills up RAM instead of ROM ??
+; must go at bottom or fills up RAM instead of ROM 
                     include  "functions.i"
                     include  "data.i"
 end 

@@ -1062,7 +1062,7 @@ bullet2_miss
                     lbeq     bullet3_done 
                     lda      alley3e                      ; can't destroy Ghost 
                     cmpa     #GHOST 
-                    lbeq      bullet3_done 
+                    lbeq     bullet3_done 
                     lda      bullet3d 
                     lbeq     bullet3d_l 
                     ldb      bullet3x                     ; test bullet going right 3-127 possible hit range 
@@ -1104,9 +1104,9 @@ eventankdies3
                     sta      bullet3x 
                     sta      bullet3d 
                     lda      #100 
-                    sta      alley3to
+                    sta      alley3to 
                     dec      enemycnt 
-                    dec      enemylvlcnt  
+                    dec      enemylvlcnt 
                     beq      set_level_done3 
                     bra      bullet3_done 
 
@@ -1243,9 +1243,9 @@ eventankdies5
                     sta      bullet5x 
                     sta      bullet5d 
                     lda      #100 
-                    sta      alley5to
+                    sta      alley5to 
                     dec      enemycnt 
-                    dec      enemylvlcnt  
+                    dec      enemylvlcnt 
                     beq      set_level_done5 
                     bra      bullet5_done 
 
@@ -1340,6 +1340,8 @@ bullet6_miss
                     endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 READ_BUTTONS        macro    
+                    lda      Ship_Dead
+                    bne      cant_shoot_while_dead
                     jsr      Read_Btns 
 ;                    lda      Vec_Button_1_2 
 ;                    beq      toad 
@@ -1395,6 +1397,7 @@ no_press
 already_exists 
 noshootexplode 
 noshootprize 
+cant_shoot_while_dead
                     endm                                  ; rts 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 NEW_ENEMY           macro    
@@ -1418,9 +1421,9 @@ doenemycntchk
                     cmpa     enemycnt 
                     lble     no_new_enemy 
 ; check spawn throttle count logic only allow one per second hm
-               ;     lda      frm100cnt 
-               ;     cmpa     #20 
-               ;     lbne     no_new_enemy 
+                                                          ; lda frm100cnt 
+                                                          ; cmpa #20 
+                                                          ; lbne no_new_enemy 
 ; spawn new enemy
                     lda      #15                          ; number of attempts to create new enemy 
                     sta      temp 
@@ -1440,14 +1443,14 @@ randloop
                     bne      randloop 
 ; else fall through ACCA (a) holds valid (empty) alley index
 ; next test "timeout" field if NOT 0 still counting down from last enemy destruction
-                    ldx      #alleyto_t
-                    lda      spawntemp
-                    lsla
-                    ldb      [a,x]
-                    lbne     no_new_enemy
+                    ldx      #alleyto_t 
+                    lda      spawntemp 
+                    lsla     
+                    ldb      [a,x] 
+                    lbne     no_new_enemy 
 ; 
-                  ;  lda      spawntemp 
-                  ;  lsla     
+                                                          ; lda spawntemp 
+                                                          ; lsla 
                     ldx      #alleye_t 
                     ldx      a,x                          ; ldx alleyNe 
                     jsr      Random 
@@ -1458,7 +1461,7 @@ randloop
                     lda      Is_Prize 
                     bne      noprize 
                     ldd      prizecnt 
-                    cmpd     #300                         ; after 6 seconds make spawn possible 
+                    cmpd     #300                         ; after 6 seconds make prize spawn possible 
                     blt      noprize 
                     inc      enemytemp                    ; adding another one means might be a prize! 
 noprize 
@@ -1466,16 +1469,17 @@ noprize
                     sta      ,x                           ; set alleyNe enemy type 
                     cmpa     #PRIZE 
                     bne      noprize2 
-                    lda      #1 
+                    lda      #1                           ;  set prize parameters
                     sta      Is_Prize 
                     clr      prizecnt 
                     clr      prizecnt+1 
-                    clrb                                  ; set prize parameters 
-                    lda      level 
-                    ldx      alleys_t 
+                    clrb                                  ;  
+                    lda      >spawntemp                        ; oops not level
+                    lsla     
+                    ldx      #alleys_t 
                     stb      [a,x]                        ; prize has zero speed 
                     ldb      #255 
-                    stb      prizecntdown 
+                    stb      >prizecntdown 
                     bra      nospeedcalc 
 
 noprize2 
@@ -1854,9 +1858,9 @@ ghost_d_done
                     ldx      a,x 
                     stb      ,x 
                     ldx      #alleys_t 
-                    ldx      a,x 
+                   ; ldx      a,x 
                     ldb      #2 
-                    stb      ,x 
+                    stb      [a,x] 
 ;  END add ghost stuff, must tweak
 noghost 
                     endm     
@@ -2080,7 +2084,7 @@ DRAW_RASTER_SCORE   macro
                     jsr      Print_Str_d 
                     endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-PRINT_SHIPS_VECTOR  macro
+PRINT_SHIPS_VECTOR  macro    
                     RESET0REF  
                     lda      #-127 
                     ldb      #-90 
@@ -2091,15 +2095,15 @@ ships_left_loop
                     ldx      #Ship_Marker 
                     DRAW_VLC  
                     dec      temp 
-                    bne      ships_left_loop
-                    endm
+                    bne      ships_left_loop 
+                    endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-PRINT_SHIPS         macro
+PRINT_SHIPS         macro    
                     RESET0REF  
                     lda      #-127 
                     ldb      #0 
-                    MOVETO_D
-                    lda      #$68                          ; asteroids ship  
-                    ldb      shipcnt
-                    jsr      Print_Ships
-                    endm
+                    MOVETO_D  
+                    lda      #$68                         ; asteroids ship 
+                    ldb      shipcnt 
+                    jsr      Print_Ships 
+                    endm     
