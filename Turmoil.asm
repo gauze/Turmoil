@@ -30,7 +30,7 @@
                     fcc       "TURMOIL", $80               ; some game information, ending with $80
                     fdb       $F850
                     fcb       -$40, -$30          ; hight, width, rel y, rel x (from 0,0) 
-                    fcc       "XXX", $80               ; some game information, ending with $80
+                    fcc       $6E,$6E,$6F, $80               ; some game information, ending with $80
 
                     db       0                            ; end of game header
                     bra restart
@@ -53,7 +53,7 @@ restart
                     jsr      levelsplash 
 ;start 
                     lda      #0 
-                    sta      shippos 
+                    sta      shipYpos 
                     sta      shipXpos 
                     sta      In_Alley 
                     sta      Ship_Dead 
@@ -65,7 +65,7 @@ restart
                     sta      shipcnt 
 main: 
                     jsr      Wait_Recal 
-                    JOYSTICK_TEST  
+                    READ_JOYSTICK
                     lda      #$5F 
                     INTENSITY_A  
                                                           ; DRAW_WALLS 
@@ -100,7 +100,8 @@ noprizecntdown
                     FRAME_CNTS  
                     MOVE_ENEMYS  
                     SHOT_COLLISION_DETECT  
-                    SHIP_COLLISION_DETECT  
+                    SHIP_Y_COLLISION_DETECT  
+                    SHIP_X_COLLISION_DETECT
                     STALL_CHECK  
 ; decrement counters on alley respawn timeouts
                     ldx     #alleyto_t

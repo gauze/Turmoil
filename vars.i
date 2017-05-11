@@ -14,7 +14,7 @@ level               ds       1
 ;
 ; your ship related variables, X,Y position and direction facing L/R, and number left
 shipdir             ds       1 
-shippos             ds       1 
+shipYpos             ds       1 
 shipXpos            ds       1 
 shipcnt             ds       1                            
 ; limits 

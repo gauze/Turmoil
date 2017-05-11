@@ -7,7 +7,7 @@ DRAW_SHIP           macro
                     RESET0REF  
                     lda      #127 
                     sta      VIA_t1_cnt_lo                ; controls "scale" 
-                    lda      shippos 
+                    lda      shipYpos 
                     ldx      #bulletYpos_t 
                     lda      a,x                          ; get pos from shippos_t table 
                                                           ; adda #2+6 ; small offset 
@@ -40,6 +40,8 @@ scale_done
                     bne      shitballs                    ; animation done clear flags+counter 
                     clr      Ship_Dead 
                     clr      Ship_Dead_Cnt 
+                    clr      shipXpos 
+                    clr      In_Alley 
 change_dir 
                     clr      Ship_Dead_Anim 
                     clr      Ship_Dead_Cnt                ; don't let it go minus. UNSOIGNED 
@@ -773,16 +775,16 @@ setDtoR_6
 subdone6 
                     endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-SHIP_COLLISION_DETECT  macro  
+SHIP_Y_COLLISION_DETECT  macro  
                     lda      Ship_Dead                    ; if SHip_Dead do not do collision routine 
                     bne      no_hit 
-                    lda      shippos 
+                    lda      shipYpos 
                     lsla     
                     ldx      #alleye_t 
                     ldx      a,x 
                     lda      ,x 
                     beq      no_hit 
-                    lda      shippos 
+                    lda      shipYpos 
                     lsla     
                     ldx      #alleyx_t 
                     ldx      a,x 
@@ -792,7 +794,7 @@ SHIP_COLLISION_DETECT  macro
                     bgt      no_hit 
                     dec      shipcnt                      ; lose one ship 
                     clrb     
-                    lda      shippos                      ; clear e exist flag for this alley, ie destroy it 
+                    lda      shipYpos                     ; clear e exist flag for this alley, ie destroy it 
                     lsla     
                     ldx      #alleye_t 
                     stb      [a,x] 
@@ -812,7 +814,83 @@ SHIP_COLLISION_DETECT  macro
 no_hit 
                     CHECK_GAMEOVER  
                     endm     
-;^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  
+;^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 
+SHIP_X_COLLISION_DETECT  macro  
+                                                          ; used when inside an alley 
+                    lda      In_Alley 
+                    beq      not_in_alley 
+                                                          ; prize score is done like this: 
+                                                          ; ldd #2048 
+                                                          ; jsr Add_Score_d 
+                                                          ; #2048 = 100 0000 0000 BCD value 
+                    lda      shipYpos 
+                    lsla     
+                    ldx      #alleye_t 
+                    lda      [a,x] 
+                    cmpa     #CANNONBALL 
+                    beq      can_collide 
+                    cmpa     #GHOST 
+                    bne      not_ghost 
+can_collide 
+not_ghost 
+                    cmpa     #PRIZE 
+                    bne      not_in_alley                 ; how are we even in the alley?!??!?! 
+                    lda      shipYpos 
+                    lsla     
+                    ldx      #alleyd_t 
+                    ldb      [a,x] 
+                    stb      temp                         ; temp has direction 
+                                                          ; ldx #alleyx_t 
+                                                          ; ldb [a,x] ; b has X 
+                    lda      shipdir 
+                    bne      ship_moving_right 
+ship_moving_left 
+                    lda      shipXpos 
+                    cmpa     -#106 
+                    blt      wee_prize_score 
+                    bra      no_prize_score 
+
+ship_moving_right 
+                    lda      shipXpos 
+                    cmpa     #106 
+                    blt      no_prize_score 
+; prize score is done like this:  #2048 = 100 0000 0000 BCD value 
+wee_prize_score 
+                    ldd      #2048 
+                    ldx      #score 
+                    jsr      Add_Score_d 
+                    lda      shipYpos 
+                    lsla     
+                    ldx      #alleye_t 
+                    ldb      #GHOST                       ; change char to ghost 
+                    stb      [a,x] 
+                    ldx      #alleys_t                    ; set speed to 2 
+                    ldb      #2 
+                    stb      [a,x] 
+                    ldx      #alleyd_t 
+                    ldb      [a,x]
+                    bne      set_dir_l 
+                    inc      [a,x]   
+                    ldb      -#127                        ; change direction from right to left 
+                    bra      done_set_dir 
+set_dir_l
+                    clr      [a,x]                           ; change direction from left to right
+                    ldb      #127 
+done_set_dir 
+                    ldx      #alleyx_t
+                    stb      [a,x]
+
+
+
+                    ldb      #-127 
+
+                    lda      shipYpos 
+                    ldx      #alleyd_t 
+                    stb      [a,x] 
+not_in_alley 
+no_prize_score 
+                    endm     
+;-----------------------------------------------------------------------------------
 SHOT_COLLISION_DETECT  macro  
 ; save next 32 lines for now JUST IN CASE
 ;                    lda      bullet0e 
@@ -1340,8 +1418,10 @@ bullet6_miss
                     endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 READ_BUTTONS        macro    
-                    lda      Ship_Dead
-                    bne      cant_shoot_while_dead
+                    lda      Ship_Dead 
+                    bne      cant_shoot_while_dead 
+                    lda      In_Alley 
+                    bne      cant_shoot_in_alley 
                     jsr      Read_Btns 
 ;                    lda      Vec_Button_1_2 
 ;                    beq      toad 
@@ -1349,7 +1429,7 @@ READ_BUTTONS        macro
 ;                    sta      Ship_Dead 
 ;toad 
 ; don't shoot at Prize or explosion
-                    lda      shippos 
+                    lda      shipYpos 
                     asla     
                     ldx      #alleye_t 
                                                           ; ldx a,x 
@@ -1363,7 +1443,7 @@ READ_BUTTONS        macro
                     lda      Vec_Btn_State 
                     beq      no_press 
                                                           ; adding bullet to alley if no other bullet is already there 
-                    lda      shippos 
+                    lda      shipYpos 
                     asla     
                     ldx      #bullete_t 
                     ldx      a,x 
@@ -1372,14 +1452,14 @@ READ_BUTTONS        macro
                     ldb      #1 
                     stb      ,x                           ; set EXIST (int) 
 ; left(0) or right(1)?
-                    lda      shippos 
+                    lda      shipYpos 
                     asla     
                     ldx      #bulletd_t 
                     ldx      a,x 
                     ldb      shipdir 
                     stb      ,x                           ; set DIRECTION (bool) 
 ; starting x coordinates
-                    lda      shippos 
+                    lda      shipYpos 
                     asla     
                     ldx      #bulletx_t 
                     ldx      a,x 
@@ -1397,7 +1477,8 @@ no_press
 already_exists 
 noshootexplode 
 noshootprize 
-cant_shoot_while_dead
+cant_shoot_while_dead 
+cant_shoot_in_alley 
                     endm                                  ; rts 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 NEW_ENEMY           macro    
@@ -1469,12 +1550,12 @@ noprize
                     sta      ,x                           ; set alleyNe enemy type 
                     cmpa     #PRIZE 
                     bne      noprize2 
-                    lda      #1                           ;  set prize parameters
+                    lda      #1                           ; set prize parameters 
                     sta      Is_Prize 
                     clr      prizecnt 
                     clr      prizecnt+1 
-                    clrb                                  ;  
-                    lda      >spawntemp                        ; oops not level
+                    clrb                                  ; 
+                    lda      >spawntemp                   ; oops not level 
                     lsla     
                     ldx      #alleys_t 
                     stb      [a,x]                        ; prize has zero speed 
@@ -1607,59 +1688,77 @@ INTENSITY_A         macro
                     stb      <VIA_port_b                  ;turn off mux 
                     endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-JOYSTICK_TEST       macro    
+READ_JOYSTICK       macro    
                     lda      Ship_Dead 
-                    lbne     jsdoneX 
+                    lbne     jsdone 
                     jsr      Joy_Digital 
                     lda      In_Alley                     ; inside an alley ? 
                     bne      jsdoneY                      ; disable Y position poll 
                     lda      Vec_Joy_1_Y 
                     beq      jsdoneY                      ; no Y motion 
                     bmi      going_down 
-                    lda      shippos 
+                    lda      shipYpos 
                     cmpa     #6                           ; slot 6 as far up as u can go 
                     beq      jsdoneY 
-                    inc      shippos 
+                    inc      shipYpos 
                     clr      stallcnt 
                     bra      jsdoneY 
 
 going_down 
-                    lda      shippos 
-                    beq      jsdoneY 
-                    dec      shippos 
-                    clr      stallcnt 
+                    lda      shipYpos 
+                    beq      jsdoneY                      ; in slot 0 as far down as u can go 
+                    dec      shipYpos 
+                    clr      stallcnt                     ; reset stall counter 
 jsdoneY 
-; now test X first test should be if there is a prize in this alley.
-; prize score is done liek this:
-; ldd #2048
-; jsr Add_Score_d
-; #2048 = 10000000000 BCD value
+; now test X, first test should be if there is a prize in this alley.
                     lda      In_Alley 
                     bne      already_in 
-                    lda      shippos 
-                    ldx      alleye_t 
+                    lda      shipYpos 
+                    lsla     
+                    ldx      #alleye_t 
                     ldb      [a,x] 
                     cmpb     #PRIZE                       ; is there a prize in alley? 
-                                                          ; inc Is_Prize 
-already_in 
-                    lda      shipdir 
-                    bne      facing_right 
-                                                          ; left 
-                    lda      shipXpos                     ; is X basically in the middle alley? unset in_alley flag 
-                    cmpa     #5 
-                    bgt      leave_flag                   ; if b-3 > 0 then clr in_alley 
-                    clr      In_Alley                     ; clear in alley flag when in middle 
-                    clr      shipXpos 
-                    bra      center_done 
+                    bne      nope_prize 
+                                                          ; logic for first move into alley 
+                    lda      Vec_Joy_1_X 
+                    beq      jsdoneX 
+                    inc      In_Alley 
+                    bmi      going_left1 
+going_right1 
+                    lda      #RIGHT 
+                    sta      shipdir 
+                    lda      #8 
+                    adda     shipXpos 
+                    jsr      jsdone 
+                    sta      shipXpos 
+                    bra      jsdoneX 
 
-leave_flag 
-facing_right 
+going_left1 
+                    lda      #LEFT 
+                    sta      shipdir 
                     lda      shipXpos 
-                    cmpa     #-5 
-                    blt      center_done 
-                    clr      In_Alley 
-                    clr      shipXpos 
-center_done 
+                    suba     #8 
+                    sta      shipXpos 
+                    jsr      jsdoneX 
+nope_prize 
+already_in 
+;                    lda      shipdir 
+;                    bne      facing_right 
+;                                                          ; left 
+;                    lda      shipXpos                     ; is X basically in the middle alley? unset in_alley flag 
+;                    cmpa     #5 
+;                    bgt      leave_flag                   ; if a-5 > 0 then clr in_alley 
+;                    clr      In_Alley                     ; clear in alley flag when in middle 
+;;                    clr      shipXpos 
+;                    bra      center_done 
+;leave_flag 
+;facing_right 
+;                    lda      shipXpos 
+;                    cmpa     #-5 
+;                    blt      center_done 
+;                    clr      In_Alley 
+;                    clr      shipXpos 
+;center_done 
 ;
                     lda      Vec_Joy_1_X 
                     beq      jsdoneX 
@@ -1695,6 +1794,7 @@ setMaxLeft
 setLeftDone 
                     sta      shipXpos 
 jsdoneX 
+jsdone 
                     endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 MOVE_BULLETS        macro    
@@ -1824,22 +1924,24 @@ LF3F4:              bitb     <VIA_int_flags               ;Wait for T1 to time o
                     endm     
 ; @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 STALL_CHECK         macro    
+                    lda      In_Alley 
+                    bne      no_ghost 
 ;; Add Ghost if stall in single alley for too long!
                     inc      stallcnt 
                     lda      #250 
                     cmpa     stallcnt 
-                    bne      noghost 
+                    bne      no_ghost 
 ;
                     jsr      Random 
                     anda     #%00000001 
                     sta      temp                         ; direction bit 
-                    lda      shippos 
+                    lda      shipYpos 
                     lsla     
                     ldx      #alleye_t 
                     ldx      a,x 
                     ldb      ,x 
                     cmpb     #0                           ; don't spawn if existing enemy in alley. 
-                    bne      noghost 
+                    bne      no_ghost 
                     ldb      #8                           ; Ghost! 
                     stb      ,x 
                     ldx      #alleyd_t 
@@ -1858,11 +1960,11 @@ ghost_d_done
                     ldx      a,x 
                     stb      ,x 
                     ldx      #alleys_t 
-                   ; ldx      a,x 
+                                                          ; ldx a,x 
                     ldb      #2 
                     stb      [a,x] 
 ;  END add ghost stuff, must tweak
-noghost 
+no_ghost 
                     endm     
 FRAME_CNTS          macro    
 ; increment the Test frame counter
