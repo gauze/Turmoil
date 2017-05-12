@@ -845,16 +845,16 @@ not_ghost
                     lda      shipdir 
                     bne      ship_moving_right 
 ship_moving_left 
-                    lda      shipXpos 
-                    cmpa     -#106 
-                    blt      wee_prize_score 
+                    lda      -#106 
+                    cmpa     shipXpos  
+                    bvs      wee_prize_score 
                     bra      no_prize_score 
 
 ship_moving_right 
                     lda      shipXpos 
                     cmpa     #106 
                     blt      no_prize_score 
-; prize score is done like this:  #2048 = 100 0000 0000 BCD value 
+; prize score is done like this:  800 == #2048 == 100 0000 0000 BCD value 
 wee_prize_score 
                     ldd      #2048 
                     ldx      #score 
@@ -865,27 +865,20 @@ wee_prize_score
                     ldb      #GHOST                       ; change char to ghost 
                     stb      [a,x] 
                     ldx      #alleys_t                    ; set speed to 2 
-                    ldb      #2 
+                    ldb      #1 
                     stb      [a,x] 
                     ldx      #alleyd_t 
-                    ldb      [a,x]
+                    ldb      [a,x] 
                     bne      set_dir_l 
-                    inc      [a,x]   
-                    ldb      -#127                        ; change direction from right to left 
+                    inc      [a,x]                        ; change direction from right to left 
+                    ldb      -#127 
                     bra      done_set_dir 
-set_dir_l
-                    clr      [a,x]                           ; change direction from left to right
+
+set_dir_l 
+                    clr      [a,x]                        ; change direction from left to right 
                     ldb      #127 
 done_set_dir 
-                    ldx      #alleyx_t
-                    stb      [a,x]
-
-
-
-                    ldb      #-127 
-
-                    lda      shipYpos 
-                    ldx      #alleyd_t 
+                    ldx      #alleyx_t 
                     stb      [a,x] 
 not_in_alley 
 no_prize_score 
@@ -1719,7 +1712,7 @@ jsdoneY
                     ldb      [a,x] 
                     cmpb     #PRIZE                       ; is there a prize in alley? 
                     bne      nope_prize 
-                                                          ; logic for first move into alley 
+                                                          ; logic for first move into alley and jumping us 8 spots into alley to avoid return to centering test
                     lda      Vec_Joy_1_X 
                     beq      jsdoneX 
                     inc      In_Alley 
@@ -1770,7 +1763,15 @@ going_right
                     beq      setRightDone 
                     lda      #4 
                     adda     shipXpos 
-                    bvs      setMaxRight 
+                    bvs      setMaxRight
+;  centering code here
+                    tsta
+                    bpl      setRightDone
+                    cmpa     #-5
+                    blt      setRightDone
+                    clr      In_Alley
+                    clra                       ; saved to shipXpos later
+; end center 
                     bra      setRightDone 
 
 setMaxRight 
@@ -1784,9 +1785,17 @@ going_left
                     sta      shipdir 
                     lda      In_Alley 
                     beq      setLeftDone 
-                    lda      shipXpos 
+                    lda      shipXpos  
                     suba     #4 
-                    bvs      setMaxLeft 
+                    bvs      setMaxLeft
+; centering code here 
+                    tsta 
+                    bmi      setLeftDone
+                    cmpa     #5
+                    bgt      setLeftDone
+                    clr      In_Alley
+                    clra                              ; saved to shipXpos later
+; center done 
                     bra      setLeftDone 
 
 setMaxLeft 
