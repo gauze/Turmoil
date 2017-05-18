@@ -112,7 +112,9 @@ respawncounter
                     beq     cntatzero
                     dec     [a,x]
 cntatzero
+                    lsra
                     deca
+                    lsla
                     bge     respawncounter
 ;
                     lda      Level_Done                   ; check level_done flag, increment level if so. 

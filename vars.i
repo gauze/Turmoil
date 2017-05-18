@@ -119,6 +119,7 @@ lvlstr              ds       6
 levelstr            ds       2
 lvlstrterm          ds       1
 Level_Done          ds       1
+Demo_Mode           ds       1
 ;
 ; CONSTANTS place after VARIABLES
 ;ALLEYWIDTH          =        17 

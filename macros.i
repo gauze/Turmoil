@@ -844,13 +844,17 @@ not_ghost
                                                           ; ldb [a,x] ; b has X 
                     lda      shipdir 
                     bne      ship_moving_right 
-ship_moving_left 
+ship_moving_left                                          ; TODO add test for which side prize is on for collision with prize logic
+                    lda      temp                         ; temp is side prze is on
+                    beq      no_prize_score
                     lda      -#106 
                     cmpa     shipXpos  
                     bvs      wee_prize_score 
                     bra      no_prize_score 
 
-ship_moving_right 
+ship_moving_right   
+                    lda      temp                          ; temp is side prze is on
+                    bne      no_prize_score
                     lda      shipXpos 
                     cmpa     #106 
                     blt      no_prize_score 
@@ -1684,6 +1688,8 @@ INTENSITY_A         macro
 READ_JOYSTICK       macro    
                     lda      Ship_Dead 
                     lbne     jsdone 
+                    lda      frm2cnt 
+                    bne      jsdoneY                      ; slowing down Y movement by half for more control
                     jsr      Joy_Digital 
                     lda      In_Alley                     ; inside an alley ? 
                     bne      jsdoneY                      ; disable Y position poll 
@@ -1978,6 +1984,12 @@ no_ghost
 FRAME_CNTS          macro    
 ; increment the Test frame counter
 ; add more logic to set/increment SHAPE_f counters for desired animations
+                    lda      #2 
+                    inc      frm2cnt 
+                    cmpa     frm2cnt 
+                    bne      no2cntreset 
+                    clr      frm2cnt 
+no2cntreset
                     lda      #5 
                     inc      frm5cnt 
                     cmpa     frm5cnt 
@@ -2103,7 +2115,7 @@ CHKPRIZEEXIST       macro
                     lda      alley6e 
                     cmpa     #PRIZE 
                     beq      prize_exist 
-                    clr      Is_Prize                     ; fgail all tests, reset Is_Prize 
+                    clr      Is_Prize                     ; fail all tests, reset Is_Prize 
 prize_exist 
                     endm     
 ;########################################################################################################
