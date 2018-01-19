@@ -15,10 +15,10 @@ DRAW_SHIP           macro
                     MOVETO_D  
 ; test if we are dead.
                     lda      Ship_Dead 
-                    bne      is_dead 
+                    bne      _is_dead 
                     bra      scale_done 
 
-is_dead 
+_is_dead 
                                                           ; lda #127 
                     ldb      Ship_Dead_Anim               ; 1 = shrink 
                     bne      ship_shrink                  ; shrink 
@@ -77,56 +77,89 @@ DRAW_WALLS          macro
                     DRAW_VLC                              ; jsr Draw_VLc 
                     endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ALLEYWALL_Y = 60
+ALLEYHEIGHT = 17
 DRAW_LINE_WALLS     macro    
                     clr      Vec_Misc_Count 
                     RESET0REF  
-                    lda      #63 
-                    ldb      #15 
+_topline
+                    lda      #(ALLEYWALL_Y) 
+                    ldb      #-127 
                     MOVETO_D  
-                    ldd      #$007F 
-                    jsr      Draw_Line_d 
+                    ldd      #$007F                       ; start far left, end far right 
+                    DRAW_LINE_D  
+                    LDD      #$007F                       ; start far left,  end far right 
+                    DRAW_LINE_D
+_toplineEnd  
                     RESET0REF  
-                    lda      #63-17 
-                    ldb      #15 
+_line1
+                    lda       #(ALLEYWALL_Y - (ALLEYHEIGHT*1) ) 
+                    ldb      #-127 
                     MOVETO_D  
                     ldd      #$007F 
-                    jsr      Draw_Line_d 
+                    DRAW_LINE_D
+                    ldd      #$007F 
+                    DRAW_LINE_D
+_line1End  
+                    RESET0REF
+_line2  
+                    lda      #(ALLEYWALL_Y - (ALLEYHEIGHT*2) )
+                    ldb      #-127 
+                    MOVETO_D  
+                    ldd      #$007F 
+                    DRAW_LINE_D
+                    ldd      #$007F 
+                    DRAW_LINE_D  
+_line2End
                     RESET0REF  
-                    lda      #63-17-17 
-                    ldb      #15 
+_line3
+                    lda      #(ALLEYWALL_Y-(ALLEYHEIGHT*3)) 
+                    ldb      #-127 
                     MOVETO_D  
                     ldd      #$007F 
-                    jsr      Draw_Line_d 
+                    DRAW_LINE_D  
+                    ldd      #$007F 
+                    DRAW_LINE_D
+_line3End
+                    RESET0REF 
+_line4 
+                    lda      #(ALLEYWALL_Y-(ALLEYHEIGHT*4)) 
+                    ldb      #-127 
+                    MOVETO_D  
+                    ldd      #$007F 
+                    DRAW_LINE_D                    
+				ldd      #$007F 
+                    DRAW_LINE_D  
+_line4End
                     RESET0REF  
-                    lda      #63-17-17-17 
-                    ldb      #15 
+_line5
+                    lda      #(ALLEYWALL_Y-(ALLEYHEIGHT*5)) 
+                    ldb      #-127 
                     MOVETO_D  
                     ldd      #$007F 
-                    jsr      Draw_Line_d 
+                    DRAW_LINE_D
+                    ldd      #$007F 
+                    DRAW_LINE_D 
+_line5End 
                     RESET0REF  
-                    lda      #63-17-17-17-17 
-                    ldb      #15 
+_line6
+                    lda      #(ALLEYWALL_Y-(ALLEYHEIGHT*6)) 
+                    ldb      #-127 
                     MOVETO_D  
                     ldd      #$007F 
-                    jsr      Draw_Line_d 
-                    RESET0REF  
-                    lda      #63-17-17-17-17-17 
-                    ldb      #15 
+                    DRAW_LINE_D  
+                    ldd      #$007F 
+                    DRAW_LINE_D
+_line6End
+                    RESET0REF 
+_bottomLine 
+                    lda      #(ALLEYWALL_Y-(ALLEYHEIGHT*7)) 
+                    ldb      #-127 
                     MOVETO_D  
                     ldd      #$007F 
-                    jsr      Draw_Line_d 
-                    RESET0REF  
-                    lda      #63-17-17-17-17-17-17 
-                    ldb      #15 
-                    MOVETO_D  
-                    ldd      #$007F 
-                    jsr      Draw_Line_d 
-                    RESET0REF  
-                    lda      #63-17-17-17-17-17-17-17 
-                    ldb      #15 
-                    MOVETO_D  
-                    ldd      #$007F 
-                    jsr      Draw_Line_d 
+                    DRAW_LINE_D  
+                    ldd      #$007F                       ; start far left  end far right 
+                    DRAW_LINE_D 
                     endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 DRAW_ENEMYS         macro    
@@ -844,17 +877,17 @@ not_ghost
                                                           ; ldb [a,x] ; b has X 
                     lda      shipdir 
                     bne      ship_moving_right 
-ship_moving_left                                          ; TODO add test for which side prize is on for collision with prize logic
-                    lda      temp                         ; temp is side prze is on
-                    beq      no_prize_score
+ship_moving_left                                          ;        TODO add test for which side prize is on for collision with prize logic 
+                    lda      temp                         ; temp is side prze is on 
+                    beq      no_prize_score 
                     lda      -#106 
-                    cmpa     shipXpos  
+                    cmpa     shipXpos 
                     bvs      wee_prize_score 
                     bra      no_prize_score 
 
-ship_moving_right   
-                    lda      temp                          ; temp is side prze is on
-                    bne      no_prize_score
+ship_moving_right 
+                    lda      temp                         ; temp is side prze is on 
+                    bne      no_prize_score 
                     lda      shipXpos 
                     cmpa     #106 
                     blt      no_prize_score 
@@ -1139,7 +1172,7 @@ bullet2_miss
                     cmpa     #GHOST 
                     lbeq     bullet3_done 
                     lda      bullet3d 
-                    lbeq     bullet3d_l 
+                    beq     bullet3d_l 
                     ldb      bullet3x                     ; test bullet going right 3-127 possible hit range 
                     bmi      bullet3_miss                 ; bullet going wrong direction can't hit. 
                     lda      alley3x 
@@ -1689,7 +1722,7 @@ READ_JOYSTICK       macro
                     lda      Ship_Dead 
                     lbne     jsdone 
                     lda      frm2cnt 
-                    bne      jsdoneY                      ; slowing down Y movement by half for more control
+                    bne      jsdoneY                      ; slowing down Y movement by half for more control 
                     jsr      Joy_Digital 
                     lda      In_Alley                     ; inside an alley ? 
                     bne      jsdoneY                      ; disable Y position poll 
@@ -1718,7 +1751,7 @@ jsdoneY
                     ldb      [a,x] 
                     cmpb     #PRIZE                       ; is there a prize in alley? 
                     bne      nope_prize 
-                                                          ; logic for first move into alley and jumping us 8 spots into alley to avoid return to centering test
+                                                          ; logic for first move into alley and jumping us 8 spots into alley to avoid return to centering test 
                     lda      Vec_Joy_1_X 
                     beq      jsdoneX 
                     inc      In_Alley 
@@ -1728,7 +1761,7 @@ going_right1
                     sta      shipdir 
                     lda      #8 
                     adda     shipXpos 
-                    jsr      jsdone 
+                    bra      jsdone 
                     sta      shipXpos 
                     bra      jsdoneX 
 
@@ -1738,7 +1771,7 @@ going_left1
                     lda      shipXpos 
                     suba     #8 
                     sta      shipXpos 
-                    jsr      jsdoneX 
+                    bra      jsdoneX 
 nope_prize 
 already_in 
 ;                    lda      shipdir 
@@ -1769,14 +1802,14 @@ going_right
                     beq      setRightDone 
                     lda      #4 
                     adda     shipXpos 
-                    bvs      setMaxRight
+                    bvs      setMaxRight 
 ;  centering code here
-                    tsta
-                    bpl      setRightDone
-                    cmpa     #-5
-                    blt      setRightDone
-                    clr      In_Alley
-                    clra                       ; saved to shipXpos later
+                    tsta     
+                    bpl      setRightDone 
+                    cmpa     #-5 
+                    blt      setRightDone 
+                    clr      In_Alley 
+                    clra                                  ; saved to shipXpos later 
 ; end center 
                     bra      setRightDone 
 
@@ -1791,16 +1824,16 @@ going_left
                     sta      shipdir 
                     lda      In_Alley 
                     beq      setLeftDone 
-                    lda      shipXpos  
+                    lda      shipXpos 
                     suba     #4 
-                    bvs      setMaxLeft
+                    bvs      setMaxLeft 
 ; centering code here 
-                    tsta 
-                    bmi      setLeftDone
-                    cmpa     #5
-                    bgt      setLeftDone
-                    clr      In_Alley
-                    clra                              ; saved to shipXpos later
+                    tsta     
+                    bmi      setLeftDone 
+                    cmpa     #5 
+                    bgt      setLeftDone 
+                    clr      In_Alley 
+                    clra                                  ; saved to shipXpos later 
 ; center done 
                     bra      setLeftDone 
 
@@ -1989,7 +2022,7 @@ FRAME_CNTS          macro
                     cmpa     frm2cnt 
                     bne      no2cntreset 
                     clr      frm2cnt 
-no2cntreset
+no2cntreset 
                     lda      #5 
                     inc      frm5cnt 
                     cmpa     frm5cnt 
@@ -2169,6 +2202,28 @@ dorgle:             bitb     <VIA_int_flags               ;Wait for T1 to time o
 
 dvm_done 
                     endm     
+;;;;;;;;;;;; from BIOS optimized slightly ;;;;;;;;;;;;;;;;;;;;;;;;
+DRAW_LINE_D         macro    
+		        local     timeout 
+                    STA      <VIA_port_a                  ;Send Y to A/D 
+                    CLR      <VIA_port_b                  ;Enable mux 
+;                   LEAX     2,X                          ;Point to next coordinate pair 
+                    NOP                                   ;Wait a moment 
+                    INC      <VIA_port_b                  ;Disable mux 
+                    STB      <VIA_port_a                  ;Send X to A/D 
+                    LDD      #$FF00                       ;Shift reg=$FF (solid line), T1H=0 
+                    STA      <VIA_shift_reg               ;Put pattern in shift register 
+                    STB      <VIA_t1_cnt_hi               ;Set T1H (scale factor?) 
+                    LDD      #$0040                       ;B-reg = T1 interrupt bit 
+timeout:            BITB     <VIA_int_flags               ;Wait for T1 to time out 
+                    BEQ      timeout 
+                    NOP                                   ;Wait a moment more 
+                    STA      <VIA_shift_reg               ;Clear shift register (blank output) 
+                                                          ;LDA $C823 ;Decrement line count 
+                                                          ;DECA 
+                                                          ;BPL Draw_VL_a ;Go back for more points 
+                                                          ;JMP Check0Ref ;Reset zero reference if necessary 
+                    endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 DRAW_VECTOR_SCORE   macro    
                     RESET0REF  
@@ -2200,7 +2255,9 @@ score_done
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 DRAW_RASTER_SCORE   macro    
                     RESET0REF  
-                    lda      #127 
+			   ldd     #$FC50
+			   std      Vec_Text_HW 
+                    lda      #128 
                     ldb      #-50 
                                                           ; MOVETO_D 
                     ldu      #score 

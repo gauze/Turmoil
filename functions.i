@@ -17,9 +17,9 @@ setup:                                                    ;        setting up ha
                                                           ; jsr Clear_Score 
                     ldx      #score 
                     jsr      Clear_Score 
-                    lda      #1
+                    lda      #1 
                     sta      level 
-                    jsr      setuplevel 
+                    bsr      setuplevel 
                     rts      
 
 setuplevel 
@@ -66,20 +66,20 @@ setuplevel
                     sta      alley4x 
                     sta      alley5x 
                     sta      alley6x 
-                    sta      alley0s
+                    sta      alley0s 
                     sta      alley1s 
                     sta      alley2s 
                     sta      alley3s 
                     sta      alley4s 
                     sta      alley5s 
                     sta      alley6s 
-                    sta      alley0to
+                    sta      alley0to 
                     sta      alley1to 
                     sta      alley2to 
                     sta      alley3to 
                     sta      alley4to 
                     sta      alley5to 
-                    sta      alley6to
+                    sta      alley6to 
                     sta      frm100cnt 
                     sta      frm50cnt 
                     sta      frm25cnt 
@@ -100,15 +100,17 @@ setuplevel
                     std      prizecnt 
                     sta      Is_Prize 
                     sta      Ship_Dead 
-                    sta      Level_Done
-                ;    lda      #1
-                ;    sta      level
+                    sta      Level_Done 
+                                                          ; lda #1 
+                                                          ; sta level 
                     rts      
-newlevel
-                    inc      level
-                    jsr      levelsplash
-                    rts
-gameover                                                  ;        #isfunction 
+
+newlevel 
+                    inc      level 
+                    jsr      levelsplash 
+                    rts      
+
+gameover:                                                  ;        #isfunction 
                     jsr      Wait_Recal 
                     clr      Vec_Misc_Count 
                     lda      #$80 
@@ -125,11 +127,14 @@ gameover                                                  ;        #isfunction
                     ldu      #score 
                     jsr      Print_Str_d 
 ; high score stuff
+			   ldu      #highscorelabel
+                    ldd      #$F0D0 
+                    jsr      Print_Str_d 
                     ldx      #score 
                     ldu      #Vec_High_Score 
                     jsr      New_High_Score 
                     ldu      #Vec_High_Score 
-                    ldd      #$0030 
+                    ldd      #$F030 
                     jsr      Print_Str_d 
                     jsr      Read_Btns 
                     lda      Vec_Button_1_3 
@@ -144,18 +149,18 @@ splashloop
                     lda      #$80 
                     sta      VIA_t1_cnt_lo 
                     jsr      Intensity_7F 
-                    lda      # "L"
-                    sta      lvlstr 
-                    lda      # "E"
-                    sta      lvlstr+1 
-                    lda      # "V"
-                    sta      lvlstr+2 
-                    lda      # "E"
-                    sta      lvlstr+3 
-                    lda      # "L"
-                    sta      lvlstr+4 
-                    lda      #$20 
-                    sta      lvlstr+5 
+                    ldd      # 'L'*256+'E'
+                    std      lvlstr 
+                                                          ; lda # "E" 
+                                                          ; sta lvlstr+1 
+                    ldd      # 'V'*256+'E'
+                    std      lvlstr+2 
+                                                          ;lda # "E" 
+                                                          ;sta lvlstr+3 
+                    ldd      # 'L'*256+$20
+                    std      lvlstr+4 
+                                                          ;lda #$20 
+                                                          ;sta lvlstr+5 
                     lda      #$20 
                     sta      levelstr 
                     lda      level 
@@ -198,18 +203,18 @@ score_format_done
                     bra      splashloop 
 
 donesplash 
-                    lda      level
-                    cmpa     #30
-                    blt      do_cnt_tbl
-                    lda      #255
-                    bra      store_max_enemy_cnt
-do_cnt_tbl      
+                    lda      level 
+                    cmpa     #30 
+                    blt      do_cnt_tbl 
+                    lda      #255 
+                    bra      store_max_enemy_cnt 
+
+do_cnt_tbl 
                     ldx      #enemylvlcnt_t 
                     lda      level 
                     lda      a,x 
-store_max_enemy_cnt
+store_max_enemy_cnt 
                     sta      enemylvlcnt 
-
                     inc      shipcnt                      ; free ship 
                     jsr      setuplevel 
                     rts      
@@ -248,3 +253,57 @@ no_ships
 
 donedeathloop 
                     rts      
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+titleScreen: 
+                    LDA      #-1                          ; high bit set by any negative number 
+                    STA      Vec_Expl_Flag                ; set high bit for Explosion flag 
+                    LDA      #-40                         ; init values above tsmain 
+                    STA      shipXpos 
+                    LDA      #10 
+                    STA      shipYpos 
+                    LDA      #200                         ; 'counter' for display of logo 
+                    STA      temp 
+                    LDU      #ustacktemp                  ; save text w/h to stack 
+                    LDA      Vec_Text_Height 
+                    LDB      Vec_Text_Width 
+                    PSHU     d 
+tsmain 
+                    JSR      DP_to_C8                     ; DP to RAM 
+                    LDU      #LOGOEXP                     ; point to explosion table entry 
+                    JSR      Explosion_Snd 
+                    JSR      Wait_Recal                   ; Vectrex BIOS recalibration 
+                    JSR      Intensity_5F                 ; Sets the intensity of the 
+                                                          ; vector beam to $5f 
+                    JSR      Do_Sound 
+                    LDA      temp 
+                    BEQ      _tsdone 
+                    DEC      temp 
+                    LDA      shipYpos                     ; Text position relative Y 
+                    LDB      shipXpos                     ; Text position relative X 
+                    JSR      Moveto_d 
+                    LDA      #-10 
+                    STA      Vec_Text_Height 
+                    LDA      #$40 
+                    STA      Vec_Text_Width 
+                    LDU      #alleyanxietylogo_data 
+                    JSR      draw_raster_image 
+                    LDA      shipYpos                     ; jiggle animation logic 
+                    CMPA     #10 
+                    BEQ      _incYPOS 
+                    DEC      shipYpos 
+                    BRA      tsmain 
+
+_incYPOS 
+                    INC      shipYpos 
+                    BRA      tsmain                       ; and repeat forever 
+
+_tsdone 
+                    LDU      #ustacktemp-2                ; loading 2 registers off U stack 
+                    PULU     d 
+                    STA      Vec_Text_Height              ; restoring 
+                    STB      Vec_Text_Width 
+                    LDA      #0
+                    STA      Vec_Music_Flag 
+                    STA      Vec_Expl_Flag               
+                    JSR      Clear_Sound 
+                    RTS      

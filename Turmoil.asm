@@ -23,31 +23,32 @@
                     org      0 
 ; the first few bytes are mandatory, otherwise the BIOS will not load
 ; the ROM file, and will start MineStorm instead
-                    fcc       "g GCE gggg", $80 ; 'g' is copyright sign
-                    fdb       music1                       ; music from the rom 
-                    fdb       $F850
-                    fcb      $20, -$35          ; hight, width, rel y, rel x (from 0,0) 
-                    fcc       "TURMOIL", $80               ; some game information, ending with $80
-                    fdb       $F850
-                    fcb       -$40, -$30          ; hight, width, rel y, rel x (from 0,0) 
-                    fcc       $6E,$6E,$6F, $80               ; some game information, ending with $80
-
-                    db       0                            ; end of game header
-                    bra restart
+                    fcc      "g GCE 2018", $80 ; 'g' is copyright sign
+                    fdb      music1                       ; music from the rom 
+                    fdb      $F850 
+                    fcb      $20, -$45                    ; hight, width, rel y, rel x (from 0,0) 
+                    fcc      "ALLEY ANXIETY", $80         ; some game information, ending with $80
+                    fdb      $F850 
+                    fcb      -$40, -$30                   ; hight, width, rel y, rel x (from 0,0) 
+                    fcc      $6E,$6E,$6F, $80             ; some game information, ending with $80 
+                    db       0                            ; end of game header 
+                    bra      introSplash 
+				;	bra restart  ; TESTING skip intro to get right to it.
 ;***************************************************************************
 ; MAGIC CARTHEADER SECTION
 ;      DO NOT CHANGE THIS STRUCT
 ;***************************************************************************
-                ORG     $30
-                fcb     "ThGS"                  ; magic handshake marker
-v4ecartversion  fdb     $0001                   ; I always have a version
+                    ORG      $30 
+                    fcb      "ThGS"                       ; magic handshake marker
+v4ecartversion      fdb      $0001                        ; I always have a version 
 ;                                                ; in comm. structs
-v4ecartflags    fdb     $4000      
-
+v4ecartflags        fdb      $4000 
 ;***************************************************************************
 ; CODE SECTION
 ;***************************************************************************
 ; here the cartridge program starts off
+introSplash 
+                    jsr      titleScreen 
 restart 
                     jsr      setup 
                     jsr      levelsplash 
@@ -65,11 +66,11 @@ restart
                     sta      shipcnt 
 main: 
                     jsr      Wait_Recal 
-                    READ_JOYSTICK
+                    READ_JOYSTICK  
                     lda      #$5F 
                     INTENSITY_A  
                                                           ; DRAW_WALLS 
-                                                          ; DRAW_LINE_WALLS 
+                    DRAW_LINE_WALLS 
                     DRAW_SHIP  
                     READ_BUTTONS  
                     MOVE_BULLETS  
@@ -82,10 +83,9 @@ main:
 ; display score and ships left
                                                           ; DRAW_VECTOR_SCORE_DONTUSEFONTSBROKEN 
                     DRAW_RASTER_SCORE  
-peepee:
-                    PRINT_SHIPS
-                    ;PRINT_SHIPS_VECTOR
- 
+peepee: 
+                    PRINT_SHIPS  
+                                                          ;PRINT_SHIPS_VECTOR 
 no_score: 
                     ldd      prizecnt 
                     addd     #1 
@@ -101,21 +101,21 @@ noprizecntdown
                     MOVE_ENEMYS  
                     SHOT_COLLISION_DETECT  
                     SHIP_Y_COLLISION_DETECT  
-                    SHIP_X_COLLISION_DETECT
+                    SHIP_X_COLLISION_DETECT  
                     STALL_CHECK  
 ; decrement counters on alley respawn timeouts
-                    ldx     #alleyto_t
-                    lda     #6
-                    lsla
-respawncounter
-                    ldb     [a,x]
-                    beq     cntatzero
-                    dec     [a,x]
-cntatzero
-                    lsra
-                    deca
-                    lsla
-                    bge     respawncounter
+                    ldx      #alleyto_t 
+                    lda      #6 
+                    lsla     
+respawncounter 
+                    ldb      [a,x] 
+                    beq      cntatzero 
+                    dec      [a,x] 
+cntatzero 
+                    lsra     
+                    deca     
+                    lsla     
+                    bge      respawncounter 
 ;
                     lda      Level_Done                   ; check level_done flag, increment level if so. 
                     beq      nolevel 
@@ -123,8 +123,8 @@ cntatzero
 nolevel 
                     jmp      main                         ; and repeat forever, sorta 
 
-
 ; must go at bottom or fills up RAM instead of ROM 
                     include  "functions.i"
                     include  "data.i"
+                    include  "rasterDraw.asm"
 end 
