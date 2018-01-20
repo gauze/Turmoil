@@ -1,6 +1,6 @@
 ; vim: ts=4
 ; vim: syntax=asm6809
-                    title    "Turmoil"
+                    title    "Alley Anxiety"
 ; DESCRIPTION
 ; Port of 20th Century Fox Atari 2600 game Turmoil
 ;
@@ -32,8 +32,8 @@
                     fcb      -$40, -$30                   ; hight, width, rel y, rel x (from 0,0) 
                     fcc      $6E,$6E,$6F, $80             ; some game information, ending with $80 
                     db       0                            ; end of game header 
-                    bra      introSplash 
-				;	bra restart  ; TESTING skip intro to get right to it.
+               ;     bra      introSplash 
+		   	bra restart  ; TESTING skip intro to get right to it.
 ;***************************************************************************
 ; MAGIC CARTHEADER SECTION
 ;      DO NOT CHANGE THIS STRUCT

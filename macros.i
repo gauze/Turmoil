@@ -77,89 +77,89 @@ DRAW_WALLS          macro
                     DRAW_VLC                              ; jsr Draw_VLc 
                     endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-ALLEYWALL_Y = 60
-ALLEYHEIGHT = 17
+ALLEYWALL_Y         =        60 
+ALLEYHEIGHT         =        17 
 DRAW_LINE_WALLS     macro    
                     clr      Vec_Misc_Count 
                     RESET0REF  
-_topline
+_topline 
                     lda      #(ALLEYWALL_Y) 
                     ldb      #-127 
                     MOVETO_D  
                     ldd      #$007F                       ; start far left, end far right 
                     DRAW_LINE_D  
-                    LDD      #$007F                       ; start far left,  end far right 
-                    DRAW_LINE_D
-_toplineEnd  
-                    RESET0REF  
-_line1
-                    lda       #(ALLEYWALL_Y - (ALLEYHEIGHT*1) ) 
-                    ldb      #-127 
-                    MOVETO_D  
-                    ldd      #$007F 
-                    DRAW_LINE_D
-                    ldd      #$007F 
-                    DRAW_LINE_D
-_line1End  
-                    RESET0REF
-_line2  
-                    lda      #(ALLEYWALL_Y - (ALLEYHEIGHT*2) )
-                    ldb      #-127 
-                    MOVETO_D  
-                    ldd      #$007F 
-                    DRAW_LINE_D
-                    ldd      #$007F 
+                    LDD      #$007F                       ; start far left, end far right 
                     DRAW_LINE_D  
-_line2End
+_toplineEnd 
                     RESET0REF  
-_line3
+_line1 
+                    lda      #(ALLEYWALL_Y - (ALLEYHEIGHT*1) ) 
+                    ldb      #-127 
+                    MOVETO_D  
+                    ldd      #$007F 
+                    DRAW_LINE_D_PAT  
+                    ldd      #$007F 
+                    DRAW_LINE_D_PAT  
+_line1End 
+                    RESET0REF  
+_line2 
+                    lda      #(ALLEYWALL_Y - (ALLEYHEIGHT*2) ) 
+                    ldb      #-127 
+                    MOVETO_D  
+                    ldd      #$007F 
+                    DRAW_LINE_D_PAT  
+                    ldd      #$007F 
+                    DRAW_LINE_D_PAT  
+_line2End 
+                    RESET0REF  
+_line3 
                     lda      #(ALLEYWALL_Y-(ALLEYHEIGHT*3)) 
                     ldb      #-127 
                     MOVETO_D  
                     ldd      #$007F 
-                    DRAW_LINE_D  
+                    DRAW_LINE_D_PAT  
                     ldd      #$007F 
-                    DRAW_LINE_D
-_line3End
-                    RESET0REF 
+                    DRAW_LINE_D_PAT  
+_line3End 
+                    RESET0REF  
 _line4 
                     lda      #(ALLEYWALL_Y-(ALLEYHEIGHT*4)) 
                     ldb      #-127 
                     MOVETO_D  
                     ldd      #$007F 
-                    DRAW_LINE_D                    
-				ldd      #$007F 
-                    DRAW_LINE_D  
-_line4End
+                    DRAW_LINE_D_PAT  
+                    ldd      #$007F 
+                    DRAW_LINE_D_PAT  
+_line4End 
                     RESET0REF  
-_line5
+_line5 
                     lda      #(ALLEYWALL_Y-(ALLEYHEIGHT*5)) 
                     ldb      #-127 
                     MOVETO_D  
                     ldd      #$007F 
-                    DRAW_LINE_D
+                    DRAW_LINE_D_PAT  
                     ldd      #$007F 
-                    DRAW_LINE_D 
+                    DRAW_LINE_D_PAT  
 _line5End 
                     RESET0REF  
-_line6
+_line6 
                     lda      #(ALLEYWALL_Y-(ALLEYHEIGHT*6)) 
                     ldb      #-127 
                     MOVETO_D  
                     ldd      #$007F 
-                    DRAW_LINE_D  
+                    DRAW_LINE_D_PAT  
                     ldd      #$007F 
-                    DRAW_LINE_D
-_line6End
-                    RESET0REF 
+                    DRAW_LINE_D_PAT  
+_line6End 
+                    RESET0REF  
 _bottomLine 
                     lda      #(ALLEYWALL_Y-(ALLEYHEIGHT*7)) 
                     ldb      #-127 
                     MOVETO_D  
                     ldd      #$007F 
                     DRAW_LINE_D  
-                    ldd      #$007F                       ; start far left  end far right 
-                    DRAW_LINE_D 
+                    ldd      #$007F                       ; start far left end far right 
+                    DRAW_LINE_D  
                     endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 DRAW_ENEMYS         macro    
@@ -1172,7 +1172,7 @@ bullet2_miss
                     cmpa     #GHOST 
                     lbeq     bullet3_done 
                     lda      bullet3d 
-                    beq     bullet3d_l 
+                    beq      bullet3d_l 
                     ldb      bullet3x                     ; test bullet going right 3-127 possible hit range 
                     bmi      bullet3_miss                 ; bullet going wrong direction can't hit. 
                     lda      alley3x 
@@ -1762,6 +1762,7 @@ going_right1
                     lda      #8 
                     adda     shipXpos 
                     bra      jsdone 
+
                     sta      shipXpos 
                     bra      jsdoneX 
 
@@ -1772,6 +1773,7 @@ going_left1
                     suba     #8 
                     sta      shipXpos 
                     bra      jsdoneX 
+
 nope_prize 
 already_in 
 ;                    lda      shipdir 
@@ -2204,13 +2206,14 @@ dvm_done
                     endm     
 ;;;;;;;;;;;; from BIOS optimized slightly ;;;;;;;;;;;;;;;;;;;;;;;;
 DRAW_LINE_D         macro    
-		        local     timeout 
+                    local    timeout 
                     STA      <VIA_port_a                  ;Send Y to A/D 
                     CLR      <VIA_port_b                  ;Enable mux 
 ;                   LEAX     2,X                          ;Point to next coordinate pair 
                     NOP                                   ;Wait a moment 
                     INC      <VIA_port_b                  ;Disable mux 
                     STB      <VIA_port_a                  ;Send X to A/D 
+                                                          ; Add pattern logic here for weirdly strobing line 
                     LDD      #$FF00                       ;Shift reg=$FF (solid line), T1H=0 
                     STA      <VIA_shift_reg               ;Put pattern in shift register 
                     STB      <VIA_t1_cnt_hi               ;Set T1H (scale factor?) 
@@ -2219,6 +2222,35 @@ timeout:            BITB     <VIA_int_flags               ;Wait for T1 to time o
                     BEQ      timeout 
                     NOP                                   ;Wait a moment more 
                     STA      <VIA_shift_reg               ;Clear shift register (blank output) 
+                                                          ;LDA $C823 ;Decrement line count 
+                                                          ;DECA 
+                                                          ;BPL Draw_VL_a ;Go back for more points 
+                                                          ;JMP Check0Ref ;Reset zero reference if necessary 
+                    endm     
+;;;;;;;;;;;; from BIOS optimized slightly ;;;;;;;;;;;;;;;;;;;;;;;;
+DRAW_LINE_D_PAT     macro    
+                    local    timeout_pat 
+                    STA      <VIA_port_a                  ;Send Y to A/D 
+                    CLR      <VIA_port_b                  ;Enable mux 
+;                   LEAX     2,X                          ;Point to next coordinate pair 
+                    NOP                                   ;Wait a moment 
+                    INC      <VIA_port_b                  ;Disable mux 
+                    STB      <VIA_port_a                  ;Send X to A/D 
+                                                          ; Add pattern logic here for weirdly strobing line 
+                    INC      Line_Pat 
+               ;     LDB      #$40                         ; mask for t1 interupt
+			;   STB      <VIA_int_flags
+                     LDA      Line_Pat                    ;Shift reg=$FF (solid line), T1H=0 
+			  ; LDA      #$91
+                    CLR      <VIA_t1_cnt_hi               ;Set T1H (scale factor?) 
+timeout_pat:        STA      <VIA_shift_reg               ;Put pattern in shift register 
+
+                    LDB      #$40                       ;B-reg = T1 interrupt bit 
+;timeout:      testing     
+			   BITB     <VIA_int_flags               ;Wait for T1 to time out 
+                    BEQ      timeout_pat 
+                    NOP                                   ;Wait a moment more 
+                    CLR      <VIA_shift_reg               ;Clear shift register (blank output) 
                                                           ;LDA $C823 ;Decrement line count 
                                                           ;DECA 
                                                           ;BPL Draw_VL_a ;Go back for more points 
@@ -2255,8 +2287,8 @@ score_done
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 DRAW_RASTER_SCORE   macro    
                     RESET0REF  
-			   ldd     #$FC50
-			   std      Vec_Text_HW 
+                    ldd      #$FC50 
+                    std      Vec_Text_HW 
                     lda      #128 
                     ldb      #-50 
                                                           ; MOVETO_D 
