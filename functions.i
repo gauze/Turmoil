@@ -101,7 +101,7 @@ setuplevel
                     sta      Is_Prize 
                     sta      Ship_Dead 
                     sta      Level_Done 
-			   sta      Line_Pat
+                    sta      Line_Pat 
                                                           ; lda #1 
                                                           ; sta level 
                     rts      
@@ -111,7 +111,7 @@ newlevel
                     jsr      levelsplash 
                     rts      
 
-gameover:                                                  ;        #isfunction 
+gameover:                                                 ;        #isfunction 
                     jsr      Wait_Recal 
                     clr      Vec_Misc_Count 
                     lda      #$80 
@@ -128,14 +128,15 @@ gameover:                                                  ;        #isfunction
                     ldu      #score 
                     jsr      Print_Str_d 
 ; high score stuff
-			   ldu      #highscorelabel
-                    ldd      #$F0D0 
+                    ldu      #highscorelabel 
+                    lda      #$F0 
+                    ldb      -#127
                     jsr      Print_Str_d 
                     ldx      #score 
                     ldu      #Vec_High_Score 
                     jsr      New_High_Score 
                     ldu      #Vec_High_Score 
-                    ldd      #$F030 
+                    ldd      #$F050 
                     jsr      Print_Str_d 
                     jsr      Read_Btns 
                     lda      Vec_Button_1_3 
@@ -254,6 +255,7 @@ no_ships
 
 donedeathloop 
                     rts      
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 titleScreen: 
                     LDA      #-1                          ; high bit set by any negative number 
@@ -303,8 +305,8 @@ _tsdone
                     PULU     d 
                     STA      Vec_Text_Height              ; restoring 
                     STB      Vec_Text_Width 
-                    LDA      #0
+                    LDA      #0 
                     STA      Vec_Music_Flag 
-                    STA      Vec_Expl_Flag               
+                    STA      Vec_Expl_Flag 
                     JSR      Clear_Sound 
                     RTS      

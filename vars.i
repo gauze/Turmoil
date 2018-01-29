@@ -9,17 +9,17 @@
                     org      $c880                        ; start of our ram space 
 ; 
 score               ds       7                            ; 7 bytes 
-;highscore           ds       7                            ; 7 bytes 
+;highscore           ds       7                            ; 7 bytes ;use built in instead.
 level               ds       1 
 ;
 ; your ship related variables, X,Y position and direction facing L/R, and number left
-shipdir             ds       1 
+shipdir             ds       1 							; left or right
 shipYpos            ds       1 
 shipXpos            ds       1 
-shipcnt             ds       1 
+shipcnt             ds       1                            ; 
 ; limits 
 enemycnt            ds       1 
-bulletcnt           ds       1                            ; 1 
+bulletcnt           ds       1                            ;  
 ; counters for events
 stallcnt            ds       1 
 prizecnt            ds       2                            ; 16 bit counter 
@@ -108,27 +108,28 @@ masktemp            ds       1
 bulletYtemp         ds       1 
 enemytemp           ds       1 
 ;
-enemylvlcnt         ds       1 
+enemylvlcnt         ds       1                    ; how many enemies left in this level?
 ; STATE FLAGS
 Ship_Dead           ds       1 
 Ship_Dead_Anim      ds       1 
 Ship_Dead_Cnt       ds       1 
 In_Alley            ds       1 					; ship is in 
 Is_Prize            ds       1 					; alley contains "prize"
+;
 lvlstr              ds       6 
 levelstr            ds       2 
 lvlstrterm          ds       1 
 Level_Done          ds       1 
 Demo_Mode           ds       1 
-Line_Pat            ds       1
+Line_Pat            ds       1                    ; this is for line darw stuff , 00000000 is nothing 11111111 is line 10101010 is dotted line
 ;
 ; CONSTANTS place after VARIABLES
 ;ALLEYWIDTH          =        17 
 LEFT                =        0 
 RIGHT               =        1 
-SCORE               =        10 
+SCORE               =        10                   ; score 10 times sped/level something
 MOVEAMOUNT          =        8                            ; how many 'pixels per frame' TODO/FIX/something 
-GHOST               =        8 
+GHOST               =        8                     ; various values for quick testing. positions are in      
 TANK                =        6 
 EXPLOSION           =        9 
 ARROW               =        1 
