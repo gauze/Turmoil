@@ -35,7 +35,9 @@
                     fcb      -$40, $23                    ; hight, width, rel y, rel x (from 0,0) 
                     fcc      "-2018", $80                 ; 3 solid blocks ending with $80 
                     db       0                            ; end of game header 
-                                                          ; bra introSplash 
+
+                    bra      introSplash 
+
                     bra      restart                      ; TESTING skip intro to get right to it. 
 
 ;***************************************************************************
@@ -73,7 +75,7 @@ main:
                     READ_JOYSTICK  
                     lda      #$5F 
                     INTENSITY_A  
-                                                          ; DRAW_WALLS 
+                                                        
                     DRAW_LINE_WALLS  
                     DRAW_SHIP  
                     READ_BUTTONS  
@@ -87,11 +89,10 @@ main:
 ; display score and ships left
                                                           ; DRAW_VECTOR_SCORE_DONTUSEFONTSBROKEN 
                     DRAW_RASTER_SCORE  
-peepee: 
                     PRINT_SHIPS  
                                                           ;PRINT_SHIPS_VECTOR 
 no_score: 
-                    ldd      prizecnt 
+                    ldd      prizecnt                     ; minumum counter for time between prize spawns
                     addd     #1 
                     std      prizecnt 
                     lda      Is_Prize 

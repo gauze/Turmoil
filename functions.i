@@ -270,7 +270,7 @@ titleScreen:
                     LDA      Vec_Text_Height 
                     LDB      Vec_Text_Width 
                     PSHU     d 
-tsmain 
+_tsmain 
                     JSR      DP_to_C8                     ; DP to RAM 
                     LDU      #LOGOEXP                     ; point to explosion table entry 
                     JSR      Explosion_Snd 
@@ -294,11 +294,11 @@ tsmain
                     CMPA     #10 
                     BEQ      _incYPOS 
                     DEC      shipYpos 
-                    BRA      tsmain 
+                    BRA      _tsmain 
 
 _incYPOS 
                     INC      shipYpos 
-                    BRA      tsmain                       ; and repeat forever 
+                    BRA      _tsmain                       ; and repeat forever 
 
 _tsdone 
                     LDU      #ustacktemp-2                ; loading 2 registers off U stack 

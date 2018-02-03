@@ -1286,6 +1286,7 @@ eventankdies4
                     lda      #100 
                     sta      alley4to 
                     dec      enemycnt 
+                    dec      enemylvlcnt 
                     beq      set_level_done4 
                     bra      bullet4_done 
 
@@ -2231,7 +2232,7 @@ timeout:            BITB     <VIA_int_flags               ;Wait for T1 to time o
                     endm     
 ;;;;;;;;;;;; from BIOS optimized slightly ;;;;;;;;;;;;;;;;;;;;;;;;
 DRAW_LINE_D_PAT     macro    
-                    local    timeout_pat 
+                    local    _timeout_pat 
                     STA      <VIA_port_a                  ;Send Y to A/D 
                     CLR      <VIA_port_b                  ;Enable mux 
                     NOP                                   ;Wait a moment 
@@ -2240,9 +2241,9 @@ DRAW_LINE_D_PAT     macro
                     LDA      Line_Pat                     ;Shift reg=$FF (solid line), T1H=0 
                     CLR      <VIA_t1_cnt_hi               ;Set T1H (scale factor?) 
                     LDB      #$40                         ;B-reg = T1 interrupt bit 
-timeout_pat:        STA      <VIA_shift_reg               ;Put pattern in shift register 
+_timeout_pat        STA      <VIA_shift_reg               ;Put pattern in shift register 
                     BITB     <VIA_int_flags               ;Wait for T1 to time out 
-                    BEQ      timeout_pat 
+                    BEQ      _timeout_pat 
                     NOP                                   ;Wait a moment more 
                     CLR      <VIA_shift_reg               ;Clear shift register (blank output) 
                     endm     
@@ -2253,10 +2254,10 @@ DRAW_VECTOR_SCORE   macro
                     ldb      #50 
                     MOVETO_D  
                     ldy      #score 
-scoreloop 
+_scoreloop 
                     lda      ,y+ 
                     cmpa     #$20                         ; space? 
-                    beq      is_zero 
+                    beq      _is_zero 
                     cmpa     #$80                         ; EOL? 
                     lbeq     score_done 
                     suba     #$30                         ; otherwise get DEC value 
@@ -2264,13 +2265,13 @@ scoreloop
                     ldx      #numbers_t 
                     ldx      a,x 
                     DRAW_VL_MODE  
-                    bra      scoreloop 
+                    bra      _scoreloop 
 
-is_zero 
+_is_zero 
                     ldx      #zero 
                     DRAW_VL_MODE  
                     ldx      #numbers_t 
-                    bra      scoreloop 
+                    bra      _scoreloop 
 
 score_done 
                     endm     
@@ -2286,18 +2287,18 @@ DRAW_RASTER_SCORE   macro
                     jsr      Print_Str_d 
                     endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-PRINT_SHIPS_VECTOR  macro    
+PRINT_VECTOR_SHIPS  macro    
                     RESET0REF  
                     lda      #-127 
                     ldb      #-90 
                     MOVETO_D  
                     lda      shipcnt                      ; vector draw ships remaining routine TEST 
                     sta      temp 
-ships_left_loop 
+_ships_left_loop 
                     ldx      #Ship_Marker 
                     DRAW_VLC  
                     dec      temp 
-                    bne      ships_left_loop 
+                    bne      _ships_left_loop 
                     endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 PRINT_SHIPS         macro    
@@ -2309,3 +2310,7 @@ PRINT_SHIPS         macro
                     ldb      shipcnt 
                     jsr      Print_Ships 
                     endm     
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+P_SHIPS			 macro
+
+				 endm
