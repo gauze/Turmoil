@@ -14,6 +14,8 @@ DRAW_SHIP           macro
                     ldb      shipXpos 
                     MOVETO_D  
 ; test if we are dead.
+                    lda      #127 
+                    sta      VIA_t1_cnt_lo                ; controls "scale" 
                     lda      Ship_Dead 
                     bne      _is_dead 
                     bra      scale_done 

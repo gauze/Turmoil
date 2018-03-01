@@ -1,5 +1,5 @@
 ;***************************************************************************
-; DATA SECTION
+; DATA SECTION 
 ;***************************************************************************
 Full_Wall_nomode:   fcb      5                            ; lda #5 ; sta $C823 ; vector count 
                     fcb      0,127 
@@ -14,28 +14,29 @@ Half_Wall:          fcb      3                            ; lda #3 ; sta $C823
                     fcb      0,-115 
                     fcb      -3,0 
 ; SHIP 
+SHIP_SCALE=1
 ShipR_nomode:       fcb      9                            ; fcb 0, +8, -12 
-                    fcb      -8, +0 
-                    fcb      +0, +17 
-                    fcb      +2, +0 
-                    fcb      +0, -12 
-                    fcb      +6, +20 
-                    fcb      +6, -20 
-                    fcb      +0, +12 
-                    fcb      +2, +0 
-                    fcb      +0, -17 
-                    fcb      -8, +0 
+                    fcb      -8*SHIP_SCALE, +0*SHIP_SCALE
+                    fcb      +0*SHIP_SCALE, +17*SHIP_SCALE
+                    fcb      +2*SHIP_SCALE, +0*SHIP_SCALE
+                    fcb      +0*SHIP_SCALE, -12*SHIP_SCALE
+                    fcb      +6*SHIP_SCALE, +20*SHIP_SCALE
+                    fcb      +6*SHIP_SCALE, -20*SHIP_SCALE
+                    fcb      +0*SHIP_SCALE, +12*SHIP_SCALE
+                    fcb      +2*SHIP_SCALE, +0*SHIP_SCALE
+                    fcb      +0*SHIP_SCALE, -17*SHIP_SCALE
+                    fcb      -8*SHIP_SCALE, +0*SHIP_SCALE
 ShipL_nomode:       fcb      9                            ; fcb 0, +8, +12 
-                    fcb      -8, +0 
-                    fcb      +0, -17 
-                    fcb      +2, +0 
-                    fcb      +0, +12 
-                    fcb      +6, -20 
-                    fcb      +6, +20 
-                    fcb      +0, -12 
-                    fcb      +2, +0 
-                    fcb      +0, +17 
-                    fcb      -8, +0 
+                    fcb      -8*SHIP_SCALE, +0*SHIP_SCALE
+                    fcb      +0*SHIP_SCALE, -17*SHIP_SCALE
+                    fcb      +2*SHIP_SCALE, +0*SHIP_SCALE
+                    fcb      +0*SHIP_SCALE, +12*SHIP_SCALE
+                    fcb      +6*SHIP_SCALE, -20*SHIP_SCALE
+                    fcb      +6*SHIP_SCALE, +20*SHIP_SCALE
+                    fcb      +0*SHIP_SCALE, -12*SHIP_SCALE
+                    fcb      +2*SHIP_SCALE, +0*SHIP_SCALE
+                    fcb      +0*SHIP_SCALE, +17*SHIP_SCALE
+                    fcb      -8*SHIP_SCALE, +0*SHIP_SCALE
 Shot:               fcb      2,0,10 
                     fcb      2,1,0 
                     fcb      2,0,-10 

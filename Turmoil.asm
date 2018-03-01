@@ -35,7 +35,7 @@
                     fcb      -$40, $23                    ; hight, width, rel y, rel x (from 0,0) 
                     fcc      "-2018", $80                 ; 3 solid blocks ending with $80 
                     db       0                            ; end of game header 
-
+			
                     bra      introSplash 
 
                     bra      restart                      ; TESTING skip intro to get right to it. 
@@ -52,7 +52,7 @@
 ;***************************************************************************
 ; CODE SECTION
 ;***************************************************************************
-; here the cartridge program starts off
+; here the cartridge program starts off	
 introSplash 
                     jsr      titleScreen 
 restart 
@@ -127,6 +127,7 @@ cntatzero
                     jsr      newlevel                     ; and run routine 
 nolevel 
                     jmp      main                         ; and repeat forever, sorta 
+
 
 ; must go at bottom or fills up RAM instead of ROM 
                     include  "functions.i"

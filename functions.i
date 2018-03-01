@@ -22,7 +22,7 @@ setup:                                                    ;        setting up ha
                     bsr      setuplevel 
                     rts      
 
-setuplevel 
+setuplevel: 
                     ldd      #0                           ; set a bunch of variables to 0 
                     sta      bullet0e 
                     sta      bullet1e 
@@ -106,7 +106,7 @@ setuplevel
                                                           ; sta level 
                     rts      
 
-newlevel 
+newlevel: 
                     inc      level 
                     jsr      levelsplash 
                     rts      
@@ -115,7 +115,7 @@ gameover:                                                 ;        #isfunction
                     jsr      Wait_Recal 
                     clr      Vec_Misc_Count 
                     lda      #$80 
-                    sta      VIA_t1_cnt_lo 
+                    sta      VIA_t1_cnt_lo 				; sets scale
                     jsr      Intensity_7F 
                     RESET0REF  
                     lda      -70 
@@ -270,6 +270,7 @@ titleScreen:
                     LDA      Vec_Text_Height 
                     LDB      Vec_Text_Width 
                     PSHU     d 
+				  STU      #ustacktemp	
 _tsmain 
                     JSR      DP_to_C8                     ; DP to RAM 
                     LDU      #LOGOEXP                     ; point to explosion table entry 
@@ -301,7 +302,7 @@ _incYPOS
                     BRA      _tsmain                       ; and repeat forever 
 
 _tsdone 
-                    LDU      #ustacktemp-2                ; loading 2 registers off U stack 
+                    LDU      #ustacktemp                ; loading 2 registers off U stack 
                     PULU     d 
                     STA      Vec_Text_Height              ; restoring 
                     STB      Vec_Text_Width 
