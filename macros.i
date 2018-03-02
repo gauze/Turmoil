@@ -10,8 +10,14 @@ DRAW_SHIP           macro
                     lda      shipYpos 
                     ldx      #bulletYpos_t 
                     lda      a,x                          ; get pos from shippos_t table 
-                                                          ; adda #2+6 ; small offset 
+                    suba     #8                           ; small offset to center in lane horizontally
                     ldb      shipXpos 
+				  addb     #+12
+                    tst      shipdir                      ; testing for 0|LEFT 1|RIGHT 
+                    beq      _donuthin 
+				  subb     #+24
+                    bra      _donuthin
+_donuthin 
                     MOVETO_D  
 ; test if we are dead.
                     lda      #127 
@@ -46,31 +52,24 @@ scale_done
                     clr      In_Alley 
 change_dir 
                     clr      Ship_Dead_Anim 
-                    clr      Ship_Dead_Cnt                ; don't let it go minus. UNSOIGNED 
+                    clr      Ship_Dead_Cnt                ; don't let it go minus. UNSIGNED 
 shitballs 
                     ldx      #ShipL_nomode 
                     ldb      shipdir                      ; testing for 0|LEFT 1|RIGHT 
-                    beq      donuthin1 
+                    beq      _donuthin1 
                     ldx      #ShipR_nomode 
-                    bra      donuthin1 
+                    bra      _donuthin1 
 
-donuthin1 
+_donuthin1 
                     DRAW_VLC                              ; jsr Draw_VLc ;_mode 
                     endm     
 ;::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 DRAW_WALLS          macro    
-                                                          ; jmp no_walls ; skip printing walls to save cycles 
-; bottom wall     
-                                                          ; lda #5 
-                                                          ; sta $C823 ; vector count 
                     lda      #-60 
                     ldb      #-127 
                     MOVETO_D  
                     ldx      #Full_Wall_nomode 
                     DRAW_VLC                              ;jsr Draw_VLc 
-;                    jmp      no_walls 
-;no_walls: 
-; top wall
                     RESET0REF  
                     lda      #60 
                     ldb      #-127 
@@ -90,7 +89,7 @@ _topline
                     lda      #(ALLEYWALL_Y) 
                     ldb      #-128 
                     MOVETO_D  
-                    ldd      #$007F                       ; start far left, end far right 
+                    ldd      #$007f                       ; start far left, end far right 
                     DRAW_LINE_D  
                     LDD      #$007F                       ; start far left, end far right 
                     DRAW_LINE_D  
@@ -100,10 +99,12 @@ _line1
                     lda      #(ALLEYWALL_Y - (ALLEYHEIGHT*1) ) 
                     ldb      #-127 
                     MOVETO_D  
+                    ldd      #$0070 
+                    DRAW_LINE_D_PAT                       ; dotted line 
+                    LDD      #$0014 
+                    MOVETO_D                              ; alley gap 
                     ldd      #$007F 
-                    DRAW_LINE_D_PAT  
-                    ldd      #$007F 
-                    DRAW_LINE_D_PAT  
+                    DRAW_LINE_D_PAT                       ; dotted line 
 _line1End 
                     RESET0REF  
 _line2 
@@ -2313,6 +2314,5 @@ PRINT_SHIPS         macro
                     jsr      Print_Ships 
                     endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-P_SHIPS			 macro
-
-				 endm
+P_SHIPS             macro    
+                    endm     

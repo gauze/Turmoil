@@ -1,5 +1,5 @@
 ;***************************************************************************
-; DATA SECTION 
+; VECTOR GRAPHICS DATA
 ;***************************************************************************
 Full_Wall_nomode:   fcb      5                            ; lda #5 ; sta $C823 ; vector count 
                     fcb      0,127 
@@ -14,29 +14,31 @@ Half_Wall:          fcb      3                            ; lda #3 ; sta $C823
                     fcb      0,-115 
                     fcb      -3,0 
 ; SHIP 
-SHIP_SCALE=1
-ShipR_nomode:       fcb      9                            ; fcb 0, +8, -12 
-                    fcb      -8*SHIP_SCALE, +0*SHIP_SCALE
-                    fcb      +0*SHIP_SCALE, +17*SHIP_SCALE
-                    fcb      +2*SHIP_SCALE, +0*SHIP_SCALE
-                    fcb      +0*SHIP_SCALE, -12*SHIP_SCALE
-                    fcb      +6*SHIP_SCALE, +20*SHIP_SCALE
-                    fcb      +6*SHIP_SCALE, -20*SHIP_SCALE
-                    fcb      +0*SHIP_SCALE, +12*SHIP_SCALE
-                    fcb      +2*SHIP_SCALE, +0*SHIP_SCALE
-                    fcb      +0*SHIP_SCALE, -17*SHIP_SCALE
-                    fcb      -8*SHIP_SCALE, +0*SHIP_SCALE
-ShipL_nomode:       fcb      9                            ; fcb 0, +8, +12 
-                    fcb      -8*SHIP_SCALE, +0*SHIP_SCALE
-                    fcb      +0*SHIP_SCALE, -17*SHIP_SCALE
-                    fcb      +2*SHIP_SCALE, +0*SHIP_SCALE
-                    fcb      +0*SHIP_SCALE, +12*SHIP_SCALE
-                    fcb      +6*SHIP_SCALE, -20*SHIP_SCALE
-                    fcb      +6*SHIP_SCALE, +20*SHIP_SCALE
-                    fcb      +0*SHIP_SCALE, -12*SHIP_SCALE
-                    fcb      +2*SHIP_SCALE, +0*SHIP_SCALE
-                    fcb      +0*SHIP_SCALE, +17*SHIP_SCALE
-                    fcb      -8*SHIP_SCALE, +0*SHIP_SCALE
+SHIP_SCALE=1 
+ShipR_nomode:       fcb      9                           ; fcb 0, +8, -12 
+                ;    fcb      -8*SHIP_SCALE, +0*SHIP_SCALE 
+                    fcb      +0*SHIP_SCALE, +17*SHIP_SCALE 
+                    fcb      +2*SHIP_SCALE, +0*SHIP_SCALE 
+                    fcb      +0*SHIP_SCALE, -12*SHIP_SCALE 
+                    fcb      +6*SHIP_SCALE, +20*SHIP_SCALE 
+                    fcb      +1*SHIP_SCALE, 0*SHIP_SCALE  ; center 
+                    fcb      +6*SHIP_SCALE, -20*SHIP_SCALE 
+                    fcb      +0*SHIP_SCALE, +12*SHIP_SCALE 
+                    fcb      +2*SHIP_SCALE, +0*SHIP_SCALE 
+                    fcb      +0*SHIP_SCALE, -17*SHIP_SCALE 
+                    fcb      -17*SHIP_SCALE, +0*SHIP_SCALE 
+ShipL_nomode:       fcb      9                           ; fcb 0, +8, +12 
+               ;     fcb      -8*SHIP_SCALE, +0*SHIP_SCALE 
+                    fcb      +0*SHIP_SCALE, -17*SHIP_SCALE 
+                    fcb      +2*SHIP_SCALE, +0*SHIP_SCALE 
+                    fcb      +0*SHIP_SCALE, +12*SHIP_SCALE 
+                    fcb      +6*SHIP_SCALE, -20*SHIP_SCALE 
+                    fcb      +1*SHIP_SCALE, 0*SHIP_SCALE  ; center 
+                    fcb      +6*SHIP_SCALE, +20*SHIP_SCALE 
+                    fcb      +0*SHIP_SCALE, -12*SHIP_SCALE 
+                    fcb      +2*SHIP_SCALE, +0*SHIP_SCALE 
+                    fcb      +0*SHIP_SCALE, +17*SHIP_SCALE 
+                    fcb      -17*SHIP_SCALE, +0*SHIP_SCALE 
 Shot:               fcb      2,0,10 
                     fcb      2,1,0 
                     fcb      2,0,-10 
@@ -403,7 +405,9 @@ nine:               fcb      0, -5, +4
                     fcb      2, +0, +4 
                     fcb      0, +2, +2 
                     fcb      1 
+;****************************************************************************************
 ; TABLES TABLES TABLES TABLES TABLES TABLES TABLES TABLES TABLES TABLES TABLES TABLES 
+;****************************************************************************************
                                                           ; align $100 
 ;shippos_t          fcb      -3*ALLEYWIDTH,-2*ALLEYWIDTH,-1*ALLEYWIDTH,0,1*ALLEYWIDTH,2*ALLEYWIDTH,3*ALLEYWIDTH ; Y pos of ship 
 BULLETYPOS          =        103                          ;; trail and error 
@@ -467,11 +471,16 @@ Prize_t             fdb      Prize_1,Prize_2,Prize_1,Prize_2 ; big/small animati
 Wedge_L_t           fdb      Wedge_L_1, Wedge_L_2, Wedge_L_3, Wedge_L_2 
 Wedge_R_t           fdb      Wedge_R_1, Wedge_R_2, Wedge_R_3, Wedge_R_2 
 ;levelstr_t          fdb      $0000,level1str,level2str,level3str 
-; SOUND data
+;##################################################################################
+; SOUND data SOUND SOUND SOUND SOUND
+;##################################################################################
 LOGOEXP             db       $15,$00,$01,$01 
 EXP1                db       $19,$3F,$00,$02 
 EXP2                db       $3F,$00,$00,$01 
 EXP3                db       $01,-1,1,$04 
+;########################################################################
+; RASTER GRAPHICS DATA
+;########################################################################
 ; format:
 ; height, width
 ; shiftreg, ...,  shiftreg
@@ -510,7 +519,9 @@ alleyanxietylogo_data:
                     db       %00000000, %00000000, %00011111, %11000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00011111, %10000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000 ; backward 
                     db       %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000001, %11111000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000011, %11110000, %00000000, %00000000 ; forward 
                     db       %00000000, %00000000, %00000111, %10000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000111, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000 ; backward 
+;***********$$$$$$$$$$$$$$$**************$$$$$$$$$$$$$$$**************$$$$$$$$$
 ; TEXT STRINGS
+;$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 deadstring          fcc      "SHIP HIT!",$80
 gameoverstr         fcc      "GAME OVER",$80
 highscorelabel      fcc      "HIGH SCORE",$80
