@@ -122,6 +122,7 @@ lvlstrterm          ds       1
 Level_Done          ds       1 
 Demo_Mode           ds       1 
 Line_Pat            ds       1                    ; this is for LINE_DRAW_D stuff , 00000000 is nothing 11111111 is line 10101010 is dotted line
+ustacktempptr       ds       2
 ;
 ; CONSTANTS place after VARIABLES
 ;ALLEYWIDTH          =        17 

@@ -16,7 +16,7 @@ DRAW_SHIP           macro
                     tst      shipdir                      ; testing for 0|LEFT 1|RIGHT 
                     beq      _donuthin 
 				  subb     #+24
-                    bra      _donuthin
+             ;       bra      _donuthin
 _donuthin 
                     MOVETO_D  
 ; test if we are dead.
@@ -99,9 +99,9 @@ _line1
                     lda      #(ALLEYWALL_Y - (ALLEYHEIGHT*1) ) 
                     ldb      #-127 
                     MOVETO_D  
-                    ldd      #$0070 
+                    ldd      #$0074 
                     DRAW_LINE_D_PAT                       ; dotted line 
-                    LDD      #$0014 
+                    LDD      #$0016 
                     MOVETO_D                              ; alley gap 
                     ldd      #$007F 
                     DRAW_LINE_D_PAT                       ; dotted line 
@@ -111,8 +111,10 @@ _line2
                     lda      #(ALLEYWALL_Y - (ALLEYHEIGHT*2) ) 
                     ldb      #-127 
                     MOVETO_D  
-                    ldd      #$007F 
+                    ldd      #$0074 
                     DRAW_LINE_D_PAT  
+                    LDD      #$0016 
+                    MOVETO_D                              ; alley gap 
                     ldd      #$007F 
                     DRAW_LINE_D_PAT  
 _line2End 
@@ -121,8 +123,10 @@ _line3
                     lda      #(ALLEYWALL_Y-(ALLEYHEIGHT*3)) 
                     ldb      #-127 
                     MOVETO_D  
-                    ldd      #$007F 
+                    ldd      #$0074 
                     DRAW_LINE_D_PAT  
+                    LDD      #$0016 
+                    MOVETO_D                              ; alley gap 
                     ldd      #$007F 
                     DRAW_LINE_D_PAT  
 _line3End 
@@ -131,8 +135,10 @@ _line4
                     lda      #(ALLEYWALL_Y-(ALLEYHEIGHT*4)) 
                     ldb      #-127 
                     MOVETO_D  
-                    ldd      #$007F 
+                    ldd      #$0074 
                     DRAW_LINE_D_PAT  
+                    LDD      #$0016 
+                    MOVETO_D                              ; alley gap 
                     ldd      #$007F 
                     DRAW_LINE_D_PAT  
 _line4End 
@@ -141,8 +147,10 @@ _line5
                     lda      #(ALLEYWALL_Y-(ALLEYHEIGHT*5)) 
                     ldb      #-127 
                     MOVETO_D  
-                    ldd      #$007F 
+                    ldd      #$0074 
                     DRAW_LINE_D_PAT  
+                    LDD      #$0016 
+                    MOVETO_D                              ; alley gap 
                     ldd      #$007F 
                     DRAW_LINE_D_PAT  
 _line5End 
@@ -151,8 +159,10 @@ _line6
                     lda      #(ALLEYWALL_Y-(ALLEYHEIGHT*6)) 
                     ldb      #-127 
                     MOVETO_D  
-                    ldd      #$007F 
+                    ldd      #$0074 
                     DRAW_LINE_D_PAT  
+                    LDD      #$0016 
+                    MOVETO_D                              ; alley gap 
                     ldd      #$007F 
                     DRAW_LINE_D_PAT  
 _line6End 

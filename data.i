@@ -1,3 +1,5 @@
+; vim: ts=4
+; vim: syntax=asm6809
 ;***************************************************************************
 ; VECTOR GRAPHICS DATA
 ;***************************************************************************
@@ -15,8 +17,7 @@ Half_Wall:          fcb      3                            ; lda #3 ; sta $C823
                     fcb      -3,0 
 ; SHIP 
 SHIP_SCALE=1 
-ShipR_nomode:       fcb      9                           ; fcb 0, +8, -12 
-                ;    fcb      -8*SHIP_SCALE, +0*SHIP_SCALE 
+ShipR_nomode:       fcb      9                          
                     fcb      +0*SHIP_SCALE, +17*SHIP_SCALE 
                     fcb      +2*SHIP_SCALE, +0*SHIP_SCALE 
                     fcb      +0*SHIP_SCALE, -12*SHIP_SCALE 
@@ -27,8 +28,7 @@ ShipR_nomode:       fcb      9                           ; fcb 0, +8, -12
                     fcb      +2*SHIP_SCALE, +0*SHIP_SCALE 
                     fcb      +0*SHIP_SCALE, -17*SHIP_SCALE 
                     fcb      -17*SHIP_SCALE, +0*SHIP_SCALE 
-ShipL_nomode:       fcb      9                           ; fcb 0, +8, +12 
-               ;     fcb      -8*SHIP_SCALE, +0*SHIP_SCALE 
+ShipL_nomode:       fcb      9                          
                     fcb      +0*SHIP_SCALE, -17*SHIP_SCALE 
                     fcb      +2*SHIP_SCALE, +0*SHIP_SCALE 
                     fcb      +0*SHIP_SCALE, +12*SHIP_SCALE 
@@ -39,14 +39,14 @@ ShipL_nomode:       fcb      9                           ; fcb 0, +8, +12
                     fcb      +2*SHIP_SCALE, +0*SHIP_SCALE 
                     fcb      +0*SHIP_SCALE, +17*SHIP_SCALE 
                     fcb      -17*SHIP_SCALE, +0*SHIP_SCALE 
-Shot:               fcb      2,0,10 
+Shot:               fcb      2,0,10							; UNUSED 
                     fcb      2,1,0 
                     fcb      2,0,-10 
                     fcb      2,1,0 
                     fcb      2,0,10 
                     fcb      1 
 ; number of guys left 
-Ship_Marker: 
+Ship_Marker: 												; UNUSED
                     fcb      3 
                     fcb      -7, +0 
                     fcb      +9, +3 

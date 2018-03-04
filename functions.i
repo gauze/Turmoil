@@ -115,7 +115,7 @@ gameover:                                                 ;        #isfunction
                     jsr      Wait_Recal 
                     clr      Vec_Misc_Count 
                     lda      #$80 
-                    sta      VIA_t1_cnt_lo 				; sets scale
+                    sta      VIA_t1_cnt_lo                ; sets scale 
                     jsr      Intensity_7F 
                     RESET0REF  
                     lda      -70 
@@ -130,7 +130,7 @@ gameover:                                                 ;        #isfunction
 ; high score stuff
                     ldu      #highscorelabel 
                     lda      #$F0 
-                    ldb      -#127
+                    ldb      -#127 
                     jsr      Print_Str_d 
                     ldx      #score 
                     ldu      #Vec_High_Score 
@@ -145,6 +145,8 @@ gameover:                                                 ;        #isfunction
 
 levelsplash 
                     clr      stallcnt 
+                                                          ; ldd #$F850 
+                                                          ; std Vec_Text_HW 
 splashloop 
                     jsr      Wait_Recal 
                     clr      Vec_Misc_Count 
@@ -153,16 +155,10 @@ splashloop
                     jsr      Intensity_7F 
                     ldd      # 'L'*256+'E'
                     std      lvlstr 
-                                                          ; lda # "E" 
-                                                          ; sta lvlstr+1 
                     ldd      # 'V'*256+'E'
                     std      lvlstr+2 
-                                                          ;lda # "E" 
-                                                          ;sta lvlstr+3 
                     ldd      # 'L'*256+$20
                     std      lvlstr+4 
-                                                          ;lda #$20 
-                                                          ;sta lvlstr+5 
                     lda      #$20 
                     sta      levelstr 
                     lda      level 
@@ -191,10 +187,6 @@ score_format_done
                     lda      #$80 
                     sta      lvlstrterm 
                     ldu      #lvlstr 
-                                                          ; ldx #levelstr_t 
-                                                          ; lda level 
-                                                          ; lsla 
-                                                          ; ldu a,x 
                     lda      -20 
                     ldb      -10 
                     jsr      Print_Str_d 
@@ -264,13 +256,13 @@ titleScreen:
                     STA      shipXpos 
                     LDA      #10 
                     STA      shipYpos 
-                    LDA      #200                         ; 'counter' for display of logo 
+                    LDA      #200                         ; 'counter' for display of logo, 4 seconds 
                     STA      temp 
                     LDU      #ustacktemp                  ; save text w/h to stack 
-                    LDA      Vec_Text_Height 
-                    LDB      Vec_Text_Width 
+                    LDD      Vec_Text_HW 
+                                                          ; LDB Vec_Text_Width 
                     PSHU     d 
-				  STU      #ustacktemp	
+                    STU      ustacktempptr 
 _tsmain 
                     JSR      DP_to_C8                     ; DP to RAM 
                     LDU      #LOGOEXP                     ; point to explosion table entry 
@@ -299,13 +291,14 @@ _tsmain
 
 _incYPOS 
                     INC      shipYpos 
-                    BRA      _tsmain                       ; and repeat forever 
+                    BRA      _tsmain                      ; and repeat forever 
 
 _tsdone 
-                    LDU      #ustacktemp                ; loading 2 registers off U stack 
+                    LDU      ustacktempptr                ; loading 2 registers off U stack 
                     PULU     d 
-                    STA      Vec_Text_Height              ; restoring 
-                    STB      Vec_Text_Width 
+                    STD      Vec_Text_HW                  ; restoring 
+                                                          ;STB Vec_Text_Width 
+                    STU      ustacktempptr                ; save for later 
                     LDA      #0 
                     STA      Vec_Music_Flag 
                     STA      Vec_Expl_Flag 
