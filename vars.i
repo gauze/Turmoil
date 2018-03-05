@@ -13,13 +13,13 @@ score               ds       7                            ; 7 bytes
 level               ds       1 
 ;
 ; your ship related variables, X,Y position and direction facing L/R, and number left
-shipdir             ds       1 							; left or right
+shipdir             ds       1                            ; left or right 
 shipYpos            ds       1 
 shipXpos            ds       1 
 shipcnt             ds       1                            ; 
 ; limits 
 enemycnt            ds       1 
-bulletcnt           ds       1                            ;  
+bulletcnt           ds       1                            ; 
 ; counters for events
 stallcnt            ds       1 
 prizecnt            ds       2                            ; 16 bit counter 
@@ -67,13 +67,20 @@ alley3x             ds       1
 alley4x             ds       1 
 alley5x             ds       1 
 alley6x             ds       1 
-alley0s             ds       1                            ; speed of monster 1-9 
+alley0s             ds       1                            ; speed==X/Y, X speed of monster 1-9 
 alley1s             ds       1 
 alley2s             ds       1 
 alley3s             ds       1 
 alley4s             ds       1 
 alley5s             ds       1 
 alley6s             ds       1 
+alley0sd            ds       1                            ; speed==X/Y, Y speed of monster 1-9 
+alley1sd            ds       1                            ; d = denominator 
+alley2sd            ds       1 
+alley3sd            ds       1 
+alley4sd            ds       1 
+alley5sd            ds       1 
+alley6sd            ds       1 
 ; timeout before respawn per alley
 alley0to            ds       1 
 alley1to            ds       1 
@@ -100,6 +107,7 @@ frm25cnt            ds       1
 frm20cnt            ds       1 
 frm10cnt            ds       1 
 frm5cnt             ds       1 
+frm4cnt             ds       1 
 frm2cnt             ds       1 
 ; temporary storage
 temp                ds       1                            ; generic 1 byte temp 
@@ -108,33 +116,34 @@ masktemp            ds       1
 bulletYtemp         ds       1 
 enemytemp           ds       1 
 ;
-enemylvlcnt         ds       1                    ; how many enemies left in this level?
+enemylvlcnt         ds       1                            ; how many enemies left in this level? 
 ; STATE FLAGS
 Ship_Dead           ds       1 
 Ship_Dead_Anim      ds       1 
 Ship_Dead_Cnt       ds       1 
-In_Alley            ds       1 					; ship is in 
-Is_Prize            ds       1 					; alley contains "prize"
+In_Alley            ds       1                            ; ship is in 
+Is_Prize            ds       1                            ; alley contains "prize" 
 ;
-lvlstr              ds       6 
+lvllabelstr         ds       6 
 levelstr            ds       2 
-lvlstrterm          ds       1 
+;lvlstrterm          ds       1 
 Level_Done          ds       1 
 Demo_Mode           ds       1 
-Line_Pat            ds       1                    ; this is for LINE_DRAW_D stuff , 00000000 is nothing 11111111 is line 10101010 is dotted line
-ustacktempptr       ds       2
+Line_Pat            ds       1                            ; this is for LINE_DRAW_D stuff , 00000000 is nothing 11111111 is line 10101010 is dotted line 
+ustacktempptr       ds       2                            ; for saving location of ustacktemp 
 ;
 ; CONSTANTS place after VARIABLES
 ;ALLEYWIDTH          =        17 
 LEFT                =        0 
 RIGHT               =        1 
-SCORE               =        10                   ; score 10 times sped/level something
+SCORE               =        10                           ; score 10 times sped/level something 
 MOVEAMOUNT          =        8                            ; how many 'pixels per frame' TODO/FIX/something 
-GHOST               =        8                     ; various values for quick testing. positions are in      
-TANK                =        6 
+;
+GHOST               =        8                            ; various values for quick testing. positions are 
+TANK                =        6 							; from Enemy_t table
 EXPLOSION           =        9 
 ARROW               =        1 
 PRIZE               =        5 
 CANNONBALL          =        7 
 ; U STACK for saving registers.
-ustacktemp          equ      $CBD0 
+ustacktemp          equ      $CBD0 						; few down from default S stack so it doesn't get overwritten

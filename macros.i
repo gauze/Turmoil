@@ -115,7 +115,7 @@ _line2
                     DRAW_LINE_D_PAT  
                     LDD      #$0016 
                     MOVETO_D                              ; alley gap 
-                    ldd      #$007F 
+                    ldd      #$0074 
                     DRAW_LINE_D_PAT  
 _line2End 
                     RESET0REF  
@@ -386,8 +386,9 @@ skip6a
 ;&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 MOVE_ENEMYS         macro    
 ; move enemies0
-                                                          ; lda Ship_Dead 
-                                                          ; lbne subdone6 
+                    lda     Ship_Dead 
+                    lbne    subdone6 
+; ships dead do not move enemys while doing ship animation
                     lda      alley0e 
                     cmpa     #PRIZE 
                     bne      noprize0 

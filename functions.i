@@ -23,6 +23,8 @@ setup:                                                    ;        setting up ha
                     rts      
 
 setuplevel: 
+				    LDD      #$FC50
+					STD      Vec_Text_HW
                     ldd      #0                           ; set a bunch of variables to 0 
                     sta      bullet0e 
                     sta      bullet1e 
@@ -73,6 +75,13 @@ setuplevel:
                     sta      alley4s 
                     sta      alley5s 
                     sta      alley6s 
+                    sta      alley0sd 
+                    sta      alley1sd 
+                    sta      alley2sd 
+                    sta      alley3sd 
+                    sta      alley4sd 
+                    sta      alley5sd 
+                    sta      alley6sd 
                     sta      alley0to 
                     sta      alley1to 
                     sta      alley2to 
@@ -154,11 +163,11 @@ splashloop
                     sta      VIA_t1_cnt_lo 
                     jsr      Intensity_7F 
                     ldd      # 'L'*256+'E'
-                    std      lvlstr 
+                    std      lvllabelstr 
                     ldd      # 'V'*256+'E'
-                    std      lvlstr+2 
+                    std      lvllabelstr+2 
                     ldd      # 'L'*256+$20
-                    std      lvlstr+4 
+                    std      lvllabelstr+4 
                     lda      #$20 
                     sta      levelstr 
                     lda      level 
@@ -183,17 +192,17 @@ tens_digit
 one_digit 
                     adda     #$30 
                     sta      levelstr+1 
-score_format_done 
-                    lda      #$80 
-                    sta      lvlstrterm 
-                    ldu      #lvlstr 
+				  lda      #$80 
+				  sta      levelstr+2
+score_format_done  
+                    ldu      #lvllabelstr 
                     lda      -20 
                     ldb      -10 
                     jsr      Print_Str_d 
                     inc      stallcnt 
                     lda      stallcnt 
                     cmpa     #100 
-                    beq      donesplash 
+                    beq      donesplash
                     bra      splashloop 
 
 donesplash 
@@ -223,12 +232,12 @@ deathloop
                     jsr      Intensity_7F 
 ; dead
                     ldu      #deadstring 
-                    lda      -20 
-                    ldb      -10 
+                    lda      #-20 
+                    ldb      #-10 
                     jsr      Print_Str_d 
 ; ships left?
-                    lda      -50 
-                    ldb      65 
+                    lda      #-50 
+                    ldb      #65 
                     MOVETO_D  
                     lda      shipcnt                      ; vector draw ships remaining routine TEST 
                     beq      no_ships 

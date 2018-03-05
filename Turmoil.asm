@@ -25,7 +25,7 @@
 ; the ROM file, and will start MineStorm instead
                     fcc      "g GCE 2016", $80 ; 'g' is copyright sign
                     fdb      music1                       ; music from the rom 
-                    fdb      $F850 
+                    fdb      $FC50 
                     fcb      $20, -$45                    ; hight, width, rel y, rel x (from 0,0) 
                     fcc      "ALLEY ANXIETY", $80         ; title ending with $80
                     fdb      $F850 
@@ -36,7 +36,7 @@
                     fcc      "-2018", $80                 ; 3 solid blocks ending with $80 
                     db       0                            ; end of game header 
 			
-                ;    bra      introSplash 
+                    bra      introSplash 
 
                     bra      restart                      ; TESTING skip intro to get right to it. 
 

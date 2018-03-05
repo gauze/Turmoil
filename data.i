@@ -17,7 +17,7 @@ Half_Wall:          fcb      3                            ; lda #3 ; sta $C823
                     fcb      -3,0 
 ; SHIP 
 SHIP_SCALE=1 
-ShipR_nomode:       fcb      9                          
+ShipR_nomode:       fcb      9 
                     fcb      +0*SHIP_SCALE, +17*SHIP_SCALE 
                     fcb      +2*SHIP_SCALE, +0*SHIP_SCALE 
                     fcb      +0*SHIP_SCALE, -12*SHIP_SCALE 
@@ -28,7 +28,7 @@ ShipR_nomode:       fcb      9
                     fcb      +2*SHIP_SCALE, +0*SHIP_SCALE 
                     fcb      +0*SHIP_SCALE, -17*SHIP_SCALE 
                     fcb      -17*SHIP_SCALE, +0*SHIP_SCALE 
-ShipL_nomode:       fcb      9                          
+ShipL_nomode:       fcb      9 
                     fcb      +0*SHIP_SCALE, -17*SHIP_SCALE 
                     fcb      +2*SHIP_SCALE, +0*SHIP_SCALE 
                     fcb      +0*SHIP_SCALE, +12*SHIP_SCALE 
@@ -39,14 +39,14 @@ ShipL_nomode:       fcb      9
                     fcb      +2*SHIP_SCALE, +0*SHIP_SCALE 
                     fcb      +0*SHIP_SCALE, +17*SHIP_SCALE 
                     fcb      -17*SHIP_SCALE, +0*SHIP_SCALE 
-Shot:               fcb      2,0,10							; UNUSED 
+Shot:               fcb      2,0,10                       ; UNUSED 
                     fcb      2,1,0 
                     fcb      2,0,-10 
                     fcb      2,1,0 
                     fcb      2,0,10 
                     fcb      1 
 ; number of guys left 
-Ship_Marker: 												; UNUSED
+Ship_Marker:                                              ;        UNUSED 
                     fcb      3 
                     fcb      -7, +0 
                     fcb      +9, +3 
@@ -346,7 +346,8 @@ Explode_10:
                     fcb      2, -11, -12 
                     fcb      1 
 None:               fcb      1 
-; NUMBERS all END at top right corner derive score from $c880 subtract $30 to get true value $20 == blank
+; NUMBERS all END at top right corner derive score from $c880 
+; subtract $30 to get true value $20 == blank/space
 zero:               fcb      5 
                     fcb      -5, +0 
                     fcb      +0, -4 
@@ -405,6 +406,11 @@ nine:               fcb      0, -5, +4
                     fcb      2, +0, +4 
                     fcb      0, +2, +2 
                     fcb      1 
+dots:               fcb      1, 7 
+                    fcb      2, 8 
+                    fcb      1, 4 
+                    fcb      1, 1 
+                    fcb      1,1 
 ;****************************************************************************************
 ; TABLES TABLES TABLES TABLES TABLES TABLES TABLES TABLES TABLES TABLES TABLES TABLES 
 ;****************************************************************************************
@@ -470,7 +476,6 @@ Tank_R_t            fdb      Tank_R_1,Tank_R_2
 Prize_t             fdb      Prize_1,Prize_2,Prize_1,Prize_2 ; big/small animation 
 Wedge_L_t           fdb      Wedge_L_1, Wedge_L_2, Wedge_L_3, Wedge_L_2 
 Wedge_R_t           fdb      Wedge_R_1, Wedge_R_2, Wedge_R_3, Wedge_R_2 
-;levelstr_t          fdb      $0000,level1str,level2str,level3str 
 ;##################################################################################
 ; SOUND data SOUND SOUND SOUND SOUND
 ;##################################################################################
