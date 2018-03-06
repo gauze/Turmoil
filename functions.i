@@ -5,6 +5,8 @@
 ; SUBROUTINES/FUNCTIONS
 ;###########################################################################
 setup:                                                    ;        setting up hardware, resetting scores, once per boot 
+                    ldx      #$c880 
+                    jsr      Clear_x_256 
                     lda      #1                           ; enable 
                     sta      Vec_Joy_Mux_1_X 
                     lda      #3 
@@ -12,9 +14,6 @@ setup:                                                    ;        setting up ha
                     lda      #0                           ; disable for Joy Mux's 
                     sta      Vec_Joy_Mux_2_X 
                     sta      Vec_Joy_Mux_2_Y 
-                                                          ; jsr Joy_Digital ; set joymode, not analog. 
-                                                          ; ldx #Vec_High_Score 
-                                                          ; jsr Clear_Score 
                     ldx      #score 
                     jsr      Clear_Score 
                     lda      #1 
@@ -23,8 +22,8 @@ setup:                                                    ;        setting up ha
                     rts      
 
 setuplevel: 
-				    LDD      #$FC50
-					STD      Vec_Text_HW
+                    LDD      #$FC50 
+                    STD      Vec_Text_HW 
                     ldd      #0                           ; set a bunch of variables to 0 
                     sta      bullet0e 
                     sta      bullet1e 
@@ -76,6 +75,9 @@ setuplevel:
                     sta      alley5s 
                     sta      alley6s 
                     sta      alley0sd 
+                    inc      alley0sd 
+                    inc      alley0sd 
+                    inc      alley0sd 
                     sta      alley1sd 
                     sta      alley2sd 
                     sta      alley3sd 
@@ -95,6 +97,11 @@ setuplevel:
                     sta      frm20cnt 
                     sta      frm10cnt 
                     sta      frm5cnt 
+                    sta      frm4cnt 
+                    sta      frm3cnt 
+                    sta      frm2cnt 
+                    sta      fmt1cnt 
+                    sta      fmt0cnt 
                     sta      Arrow_f 
                     sta      Bow_f 
                     sta      Dash_f 
@@ -121,19 +128,23 @@ newlevel:
                     rts      
 
 gameover:                                                 ;        #isfunction 
+                    ldx      #score 
+                    ldu      #Vec_High_Score 
+                    jsr      New_High_Score 
+goloop: 
                     jsr      Wait_Recal 
                     clr      Vec_Misc_Count 
-                    lda      #$80 
+                    lda      #$7F 
                     sta      VIA_t1_cnt_lo                ; sets scale 
                     jsr      Intensity_7F 
                     RESET0REF  
-                    lda      -70 
-                    ldb      -10 
+                    lda      #70 
+                    ldb      #-15 
                     ldu      #gameoverstr 
                     jsr      Print_Str_d 
                     RESET0REF  
-                    lda      -50 
-                    ldb      -50 
+                    lda      #-50 
+                    ldb      #-50 
                     ldu      #score 
                     jsr      Print_Str_d 
 ; high score stuff
@@ -141,21 +152,16 @@ gameover:                                                 ;        #isfunction
                     lda      #$F0 
                     ldb      -#127 
                     jsr      Print_Str_d 
-                    ldx      #score 
-                    ldu      #Vec_High_Score 
-                    jsr      New_High_Score 
                     ldu      #Vec_High_Score 
                     ldd      #$F050 
                     jsr      Print_Str_d 
                     jsr      Read_Btns 
                     lda      Vec_Button_1_3 
                     lbne     restart 
-                    bra      gameover 
+                    bra      goloop 
 
 levelsplash 
                     clr      stallcnt 
-                                                          ; ldd #$F850 
-                                                          ; std Vec_Text_HW 
 splashloop 
                     jsr      Wait_Recal 
                     clr      Vec_Misc_Count 
@@ -192,9 +198,9 @@ tens_digit
 one_digit 
                     adda     #$30 
                     sta      levelstr+1 
-				  lda      #$80 
-				  sta      levelstr+2
-score_format_done  
+                    lda      #$80 
+                    sta      levelstr+2 
+score_format_done 
                     ldu      #lvllabelstr 
                     lda      -20 
                     ldb      -10 
@@ -202,7 +208,7 @@ score_format_done
                     inc      stallcnt 
                     lda      stallcnt 
                     cmpa     #100 
-                    beq      donesplash
+                    beq      donesplash 
                     bra      splashloop 
 
 donesplash 

@@ -10,13 +10,13 @@ DRAW_SHIP           macro
                     lda      shipYpos 
                     ldx      #bulletYpos_t 
                     lda      a,x                          ; get pos from shippos_t table 
-                    suba     #8                           ; small offset to center in lane horizontally
+                    suba     #8                           ; small offset to center in lane horizontally 
                     ldb      shipXpos 
-				  addb     #+12
+                    addb     #+12 
                     tst      shipdir                      ; testing for 0|LEFT 1|RIGHT 
                     beq      _donuthin 
-				  subb     #+24
-             ;       bra      _donuthin
+                    subb     #+24 
+                                                          ; bra _donuthin 
 _donuthin 
                     MOVETO_D  
 ; test if we are dead.
@@ -386,15 +386,25 @@ skip6a
 ;&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 MOVE_ENEMYS         macro    
 ; move enemies0
-                    lda     Ship_Dead 
-                    lbne    subdone6 
-; ships dead do not move enemys while doing ship animation
+                    lda      Ship_Dead 
+                    lbne     subdone6 
+; ships dead do not move enemys while doing ship dying animation
                     lda      alley0e 
                     cmpa     #PRIZE 
                     bne      noprize0 
                     lda      prizecntdown 
                     beq      prize2cannonball0 
 noprize0 
+                    cmpa     #EXPLOSION                   ; don't scale Explosion speed
+                    beq      framecont0 
+                    lda      alley0sd                     ; speed divisor code 
+                    lsla     
+                    ldx      #speed_t 
+                    lda      [a,x]                        ; check scale divisor vs current count from table
+                    beq      framecont0                   ; move on this frame
+                    bra      subdone0                     ; skip movet on this frame
+
+framecont0 
                     lda      alley0x 
                     sta      temp 
                     ldb      alley0d 
@@ -2042,6 +2052,18 @@ FRAME_CNTS          macro
                     bne      no2cntreset 
                     clr      frm2cnt 
 no2cntreset 
+                    lda      #3 
+                    inc      frm3cnt 
+                    cmpa     frm3cnt 
+                    bne      no3cntreset 
+                    clr      frm3cnt 
+no3cntreset 
+                    lda      #4 
+                    inc      frm4cnt 
+                    cmpa     frm4cnt 
+                    bne      no4cntreset 
+                    clr      frm4cnt 
+no4cntreset 
                     lda      #5 
                     inc      frm5cnt 
                     cmpa     frm5cnt 
@@ -2078,7 +2100,6 @@ no25cntreset
                     clr      frm50cnt 
                     lda      #1 
                     sta      Arrow_f 
-                                                          ;sta Prize_f 
                     sta      Dash_f 
                     sta      Tank_f 
                     CHKPRIZEEXIST                         ; check if prize exists every 1 second 
@@ -2096,9 +2117,7 @@ no50cntreset
                     sta      Bow_f 
                     sta      Dash_f 
                     sta      Wedge_f 
-                                                          ; sta Ghost_f 
                     sta      Prize_f 
-                                                          ; sta Cannonball_f 
                     sta      Tank_f 
                     sta      Explode_f 
 no100cntreset 

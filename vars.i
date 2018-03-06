@@ -100,7 +100,7 @@ Cannonball_f        ds       1
 Tank_f              ds       1 
 None_f              ds       1 
 Explode_f           ds       1                            ; generic shape used when something is destroyed 
-; frame counts for animations
+; frame counts for animations/speed
 frm100cnt           ds       1 
 frm50cnt            ds       1 
 frm25cnt            ds       1 
@@ -108,7 +108,10 @@ frm20cnt            ds       1
 frm10cnt            ds       1 
 frm5cnt             ds       1 
 frm4cnt             ds       1 
+frm3cnt             ds       1 
 frm2cnt             ds       1 
+fmt1cnt             ds       1
+fmt0cnt             ds       1
 ; temporary storage
 temp                ds       1                            ; generic 1 byte temp 
 spawntemp           ds       1 
@@ -140,10 +143,10 @@ SCORE               =        10                           ; score 10 times sped/
 MOVEAMOUNT          =        8                            ; how many 'pixels per frame' TODO/FIX/something 
 ;
 GHOST               =        8                            ; various values for quick testing. positions are 
-TANK                =        6 							; from Enemy_t table
+TANK                =        6                            ; from Enemy_t table 
 EXPLOSION           =        9 
 ARROW               =        1 
 PRIZE               =        5 
 CANNONBALL          =        7 
 ; U STACK for saving registers.
-ustacktemp          equ      $CBD0 						; few down from default S stack so it doesn't get overwritten
+ustacktemp          equ      $CBD0                        ; few down from default S stack so it doesn't get overwritten 
