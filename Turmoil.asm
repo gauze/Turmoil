@@ -36,7 +36,7 @@
                     fcc      "-2018", $80                 ; 3 solid blocks ending with $80 
                     db       0                            ; end of game header 
 			
-                 ;   bra      introSplash 
+                    bra      introSplash 
 
                     bra      restart                      ; TESTING skip intro to get right to it. 
 

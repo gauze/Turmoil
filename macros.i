@@ -82,8 +82,11 @@ ALLEYWALL_Y         =        60
 ALLEYHEIGHT         =        17 
 DRAW_LINE_WALLS     macro    
                     clr      Vec_Misc_Count 
-                    INC      Line_Pat                     ; sets pattern for "DRAW_LINE_D_PAT" 
-                    INC      Line_Pat 
+               ;     INC      Line_Pat                     ; sets pattern for "DRAW_LINE_D_PAT" 
+               ;     INC      Line_Pat 	
+				   rol      Line_Pat
+				   bne      _topline                     ; check for 0
+				   inc      Line_Pat
                     RESET0REF  
 _topline 
                     lda      #(ALLEYWALL_Y) 

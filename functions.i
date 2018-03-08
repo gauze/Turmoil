@@ -118,6 +118,7 @@ setuplevel:
                     sta      Ship_Dead 
                     sta      Level_Done 
                     sta      Line_Pat 
+				  inc      Line_Pat
                                                           ; lda #1 
                                                           ; sta level 
                     rts      
