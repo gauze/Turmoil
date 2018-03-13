@@ -70,12 +70,12 @@ restart
                     jsr      Clear_Score 
                     lda      #5 
                     sta      shipcnt 
+;----------------------------------------------------------------------------
 main: 
                     jsr      Wait_Recal 
                     READ_JOYSTICK  
                     lda      #$5F 
-                    INTENSITY_A  
-                                                        
+                    INTENSITY_A                         
                     DRAW_LINE_WALLS  
                     DRAW_SHIP  
                     READ_BUTTONS  
@@ -101,13 +101,13 @@ no_score:
 noprizecntdown 
 ; end score+ship count
                     NEW_ENEMY  
-                    DRAW_ENEMYS  
                     FRAME_CNTS  
                     MOVE_ENEMYS  
+                    DRAW_ENEMYS 
                     SHOT_COLLISION_DETECT  
                     SHIP_Y_COLLISION_DETECT  
                     SHIP_X_COLLISION_DETECT  
-                    STALL_CHECK  
+                    STALL_CHECK  						; can't just sit in an open alley forever...
 ; decrement counters on alley respawn timeouts
                     ldx      #alleyto_t 
                     lda      #6 

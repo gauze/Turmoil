@@ -75,9 +75,6 @@ setuplevel:
                     sta      alley5s 
                     sta      alley6s 
                     sta      alley0sd 
-                    inc      alley0sd 
-                    inc      alley0sd 
-                    inc      alley0sd 
                     sta      alley1sd 
                     sta      alley2sd 
                     sta      alley3sd 

@@ -18,26 +18,26 @@ Half_Wall:          fcb      3                            ; lda #3 ; sta $C823
 ; SHIP 
 SHIP_SCALE=1 
 ShipR_nomode:       fcb      9 
-                    fcb      +0*SHIP_SCALE, +17*SHIP_SCALE 
-                    fcb      +2*SHIP_SCALE, +0*SHIP_SCALE 
-                    fcb      +0*SHIP_SCALE, -12*SHIP_SCALE 
-                    fcb      +6*SHIP_SCALE, +20*SHIP_SCALE 
-                    fcb      +1*SHIP_SCALE, 0*SHIP_SCALE  ; center 
-                    fcb      +6*SHIP_SCALE, -20*SHIP_SCALE 
                     fcb      +0*SHIP_SCALE, +12*SHIP_SCALE 
                     fcb      +2*SHIP_SCALE, +0*SHIP_SCALE 
-                    fcb      +0*SHIP_SCALE, -17*SHIP_SCALE 
+                    fcb      +0*SHIP_SCALE, -9*SHIP_SCALE 
+                    fcb      +6*SHIP_SCALE, +18*SHIP_SCALE 
+                    fcb      +1*SHIP_SCALE, 0*SHIP_SCALE  ; center 
+                    fcb      +6*SHIP_SCALE, -18*SHIP_SCALE 
+                    fcb      +0*SHIP_SCALE, +9*SHIP_SCALE 
+                    fcb      +2*SHIP_SCALE, +0*SHIP_SCALE 
+                    fcb      +0*SHIP_SCALE, -12*SHIP_SCALE 
                     fcb      -17*SHIP_SCALE, +0*SHIP_SCALE 
 ShipL_nomode:       fcb      9 
-                    fcb      +0*SHIP_SCALE, -17*SHIP_SCALE 
-                    fcb      +2*SHIP_SCALE, +0*SHIP_SCALE 
-                    fcb      +0*SHIP_SCALE, +12*SHIP_SCALE 
-                    fcb      +6*SHIP_SCALE, -20*SHIP_SCALE 
-                    fcb      +1*SHIP_SCALE, 0*SHIP_SCALE  ; center 
-                    fcb      +6*SHIP_SCALE, +20*SHIP_SCALE 
                     fcb      +0*SHIP_SCALE, -12*SHIP_SCALE 
                     fcb      +2*SHIP_SCALE, +0*SHIP_SCALE 
-                    fcb      +0*SHIP_SCALE, +17*SHIP_SCALE 
+                    fcb      +0*SHIP_SCALE, +9*SHIP_SCALE 
+                    fcb      +6*SHIP_SCALE, -18*SHIP_SCALE 
+                    fcb      +1*SHIP_SCALE, 0*SHIP_SCALE  ; center 
+                    fcb      +6*SHIP_SCALE, +18*SHIP_SCALE 
+                    fcb      +0*SHIP_SCALE, -9*SHIP_SCALE 
+                    fcb      +2*SHIP_SCALE, +0*SHIP_SCALE 
+                    fcb      +0*SHIP_SCALE, +12*SHIP_SCALE 
                     fcb      -17*SHIP_SCALE, +0*SHIP_SCALE 
 Shot:               fcb      2,0,10                       ; UNUSED 
                     fcb      2,1,0 
@@ -538,7 +538,7 @@ alleyanxietylogo_data:
 deadstring          fcc      "SHIP HIT!",$80
 gameoverstr         fcc      "GAME OVER",$80
 highscorelabel      fcc      "HIGH SCORE",$80
-meow                fcc      "SECRET GAME",$80
+                    fcc      "SECRET GAME",$80
 credits             fcc      "PROGRAMMED BY GAUZE 2016-2018",$80 
                     FCC      "DISASSEMBLED BY MALBAN",$6C
                     fcc      "KARRSOFT82LDMCBCJT82LDMCBCJ"

@@ -12,10 +12,10 @@ DRAW_SHIP           macro
                     lda      a,x                          ; get pos from shippos_t table 
                     suba     #8                           ; small offset to center in lane horizontally 
                     ldb      shipXpos 
-                    addb     #+12 
+              ;TEST      addb     #+12 
                     tst      shipdir                      ; testing for 0|LEFT 1|RIGHT 
                     beq      _donuthin 
-                    subb     #+24 
+              ;TEST      subb     #+24 
                                                           ; bra _donuthin 
 _donuthin 
                     MOVETO_D  
@@ -81,20 +81,18 @@ DRAW_WALLS          macro
 ALLEYWALL_Y         =        60 
 ALLEYHEIGHT         =        17 
 DRAW_LINE_WALLS     macro    
-                    clr      Vec_Misc_Count 
-               ;     INC      Line_Pat                     ; sets pattern for "DRAW_LINE_D_PAT" 
-               ;     INC      Line_Pat 	
-				   rol      Line_Pat
+                    clr      Vec_Misc_Count 	
+				   rol      Line_Pat                     ; 1->2->4->8->16-> etc
 				   bne      _topline                     ; check for 0
-				   inc      Line_Pat
+				   inc      Line_Pat					 ; if it's zero set to 1 ie reset it
                     RESET0REF  
 _topline 
                     lda      #(ALLEYWALL_Y) 
                     ldb      #-128 
                     MOVETO_D  
-                    ldd      #$007f                       ; start far left, end far right 
+                    ldd      #$007F                       ; start far left, end middle 
                     DRAW_LINE_D  
-                    LDD      #$007F                       ; start far left, end far right 
+                    LDD      #$007F                       ; start middle, end far right 
                     DRAW_LINE_D  
 _toplineEnd 
                     RESET0REF  
@@ -1483,11 +1481,6 @@ READ_BUTTONS        macro
                     lda      In_Alley 
                     bne      cant_shoot_in_alley 
                     jsr      Read_Btns 
-;                    lda      Vec_Button_1_2 
-;                    beq      toad 
-;                    lda      #1 
-;                    sta      Ship_Dead 
-;toad 
 ; don't shoot at Prize or explosion
                     lda      shipYpos 
                     asla     
@@ -1525,12 +1518,12 @@ READ_BUTTONS        macro
                     ldx      a,x 
                     ldb      shipdir 
                     beq      negstart 
-                    ldb      #17 
+                    ldb      #7 						; trying to lin up bullet creation with tip of ships nose
                     stb      ,x                           ; set start X 
                     bra      newshotdone 
 
 negstart 
-                    ldb      #-17 
+                    ldb      #-7 
                     stb      ,x                           ; set start -X 
 newshotdone 
 no_press 
@@ -1760,7 +1753,7 @@ READ_JOYSTICK       macro
                     beq      jsdoneY                      ; no Y motion 
                     bmi      going_down 
                     lda      shipYpos 
-                    cmpa     #6                           ; slot 6 as far up as u can go 
+                    cmpa     #6                           ; slot 6 as far up as u can go don't move
                     beq      jsdoneY 
                     inc      shipYpos 
                     clr      stallcnt 
@@ -1781,7 +1774,8 @@ jsdoneY
                     ldb      [a,x] 
                     cmpb     #PRIZE                       ; is there a prize in alley? 
                     bne      nope_prize 
-                                                          ; logic for first move into alley and jumping us 8 spots into alley to avoid return to centering test 
+                                                          ; logic for first move into alley and jumping us 8 spots 
+                                                          ; into alley to avoid return to centering test 
                     lda      Vec_Joy_1_X 
                     beq      jsdoneX 
                     inc      In_Alley 
@@ -1792,14 +1786,14 @@ going_right1
                     lda      #8 
                     adda     shipXpos 
                     bra      jsdone 
-
-                    sta      shipXpos 
-                    bra      jsdoneX 
+; unreachable
+;                    sta      shipXpos 
+;                    bra      jsdoneX 
 
 going_left1 
                     lda      #LEFT 
                     sta      shipdir 
-                    lda      shipXpos 
+;                    lda      shipXpos 
                     suba     #8 
                     sta      shipXpos 
                     bra      jsdoneX 
@@ -1861,11 +1855,11 @@ going_left
                     bvs      setMaxLeft 
 ; centering code here 
                     tsta     
-                    bmi      setLeftDone 
-                    cmpa     #5 
-                    bgt      setLeftDone 
-                    clr      In_Alley 
-                    clra                                  ; saved to shipXpos later 
+                    bmi      setLeftDone 		
+                    cmpa     #5					; if ship is closer than 5 
+                    bgt      setLeftDone        ; center it on screen
+                    clr      In_Alley 			; and remove from In_Alley
+                    clra                        ; saved to shipXpos later 
 ; center done 
                     bra      setLeftDone 
 
@@ -2313,14 +2307,17 @@ score_done
                     endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 DRAW_RASTER_SCORE   macro    
+				  tst       frm2cnt
+			;	  beq       _no_print_score
                     RESET0REF  
-                    ldd      #$FC50 
-                    std      Vec_Text_HW 
-                    lda      #128 
-                    ldb      #-50 
-                                                          ; MOVETO_D 
+               ;     ldd      #$FC50 				     ; probably don't need to do this every frame
+               ;     std      Vec_Text_HW 				; wastes 8 cycles
+               ;     lda      #128 
+               ;     ldb      #-50 
+				  ldd      #$80CE
                     ldu      #score 
-                    jsr      Print_Str_d 
+                    jsr      Print_Str_d
+_no_print_score 
                     endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 PRINT_VECTOR_SHIPS  macro    
@@ -2338,14 +2335,18 @@ _ships_left_loop
                     endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 PRINT_SHIPS         macro    
+				  tst       frm2cnt
+				;  bne       _no_print_ships
                     RESET0REF  
-                    lda      #-127 
-                    ldb      #-80 
+                   ; lda      #-127 
+                   ; ldb      #-60
+				  ldd      #$89C4						; save a cycle
+				;  ldd      #$00C4						; save a cycle
                     MOVETO_D  
                     lda      #$68                         ; asteroids ship 
                     ldb      shipcnt 
                     jsr      Print_Ships 
+_no_print_ships
                     endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-P_SHIPS             macro    
-                    endm     
+  
