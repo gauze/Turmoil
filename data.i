@@ -348,69 +348,79 @@ Explode_10:
 None:               fcb      1 
 ; NUMBERS all END at top right corner derive score from $c880 
 ; subtract $30 to get true value $20 == blank/space
-zero:               fcb      5 
-                    fcb      -5, +0 
-                    fcb      +0, -4 
-                    fcb      +5, +0 
-                    fcb      +0, +4 
-one:                fcb      3 
-                    fcb      -5, +0 
-                    fcb      +5, +0 
-two:                fcb      3 
-                    fcb      +0, -4 
-                    fcb      +0, +4 
-                    fcb      -5, -4 
-three:              fcb      2, +0, +4 
+NUM_GAP=6 
+zero: 
+                    fcb      2, -5, +0 
+                    fcb      2, +0, -4 
+                    fcb      2, +5, +0 
+                    fcb      2, +0, +4 
+                    fcb      0, +0, +0+NUM_GAP 
+                    fcb      1 
+one: 
+                    fcb      0, -5, +0 
+                    fcb      2, +5, +0 
+                    fcb      0, +0, +0+NUM_GAP 
+                    fcb      1 
+two: 
+                    fcb      0, +0, -4 
+                    fcb      2, +0, +4 
+                    fcb      2, -5, -4 
+                    fcb      2, +0, +4 
+                    fcb      0, +5, +0+NUM_GAP 
+                    fcb      1 
+three:              fcb      0, +0, -4 
+                    fcb      2, +0, +4 
                     fcb      2, -2, +0 
                     fcb      2, +0, -4 
                     fcb      0, +0, +4 
                     fcb      2, -3, +0 
                     fcb      2, +0, -4 
-                    fcb      0, +5, +6 
+                    fcb      0, +5, +4 
+                    fcb      0, +0, +0+NUM_GAP 
                     fcb      1 
-four:               fcb      0, -5, +4 
+four:               fcb      0, -5, 0 
                     fcb      2, +5, 0 
                     fcb      2, -3, -4 
                     fcb      2, +0, +4 
-                    fcb      0, +3, +2 
+                    fcb      0, +3, +0 
+                    fcb      0, +0, +0+NUM_GAP 
                     fcb      1 
-five:               fcb      0, +0, +4 
+five:                                                     ;fcb     0, +0, +4 
                     fcb      2, +0, -4 
                     fcb      2, -3, +0 
                     fcb      2, +0, +4 
                     fcb      2, -2, +0 
                     fcb      2, +0, -4 
-                    fcb      0, +5, +6 
+                    fcb      0, +5, +0 
+                    fcb      0, +0, +0+NUM_GAP 
                     fcb      1 
-six:                fcb      2, -5, +0 
+six:                fcb      2, +0, -4 
+                    fcb      2, -5, +0 
                     fcb      2, +0, +4 
-                    fcb      2, +2, +0 
+                    fcb      2, +3, +0 
                     fcb      2, +0, -4 
-                    fcb      0, +3, +6 
+                    fcb      0, +2, +4+NUM_GAP 
                     fcb      1 
-seven:              fcb      0, -5, +4 
+seven:              fcb      0, -5, -0 
                     fcb      2, +5, +0 
                     fcb      2, +0, -4 
-                    fcb      0, +0, +6 
+                    fcb      0, +0, +4 
+                    fcb      0, +0, +0+NUM_GAP 
                     fcb      1 
-eight:              fcb      2, +0, +4 
-                    fcb      2, -5, -4 
-                    fcb      2, +0, +4 
-                    fcb      2, +5, -4 
-                    fcb      0, +0, +6 
+eight:              fcb      2, +0, -4 
+                    fcb      2, -5, +4 
+                    fcb      2, +0, -4 
+                    fcb      2, +5, +4 
+                    fcb      0, +0, +0+NUM_GAP 
                     fcb      1 
-nine:               fcb      0, -5, +4 
+nine:               fcb      0, -5, +0 
                     fcb      2, +5, +0 
                     fcb      2, +0, -4 
-                    fcb      2, -2, +0 
+                    fcb      2, -3, +0 
                     fcb      2, +0, +4 
-                    fcb      0, +2, +2 
+                    fcb      0, +3, +0 
+                    fcb      0, +0, +0+NUM_GAP 
                     fcb      1 
-dots:               fcb      1, 7 
-                    fcb      2, 8 
-                    fcb      1, 4 
-                    fcb      1, 1 
-                    fcb      1,1 
 ;****************************************************************************************
 ; TABLES TABLES TABLES TABLES TABLES TABLES TABLES TABLES TABLES TABLES TABLES TABLES 
 ;****************************************************************************************
@@ -431,13 +441,13 @@ alleyto_t           fdb      alley0to,alley1to,alley2to,alley3to,alley4to,alley5
 max_enemys_t        fcb      -1,3,4,5,5,6,6,7,7,7,7,7     ; maximum number of occupied alleys per level, repeat after 6 
 ;enemy_speed_t       fcb      -1,5,5,6,7,8,9,0,20          ; example TODO 
 ; speed table divisor  (not used)0, 1(default), 2 , 3, 4, 5
-speed_t             fdb      fmt0cnt, fmt1cnt, frm2cnt, frm3cnt, frm4cnt, frm5cnt
+speed_t             fdb      fmt0cnt, fmt1cnt, frm2cnt, frm3cnt, frm4cnt, frm5cnt 
 ;speed tables 21 divisions .2, .25, .33, .5. 1, 1.5, 2, 2.5, 3, 3.5, ... , 9
-speedTop_t         fcb      1, 1, 1, 1, 1, 3, 2, 5, 3, 7, 4, 9, 5, 11, 6, 13, 7, 15, 8, 17, 9 ; move X 'pixels' 
-speedBot_t         fcb      5, 4, 3, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1,  2, 1,  2, 1,  2, 1,  2, 1 ; every Y frames
+speedTop_t          fcb      1, 1, 1, 1, 1, 3, 2, 5, 3, 7, 4, 9, 5, 11, 6, 13, 7, 15, 8, 17, 9 ; move X 'pixels' 
+speedBot_t          fcb      5, 4, 3, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1 ; every Y frames 
 ; all values in one table and do X+ to read next byte after loading table
-speedComb_t         fcb      1,5, 1,4, 1,3, 1,2, 1,1, 2,1, 5,2, 3,1, 7,2, 4,1, 9,2, 5,1, 11,2, 6,1, 13,2, 7,1, 15,2, 8,1, 17,2, 9,1
-max_speed_mask_t    fcb      1,1,1,1,3,3,3,7,7,7,7,7,7    ; masking to lower speed range 7 == 100% TODO/FIX/CHANGE
+speedComb_t         fcb      1,5, 1,4, 1,3, 1,2, 1,1, 2,1, 5,2, 3,1, 7,2, 4,1, 9,2, 5,1, 11,2, 6,1, 13,2, 7,1, 15,2, 8,1, 17,2, 9,1 
+max_speed_mask_t    fcb      1,1,1,1,3,3,3,7,7,7,7,7,7    ; masking to lower speed range 7 == 100% TODO/FIX/CHANGE 
 enemylvlcnt_t       fcb      0,50,60,70,75,80,90,100,100,100,100,100,110,120,130,140,150,160,170,180,190 
                     fcb      200,210,220,230,235,240,245,250,255,255,255,255,255,255,255,255,255,255,255,255 
                     fcb      255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255 
@@ -483,7 +493,6 @@ Tank_R_t            fdb      Tank_R_1,Tank_R_2
 Prize_t             fdb      Prize_1,Prize_2,Prize_1,Prize_2 ; big/small animation 
 Wedge_L_t           fdb      Wedge_L_1, Wedge_L_2, Wedge_L_3, Wedge_L_2 
 Wedge_R_t           fdb      Wedge_R_1, Wedge_R_2, Wedge_R_3, Wedge_R_2 
-
 ;##################################################################################
 ; SOUND data SOUND SOUND SOUND SOUND
 ;##################################################################################

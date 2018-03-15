@@ -2279,6 +2279,8 @@ _timeout_pat        STA      <VIA_shift_reg               ;Put pattern in shift 
                     endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 DRAW_VECTOR_SCORE   macro    
+				  lda       frm2cnt
+				  lbeq       _no_print_vscore
                     RESET0REF  
                     lda      #-127 
                     ldb      #50 
@@ -2304,14 +2306,15 @@ _is_zero
                     bra      _scoreloop 
 
 score_done 
+_no_print_vscore
                     endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-DRAW_RASTER_SCORE   macro    
-				  tst       frm2cnt
-			;	  beq       _no_print_score
+DRAW_RASTER_SCORE   macro   
+				  lda       frm2cnt
+				  beq       _no_print_score
                     RESET0REF  
-               ;     ldd      #$FC50 				     ; probably don't need to do this every frame
-               ;     std      Vec_Text_HW 				; wastes 8 cycles
+                ;    ldd      #$FC50 				     ; probably don't need to do this every frame
+               ;;     std      Vec_Text_HW 				; wastes 8 cycles
                ;     lda      #128 
                ;     ldb      #-50 
 				  ldd      #$80CE
@@ -2323,7 +2326,7 @@ _no_print_score
 PRINT_VECTOR_SHIPS  macro    
                     RESET0REF  
                     lda      #-127 
-                    ldb      #-90 
+                    ldb      #50 
                     MOVETO_D  
                     lda      shipcnt                      ; vector draw ships remaining routine TEST 
                     sta      temp 
@@ -2335,14 +2338,12 @@ _ships_left_loop
                     endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 PRINT_SHIPS         macro    
-				  tst       frm2cnt
-				;  bne       _no_print_ships
+				  lda       frm2cnt
+				  bne       _no_print_ships
                     RESET0REF  
-                   ; lda      #-127 
-                   ; ldb      #-60
-				  ldd      #$89C4						; save a cycle
-				;  ldd      #$00C4						; save a cycle
-                    MOVETO_D  
+                  ;  lda      #-127 
+                  ;  ldb      #60
+				  ldx      #$8150						; coords
                     lda      #$68                         ; asteroids ship 
                     ldb      shipcnt 
                     jsr      Print_Ships 

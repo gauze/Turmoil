@@ -74,10 +74,12 @@ restart
 main: 
                     jsr      Wait_Recal 
                     READ_JOYSTICK  
+
                     lda      #$5F 
                     INTENSITY_A                         
                     DRAW_LINE_WALLS  
                     DRAW_SHIP  
+
                     READ_BUTTONS  
                     MOVE_BULLETS  
                     lda      #$7F 
@@ -85,12 +87,14 @@ main:
                     DRAW_BULLETS  
                     lda      #$6F 
                     INTENSITY_A  
-                                                          ; jmp no_score 
-; display score and ships left
-                                                          ; DRAW_VECTOR_SCORE_DONTUSEFONTSBROKEN 
-                    DRAW_RASTER_SCORE  
-                    PRINT_SHIPS  
+                      ; display score and ships left
+                     DRAW_VECTOR_SCORE ;_DONTUSEFONTSBROKEN 
+                   ; DRAW_RASTER_SCORE  
+                    PRINT_SHIPS 
+
                                                           ;PRINT_SHIPS_VECTOR 
+; decrement counters on alley respawn timeouts                                    ; jmp no_score 
+
 no_score: 
                     ldd      prizecnt                     ; minumum counter for time between prize spawns
                     addd     #1 
@@ -108,7 +112,7 @@ noprizecntdown
                     SHIP_Y_COLLISION_DETECT  
                     SHIP_X_COLLISION_DETECT  
                     STALL_CHECK  						; can't just sit in an open alley forever...
-; decrement counters on alley respawn timeouts
+
                     ldx      #alleyto_t 
                     lda      #6 
                     lsla     
@@ -122,10 +126,12 @@ cntatzero
                     lsla     
                     bge      respawncounter 
 ;
+ 
                     lda      Level_Done                   ; check level_done flag, increment level if so. 
-                    beq      nolevel 
+                    lbeq      nolevel 
                     jsr      newlevel                     ; and run routine 
-nolevel 
+
+nolevel
                     jmp      main                         ; and repeat forever, sorta 
 
 
