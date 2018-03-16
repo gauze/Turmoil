@@ -348,78 +348,84 @@ Explode_10:
 None:               fcb      1 
 ; NUMBERS all END at top right corner derive score from $c880 
 ; subtract $30 to get true value $20 == blank/space
-NUM_GAP=6 
+NUM_GAP=65
+VNUM_SCALE=6 
 zero: 
-                    fcb      2, -5, +0 
-                    fcb      2, +0, -4 
-                    fcb      2, +5, +0 
-                    fcb      2, +0, +4 
+                    fcb      2, -10*VNUM_SCALE, +0 
+                    fcb      2, +0, -8*VNUM_SCALE 
+                    fcb      2, +10*VNUM_SCALE, +0 
+                    fcb      2, +0, +8*VNUM_SCALE 
                     fcb      0, +0, +0+NUM_GAP 
                     fcb      1 
 one: 
-                    fcb      0, -5, +0 
-                    fcb      2, +5, +0 
-                    fcb      0, +0, +0+NUM_GAP 
+                    fcb      2, -10*VNUM_SCALE, +0 
+                    fcb      0, +10*VNUM_SCALE, +0+NUM_GAP 
+                                                          ;fcb 0, +0, +0+NUM_GAP 
                     fcb      1 
 two: 
-                    fcb      0, +0, -4 
-                    fcb      2, +0, +4 
-                    fcb      2, -5, -4 
-                    fcb      2, +0, +4 
-                    fcb      0, +5, +0+NUM_GAP 
+                    fcb      0, +0, -8*VNUM_SCALE 
+                    fcb      2, +0, +8*VNUM_SCALE 
+                    fcb      2, -10*VNUM_SCALE, -8*VNUM_SCALE 
+                    fcb      2, +0, +8*VNUM_SCALE 
+                    fcb      0, +10*VNUM_SCALE, +0+NUM_GAP 
                     fcb      1 
-three:              fcb      0, +0, -4 
-                    fcb      2, +0, +4 
-                    fcb      2, -2, +0 
-                    fcb      2, +0, -4 
-                    fcb      0, +0, +4 
-                    fcb      2, -3, +0 
-                    fcb      2, +0, -4 
-                    fcb      0, +5, +4 
+three:              fcb      0, +0, -8*VNUM_SCALE 
+                    fcb      2, +0, +8*VNUM_SCALE 
+                    fcb      2, -4*VNUM_SCALE, +0 
+                    fcb      2, +0, -8*VNUM_SCALE 
+                    fcb      0, +0, +8*VNUM_SCALE 
+                    fcb      2, -6*VNUM_SCALE, +0 
+                    fcb      2, +0, -8*VNUM_SCALE 
+                    fcb      0, +10*VNUM_SCALE, +8*VNUM_SCALE+NUM_GAP 
+                                                          ; fcb 0, +0, +0+NUM_GAP 
+                    fcb      1 
+four:               fcb      0, -10*VNUM_SCALE, 0 
+                    fcb      2, +10*VNUM_SCALE, 0 
+                    fcb      2, -6*VNUM_SCALE, -8*VNUM_SCALE 
+                    fcb      2, +0, +8*VNUM_SCALE 
+                    fcb      0, +6*VNUM_SCALE, +0+NUM_GAP 
+                                                          ; fcb 0, +0, +0+NUM_GAP 
+                    fcb      1 
+;five:                                                     ;fcb     0, +0, +8 
+;                    fcb      2, +0, -8 
+;                    fcb      2, -6, +0 
+;                    fcb      2, +0, +8 
+;                    fcb      2, -2, +0 
+;                    fcb      2, +0, -8 
+;                    fcb      0, +10, +0 
+;                    fcb      0, +0, +0+NUM_GAP 
+;                    fcb      1
+five:               fcb      2, +0, -8*VNUM_SCALE 
+                    fcb      2, -10*VNUM_SCALE, +8*VNUM_SCALE 
+                    fcb      2, +0, -8*VNUM_SCALE 
+                    fcb      0, +10*VNUM_SCALE, +8*VNUM_SCALE+NUM_GAP 
+                    fcb      1 
+six:                fcb      2, +0, -8*VNUM_SCALE 
+                    fcb      2, -10*VNUM_SCALE, +0 
+                    fcb      2, +0, +8*VNUM_SCALE 
+                    fcb      2, +6*VNUM_SCALE, +0 
+                    fcb      2, +0, -8*VNUM_SCALE 
+                    fcb      0, +4*VNUM_SCALE, +8*VNUM_SCALE+NUM_GAP 
+                    fcb      1 
+seven:              fcb      0, -10*VNUM_SCALE, -0 
+                    fcb      2, +10*VNUM_SCALE, +0 
+                    fcb      2, +0, -8*VNUM_SCALE 
+                    fcb      0, +0, +8*VNUM_SCALE+NUM_GAP 
+                                                          ; fcb 0, +0, +0+NUM_GAP 
+                    fcb      1 
+eight:              fcb      2, +0, -8*VNUM_SCALE 
+                    fcb      2, -10*VNUM_SCALE, +8*VNUM_SCALE 
+                    fcb      2, +0, -8*VNUM_SCALE 
+                    fcb      2, +10*VNUM_SCALE, +8*VNUM_SCALE 
                     fcb      0, +0, +0+NUM_GAP 
                     fcb      1 
-four:               fcb      0, -5, 0 
-                    fcb      2, +5, 0 
-                    fcb      2, -3, -4 
-                    fcb      2, +0, +4 
-                    fcb      0, +3, +0 
-                    fcb      0, +0, +0+NUM_GAP 
-                    fcb      1 
-five:                                                     ;fcb     0, +0, +4 
-                    fcb      2, +0, -4 
-                    fcb      2, -3, +0 
-                    fcb      2, +0, +4 
-                    fcb      2, -2, +0 
-                    fcb      2, +0, -4 
-                    fcb      0, +5, +0 
-                    fcb      0, +0, +0+NUM_GAP 
-                    fcb      1 
-six:                fcb      2, +0, -4 
-                    fcb      2, -5, +0 
-                    fcb      2, +0, +4 
-                    fcb      2, +3, +0 
-                    fcb      2, +0, -4 
-                    fcb      0, +2, +4+NUM_GAP 
-                    fcb      1 
-seven:              fcb      0, -5, -0 
-                    fcb      2, +5, +0 
-                    fcb      2, +0, -4 
-                    fcb      0, +0, +4 
-                    fcb      0, +0, +0+NUM_GAP 
-                    fcb      1 
-eight:              fcb      2, +0, -4 
-                    fcb      2, -5, +4 
-                    fcb      2, +0, -4 
-                    fcb      2, +5, +4 
-                    fcb      0, +0, +0+NUM_GAP 
-                    fcb      1 
-nine:               fcb      0, -5, +0 
-                    fcb      2, +5, +0 
-                    fcb      2, +0, -4 
-                    fcb      2, -3, +0 
-                    fcb      2, +0, +4 
-                    fcb      0, +3, +0 
-                    fcb      0, +0, +0+NUM_GAP 
+nine:               fcb      0, -10*VNUM_SCALE, +0 
+                    fcb      2, +10*VNUM_SCALE, +0 
+                    fcb      2, +0, -8*VNUM_SCALE 
+                    fcb      2, -6*VNUM_SCALE, +0 
+                    fcb      2, +0, +8*VNUM_SCALE 
+                    fcb      0, +6*VNUM_SCALE, +0+NUM_GAP 
+                                                          ; fcb 0, +0, +0+NUM_GAP 
                     fcb      1 
 ;****************************************************************************************
 ; TABLES TABLES TABLES TABLES TABLES TABLES TABLES TABLES TABLES TABLES TABLES TABLES 

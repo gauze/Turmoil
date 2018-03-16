@@ -35,7 +35,6 @@
                     fcb      -$40, $23                    ; hight, width, rel y, rel x (from 0,0) 
                     fcc      "-2018", $80                 ; 3 solid blocks ending with $80 
                     db       0                            ; end of game header 
-			
                     bra      introSplash 
 
                     bra      restart                      ; TESTING skip intro to get right to it. 
@@ -52,7 +51,7 @@
 ;***************************************************************************
 ; CODE SECTION
 ;***************************************************************************
-; here the cartridge program starts off	
+; here the cartridge program starts off    
 introSplash 
                     jsr      titleScreen 
 restart 
@@ -74,29 +73,27 @@ restart
 main: 
                     jsr      Wait_Recal 
                     READ_JOYSTICK  
-
                     lda      #$5F 
-                    INTENSITY_A                         
+                    INTENSITY_A  
                     DRAW_LINE_WALLS  
                     DRAW_SHIP  
-
                     READ_BUTTONS  
                     MOVE_BULLETS  
                     lda      #$7F 
                     INTENSITY_A  
                     DRAW_BULLETS  
-                    lda      #$6F 
+                    lda      #$5F 
                     INTENSITY_A  
-                      ; display score and ships left
-                     DRAW_VECTOR_SCORE ;_DONTUSEFONTSBROKEN 
-                   ; DRAW_RASTER_SCORE  
-                    PRINT_SHIPS 
-
+                                                          ; display score and ships left 
+                    DRAW_VECTOR_SCORE  
+                    lda      #127 
+                    sta      VIA_t1_cnt_lo 
+                                                          ; DRAW_RASTER_SCORE 
+                    PRINT_SHIPS  
                                                           ;PRINT_SHIPS_VECTOR 
 ; decrement counters on alley respawn timeouts                                    ; jmp no_score 
-
 no_score: 
-                    ldd      prizecnt                     ; minumum counter for time between prize spawns
+                    ldd      prizecnt                     ; minumum counter for time between prize spawns 
                     addd     #1 
                     std      prizecnt 
                     lda      Is_Prize 
@@ -107,12 +104,11 @@ noprizecntdown
                     NEW_ENEMY  
                     FRAME_CNTS  
                     MOVE_ENEMYS  
-                    DRAW_ENEMYS 
+                    DRAW_ENEMYS  
                     SHOT_COLLISION_DETECT  
                     SHIP_Y_COLLISION_DETECT  
                     SHIP_X_COLLISION_DETECT  
-                    STALL_CHECK  						; can't just sit in an open alley forever...
-
+                    STALL_CHECK                           ; can't just sit in an open alley forever... 
                     ldx      #alleyto_t 
                     lda      #6 
                     lsla     
@@ -126,14 +122,11 @@ cntatzero
                     lsla     
                     bge      respawncounter 
 ;
- 
                     lda      Level_Done                   ; check level_done flag, increment level if so. 
-                    lbeq      nolevel 
+                    lbeq     nolevel 
                     jsr      newlevel                     ; and run routine 
-
-nolevel
+nolevel 
                     jmp      main                         ; and repeat forever, sorta 
-
 
 ; must go at bottom or fills up RAM instead of ROM 
                     include  "functions.i"

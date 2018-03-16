@@ -12,10 +12,10 @@ DRAW_SHIP           macro
                     lda      a,x                          ; get pos from shippos_t table 
                     suba     #8                           ; small offset to center in lane horizontally 
                     ldb      shipXpos 
-              ;TEST      addb     #+12 
+                                                          ;TEST addb #+12 
                     tst      shipdir                      ; testing for 0|LEFT 1|RIGHT 
                     beq      _donuthin 
-              ;TEST      subb     #+24 
+                                                          ;TEST subb #+24 
                                                           ; bra _donuthin 
 _donuthin 
                     MOVETO_D  
@@ -81,10 +81,10 @@ DRAW_WALLS          macro
 ALLEYWALL_Y         =        60 
 ALLEYHEIGHT         =        17 
 DRAW_LINE_WALLS     macro    
-                    clr      Vec_Misc_Count 	
-				   rol      Line_Pat                     ; 1->2->4->8->16-> etc
-				   bne      _topline                     ; check for 0
-				   inc      Line_Pat					 ; if it's zero set to 1 ie reset it
+                    clr      Vec_Misc_Count 
+                    rol      Line_Pat                     ; 1->2->4->8->16-> etc 
+                    bne      _topline                     ; check for 0 
+                    inc      Line_Pat                     ; if it's zero set to 1 ie reset it 
                     RESET0REF  
 _topline 
                     lda      #(ALLEYWALL_Y) 
@@ -396,14 +396,14 @@ MOVE_ENEMYS         macro
                     lda      prizecntdown 
                     beq      prize2cannonball0 
 noprize0 
-                    cmpa     #EXPLOSION                   ; don't scale Explosion speed
+                    cmpa     #EXPLOSION                   ; don't scale Explosion speed 
                     beq      framecont0 
                     lda      alley0sd                     ; speed divisor code 
                     lsla     
                     ldx      #speed_t 
-                    lda      [a,x]                        ; check scale divisor vs current count from table
-                    beq      framecont0                   ; move on this frame
-                    bra      subdone0                     ; skip movet on this frame
+                    lda      [a,x]                        ; check scale divisor vs current count from table 
+                    beq      framecont0                   ; move on this frame 
+                    bra      subdone0                     ; skip move on this frame 
 
 framecont0 
                     lda      alley0x 
@@ -445,6 +445,7 @@ alley0of                                                  ;        object hit th
                     sta      alley0x 
                     sta      alley0d 
                     sta      alley0s 
+                    sta      alley0sd 
                     bra      subdone0 
 
 dotank0                                                   ;        change type from arrow to tank 
@@ -507,6 +508,7 @@ alley1of                                                  ;        object hit th
                     sta      alley1x 
                     sta      alley1d 
                     sta      alley1s 
+                    sta      alley1sd 
                     bra      subdone1 
 
 dotank1                                                   ;        change type from arrow to tank 
@@ -569,6 +571,7 @@ alley2of                                                  ;        object hit th
                     sta      alley2x 
                     sta      alley2d 
                     sta      alley2s 
+                    sta      alley2sd 
                     bra      subdone2 
 
 dotank2                                                   ;        change type from arrow to tank 
@@ -631,6 +634,7 @@ alley3of                                                  ;        object hit th
                     sta      alley3x 
                     sta      alley3d 
                     sta      alley3s 
+                    sta      alley3sd 
                     bra      subdone3 
 
 dotank3                                                   ;        change type from arrow to tank 
@@ -693,6 +697,7 @@ alley4of                                                  ;        object hit th
                     sta      alley4x 
                     sta      alley4d 
                     sta      alley4s 
+                    sta      alley4sd 
                     bra      subdone4 
 
 dotank4                                                   ;        change type from arrow to tank 
@@ -755,6 +760,7 @@ alley5of                                                  ;        object hit th
                     sta      alley5x 
                     sta      alley5d 
                     sta      alley5s 
+                    sta      alley5sd 
                     bra      subdone5 
 
 dotank5                                                   ;        change type from arrow to tank 
@@ -817,6 +823,7 @@ alley6of                                                  ;        object hit th
                     sta      alley6x 
                     sta      alley6d 
                     sta      alley6s 
+                    sta      alley6sd 
                     bra      subdone6 
 
 dotank6                                                   ;        change type from arrow to tank 
@@ -882,7 +889,8 @@ SHIP_X_COLLISION_DETECT  macro
                                                           ; prize score is done like this: 
                                                           ; ldd #2048 
                                                           ; jsr Add_Score_d 
-                                                          ; #2048 = 100 0000 0000 BCD value 
+                                                          ; #2048 = 0000 0100 0000 0000 BCD value
+												     ; that's 800 DEC
                     lda      shipYpos 
                     lsla     
                     ldx      #alleye_t 
@@ -1023,7 +1031,9 @@ eventankdies0
                     lda      bullet0d                     ; take bullets dir, str to explosions dir 
                     sta      alley0d 
                     lda      #2 
-                    sta      alley0s 
+                    sta      alley0s
+			       deca     
+				  sta      alley0sd 
                     clra     
                     sta      bullet0e 
                     sta      bullet0x 
@@ -1093,7 +1103,9 @@ eventankdies1
                     lda      bullet1d                     ; take bullets dir, str to explosions dir 
                     sta      alley1d 
                     lda      #2 
-                    sta      alley1s 
+                    sta      alley1s
+				  deca
+				  sta      alley1sd 
                     clra     
                     sta      bullet1e 
                     sta      bullet1x 
@@ -1164,6 +1176,8 @@ eventankdies2
                     sta      alley2d 
                     lda      #2 
                     sta      alley2s 
+				  deca
+				  sta      alley2sd 
                     clra     
                     sta      bullet2e 
                     sta      bullet2x 
@@ -1233,7 +1247,9 @@ eventankdies3
                     lda      bullet3d                     ; take bullets dir, str to explosions dir 
                     sta      alley3d 
                     lda      #2 
-                    sta      alley3s 
+                    sta      alley3s
+				  deca
+				  sta      alley3sd  
                     clra     
                     sta      bullet3e 
                     sta      bullet3x 
@@ -1304,6 +1320,8 @@ eventankdies4
                     sta      alley4d 
                     lda      #2 
                     sta      alley4s 
+				  deca
+				  sta      alley4sd 
                     clra     
                     sta      bullet4e 
                     sta      bullet4x 
@@ -1374,6 +1392,8 @@ eventankdies5
                     sta      alley5d 
                     lda      #2 
                     sta      alley5s 
+				  deca
+				  sta      alley5sd 
                     clra     
                     sta      bullet5e 
                     sta      bullet5x 
@@ -1444,6 +1464,8 @@ eventankdies6
                     sta      alley6d 
                     lda      #2 
                     sta      alley6s 
+				  deca
+				  sta      alley6sd 
                     clra     
                     sta      bullet6e 
                     sta      bullet6x 
@@ -1518,7 +1540,7 @@ READ_BUTTONS        macro
                     ldx      a,x 
                     ldb      shipdir 
                     beq      negstart 
-                    ldb      #7 						; trying to lin up bullet creation with tip of ships nose
+                    ldb      #7                           ; trying to lin up bullet creation with tip of ships nose 
                     stb      ,x                           ; set start X 
                     bra      newshotdone 
 
@@ -1753,7 +1775,7 @@ READ_JOYSTICK       macro
                     beq      jsdoneY                      ; no Y motion 
                     bmi      going_down 
                     lda      shipYpos 
-                    cmpa     #6                           ; slot 6 as far up as u can go don't move
+                    cmpa     #6                           ; slot 6 as far up as u can go don't move 
                     beq      jsdoneY 
                     inc      shipYpos 
                     clr      stallcnt 
@@ -1786,10 +1808,10 @@ going_right1
                     lda      #8 
                     adda     shipXpos 
                     bra      jsdone 
+
 ; unreachable
 ;                    sta      shipXpos 
 ;                    bra      jsdoneX 
-
 going_left1 
                     lda      #LEFT 
                     sta      shipdir 
@@ -1855,11 +1877,11 @@ going_left
                     bvs      setMaxLeft 
 ; centering code here 
                     tsta     
-                    bmi      setLeftDone 		
-                    cmpa     #5					; if ship is closer than 5 
-                    bgt      setLeftDone        ; center it on screen
-                    clr      In_Alley 			; and remove from In_Alley
-                    clra                        ; saved to shipXpos later 
+                    bmi      setLeftDone 
+                    cmpa     #5                           ; if ship is closer than 5 
+                    bgt      setLeftDone                  ; center it on screen 
+                    clr      In_Alley                     ; and remove from In_Alley 
+                    clra                                  ; saved to shipXpos later 
 ; center done 
                     bra      setLeftDone 
 
@@ -2279,18 +2301,21 @@ _timeout_pat        STA      <VIA_shift_reg               ;Put pattern in shift 
                     endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 DRAW_VECTOR_SCORE   macro    
-				  lda       frm2cnt
-				  lbeq       _no_print_vscore
-                    RESET0REF  
-                    lda      #-127 
-                    ldb      #50 
+                    lda      frm2cnt 
+                    lbeq     _no_print_vscore 
+                    RESET0REF 
+                    lda      #-127 						; position before scaling
+                    ldb      #-20 
                     MOVETO_D  
+                    lda      #17 						; scale it lower is better
+                    sta      VIA_t1_cnt_lo 
+  
                     ldy      #score 
 _scoreloop 
                     lda      ,y+ 
-                    cmpa     #$20                         ; space? 
+                    cmpa     #$20                         ; is space? 
                     beq      _is_zero 
-                    cmpa     #$80                         ; EOL? 
+                    cmpa     #$80                         ; is EOL? 
                     lbeq     score_done 
                     suba     #$30                         ; otherwise get DEC value 
                     lsla     
@@ -2306,20 +2331,20 @@ _is_zero
                     bra      _scoreloop 
 
 score_done 
-_no_print_vscore
+_no_print_vscore 
                     endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-DRAW_RASTER_SCORE   macro   
-				  lda       frm2cnt
-				  beq       _no_print_score
+DRAW_RASTER_SCORE   macro    
+                    lda      frm2cnt 
+                    beq      _no_print_score 
                     RESET0REF  
-                ;    ldd      #$FC50 				     ; probably don't need to do this every frame
-               ;;     std      Vec_Text_HW 				; wastes 8 cycles
-               ;     lda      #128 
-               ;     ldb      #-50 
-				  ldd      #$80CE
+                                                          ; ldd #$FC50 ; probably don't need to do this every frame 
+                                                          ;; std Vec_Text_HW ; wastes 8 cycles 
+                                                          ; lda #128 
+                                                          ; ldb #-50 
+                    ldd      #$80CE 
                     ldu      #score 
-                    jsr      Print_Str_d
+                    jsr      Print_Str_d 
 _no_print_score 
                     endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -2338,16 +2363,15 @@ _ships_left_loop
                     endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 PRINT_SHIPS         macro    
-				  lda       frm2cnt
-				  bne       _no_print_ships
+                    lda      frm2cnt 
+                    bne      _no_print_ships 
                     RESET0REF  
-                  ;  lda      #-127 
-                  ;  ldb      #60
-				  ldx      #$8150						; coords
+                                                          ; lda #-127 
+                                                          ; ldb #60 
+                    ldx      #$8150                       ; coords 
                     lda      #$68                         ; asteroids ship 
                     ldb      shipcnt 
                     jsr      Print_Ships 
-_no_print_ships
+_no_print_ships 
                     endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  
