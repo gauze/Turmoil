@@ -2307,7 +2307,7 @@ DRAW_VECTOR_SCORE   macro
                     lda      #-127 						; position before scaling
                     ldb      #-20 
                     MOVETO_D  
-                    lda      #17 						; scale it lower is better
+                    lda      #14 						; scale it lower is better
                     sta      VIA_t1_cnt_lo 
   
                     ldy      #score 

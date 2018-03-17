@@ -348,7 +348,7 @@ Explode_10:
 None:               fcb      1 
 ; NUMBERS all END at top right corner derive score from $c880 
 ; subtract $30 to get true value $20 == blank/space
-NUM_GAP=65
+NUM_GAP=65 
 VNUM_SCALE=6 
 zero: 
                     fcb      2, -10*VNUM_SCALE, +0 
@@ -443,16 +443,72 @@ alleye_t            fdb      alley0e,alley1e,alley2e,alley3e,alley4e,alley5e,all
 alleyd_t            fdb      alley0d,alley1d,alley2d,alley3d,alley4d,alley5d,alley6d ; direction 
 alleyx_t            fdb      alley0x,alley1x,alley2x,alley3x,alley4x,alley5x,alley6x ; X pos 
 alleys_t            fdb      alley0s,alley1s,alley2s,alley3s,alley4s,alley5s,alley6s ; speed 
+alleysd_t           fdb      alley0sd,alley1sd,alley2sd,alley3sd,alley4sd,alley5sd,alley6sd ; speed divisor 
 alleyto_t           fdb      alley0to,alley1to,alley2to,alley3to,alley4to,alley5to,alley6to ; timeout before next spawn 
 max_enemys_t        fcb      -1,3,4,5,5,6,6,7,7,7,7,7     ; maximum number of occupied alleys per level, repeat after 6 
 ;enemy_speed_t       fcb      -1,5,5,6,7,8,9,0,20          ; example TODO 
 ; speed table divisor  (not used)0, 1(default), 2 , 3, 4, 5
 speed_t             fdb      fmt0cnt, fmt1cnt, frm2cnt, frm3cnt, frm4cnt, frm5cnt 
 ;speed tables 21 divisions .2, .25, .33, .5. 1, 1.5, 2, 2.5, 3, 3.5, ... , 9
-speedTop_t          fcb      1, 1, 1, 1, 1, 3, 2, 5, 3, 7, 4, 9, 5, 11, 6, 13, 7, 15, 8, 17, 9 ; move X 'pixels' 
-speedBot_t          fcb      5, 4, 3, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1 ; every Y frames 
+speedTop_t          fcb      1, 1, 1, 1, 1, 1, 3, 2, 5, 3, 7, 4, 9, 5, 11, 6, 13, 7, 15, 8, 17, 9 ; move X 'pixels' 
+speedBot_t          fcb      10, 5, 4, 3, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1 ; every Y frames 
+speedComb_t         fcb      1,10, 1,5, 1,4, 1,3, 1,2, 1,1, 2,1, 5,2, 3,1, 7,2, 4,1, 9,2, 5,1, 11,2, 6,1, 13,2, 7,1, 15,2, 8,1, 17,2, 9,1 
+; and set up symbolic names for each speed with assigns
+TENTH_S             =        0 
+FIFTH_S             =        1 
+FORTH_S             =        2 
+THIRD_S             =        3 
+HALF_S              =        4 
+ONE_S               =        5 
+ONE_AND_HALF_S      =        6 
+TWO_S               =        7 
+TWO_AND_HALF_S      =        8 
+THREE_S             =        9 
+THREE_HALF_S        =        10 
+FOUR_S              =        11 
+FOUR_AND_HALF       =        12 
+FIVE_S              =        13 
+FIVE_AND_HALF_S     =        14 
+SIX_S               =        15 
+SIX_AND_HALF_S      =        16 
+SEVEN_S             =        17 
+SEVEN_AND_HALF_S    =        18 
+EIGHT_S             =        19 
+EIGHT_AND_HALF_S    =        20 
+NINE_S              =        21 
+; LARGE table needs NEGATIVE indexes
+                    db       128,129,130,131,132,133,134,135,136,137,138,139,140 
+                    db       141,142,143,144,145,146,147,148,149,150 
+                    db       151,152,153,154,155,156,157,158,159,160 
+                    db       161,162,163,164,165,166,167,168,169,170 
+                    db       171,172,173,174,175,176,177,178,179,180 
+                    db       181,182,183,184,185,186,187,188,189,190 
+                    db       191,192,193,194,195,196,197,198,199,200 
+                    db       201,202,203,204,205,206,207,208,209,210 
+                    db       211,212,213,214,215,216,217,218,219,220 
+                    db       221,222,223,224,225,226,227,228,229,230 
+                    db       231,232,233,234,235,236,237,238,239,240 
+                    db       241,242,243,244,245,246,247,248,249,250 
+                    db       251,252,253,254,255          ; level 8 (all of above and below) 
+enemyspeed_t        db       ONE_S,HALF_S                 ; level 1 (2^1) 
+                    db       FIFTH_S, ONE_S               ; level 2 + above (2^2) 
+                    db       4,5,6,7                      ; level 3 + above (2^3) 
+                    db       8,9,10,11,12,13,14,15        ; level 4 + above (2^4) 
+                    db       16,17,18,19,20               ; level 5 
+                    db       21,22,23,24,25,26,27,28,29,30,31 ; level 5 + above (2^5) 
+                    db       32,33,34,35,36,37,38,39,40 
+                    db       41,42,43,44,45,46,47,48,49,50 
+                    db       51,52,53,54,55,56,57,58,59,60 
+                    db       61,62,63                     ; level 6 
+                    db       64,65,66,67,68,69,70 
+                    db       71,72,73,74,75,76,77,78,79,80 
+                    db       81,82,83,84,85,86,87,88,89,90 
+                    db       91,92,93,94,95,96,97,98,99,100 
+                    db       101,102,103,104,105,106,107,108,109,110 
+                    db       111,112,113,114,115,116,117,118,119,120 
+                    db       121,122,123,124,125,126,127  ;level 7 + above (2^7) 
+; END SPEED TABLES
 ; all values in one table and do X+ to read next byte after loading table
-speedComb_t         fcb      1,5, 1,4, 1,3, 1,2, 1,1, 2,1, 5,2, 3,1, 7,2, 4,1, 9,2, 5,1, 11,2, 6,1, 13,2, 7,1, 15,2, 8,1, 17,2, 9,1 
 max_speed_mask_t    fcb      1,1,1,1,3,3,3,7,7,7,7,7,7    ; masking to lower speed range 7 == 100% TODO/FIX/CHANGE 
 enemylvlcnt_t       fcb      0,50,60,70,75,80,90,100,100,100,100,100,110,120,130,140,150,160,170,180,190 
                     fcb      200,210,220,230,235,240,245,250,255,255,255,255,255,255,255,255,255,255,255,255 
@@ -557,3 +613,6 @@ highscorelabel      fcc      "HIGH SCORE",$80
 credits             fcc      "PROGRAMMED BY GAUZE 2016-2018",$80 
                     FCC      "DISASSEMBLED BY MALBAN",$6C
                     fcc      "KARRSOFT82LDMCBCJT82LDMCBCJ"
+                                                          ; table negative indexs start here 128-255 leave as reminder 
+;                     db       128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,150,151,152,153,154,155,156,157,158,159,160,161,162,163,164,165,166,167,168,169,170,171,172,173,174,175,176,177,178,179,180,181,182,183,184,185,186,187,188,189,190,191,192,193,194,195,196,197,198,199,200,201,202,203,204,205,206,207,208,209,210,211,212,213,214,215,216,217,218,219,220,221,222,223,224,225,226,227,228,229,230,231,232,233,234,235,236,237,238,239,240,241,242,243,244,245,246,247,248,249,250,251,252,253,254,255
+;shit_t               db       0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127, 42, 69
