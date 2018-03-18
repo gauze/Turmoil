@@ -114,6 +114,10 @@ fmt1cnt             ds       1
 fmt0cnt             ds       1
 ; temporary storage
 temp                ds       1                            ; generic 1 byte temp 
+temp1               ds       1
+speedtemp           ds       1
+speeddtemp          ds       1
+speeditemp          ds       1
 spawntemp           ds       1 
 masktemp            ds       1 
 bulletYtemp         ds       1 

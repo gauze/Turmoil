@@ -446,13 +446,14 @@ alleys_t            fdb      alley0s,alley1s,alley2s,alley3s,alley4s,alley5s,all
 alleysd_t           fdb      alley0sd,alley1sd,alley2sd,alley3sd,alley4sd,alley5sd,alley6sd ; speed divisor 
 alleyto_t           fdb      alley0to,alley1to,alley2to,alley3to,alley4to,alley5to,alley6to ; timeout before next spawn 
 max_enemys_t        fcb      -1,3,4,5,5,6,6,7,7,7,7,7     ; maximum number of occupied alleys per level, repeat after 6 
-;enemy_speed_t       fcb      -1,5,5,6,7,8,9,0,20          ; example TODO 
+bitmasks            db       0, %00000001, %00000011, %00000111, %00001111, %00011111, %00111111, %01111111, 255
+
 ; speed table divisor  (not used)0, 1(default), 2 , 3, 4, 5
-speed_t             fdb      fmt0cnt, fmt1cnt, frm2cnt, frm3cnt, frm4cnt, frm5cnt 
+speed_t             dw      fmt0cnt, fmt1cnt, frm2cnt, frm3cnt, frm4cnt, frm5cnt,0,0,0,0,frm10cnt ; which frame to do enemy moves on
 ;speed tables 21 divisions .2, .25, .33, .5. 1, 1.5, 2, 2.5, 3, 3.5, ... , 9
-speedTop_t          fcb      1, 1, 1, 1, 1, 1, 3, 2, 5, 3, 7, 4, 9, 5, 11, 6, 13, 7, 15, 8, 17, 9 ; move X 'pixels' 
-speedBot_t          fcb      10, 5, 4, 3, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1 ; every Y frames 
-speedComb_t         fcb      1,10, 1,5, 1,4, 1,3, 1,2, 1,1, 2,1, 5,2, 3,1, 7,2, 4,1, 9,2, 5,1, 11,2, 6,1, 13,2, 7,1, 15,2, 8,1, 17,2, 9,1 
+speedTop_t          db      1, 1, 1, 1, 1, 1, 3, 2, 5, 3, 7, 4, 9, 5, 11, 6, 13, 7, 15, 8, 17, 9 ; move X 'pixels' 
+speedBot_t          db      10, 5, 4, 3, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1 ; every Y frames 
+;speedComb_t         db      1,10, 1,5, 1,4, 1,3, 1,2, 1,1, 2,1, 5,2, 3,1, 7,2, 4,1, 9,2, 5,1, 11,2, 6,1, 13,2, 7,1, 15,2, 8,1, 17,2, 9,1 
 ; and set up symbolic names for each speed with assigns
 TENTH_S             =        0 
 FIFTH_S             =        1 
@@ -492,7 +493,7 @@ NINE_S              =        21
                     db       251,252,253,254,255          ; level 8 (all of above and below) 
 enemyspeed_t        db       ONE_S,HALF_S                 ; level 1 (2^1) 
                     db       FIFTH_S, ONE_S               ; level 2 + above (2^2) 
-                    db       4,5,6,7                      ; level 3 + above (2^3) 
+                    db       TWO_S,ONE_S,ONE_AND_HALF_S, HALF_S ; level 3 + above (2^3) 
                     db       8,9,10,11,12,13,14,15        ; level 4 + above (2^4) 
                     db       16,17,18,19,20               ; level 5 
                     db       21,22,23,24,25,26,27,28,29,30,31 ; level 5 + above (2^5) 

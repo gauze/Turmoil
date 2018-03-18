@@ -115,7 +115,7 @@ setuplevel:
                     sta      Ship_Dead 
                     sta      Level_Done 
                     sta      Line_Pat 
-				  inc      Line_Pat
+				  inc      Line_Pat					; never want this 0 based on how it works on ROL
                                                           ; lda #1 
                                                           ; sta level 
                     rts      

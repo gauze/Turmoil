@@ -396,14 +396,14 @@ MOVE_ENEMYS         macro
                     lda      prizecntdown 
                     beq      prize2cannonball0 
 noprize0 
-                    cmpa     #EXPLOSION                   ; don't scale Explosion speed 
-                    beq      framecont0 
+                                                          ; cmpa #EXPLOSION ; don't scale Explosion speed 
+                                                          ; beq framecont0 
                     lda      alley0sd                     ; speed divisor code 
                     lsla     
                     ldx      #speed_t 
                     lda      [a,x]                        ; check scale divisor vs current count from table 
-                    beq      framecont0                   ; move on this frame 
-                    bra      subdone0                     ; skip move on this frame 
+                    beq      framecont0                   ; move on current frame or 
+                    bra      subdone0                     ; skip move on current frame 
 
 framecont0 
                     lda      alley0x 
@@ -889,8 +889,8 @@ SHIP_X_COLLISION_DETECT  macro
                                                           ; prize score is done like this: 
                                                           ; ldd #2048 
                                                           ; jsr Add_Score_d 
-                                                          ; #2048 = 0000 0100 0000 0000 BCD value
-												     ; that's 800 DEC
+                                                          ; #2048 = 0000 0100 0000 0000 BCD value 
+                                                          ; that's 800 DEC 
                     lda      shipYpos 
                     lsla     
                     ldx      #alleye_t 
@@ -1031,9 +1031,9 @@ eventankdies0
                     lda      bullet0d                     ; take bullets dir, str to explosions dir 
                     sta      alley0d 
                     lda      #2 
-                    sta      alley0s
-			       deca     
-				  sta      alley0sd 
+                    sta      alley0s 
+                    deca     
+                    sta      alley0sd 
                     clra     
                     sta      bullet0e 
                     sta      bullet0x 
@@ -1103,9 +1103,9 @@ eventankdies1
                     lda      bullet1d                     ; take bullets dir, str to explosions dir 
                     sta      alley1d 
                     lda      #2 
-                    sta      alley1s
-				  deca
-				  sta      alley1sd 
+                    sta      alley1s 
+                    deca     
+                    sta      alley1sd 
                     clra     
                     sta      bullet1e 
                     sta      bullet1x 
@@ -1176,8 +1176,8 @@ eventankdies2
                     sta      alley2d 
                     lda      #2 
                     sta      alley2s 
-				  deca
-				  sta      alley2sd 
+                    deca     
+                    sta      alley2sd 
                     clra     
                     sta      bullet2e 
                     sta      bullet2x 
@@ -1247,9 +1247,9 @@ eventankdies3
                     lda      bullet3d                     ; take bullets dir, str to explosions dir 
                     sta      alley3d 
                     lda      #2 
-                    sta      alley3s
-				  deca
-				  sta      alley3sd  
+                    sta      alley3s 
+                    deca     
+                    sta      alley3sd 
                     clra     
                     sta      bullet3e 
                     sta      bullet3x 
@@ -1320,8 +1320,8 @@ eventankdies4
                     sta      alley4d 
                     lda      #2 
                     sta      alley4s 
-				  deca
-				  sta      alley4sd 
+                    deca     
+                    sta      alley4sd 
                     clra     
                     sta      bullet4e 
                     sta      bullet4x 
@@ -1392,8 +1392,8 @@ eventankdies5
                     sta      alley5d 
                     lda      #2 
                     sta      alley5s 
-				  deca
-				  sta      alley5sd 
+                    deca     
+                    sta      alley5sd 
                     clra     
                     sta      bullet5e 
                     sta      bullet5x 
@@ -1464,8 +1464,8 @@ eventankdies6
                     sta      alley6d 
                     lda      #2 
                     sta      alley6s 
-				  deca
-				  sta      alley6sd 
+                    deca     
+                    sta      alley6sd 
                     clra     
                     sta      bullet6e 
                     sta      bullet6x 
@@ -1640,40 +1640,65 @@ noprize
 
 noprize2 
                                                           ; figure out speed stuff here 
-                    lda      level 
-                    cmpa     #5 
-                    blt      nofixmask 
-                    ldb      #7 
-                    stb      masktemp 
-                    bra      dofixmask 
-
-nofixmask 
-                    ldx      #max_speed_mask_t 
-                    ldb      a,x 
-                    stb      masktemp 
-dofixmask 
-                    lda      temp 
-                    lsra     
-                    lsra     
-                    lsra     
-                    lsra     
-                    lsra                                  ;shift til 3 bits 0-7 
-                    anda     masktemp                     ; then apply mask 
-                    ldx      #alleys_t 
+;                    lda      level 
+;                    cmpa     #5 
+;                    blt      nofixmask 
+;                    ldb      #7 
+;                    stb      masktemp 
+;                    bra      dofixmask 
+;nofixmask 
+;                    ldx      #max_speed_mask_t 
+;                    ldb      a,x 
+;                    stb      masktemp 
+;dofixmask 
+;                    lda      temp 
+;                    lsra     
+;                    lsra     
+;                    lsra     
+;                    lsra     
+;                    lsra                                  ;shift til 3 bits 0-7 
+;                    anda     masktemp                     ; then apply mask 
+;                    ldx      #alleys_t 
+;                    ldb      spawntemp 
+;                    lslb     
+;                    tsta     
+;                    beq      nozerospeed 
+;addspdreturn 
+;                    sta      [b,x] 
+;                    bra      speedset_done 
+;nozerospeed 
+;                    inca     
+;                    bra      addspdreturn 
+;nospeedcalc 
+;speedset_done
+;START new speed set routine 
+                    jsr      Random                       ; fills A reg 
+                    sta      temp1                        ; put aside 
+                    ldb      level                        ; index to bitmask table might have to change
+                    ldx      #bitmasks 
+                    ldb      b,x                          ; b holds bitmask 
+                    andb     temp1                        ; result of random speed index held in B 
+                    lslb                                  ; double index 
+;
+				  ldx      #enemyspeed_t				; table index				
+				  lda      b,x
+                    sta      speeditemp                   ; put aside
+                    ldx      #speedTop_t 
+                    lda      a,x                          ; load value postion to A 
                     ldb      spawntemp 
-                    lslb     
-                    tsta     
-                    beq      nozerospeed 
-addspdreturn 
-                    sta      [b,x] 
-                    bra      speedset_done 
-
-nozerospeed 
-                    inca     
-                    bra      addspdreturn 
-
+				  lslb
+                    ldx      #alleys_t 
+                    sta      [b,x]                        ; this is alleyXs 
+;
+                    lda      speeditemp 
+                    ldx      #speedBot_t 
+                    lda      a,x                          ; load value postion to A 
+                    ldb      spawntemp 
+                    lslb
+                    ldx      #alleysd_t 
+                    sta      [b,x]                        ; this is alleyXsd 
+;END new speed set routine 
 nospeedcalc 
-speedset_done 
                                                           ; initial direction which sets initial X pos 
                     lda      temp 
                     anda     #%00010000                   ; mask some other random bit to derive start direction 
@@ -2303,13 +2328,12 @@ _timeout_pat        STA      <VIA_shift_reg               ;Put pattern in shift 
 DRAW_VECTOR_SCORE   macro    
                     lda      frm2cnt 
                     lbeq     _no_print_vscore 
-                    RESET0REF 
-                    lda      #-127 						; position before scaling
+                    RESET0REF  
+                    lda      #-127                        ; position before scaling 
                     ldb      #-20 
                     MOVETO_D  
-                    lda      #14 						; scale it lower is better
+                    lda      #14                          ; scale it lower is better 
                     sta      VIA_t1_cnt_lo 
-  
                     ldy      #score 
 _scoreloop 
                     lda      ,y+ 
