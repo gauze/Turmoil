@@ -453,6 +453,7 @@ speed_t             dw      fmt0cnt, fmt1cnt, frm2cnt, frm3cnt, frm4cnt, frm5cnt
 ;speed tables 21 divisions .2, .25, .33, .5. 1, 1.5, 2, 2.5, 3, 3.5, ... , 9
 speedTop_t          db      1, 1, 1, 1, 1, 1, 3, 2, 5, 3, 7, 4, 9, 5, 11, 6, 13, 7, 15, 8, 17, 9 ; move X 'pixels' 
 speedBot_t          db      10, 5, 4, 3, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1 ; every Y frames 
+; too unwieldy, can't increment x easily without reloading it
 ;speedComb_t         db      1,10, 1,5, 1,4, 1,3, 1,2, 1,1, 2,1, 5,2, 3,1, 7,2, 4,1, 9,2, 5,1, 11,2, 6,1, 13,2, 7,1, 15,2, 8,1, 17,2, 9,1 
 ; and set up symbolic names for each speed with assigns
 TENTH_S             =        0 
@@ -494,7 +495,7 @@ NINE_S              =        21
 enemyspeed_t        db       ONE_S,HALF_S                 ; level 1 (2^1) 
                     db       FIFTH_S, ONE_S               ; level 2 + above (2^2) 
                     db       TWO_S,ONE_S,ONE_AND_HALF_S, HALF_S ; level 3 + above (2^3) 
-                    db       8,9,10,11,12,13,14,15        ; level 4 + above (2^4) 
+                    db       THREE_S,TWO_AND_HALF_S,TWO_S,ONE_AND_HALF_S,ONE_S,HALF_S,FORTH_S,TENTH_S        ; level 4 + above (2^4) 
                     db       16,17,18,19,20               ; level 5 
                     db       21,22,23,24,25,26,27,28,29,30,31 ; level 5 + above (2^5) 
                     db       32,33,34,35,36,37,38,39,40 

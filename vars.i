@@ -119,7 +119,7 @@ speedtemp           ds       1
 speeddtemp          ds       1
 speeditemp          ds       1
 spawntemp           ds       1 
-masktemp            ds       1 
+;masktemp            ds       1 
 bulletYtemp         ds       1 
 enemytemp           ds       1 
 ;
