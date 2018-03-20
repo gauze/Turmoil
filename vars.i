@@ -6,11 +6,13 @@
 ; insert your variables (RAM usage) in the BSS section
 ; user RAM starts at $c880 
                     bss      
-                    org      $c880                        ; start of our ram space 
+                    org      $C880                        ; start of our ram space 
 ; 
 score               ds       7                            ; 7 bytes 
 ;highscore           ds       7                            ; 7 bytes ;use built in instead.
 level               ds       1 
+shipspeed           ds       1 
+conf_box_index      ds       1
 ;
 ; your ship related variables, X,Y position and direction facing L/R, and number left
 shipdir             ds       1                            ; left or right 
@@ -110,14 +112,14 @@ frm5cnt             ds       1
 frm4cnt             ds       1 
 frm3cnt             ds       1 
 frm2cnt             ds       1 
-fmt1cnt             ds       1
-fmt0cnt             ds       1
+fmt1cnt             ds       1 
+fmt0cnt             ds       1 
 ; temporary storage
 temp                ds       1                            ; generic 1 byte temp 
-temp1               ds       1
-speedtemp           ds       1
-speeddtemp          ds       1
-speeditemp          ds       1
+temp1               ds       1 
+speedtemp           ds       1 
+speeddtemp          ds       1 
+speeditemp          ds       1 
 spawntemp           ds       1 
 ;masktemp            ds       1 
 bulletYtemp         ds       1 
@@ -135,7 +137,7 @@ lvllabelstr         ds       6
 levelstr            ds       2 
 ;lvlstrterm          ds       1 
 Level_Done          ds       1 
-Demo_Mode           ds       1 							; arcade selfplay mode. 
+Demo_Mode           ds       1                            ; arcade selfplay mode. 
 Line_Pat            ds       1                            ; this is for LINE_DRAW_D stuff , 00000000 is nothing 11111111 is line 10101010 is dotted line 
 ustacktempptr       ds       2                            ; for saving location of ustacktemp 
 ;

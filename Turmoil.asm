@@ -13,8 +13,8 @@
 ;***************************************************************************
 ; load vectrex bios routine definitions
                     include  "VECTREX.I"                  ; vectrex bios function include
-                    include  "vars.i"
-                    include  "macros.i"             
+                    include  "vars.i"                     ; RAM allocation starting at $C880
+                    include  "macros.i"                   ; inlined code to save jsr/rts
 ;***************************************************************************
 ; HEADER SECTION
 ;***************************************************************************
@@ -35,7 +35,6 @@
                     fcb      -$40, $23                    ; hight, width, rel y, rel x (from 0,0) 
                     fcc      "-2018", $80                 ; 3 solid blocks ending with $80 
                     db       0                            ; end of game header 
-
 ;                   bra restart ; TESTING skip intro to get right to it. 
                     bra      introSplash 
 
@@ -52,10 +51,10 @@
 ; CODE SECTION
 ;***************************************************************************
 ; here the cartridge program starts off   
-
-
 introSplash 
                     jsr      titleScreen 
+                    jsr      setup 
+                    jsr      joystick_config              ; move! 
 restart 
                     jsr      setup 
                     jsr      levelsplash 

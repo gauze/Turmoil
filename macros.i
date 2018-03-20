@@ -423,8 +423,8 @@ prize2cannonball0
                     sta      alley0e                      ; change enemy type and speed 
                     lda      #8 
                     sta      alley0s 
-				  lda      #1
-				  sta      alley0sd 
+                    lda      #1 
+                    sta      alley0sd 
                     bra      subdone0 
 
 add0 
@@ -496,8 +496,8 @@ prize2cannonball1
                     sta      alley1e                      ; change enemy type and speed 
                     lda      #8 
                     sta      alley1s 
-				  lda      #1
-				  sta      alley1sd 
+                    lda      #1 
+                    sta      alley1sd 
                     bra      subdone1 
 
 add1 
@@ -569,8 +569,8 @@ prize2cannonball2
                     sta      alley2e                      ; change enemy type and speed 
                     lda      #8 
                     sta      alley2s 
-				  lda      #1
-				  sta      alley2sd 
+                    lda      #1 
+                    sta      alley2sd 
                     bra      subdone2 
 
 add2 
@@ -642,8 +642,8 @@ prize2cannonball3
                     sta      alley3e                      ; change enemy type and speed 
                     lda      #8 
                     sta      alley3s 
-				  lda      #1
-				  sta      alley3sd 
+                    lda      #1 
+                    sta      alley3sd 
                     bra      subdone3 
 
 add3 
@@ -690,7 +690,7 @@ subdone3
                     lda      prizecntdown 
                     beq      prize2cannonball4 
 noprize4 
-				  lda      alley4sd                     ; speed divisor code 
+                    lda      alley4sd                     ; speed divisor code 
                     lsla     
                     ldx      #speed_t 
                     lda      [a,x]                        ; check scale divisor vs current count from table 
@@ -715,8 +715,8 @@ prize2cannonball4
                     sta      alley4e                      ; change enemy type and speed 
                     lda      #8 
                     sta      alley4s 
-				  lda      #1
-				  sta      alley4sd 
+                    lda      #1 
+                    sta      alley4sd 
                     bra      subdone4 
 
 add4 
@@ -762,15 +762,15 @@ subdone4
                     bne      noprize5 
                     lda      prizecntdown 
                     beq      prize2cannonball5 
-noprize5
-				  lda      alley5sd                     ; speed divisor code 
+noprize5 
+                    lda      alley5sd                     ; speed divisor code 
                     lsla     
                     ldx      #speed_t 
                     lda      [a,x]                        ; check scale divisor vs current count from table 
                     beq      framecont5                   ; move on current frame or 
-                    bra      subdone5                    ; skip move on current frame 
+                    bra      subdone5                     ; skip move on current frame 
 
-framecont5  
+framecont5 
                     lda      alley5x 
                     sta      temp 
                     ldb      alley5d 
@@ -788,8 +788,8 @@ prize2cannonball5
                     sta      alley5e                      ; change enemy type and speed 
                     lda      #8 
                     sta      alley5s 
-				  lda      #1
-				  sta      alley5sd 
+                    lda      #1 
+                    sta      alley5sd 
                     bra      subdone5 
 
 add5 
@@ -836,14 +836,14 @@ subdone5
                     lda      prizecntdown 
                     beq      prize2cannonball6 
 noprize6 
-				  lda      alley6sd                     ; speed divisor code 
+                    lda      alley6sd                     ; speed divisor code 
                     lsla     
                     ldx      #speed_t 
                     lda      [a,x]                        ; check scale divisor vs current count from table 
                     beq      framecont6                   ; move on current frame or 
                     bra      subdone6                     ; skip move on current frame 
 
-framecont6
+framecont6 
                     lda      alley6x 
                     sta      temp 
                     ldb      alley6d 
@@ -860,9 +860,9 @@ prize2cannonball6
                     lda      #CANNONBALL 
                     sta      alley6e                      ; change enemy type and speed 
                     lda      #8 
-                    sta      alley6s
-				  lda      #1
-				  sta      alley6sd 
+                    sta      alley6s 
+                    lda      #1 
+                    sta      alley6sd 
                     bra      subdone6 
 
 add6 
@@ -1853,7 +1853,10 @@ INTENSITY_A         macro
 READ_JOYSTICK       macro    
                     lda      Ship_Dead 
                     lbne     jsdone 
-                    lda      frm2cnt 
+                    lda      shipspeed                    ; user defined joystick speed 
+                    lsla     
+                    ldx      #speed_t 
+                    lda      [a,x] 
                     bne      jsdoneY                      ; slowing down Y movement by half for more control 
                     jsr      Joy_Digital 
                     lda      In_Alley                     ; inside an alley ? 

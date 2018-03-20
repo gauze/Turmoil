@@ -5,8 +5,6 @@
 ; SUBROUTINES/FUNCTIONS
 ;###########################################################################
 setup:                                                    ;        setting up hardware, resetting scores, once per boot 
-                    ldx      #$c880 
-                    jsr      Clear_x_256 
                     lda      #1                           ; enable 
                     sta      Vec_Joy_Mux_1_X 
                     lda      #3 
@@ -16,7 +14,7 @@ setup:                                                    ;        setting up ha
                     sta      Vec_Joy_Mux_2_Y 
                     ldx      #score 
                     jsr      Clear_Score 
-                    lda      #1 
+                    lda      #7 
                     sta      level 
                     bsr      setuplevel 
                     rts      
@@ -115,9 +113,8 @@ setuplevel:
                     sta      Ship_Dead 
                     sta      Level_Done 
                     sta      Line_Pat 
-				  inc      Line_Pat					; never want this 0 based on how it works on ROL
-                                                          ; lda #1 
-                                                          ; sta level 
+                    inc      Line_Pat                     ; never want this 0 based on how it works on ROL 
+
                     rts      
 
 newlevel: 
@@ -317,3 +314,84 @@ _tsdone
                     STA      Vec_Expl_Flag 
                     JSR      Clear_Sound 
                     RTS      
+
+;&&&&&&&&&&&&&&&%%%%%%%
+joystick_config 
+                    lda      #0 
+                    sta      conf_box_index 
+				  sta       frm10cnt
+conf_loop 
+                    jsr      Wait_Recal 
+                    jsr      Intensity_5F
+				  lda      frm10cnt
+                    bne      jsdoneYcal 
+                    jsr      Joy_Digital 
+                    nop      
+                    lda      Vec_Joy_1_Y 
+                    beq      jsdoneYcal                   ; no Y motion 
+                    bmi      going_down_conf 
+                    lda      conf_box_index 
+                    beq      jsdoneYcal                    ; 0 is highest slot on screen !move
+                    dec      conf_box_index 
+                    bra      jsdoneYcal 
+
+going_down_conf 
+                    lda      conf_box_index 
+                    cmpa     #3                           ; 3 is lowest slot on screen !move
+                    beq      jsdoneYcal                  
+                    inc      conf_box_index 
+jsdoneYcal 
+                    jsr      Read_Btns 
+                    lda      Vec_Btn_State 
+                    beq      no_press_cal 
+                    jmp      conf_done 
+
+no_press_cal 
+                    RESET0REF  
+                    lda      #110 
+                    ldb      #-80 
+                    ldu      #joycal_label 
+                    jsr      Print_Str_d 
+
+                    lda      #90 
+                    ldb      #-33 
+                    ldu      #fast_text 
+                    jsr      Print_Str_d 
+
+                    lda      #78 
+                    ldb      #-43 
+                    ldu      #med_text 
+                    jsr      Print_Str_d 
+
+                    lda      #66 
+                    ldb      #-33 
+                    ldu      #slow_text 
+                    jsr      Print_Str_d 
+
+                    lda      #54 
+                    ldb      #-60 
+                    ldu      #vslow_text 
+                    jsr      Print_Str_d 
+                    RESET0REF  
+                    lda      conf_box_index 
+                    ldx      #boxYpos_t 
+                    lda      a,x 
+                    ldb      #-59 
+                    MOVETO_D  
+                    ldx      #Conf_Box_nomode 
+                    DRAW_VLC  
+
+                    lda      #10 
+                    inc      frm10cnt 
+                    cmpa     frm10cnt 
+                    bne      no10cntresetC 
+                    clr      frm10cnt 
+no10cntresetC 
+
+                    bra      conf_loop 
+
+conf_done 
+                    lda      conf_box_index 
+                    inca     
+                    sta      shipspeed                    ; ship verical speed 
+                    rts      
