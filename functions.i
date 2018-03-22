@@ -14,14 +14,20 @@ setup:                                                    ;        setting up ha
                     sta      Vec_Joy_Mux_2_Y 
                     ldx      #score 
                     jsr      Clear_Score 
-                    lda      #7 
+                    lda      #1 
                     sta      level 
                     bsr      setuplevel 
                     rts      
 
 setuplevel: 
-                    LDD      #$FC50 
-                    STD      Vec_Text_HW 
+                    ldd      #$FC50 
+                    std      Vec_Text_HW 
+                    lda      #$5F                         ; under score 
+                    sta      hstempstr 
+                    sta      hstempstr+1 
+                    sta      hstempstr+2 
+                    lda      #$80                         ; EOL 
+                    sta      hstempstr+3 
                     ldd      #0                           ; set a bunch of variables to 0 
                     sta      bullet0e 
                     sta      bullet1e 
@@ -114,7 +120,6 @@ setuplevel:
                     sta      Level_Done 
                     sta      Line_Pat 
                     inc      Line_Pat                     ; never want this 0 based on how it works on ROL 
-
                     rts      
 
 newlevel: 
@@ -319,11 +324,11 @@ _tsdone
 joystick_config 
                     lda      #0 
                     sta      conf_box_index 
-				  sta       frm10cnt
+                    sta      frm10cnt 
 conf_loop 
                     jsr      Wait_Recal 
-                    jsr      Intensity_5F
-				  lda      frm10cnt
+                    jsr      Intensity_5F 
+                    lda      frm10cnt 
                     bne      jsdoneYcal 
                     jsr      Joy_Digital 
                     nop      
@@ -331,18 +336,18 @@ conf_loop
                     beq      jsdoneYcal                   ; no Y motion 
                     bmi      going_down_conf 
                     lda      conf_box_index 
-                    beq      jsdoneYcal                    ; 0 is highest slot on screen !move
+                    beq      jsdoneYcal                   ; 0 is highest slot on screen !move 
                     dec      conf_box_index 
                     bra      jsdoneYcal 
 
 going_down_conf 
                     lda      conf_box_index 
-                    cmpa     #3                           ; 3 is lowest slot on screen !move
-                    beq      jsdoneYcal                  
+                    cmpa     #3                           ; 3 is lowest slot on screen !move 
+                    beq      jsdoneYcal 
                     inc      conf_box_index 
 jsdoneYcal 
                     jsr      Read_Btns 
-                    lda      Vec_Btn_State 
+                    lda      Vec_Button_1_4 
                     beq      no_press_cal 
                     jmp      conf_done 
 
@@ -352,46 +357,207 @@ no_press_cal
                     ldb      #-80 
                     ldu      #joycal_label 
                     jsr      Print_Str_d 
-
                     lda      #90 
                     ldb      #-33 
                     ldu      #fast_text 
                     jsr      Print_Str_d 
-
                     lda      #78 
                     ldb      #-43 
                     ldu      #med_text 
                     jsr      Print_Str_d 
-
                     lda      #66 
                     ldb      #-33 
                     ldu      #slow_text 
                     jsr      Print_Str_d 
-
                     lda      #54 
                     ldb      #-60 
                     ldu      #vslow_text 
                     jsr      Print_Str_d 
                     RESET0REF  
                     lda      conf_box_index 
-                    ldx      #boxYpos_t 
+                    ldx      #cboxYpos_t 
                     lda      a,x 
                     ldb      #-59 
                     MOVETO_D  
                     ldx      #Conf_Box_nomode 
                     DRAW_VLC  
-
                     lda      #10 
                     inc      frm10cnt 
                     cmpa     frm10cnt 
                     bne      no10cntresetC 
                     clr      frm10cnt 
-no10cntresetC 
 
+no10cntresetC 
                     bra      conf_loop 
 
 conf_done 
                     lda      conf_box_index 
                     inca     
                     sta      shipspeed                    ; ship verical speed 
+                    rts      
+
+;***************     
+highscore_entry: 
+                    lda      #0 
+                    sta      hs_box_Yindex 
+                    sta      hs_box_Xindex 
+                    sta      frm10cnt 
+                    sta      hsentry_index 
+hs_loop 
+                    jsr      Wait_Recal 
+                    jsr      Intensity_5F 
+                    lda      frm10cnt 
+                    bne      hsbtn3_done                  ; joystick movement delay 
+                    jsr      Joy_Digital 
+; Y stick poll    
+                    lda      Vec_Joy_1_Y 
+                    beq      jsdoneYhs                    ; no Y motion 
+                    bmi      going_down_hs 
+                    lda      hs_box_Yindex 
+                    beq      jsdoneYhs                    ; 0 is highest slot on screen !move 
+                    dec      hs_box_Yindex 
+                    bra      jsdoneYhs 
+
+going_down_hs 
+                    lda      hs_box_Yindex 
+                    cmpa     #5                           ; 5 is lowest row on screen !move 
+                    beq      jsdoneYhs 
+                    inc      hs_box_Yindex 
+jsdoneYhs 
+; X stick poll    
+                    lda      Vec_Joy_1_X 
+                    beq      jsdoneXhs                    ; no X motion 
+                    bmi      going_left_hs 
+                    lda      hs_box_Xindex 
+                    cmpa     #5 
+                    beq      jsdoneXhs                    ; 5 is highest slot on screen !move 
+                    inc      hs_box_Xindex 
+                    bra      jsdoneXhs 
+
+going_left_hs 
+                    lda      hs_box_Xindex 
+                    beq      jsdoneXhs 
+                    dec      hs_box_Xindex 
+jsdoneXhs 
+; Buttons!!!
+                    jsr      Read_Btns 
+                    lda      Vec_Button_1_4 
+                    beq      hsbtn4_done 
+                    lda      hsentry_index 
+                    cmpa     #3                           ; did 3 chars for HS, now SAVE 
+                    lbeq      doHSsave 
+                    lda      hs_box_Yindex 
+                    lsla     
+                    ldx      #hsgridrow 
+                    ldx      a,x 
+                    lda      hs_box_Xindex 
+                    lda      a,x 
+                    ldx      #hstempstr 
+                    ldb      hsentry_index 
+                    sta      b,x 
+                    inc      hsentry_index 
+hsbtn4_done 
+                    lda      Vec_Button_1_3 
+                    beq      hsbtn3_done 
+                    lda      hsentry_index
+                    beq      hsbtn3_done                  ; already at start can't go back more
+                    dec      hsentry_index				; go back one space left
+                    lda      #$5F                         ; load underscore char
+				  ldx      #hstempstr
+                    ldb      hsentry_index
+				  sta      b,x                          ; over write char	
+hsbtn3_done 
+; end INPUT handling
+hsgridxpos          =        -59 
+                    lda      #100 
+                    ldb      #hsgridxpos 
+                    ldu      #hs_abc_1 
+                    jsr      Print_Str_d 
+                    lda      #88 
+                    ldb      #hsgridxpos 
+                    ldu      #hs_abc_2 
+                    jsr      Print_Str_d 
+                    lda      #76 
+                    ldb      #hsgridxpos 
+                    ldu      #hs_abc_3 
+                    jsr      Print_Str_d 
+                    lda      #64 
+                    ldb      #hsgridxpos 
+                    ldu      #hs_abc_4 
+                    jsr      Print_Str_d 
+                    lda      #52 
+                    ldb      #hsgridxpos 
+                    ldu      #hs_abc_5 
+                    jsr      Print_Str_d 
+                    lda      #40 
+                    ldb      #hsgridxpos 
+                    ldu      #hs_abc_6 
+                    jsr      Print_Str_d 
+; test 
+                    lda      #-50 
+                    ldb      #-30 
+                    ldu      #hstempstr 
+                    jsr      Print_Str_d 
+; test done
+                    RESET0REF  
+                    lda      hs_box_Yindex 
+                    ldx      #hsboxYpos_t 
+                    lda      a,x 
+                    ldb      hs_box_Xindex 
+                    ldx      #hsboxXpos_t 
+                    ldb      b,x 
+                    MOVETO_D  
+                    ldx      #Letter_Select_nomode 
+                    DRAW_VLC  
+                    RESET0REF
+                    lda      #25 
+                    inc      frm25cnt 
+                    cmpa     frm25cnt 
+                    bne      no25cntresetHS
+				  ldb      hsentry_index
+                    cmpb     #3
+                    beq      cursorchange_done 
+                    ldx      #hstempstr 
+                    ldb      hsentry_index 
+                    lda      b,x
+                    cmpa     #$20
+                    beq      change_underscore 
+				  lda      #$20
+                    sta      b,x
+                    bra      cursorchange_done
+change_underscore
+				  lda      #$5F
+				  sta      b,x	
+cursorchange_done
+                    clr      frm25cnt
+no25cntresetHS  
+                    lda      #10 
+                    inc      frm10cnt 
+                    cmpa     frm10cnt 
+                    bne      no10cntresetHS 
+                    clr      frm10cnt 
+no10cntresetHS 
+                    jmp      hs_loop 
+
+doHSsave                                                  ;        finished HS entry 
+;   hsentryXn = initials  hsentryXs = score
+; tables  hsentryn_t      hsentrys_t   
+; table has 5 slots for scores
+
+                    ldx    #hsentryn_t
+				  ldx    0,x
+                    ldy    #hstempstr                        ; no index yet
+                    lda    ,y+
+				  sta    ,x+
+				  lda    ,y+
+                    sta    ,x+
+				  lda    ,y+
+                    sta    ,x+
+				  lda    ,y+
+                    sta    ,x+
+; print name example
+				  ldx     #hsentryn_t
+				  ldu     ,x
+                    ldd     #$D400
+				  jsr     Print_Str_d
                     rts      

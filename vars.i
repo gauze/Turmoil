@@ -12,7 +12,9 @@ score               ds       7                            ; 7 bytes
 ;highscore           ds       7                            ; 7 bytes ;use built in instead.
 level               ds       1 
 shipspeed           ds       1 
-conf_box_index      ds       1
+conf_box_index      ds       1 
+hs_box_Yindex       ds       1 
+hs_box_Xindex       ds       1 
 ;
 ; your ship related variables, X,Y position and direction facing L/R, and number left
 shipdir             ds       1                            ; left or right 
@@ -124,6 +126,18 @@ spawntemp           ds       1
 ;masktemp            ds       1 
 bulletYtemp         ds       1 
 enemytemp           ds       1 
+hsentry_index       ds       1
+hsentry1n           ds       4
+hsentry1s           ds       7
+hsentry2n           ds       4
+hsentry2s           ds       7
+hsentry3n           ds       4
+hsentry3s           ds       7
+hsentry4n           ds       4
+hsentry4s           ds       7
+hsentry5n           ds       4
+hsentry5s           ds       7
+hstempstr		  ds       4
 ;
 enemylvlcnt         ds       1                            ; how many enemies left in this level? 
 ; STATE FLAGS
@@ -140,6 +154,7 @@ Level_Done          ds       1
 Demo_Mode           ds       1                            ; arcade selfplay mode. 
 Line_Pat            ds       1                            ; this is for LINE_DRAW_D stuff , 00000000 is nothing 11111111 is line 10101010 is dotted line 
 ustacktempptr       ds       2                            ; for saving location of ustacktemp 
+calibrationValue    ds       1 
 ;
 ; CONSTANTS place after VARIABLES
 ;ALLEYWIDTH          =        17 

@@ -3,6 +3,12 @@
 ;***************************************************************************
 ; VECTOR GRAPHICS DATA
 ;***************************************************************************
+Letter_Select_nomode: 
+                    fcb      3 
+                    fcb      0, +12 
+                    fcb      -12, 0 
+                    fcb      0, -12 
+                    fcb      +12,0 
 Conf_Box_nomode:    fcb      3 
                     fcb      0, 110 
                     fcb      -12, 0 
@@ -437,7 +443,21 @@ nine:               fcb      0, -10*VNUM_SCALE, +0
 ;****************************************************************************************
                                                           ; align $100 
 ;shippos_t          fcb      -3*ALLEYWIDTH,-2*ALLEYWIDTH,-1*ALLEYWIDTH,0,1*ALLEYWIDTH,2*ALLEYWIDTH,3*ALLEYWIDTH ; Y pos of ship 
-boxYpos_t           db       93,81,69,57 
+; position of cursor
+cboxYpos_t          db       93,81,69,57 
+hsboxYpos_t         db       103,91,79,67,55,43 
+hsboxXpos_t         db       -54,-31,-9,13,35,58 
+; high score entry grid tables
+hsgridrow           dw       hsgr0,hsgr1,hsgr2,hsgr3, hsgr4,hsgr5 
+hsgr0               db       "A", "B", "C", "D", "E", "F"   
+hsgr1               db       "G", "H", "I", "J", "K", "L"
+hsgr2               db       "M", "N", "O", "P", "Q", "R"
+hsgr3               db       "S", "T", "U", "V", "W", "X"
+hsgr4               db       "Y", "Z", "0", "1", "2", "3"
+hsgr5               db       "4", "5", "6", "7", "8", "9"
+hsentryn_t          dw       hsentry1n, hsentry2n, hsentry3n, hsentry4n, hsentry5n 
+hsentrys_t          dw       hsentry1s, hsentry2s, hsentry3s, hsentry4s, hsentry5s 
+; game positions
 BULLETYPOS          =        103                          ;; trail and error 
 shippos_t 
 bulletYpos_t        fcb      BULLETYPOS-(ALLEYHEIGHT*6*2), BULLETYPOS-(ALLEYHEIGHT*5*2), BULLETYPOS-(ALLEYHEIGHT*4*2), BULLETYPOS-(ALLEYHEIGHT*3*2), BULLETYPOS-(ALLEYHEIGHT*2*2),BULLETYPOS-(ALLEYHEIGHT*1*2), BULLETYPOS-(ALLEYHEIGHT*0*2) 
@@ -485,20 +505,20 @@ EIGHT_S             =        19
 EIGHT_AND_HALF_S    =        20 
 NINE_S              =        21 
 ; LARGE table needs NEGATIVE indexes
-                    db       ONE_S,HALF_S, FIFTH_S, ONE_S, TWO_S,ONE_S,ONE_AND_HALF_S, HALF_S                       
+                    db       ONE_S,HALF_S, FIFTH_S, ONE_S, TWO_S,ONE_S,ONE_AND_HALF_S, HALF_S 
                     db       THREE_S,TWO_AND_HALF_S,TWO_S,ONE_AND_HALF_S,ONE_S,HALF_S,FORTH_S,TENTH_S 
                     db       FOUR_S,THREE_S,TWO_S,ONE_S,ONE_S 
                     db       HALF_S,THIRD_S,FIFTH_S,TENTH_S,HALF_S,FORTH_S,ONE_S,ONE_S,TWO_S,THREE_S,FOUR_S 
                     db       FIVE_S,FOUR_S,THREE_S,TWO_S,ONE_AND_HALF_S,ONE_S,HALF_S,ONE_S,HALF_S 
                     db       TWO_S,FIFTH_S,TENTH_S,THREE_S,ONE_S,THIRD_S,FIVE_S,FOUR_S,THIRD_S,ONE_S 
                     db       THREE_S,TENTH_S,FIFTH_S,TWO_S,HALF_S,ONE_S,HALF_S,ONE_S,ONE_AND_HALF_S,TWO_S 
-                    db       THREE_S,FOUR_S,FIVE_S, SEVEN_S,SIX_S,FIVE_S,FOUR_S,THREE_S,TWO_S,ONE_S                
+                    db       THREE_S,FOUR_S,FIVE_S, SEVEN_S,SIX_S,FIVE_S,FOUR_S,THREE_S,TWO_S,ONE_S 
                     db       HALF_S,FIFTH_S,FORTH_S,THIRD_S,HALF_S,TENTH_S,ONE_S,ONE_S,HALF_S,TWO_AND_HALF_S 
                     db       ONE_S,TWO_S,HALF_S,ONE_S,HALF_S,ONE_AND_HALF_S,ONE_S,HALF_S,TENTH_S,THIRD_S 
                     db       ONE_S,TWO_S,HALF_S,ONE_S,HALF_S,ONE_AND_HALF_S,ONE_S,HALF_S,TENTH_S,FORTH_S 
                     db       ONE_S,TWO_S,HALF_S,ONE_S,HALF_S,ONE_AND_HALF_S,ONE_S,HALF_S,TENTH_S,FIFTH_S 
                     db       TWO_AND_HALF_S,ONE_S,HALF_S,TWO_S,ONE_S,FIFTH_S,FORTH_S,THIRD_S,HALF_S,TENTH_S 
-                    db       ONE_S,TWO_S,THREE_S,FOUR_S,FIVE_S,SIX_S,SEVEN_S  ; level 8 (all of above and below) 
+                    db       ONE_S,TWO_S,THREE_S,FOUR_S,FIVE_S,SIX_S,SEVEN_S ; level 8 (all of above and below) 
 enemyspeed_t        db       ONE_S,HALF_S                 ; level 1 (2^1) 
                     db       FIFTH_S, ONE_S               ; level 2 + above (2^2) 
                     db       TWO_S,ONE_S,ONE_AND_HALF_S, HALF_S ; level 3 + above (2^3) 
@@ -515,7 +535,7 @@ enemyspeed_t        db       ONE_S,HALF_S                 ; level 1 (2^1)
                     db       ONE_S,TWO_S,HALF_S,ONE_S,HALF_S,ONE_AND_HALF_S,ONE_S,HALF_S,TENTH_S,FORTH_S 
                     db       ONE_S,TWO_S,HALF_S,ONE_S,HALF_S,ONE_AND_HALF_S,ONE_S,HALF_S,TENTH_S,FIFTH_S 
                     db       TWO_AND_HALF_S,ONE_S,HALF_S,TWO_S,ONE_S,FIFTH_S,FORTH_S,THIRD_S,HALF_S,TENTH_S 
-                    db       ONE_S,TWO_S,THREE_S,FOUR_S,FIVE_S,SIX_S,SEVEN_S  ;level 7 + above (2^7) 
+                    db       ONE_S,TWO_S,THREE_S,FOUR_S,FIVE_S,SIX_S,SEVEN_S ;level 7 + above (2^7) 
 ; END SPEED TABLES
 ;OBSOLETE max_speed_mask_t    fcb      1,1,1,1,3,3,3,7,7,7,7,7,7    ; masking to lower speed range 7 == 100% TODO/FIX/CHANGE 
 enemylvlcnt_t       fcb      0,50,60,70,75,80,90,100,100,100,100,100,110,120,130,140,150,160,170,180,190 
@@ -622,6 +642,12 @@ vslow_text          fcc      "VERY SLOW",$80
 slow_text           fcc      "SLOW",$80
 med_text            fcc      "MEDIUM",$80
 fast_text           fcc      "FAST",$80
+hs_abc_1            fcc      "A B C D E F",$80
+hs_abc_2            fcc      "G H I J K L",$80
+hs_abc_3            fcc      "M N O P Q R",$80
+hs_abc_4            fcc      "S T U V W X",$80
+hs_abc_5            fcc      "Y Z 0 1 2 3",$80
+hs_abc_6            fcc      "4 5 6 7 8 9",$80
                     fcc      "SECRET GAME",$80
 credits             fcc      "PROGRAMMED BY GAUZE 2016-2018",$80 
                     FCC      "DISASSEMBLED BY MALBAN",$6B

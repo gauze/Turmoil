@@ -52,9 +52,11 @@
 ;***************************************************************************
 ; here the cartridge program starts off   
 introSplash 
-                    jsr      titleScreen 
-                    jsr      setup 
-                    jsr      joystick_config              ; move! 
+                  ;  jsr      titleScreen 
+                    jsr      setup                        ; remove when done testing
+                    
+				  jsr      highscore_entry              ; remove when done testing
+                    jsr      joystick_config              ; move? 
 restart 
                     jsr      setup 
                     jsr      levelsplash 
