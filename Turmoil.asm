@@ -54,9 +54,15 @@
 introSplash 
                   ;  jsr      titleScreen 
                     jsr      setup                        ; remove when done testing
+                  
                     
-				  jsr      highscore_entry              ; remove when done testing
+				;  jsr      highscore_entry              ; remove when done testing
                     jsr      joystick_config              ; move? 
+                    jsr      fill_hs_tbl
+				  ldu      #hsentry1s 
+                    ldx      #hsentry2s
+				  jsr      Compare_Score 
+				  
 restart 
                     jsr      setup 
                     jsr      levelsplash 
@@ -71,9 +77,12 @@ restart
                     ldx      #score 
                     jsr      Clear_Score 
                     lda      #5 
-                    sta      shipcnt 
+                    sta      shipcnt
+
+
 ;----------------------------------------------------------------------------
 main: 
+
                     jsr      Wait_Recal 
                     READ_JOYSTICK  
                     lda      #$5F 

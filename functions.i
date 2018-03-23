@@ -127,10 +127,13 @@ newlevel:
                     jsr      levelsplash 
                     rts      
 
+; ##########################################################################
 gameover:                                                 ;        #isfunction 
                     ldx      #score 
                     ldu      #Vec_High_Score 
                     jsr      New_High_Score 
+                    jsr      check_highscore_entry 
+                    jsr      print_hs_tbl 
 goloop: 
                     jsr      Wait_Recal 
                     clr      Vec_Misc_Count 
@@ -152,14 +155,25 @@ goloop:
                     lda      #$F0 
                     ldb      -#127 
                     jsr      Print_Str_d 
-                    ldu      #Vec_High_Score 
-                    ldd      #$F050 
+                                                          ; ldu #Vec_High_Score 
+                                                          ; ldd #$F050 
+                                                          ; jsr Print_Str_d 
+; print name example
+                    ldx      #hsentryn_t 
+                    ldu      ,x 
+                    ldd      #$D400 
+                    jsr      Print_Str_d 
+; print name example
+                    ldx      #hsentrys_t 
+                    ldu      ,x 
+                    ldd      #$D4B0 
                     jsr      Print_Str_d 
                     jsr      Read_Btns 
                     lda      Vec_Button_1_3 
                     lbne     restart 
                     bra      goloop 
 
+;################################################################
 levelsplash 
                     clr      stallcnt 
 splashloop 
@@ -183,6 +197,7 @@ splashloop
                     sta      levelstr+1 
                     bra      score_format_done 
 
+; @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 do_level 
 ; parse level into chars  $30-$39 0-9
                     lda      level 
@@ -228,6 +243,7 @@ store_max_enemy_cnt
                     jsr      setuplevel 
                     rts      
 
+;**********************************************************************
 deathsplash 
                     clr      stallcnt 
 deathloop 
@@ -386,7 +402,6 @@ no_press_cal
                     cmpa     frm10cnt 
                     bne      no10cntresetC 
                     clr      frm10cnt 
-
 no10cntresetC 
                     bra      conf_loop 
 
@@ -396,8 +411,15 @@ conf_done
                     sta      shipspeed                    ; ship verical speed 
                     rts      
 
-;***************     
-highscore_entry: 
+;***************    ********************************************************************** 
+check_highscore_entry: 
+; score compare see if we even need to do this
+                    ldx      #hsentrys_t 
+                    ldx      4,x                          ; just check lowest entry for now 
+                    ldu      #score 
+                    jsr      Compare_Score                ; result in A 
+                    cmpa     #2 
+                    lbne     hs_check_done                ; 0 = same | 1 = x > u | 2 = x < u == new highscore 
                     lda      #0 
                     sta      hs_box_Yindex 
                     sta      hs_box_Xindex 
@@ -445,7 +467,7 @@ jsdoneXhs
                     beq      hsbtn4_done 
                     lda      hsentry_index 
                     cmpa     #3                           ; did 3 chars for HS, now SAVE 
-                    lbeq      doHSsave 
+                    lbeq     doHSsave 
                     lda      hs_box_Yindex 
                     lsla     
                     ldx      #hsgridrow 
@@ -459,13 +481,13 @@ jsdoneXhs
 hsbtn4_done 
                     lda      Vec_Button_1_3 
                     beq      hsbtn3_done 
-                    lda      hsentry_index
-                    beq      hsbtn3_done                  ; already at start can't go back more
-                    dec      hsentry_index				; go back one space left
-                    lda      #$5F                         ; load underscore char
-				  ldx      #hstempstr
-                    ldb      hsentry_index
-				  sta      b,x                          ; over write char	
+                    lda      hsentry_index 
+                    beq      hsbtn3_done                  ; already at start can't go back more 
+                    dec      hsentry_index                ; go back one space left 
+                    lda      #$5F                         ; load underscore char 
+                    ldx      #hstempstr 
+                    ldb      hsentry_index 
+                    sta      b,x                          ; over write char 
 hsbtn3_done 
 ; end INPUT handling
 hsgridxpos          =        -59 
@@ -509,28 +531,29 @@ hsgridxpos          =        -59
                     MOVETO_D  
                     ldx      #Letter_Select_nomode 
                     DRAW_VLC  
-                    RESET0REF
+                    RESET0REF  
                     lda      #25 
                     inc      frm25cnt 
                     cmpa     frm25cnt 
-                    bne      no25cntresetHS
-				  ldb      hsentry_index
-                    cmpb     #3
+                    bne      no25cntresetHS 
+                    ldb      hsentry_index 
+                    cmpb     #3 
                     beq      cursorchange_done 
                     ldx      #hstempstr 
                     ldb      hsentry_index 
-                    lda      b,x
-                    cmpa     #$20
+                    lda      b,x 
+                    cmpa     #$20 
                     beq      change_underscore 
-				  lda      #$20
-                    sta      b,x
-                    bra      cursorchange_done
-change_underscore
-				  lda      #$5F
-				  sta      b,x	
-cursorchange_done
-                    clr      frm25cnt
-no25cntresetHS  
+                    lda      #$20 
+                    sta      b,x 
+                    bra      cursorchange_done 
+
+change_underscore 
+                    lda      #$5F 
+                    sta      b,x 
+cursorchange_done 
+                    clr      frm25cnt 
+no25cntresetHS 
                     lda      #10 
                     inc      frm10cnt 
                     cmpa     frm10cnt 
@@ -543,21 +566,154 @@ doHSsave                                                  ;        finished HS e
 ;   hsentryXn = initials  hsentryXs = score
 ; tables  hsentryn_t      hsentrys_t   
 ; table has 5 slots for scores
+; #hstempstr holds entered initials
+                    lda      #4                           ; top 5 zero index 
+                    sta      temp1 
+hs_test_loop 
+; score compare
+				  lda      temp1
+				  lsla
+                    ldx      #hsentrys_t 
+                    ldx      a,x 
+                    ldu      #score 
+                    jsr      Compare_Score                ; result in A 
+                    cmpa     #2 
+                    bne      hs_check_done                ; 0 = same | 1 = x > u | 2 = x < u == new highscore 
+                                                          ; X = target 
+; remember indexes: top score == 0 5th = 4
+; first copy current slot score to one slot higher in source index 0-3 only, discard on 4 
+hs_copy_outer_loop 
+                    lda      temp1 
+                    cmpa     #4 
+                    beq      no_copy_score 
+                    lda      temp1 
+                    lsla     
+                    ldy      #hsentrys_t 
+                    ldy      a,y                          ; Y = source 
+                    inca     
+                    inca     
+                    ldx      #hsentrys_t 
+                    ldx      a,x                          ; X = target 
+hs_copy_old_down_1_loop 
+                    lda      ,y+                          ; increments AFTER apparently!! 
+                    sta      ,x+ 
+                    bpl      hs_copy_old_down_1_loop 
+                    lda      temp1 
+                    lsla     
+                    ldy      #hsentryn_t 
+                    ldy      a,y                          ; Y = source 
+                    inca     
+                    inca     
+                    ldx      #hsentryn_t 
+                    ldx      a,x                          ; X = target 
+hsn_copy_old_down_1_loop 
+                    lda      ,y+                          ; increments AFTER apparently!! 
+                    sta      ,x+ 
+                    bpl      hsn_copy_old_down_1_loop
+; TO DO add initial drop code here 
+no_copy_score 
+                    lda      temp1 
+                    lsla     
+                    ldy      #score                       ; Y = source 
+                    ldx      #hsentrys_t 
+                    ldx      a,x                          ; X = target 
+hs_copy_loop 
+                    lda      ,y+                          ; increments AFTER apparently!! 
+                    sta      ,x+ 
+                    bpl      hs_copy_loop 
+; NAME 2nd 
+                    lda      temp1 
+				  lsla
+                    ldy      #hstempstr                   ; from user input above 
+                    ldx      #hsentryn_t 
+				  ldx      a,x
+hsn_copy_loop 
+                    lda      ,y+                          ; increments AFTER apparently!! 
+                    sta      ,x+ 
+                    bpl      hsn_copy_loop 
+				  dec      temp1
+                    jmp      hs_test_loop 
 
-                    ldx    #hsentryn_t
-				  ldx    0,x
-                    ldy    #hstempstr                        ; no index yet
-                    lda    ,y+
-				  sta    ,x+
-				  lda    ,y+
-                    sta    ,x+
-				  lda    ,y+
-                    sta    ,x+
-				  lda    ,y+
-                    sta    ,x+
-; print name example
-				  ldx     #hsentryn_t
-				  ldu     ,x
-                    ldd     #$D400
-				  jsr     Print_Str_d
+hs_check_done 
+                    rts      
+
+;; populate hs table ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+fill_hs_tbl: 
+;name
+                    ldb      #4                           ; 5 entries, 0 index 
+                    lslb                                  ; 2 btye table 
+get_nentry 
+                    ldx      #hsentryn_t 
+                    ldx      b,x 
+                    ldy      #default_name 
+_fill_nloop 
+                    lda      ,y+ 
+                    sta      ,x+ 
+                    bpl      _fill_nloop                  ; $80 is string char terminator, also negative 
+                    decb     
+                    decb     
+                    bpl      get_nentry 
+; score    
+                    ldb      #4                           ; 5 entries, 0 index 
+                    lslb     
+get_sentry 
+                    ldx      #hsentrys_t 
+                    ldx      b,x 
+                    ldy      #default_high 
+_fill_sloop 
+                    lda      ,y+ 
+                    sta      ,x+ 
+                    bpl      _fill_sloop 
+                    decb     
+                    decb     
+                    bpl      get_sentry 
+                    rts      
+
+;))))))))))))))))))))))))))))))))))))))))))))))))))))))))))
+print_hs_tbl 
+_keepshow 
+                    jsr      Wait_Recal 
+                    jsr      Intensity_5F 
+                    ldd      #$7DC0 
+                    ldu      #highscorelabel 
+                    jsr      Print_Str_d 
+                    ldb      #4 
+_hsprtloop 
+; first initials
+                    lslb                                  ; double for 2 byte table 
+                    ldx      #hsentryn_t 
+                    ldu      b,x                          ; putting u value in first then D 
+                    lsrb     
+                    pshs     b 
+                    ldx      #hsentrynYpos_t 
+                    lda      b,x 
+                    ldb      #-85 
+                    jsr      Print_Str_d 
+                    RESET0REF                             ; trashes d 
+                    puls     b                            ; restore b 
+; now names
+                    lslb                                  ; double for 2 byte table 
+                    ldx      #hsentrys_t 
+                    ldu      b,x                          ; putting u value in first then D 
+                    lsrb     
+                    pshs     b 
+                    ldx      #hsentrynYpos_t              ; same Y so they line up 
+                    lda      b,x 
+                    ldb      #10 
+                    jsr      Print_Str_d 
+                    puls     b                            ; restore b 
+                    decb                                  ; next one up. 
+                    bpl      _hsprtloop
+
+                    jsr      Read_Btns 
+                    lda      Vec_Button_1_3 
+                    lbne     restart                       ; break out
+
+                    bra      _keepshow 
+
+                                                          
+                    rts      
+
+;((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((
+sort_hs_tbl 
                     rts      
