@@ -338,6 +338,10 @@ _tsdone
 
 ;&&&&&&&&&&&&&&&%%%%%%%
 joystick_config 
+				  lda      #10
+				  sta      temp1
+				  lda      #$FF
+				  sta      Vec_Counter_1
                     lda      #0 
                     sta      conf_box_index 
                     sta      frm10cnt 
@@ -403,7 +407,20 @@ no_press_cal
                     bne      no10cntresetC 
                     clr      frm10cnt 
 no10cntresetC 
+
+				  jsr      Dec_3_Counters
+				  tst      Vec_Counter_1
+				  bne      keepgoing
+                    dec      temp1
+				  beq      do_demo 
+				  lda      #$FF
+                    sta      Vec_Counter_1
+				 
+				     
+keepgoing
                     bra      conf_loop 
+do_demo             inc      Demo_Mode
+				  jsr      restart      
 
 conf_done 
                     lda      conf_box_index 
@@ -413,6 +430,8 @@ conf_done
 
 ;***************    ********************************************************************** 
 check_highscore_entry: 
+				  ldd      #$9411         ; change refresh rate 
+                    std      Vec_Rfrsh
 ; score compare see if we even need to do this
                     ldx      #hsentrys_t 
                     ldx      4,x                          ; just check lowest entry for now 
@@ -560,6 +579,21 @@ no25cntresetHS
                     bne      no10cntresetHS 
                     clr      frm10cnt 
 no10cntresetHS 
+				  RESET0REF
+				  ldd     Vec_Text_HW
+				  pshs    d
+				  ldd     #$FE40
+				  std     Vec_Text_HW
+				  lda     #-110
+				  ldb     #-120
+			       ldu     #press_btn3_text
+				  jsr      Print_Str_d	
+				  lda     #-120
+				  ldb     #-120
+			       ldu     #press_btn4_text
+				  jsr      Print_Str_d
+				  puls     d
+                    std      Vec_Text_HW      	
                     jmp      hs_loop 
 
 doHSsave                                                  ;        finished HS entry 
@@ -579,7 +613,7 @@ hs_test_loop
                     jsr      Compare_Score                ; result in A 
                     cmpa     #2 
                     bne      hs_check_done                ; 0 = same | 1 = x > u | 2 = x < u == new highscore 
-                                                          ; X = target 
+                                                         
 ; remember indexes: top score == 0 5th = 4
 ; first copy current slot score to one slot higher in source index 0-3 only, discard on 4 
 hs_copy_outer_loop 
@@ -610,8 +644,8 @@ hsn_copy_old_down_1_loop
                     lda      ,y+                          ; increments AFTER apparently!! 
                     sta      ,x+ 
                     bpl      hsn_copy_old_down_1_loop
-; TO DO add initial drop code here 
 no_copy_score 
+;
                     lda      temp1 
                     lsla     
                     ldy      #score                       ; Y = source 

@@ -444,9 +444,9 @@ nine:               fcb      0, -10*VNUM_SCALE, +0
                                                           ; align $100 
 ;shippos_t          fcb      -3*ALLEYWIDTH,-2*ALLEYWIDTH,-1*ALLEYWIDTH,0,1*ALLEYWIDTH,2*ALLEYWIDTH,3*ALLEYWIDTH ; Y pos of ship 
 ; position of cursor
-cboxYpos_t          db       93,81,69,57 					; position of box for JS conf
-hsentrynYpos_t												; position of hs table 
-hsboxYpos_t         db       103,91,79,67,55,43 				; Y,X pos of hs initials entry cusor
+cboxYpos_t          db       93,81,69,57                  ; position of box for JS conf 
+hsentrynYpos_t                                            ;        position of hs table 
+hsboxYpos_t         db       103,91,79,67,55,43           ; Y,X pos of hs initials entry cusor 
 hsboxXpos_t         db       -54,-31,-9,13,35,58 
 ; high score entry grid tables
 hsgridrow           dw       hsgr0,hsgr1,hsgr2,hsgr3, hsgr4,hsgr5 
@@ -638,6 +638,9 @@ alleyanxietylogo_data:
 deadstring          fcc      "SHIP HIT!",$80
 gameoverstr         fcc      "GAME OVER",$80
 highscorelabel      fcc      "HIGH SCORE",$80
+newlabel            fcc      "NEW ",$80
+press_btn3_text     fcc      "PRESS BUTTON 3 TO BACKSPACE",$80
+press_btn4_text     fcc      "PRESS BUTTON 4 TO ENTER",$80
 joycal_label        fcc      "JOYSTICK SPEED",$80
 vslow_text          fcc      "VERY SLOW",$80
 slow_text           fcc      "SLOW",$80

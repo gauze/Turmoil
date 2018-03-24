@@ -52,18 +52,17 @@
 ;***************************************************************************
 ; here the cartridge program starts off   
 introSplash 
-                  ;  jsr      titleScreen 
-                    jsr      setup                        ; remove when done testing
-                  
-                    
-				;  jsr      highscore_entry              ; remove when done testing
+                                                          ; jsr titleScreen 
+                    jsr      setup                        ; remove when done testing 
+                                                          ; jsr highscore_entry ; remove when done testing 
                     jsr      joystick_config              ; move? 
-                    jsr      fill_hs_tbl
-				  ldu      #hsentry1s 
-                    ldx      #hsentry2s
-				  jsr      Compare_Score 
-				  
+                    jsr      fill_hs_tbl 
+                    ldu      #hsentry1s 
+                    ldx      #hsentry2s 
+                    jsr      Compare_Score 
 restart 
+                    ldd      #$3075 
+                    std      Vec_Rfrsh 					; make sure we are at 50hz 
                     jsr      setup 
                     jsr      levelsplash 
 ;start 
@@ -76,13 +75,10 @@ restart
                     stb      shipdir 
                     ldx      #score 
                     jsr      Clear_Score 
-                    lda      #5 
-                    sta      shipcnt
-
-
+                    lda      #1                           ; normally 5 FIX 
+                    sta      shipcnt 
 ;----------------------------------------------------------------------------
 main: 
-
                     jsr      Wait_Recal 
                     READ_JOYSTICK  
                     lda      #$5F 
