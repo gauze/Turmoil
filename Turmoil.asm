@@ -52,17 +52,16 @@
 ;***************************************************************************
 ; here the cartridge program starts off   
 introSplash 
-                                                          ; jsr titleScreen 
+			       ldu      #ustacktemp
+                    STU      ustacktempptr 				; only do this once
                     jsr      setup                        ; remove when done testing 
+                    jsr      fill_hs_tbl 
+                    jsr      titleScreen 
                                                           ; jsr highscore_entry ; remove when done testing 
                     jsr      joystick_config              ; move? 
-                    jsr      fill_hs_tbl 
-                    ldu      #hsentry1s 
-                    ldx      #hsentry2s 
-                    jsr      Compare_Score 
 restart 
                     ldd      #$3075 
-                    std      Vec_Rfrsh 					; make sure we are at 50hz 
+                    std      Vec_Rfrsh                    ; make sure we are at 50hz 
                     jsr      setup 
                     jsr      levelsplash 
 ;start 
@@ -77,6 +76,14 @@ restart
                     jsr      Clear_Score 
                     lda      #1                           ; normally 5 FIX 
                     sta      shipcnt 
+
+                    lda      #$5F                         ; for high score input _ under scores _
+                    sta      hstempstr 
+                    sta      hstempstr+1 
+                    sta      hstempstr+2 
+                    lda      #$80                         ; EOL 
+                    sta      hstempstr+3 
+			
 ;----------------------------------------------------------------------------
 main: 
                     jsr      Wait_Recal 
@@ -94,11 +101,11 @@ main:
                     INTENSITY_A  
                                                           ; display score and ships left 
                     DRAW_VECTOR_SCORE  
-                    lda      #127 
+                    lda      #127 						; scale
                     sta      VIA_t1_cnt_lo 
-                                                          ; DRAW_RASTER_SCORE 
+                                                       
                     PRINT_SHIPS  
-                                                          ;PRINT_SHIPS_VECTOR 
+                                                        
 ; decrement counters on alley respawn timeouts                                    ; jmp no_score 
 no_score: 
                     ldd      prizecnt                     ; minumum counter for time between prize spawns 

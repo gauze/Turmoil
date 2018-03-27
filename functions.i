@@ -21,13 +21,8 @@ setup:                                                    ;        setting up ha
 
 setuplevel: 
                     ldd      #$FC50 
-                    std      Vec_Text_HW 
-                    lda      #$5F                         ; under score 
-                    sta      hstempstr 
-                    sta      hstempstr+1 
-                    sta      hstempstr+2 
-                    lda      #$80                         ; EOL 
-                    sta      hstempstr+3 
+                    std      Vec_Text_HW
+
                     ldd      #0                           ; set a bunch of variables to 0 
                     sta      bullet0e 
                     sta      bullet1e 
@@ -116,6 +111,7 @@ setuplevel:
                     sta      enemycnt 
                     std      prizecnt 
                     sta      Is_Prize 
+                    sta      Demo_Mode 
                     sta      Ship_Dead 
                     sta      Level_Done 
                     sta      Line_Pat 
@@ -129,11 +125,11 @@ newlevel:
 
 ; ##########################################################################
 gameover:                                                 ;        #isfunction 
-                    ldx      #score 
-                    ldu      #Vec_High_Score 
-                    jsr      New_High_Score 
+;                    ldx      #score 
+;                    ldu      #Vec_High_Score 
+;                    jsr      New_High_Score 
                     jsr      check_highscore_entry 
-                    jsr      print_hs_tbl 
+                    jmp      print_hs_tbl 				; no RTS don't use jsr
 goloop: 
                     jsr      Wait_Recal 
                     clr      Vec_Misc_Count 
@@ -289,11 +285,12 @@ titleScreen:
                     STA      shipYpos 
                     LDA      #200                         ; 'counter' for display of logo, 4 seconds 
                     STA      temp 
-                    LDU      #ustacktemp                  ; save text w/h to stack 
+                    LDU      ustacktempptr                  ; save text w/h to stack 
                     LDD      Vec_Text_HW 
                                                           ; LDB Vec_Text_Width 
                     PSHU     d 
-                    STU      ustacktempptr 
+				  stu      ustacktempptr
+
 _tsmain 
                     JSR      DP_to_C8                     ; DP to RAM 
                     LDU      #LOGOEXP                     ; point to explosion table entry 
@@ -332,19 +329,30 @@ _tsdone
                     STU      ustacktempptr                ; save for later 
                     LDA      #0 
                     STA      Vec_Music_Flag 
-                    STA      Vec_Expl_Flag 
+                    STA      Vec_Expl_Flag
+				  sta      Vec_Expl_Chans
+				  sta      Vec_Expl_1	 
+				  sta      Vec_Expl_2
+				  sta      Vec_Expl_3
+				  sta      Vec_Expl_4
+				  sta      Vec_Expl_Chan
+				  sta      Vec_Expl_ChanA
+				  sta      Vec_Expl_ChanB
+				  sta      Vec_Expl_Timer
                     JSR      Clear_Sound 
-                    RTS      
+                    rts      
 
 ;&&&&&&&&&&&&&&&%%%%%%%
 joystick_config 
-				  lda      #10
-				  sta      temp1
-				  lda      #$FF
-				  sta      Vec_Counter_1
+                    lda      #10 
+                    sta      temp1 
+                    lda      #$FF 
+                    sta      Vec_Counter_1 
                     lda      #0 
                     sta      conf_box_index 
                     sta      frm10cnt 
+                    inca     
+                    sta      shipspeed 
 conf_loop 
                     jsr      Wait_Recal 
                     jsr      Intensity_5F 
@@ -407,20 +415,18 @@ no_press_cal
                     bne      no10cntresetC 
                     clr      frm10cnt 
 no10cntresetC 
-
-				  jsr      Dec_3_Counters
-				  tst      Vec_Counter_1
-				  bne      keepgoing
-                    dec      temp1
-				  beq      do_demo 
-				  lda      #$FF
-                    sta      Vec_Counter_1
-				 
-				     
-keepgoing
+                    jsr      Dec_3_Counters 
+                    tst      Vec_Counter_1 
+                    bne      keepgoing 
+                    dec      temp1 
+                    beq      do_demo 
+                    lda      #$FF 
+                    sta      Vec_Counter_1 
+keepgoing 
                     bra      conf_loop 
-do_demo             inc      Demo_Mode
-				  jsr      restart      
+
+do_demo             inc      Demo_Mode 
+                    jmp      restart 
 
 conf_done 
                     lda      conf_box_index 
@@ -430,11 +436,11 @@ conf_done
 
 ;***************    ********************************************************************** 
 check_highscore_entry: 
-				  ldd      #$9411         ; change refresh rate 
-                    std      Vec_Rfrsh
+                    ldd      #$9411                       ; change refresh rate 
+                    std      Vec_Rfrsh 
 ; score compare see if we even need to do this
                     ldx      #hsentrys_t 
-                    ldx      4,x                          ; just check lowest entry for now 
+                    ldx      4,x                          ; check lowest entry 
                     ldu      #score 
                     jsr      Compare_Score                ; result in A 
                     cmpa     #2 
@@ -442,24 +448,29 @@ check_highscore_entry:
                     lda      #0 
                     sta      hs_box_Yindex 
                     sta      hs_box_Xindex 
-                    sta      frm10cnt 
-                    sta      hsentry_index 
+                    sta      frm5cnt 
+                    sta      hsentry_index
+				  sta      temp1 
 hs_loop 
                     jsr      Wait_Recal 
                     jsr      Intensity_5F 
-                    lda      frm10cnt 
-                    bne      hsbtn3_done                  ; joystick movement delay 
+                    lda      frm5cnt 
+                    lbne      hsbtn3_done                  ; joystick movement delay 
                     jsr      Joy_Digital 
 ; Y stick poll    
                     lda      Vec_Joy_1_Y 
                     beq      jsdoneYhs                    ; no Y motion 
-                    bmi      going_down_hs 
+                    bmi      going_down_hs
+				  lda      #50 
+				  sta      temp1 
                     lda      hs_box_Yindex 
                     beq      jsdoneYhs                    ; 0 is highest slot on screen !move 
                     dec      hs_box_Yindex 
                     bra      jsdoneYhs 
 
 going_down_hs 
+				  lda      #50 
+				  sta      temp1
                     lda      hs_box_Yindex 
                     cmpa     #5                           ; 5 is lowest row on screen !move 
                     beq      jsdoneYhs 
@@ -468,7 +479,9 @@ jsdoneYhs
 ; X stick poll    
                     lda      Vec_Joy_1_X 
                     beq      jsdoneXhs                    ; no X motion 
-                    bmi      going_left_hs 
+                    bmi      going_left_hs
+				  lda      #50 
+				  sta      temp1 
                     lda      hs_box_Xindex 
                     cmpa     #5 
                     beq      jsdoneXhs                    ; 5 is highest slot on screen !move 
@@ -476,6 +489,8 @@ jsdoneYhs
                     bra      jsdoneXhs 
 
 going_left_hs 
+				  lda      #50 
+				  sta      temp1
                     lda      hs_box_Xindex 
                     beq      jsdoneXhs 
                     dec      hs_box_Xindex 
@@ -497,6 +512,8 @@ jsdoneXhs
                     ldb      hsentry_index 
                     sta      b,x 
                     inc      hsentry_index 
+				  lda      #50 
+				  sta      temp1
 hsbtn4_done 
                     lda      Vec_Button_1_3 
                     beq      hsbtn3_done 
@@ -506,7 +523,9 @@ hsbtn4_done
                     lda      #$5F                         ; load underscore char 
                     ldx      #hstempstr 
                     ldb      hsentry_index 
-                    sta      b,x                          ; over write char 
+                    sta      b,x                          ; over write char
+				  lda      #50 
+				  sta      temp1 
 hsbtn3_done 
 ; end INPUT handling
 hsgridxpos          =        -59 
@@ -574,26 +593,41 @@ cursorchange_done
                     clr      frm25cnt 
 no25cntresetHS 
                     lda      #10 
-                    inc      frm10cnt 
-                    cmpa     frm10cnt 
-                    bne      no10cntresetHS 
-                    clr      frm10cnt 
-no10cntresetHS 
-				  RESET0REF
-				  ldd     Vec_Text_HW
-				  pshs    d
-				  ldd     #$FE40
-				  std     Vec_Text_HW
-				  lda     #-110
-				  ldb     #-120
-			       ldu     #press_btn3_text
-				  jsr      Print_Str_d	
-				  lda     #-120
-				  ldb     #-120
-			       ldu     #press_btn4_text
+                    inc      frm5cnt 
+                    cmpa     frm5cnt 
+                    bne      no5cntresetHS 
+                    clr      frm5cnt 
+no5cntresetHS
+
+;show_inst
+                    RESET0REF  
+                    ldd      Vec_Text_HW 
+                    pshs     d 
+                    ldd      #$FE40 
+                    std      Vec_Text_HW 
+
+				  lda      #117
+				  ldb      #-60
+				  ldu      #newhslabel
 				  jsr      Print_Str_d
-				  puls     d
-                    std      Vec_Text_HW      	
+
+				  lda      temp1					    ; timer to hide instructions
+				  beq      show_inst
+				  dec      temp1
+			       bne      no_ent_inst
+show_inst
+                    lda      #-110 
+                    ldb      #-120 
+                    ldu      #press_btn3_text 
+                    jsr      Print_Str_d 
+                    lda      #-120 
+                    ldb      #-120 
+                    ldu      #press_btn4_text 
+                    jsr      Print_Str_d 
+no_ent_inst
+                    puls     d 
+                    std      Vec_Text_HW
+ 
                     jmp      hs_loop 
 
 doHSsave                                                  ;        finished HS entry 
@@ -605,15 +639,14 @@ doHSsave                                                  ;        finished HS e
                     sta      temp1 
 hs_test_loop 
 ; score compare
-				  lda      temp1
-				  lsla
+                    lda      temp1 
+                    lsla     
                     ldx      #hsentrys_t 
                     ldx      a,x 
                     ldu      #score 
                     jsr      Compare_Score                ; result in A 
                     cmpa     #2 
                     bne      hs_check_done                ; 0 = same | 1 = x > u | 2 = x < u == new highscore 
-                                                         
 ; remember indexes: top score == 0 5th = 4
 ; first copy current slot score to one slot higher in source index 0-3 only, discard on 4 
 hs_copy_outer_loop 
@@ -643,7 +676,7 @@ hs_copy_old_down_1_loop
 hsn_copy_old_down_1_loop 
                     lda      ,y+                          ; increments AFTER apparently!! 
                     sta      ,x+ 
-                    bpl      hsn_copy_old_down_1_loop
+                    bpl      hsn_copy_old_down_1_loop 
 no_copy_score 
 ;
                     lda      temp1 
@@ -657,15 +690,15 @@ hs_copy_loop
                     bpl      hs_copy_loop 
 ; NAME 2nd 
                     lda      temp1 
-				  lsla
+                    lsla     
                     ldy      #hstempstr                   ; from user input above 
                     ldx      #hsentryn_t 
-				  ldx      a,x
+                    ldx      a,x 
 hsn_copy_loop 
                     lda      ,y+                          ; increments AFTER apparently!! 
                     sta      ,x+ 
                     bpl      hsn_copy_loop 
-				  dec      temp1
+                    dec      temp1 
                     jmp      hs_test_loop 
 
 hs_check_done 
@@ -705,6 +738,8 @@ _fill_sloop
 
 ;))))))))))))))))))))))))))))))))))))))))))))))))))))))))))
 print_hs_tbl 
+                    lda      #2 
+                    sta      temp1 
 _keepshow 
                     jsr      Wait_Recal 
                     jsr      Intensity_5F 
@@ -737,15 +772,26 @@ _hsprtloop
                     jsr      Print_Str_d 
                     puls     b                            ; restore b 
                     decb                                  ; next one up. 
-                    bpl      _hsprtloop
-
+                    bpl      _hsprtloop 
                     jsr      Read_Btns 
                     lda      Vec_Button_1_3 
-                    lbne     restart                       ; break out
-
+                    lbne     restart                      ; break out 
+; count down to next screen without button press
+                    jsr      Dec_3_Counters 
+                    tst      Vec_Counter_1 
+                    bne      keepgoinghs 
+                    dec      temp1 
+                    beq      do_demohs 
+                    lda      #$FF 
+                    sta      Vec_Counter_1 
+keepgoinghs 
                     bra      _keepshow 
 
-                                                          
+do_demohs           inc      Demo_Mode 
+                    jsr      titleScreen                  ; remove until cause of crash is figured out
+                    jmp      restart 
+
+                                                          ; bra _keepshow 
                     rts      
 
 ;((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((

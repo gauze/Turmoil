@@ -2235,7 +2235,7 @@ no100cntreset
 CHECK_GAMEOVER      macro    
                     lda      shipcnt 
                     bne      notgameover 
-                    jsr      gameover 
+                    jmp      gameover 
 notgameover 
                     endm     
 ;###########################################################################################################
