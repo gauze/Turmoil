@@ -18,6 +18,7 @@ hs_box_Xindex       ds       1
 ;
 ; your ship related variables, X,Y position and direction facing L/R, and number left
 shipdir             ds       1                            ; left or right 
+shipYdir            ds       1                            ; up or down for Demo_Mode
 shipYpos            ds       1 
 shipXpos            ds       1 
 shipcnt             ds       1                            ; 

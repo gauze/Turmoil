@@ -1561,7 +1561,9 @@ bullet6_miss
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 READ_BUTTONS        macro    
                     lda      Ship_Dead 
-                    bne      cant_shoot_while_dead 
+                    bne      cant_shoot_while_dead
+				  lda      Demo_Mode
+				  bne      demo_mode_firing 
                     lda      In_Alley 
                     bne      cant_shoot_in_alley 
                     jsr      Read_Btns 
@@ -1580,6 +1582,7 @@ READ_BUTTONS        macro
                     lda      Vec_Btn_State 
                     beq      no_press 
                                                           ; adding bullet to alley if no other bullet is already there 
+demo_mode_firing
                     lda      shipYpos 
                     asla     
                     ldx      #bullete_t 
@@ -1602,7 +1605,7 @@ READ_BUTTONS        macro
                     ldx      a,x 
                     ldb      shipdir 
                     beq      negstart 
-                    ldb      #7                           ; trying to lin up bullet creation with tip of ships nose 
+                    ldb      #7                           ; trying to line up bullet creation with tip of ships nose 
                     stb      ,x                           ; set start X 
                     bra      newshotdone 
 
@@ -1853,6 +1856,39 @@ INTENSITY_A         macro
 READ_JOYSTICK       macro    
                     lda      Ship_Dead 
                     lbne     jsdone 
+; can't move, done 
+                    lda      Demo_Mode 
+                    beq      not_demo_rjs 
+				  lda      frm10cnt
+                    lbne      jsdone
+				  jsr      Random
+				  anda     #%00000001
+				  sta      shipdir					; set random ship direction
+                    lda      shipYdir                     ; 0 = up 1 = down 
+                    bne      do_demo_dec 
+                    lda      shipYpos 
+                    cmpa     #6 
+                    beq      rev_shipdir_down 
+                    inc      shipYpos 
+                    jmp      jsdone 
+
+rev_shipdir_down 
+                    inc      shipYdir 
+                    dec      shipYpos 
+                    jmp      jsdone 
+
+do_demo_dec 
+                    lda      shipYpos 
+                    beq      rev_shipdir 
+                    dec      shipYpos 
+                    jmp      jsdone 
+
+rev_shipdir 
+                    clr      shipYdir 
+                    inc      shipYpos 
+                    jmp      jsdone 
+
+not_demo_rjs 
                     lda      shipspeed                    ; user defined joystick speed 
                     lsla     
                     ldx      #speed_t 
@@ -2236,6 +2272,7 @@ CHECK_GAMEOVER      macro
                     lda      shipcnt 
                     bne      notgameover 
                     jmp      gameover 
+
 notgameover 
                     endm     
 ;###########################################################################################################
@@ -2298,6 +2335,21 @@ CHKPRIZEEXIST       macro
                     clr      Is_Prize                     ; fail all tests, reset Is_Prize 
 prize_exist 
                     endm     
+;::::::::::::::::::::::::::::::::
+ALLEY_TIMEOUT       macro
+                    ldx      #alleyto_t 
+                    lda      #6 
+                    lsla     
+respawncounter 
+                    ldb      [a,x] 
+                    beq      cntatzero 
+                    dec      [a,x] 
+cntatzero 
+                    lsra     
+                    deca     
+                    lsla     
+                    bge      respawncounter 
+				  endm
 ;########################################################################################################
 ;#########################################################################################################
 ;########################DRAWING MACROS
@@ -2392,7 +2444,9 @@ _timeout_pat        STA      <VIA_shift_reg               ;Put pattern in shift 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 DRAW_VECTOR_SCORE   macro    
                     lda      frm2cnt 
-                    lbeq     _no_print_vscore 
+                    lbeq     _no_print_vscore
+				  lda      Demo_Mode
+                    lbne      demo_score 
                     RESET0REF  
                     lda      #-127                        ; position before scaling 
                     ldb      #-20 
@@ -2417,7 +2471,13 @@ _is_zero
                     ldx      #zero 
                     DRAW_VL_MODE  
                     ldx      #numbers_t 
-                    bra      _scoreloop 
+                    bra      _scoreloop
+demo_score
+				  RESET0REF
+				  lda      #-127
+				  ldb      #-40
+				  ldu      #demolabel
+				  jsr      Print_Str_d 
 
 score_done 
 _no_print_vscore 
@@ -2438,6 +2498,7 @@ _no_print_score
                     endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 PRINT_VECTOR_SHIPS  macro    
+    
                     RESET0REF  
                     lda      #-127 
                     ldb      #50 
@@ -2452,6 +2513,8 @@ _ships_left_loop
                     endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 PRINT_SHIPS         macro    
+				  lda      Demo_Mode
+				  bne      _no_print_ships
                     lda      frm2cnt 
                     bne      _no_print_ships 
                     RESET0REF  
@@ -2464,3 +2527,13 @@ PRINT_SHIPS         macro
 _no_print_ships 
                     endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+CHECK_DEMO          macro
+				  lda      Demo_Mode
+                    beq      no_check_needed
+                    jsr      Read_Btns 
+                    lda      Vec_Button_1_3
+                    beq      no_check_needed
+				  clr      Demo_Mode
+                    jmp      restart 	 
+no_check_needed
+				  endm

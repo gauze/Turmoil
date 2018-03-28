@@ -636,9 +636,10 @@ alleyanxietylogo_data:
 ; TEXT STRINGS
 ;$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 deadstring          fcc      "SHIP HIT!",$80
+demolabel           fcc      "DEMO MODE",$80
 gameoverstr         fcc      "GAME OVER",$80
 highscorelabel      fcc      "HIGH SCORE",$80
-newhslabel            fcc      "NEW HIGH SCORE",$80
+newhslabel          fcc      "NEW HIGH SCORE",$80
 press_btn3_text     fcc      "PRESS BUTTON 3 TO BACKSPACE",$80
 press_btn4_text     fcc      "PRESS BUTTON 4 TO ENTER",$80
 joycal_label        fcc      "JOYSTICK SPEED",$80
@@ -655,7 +656,7 @@ hs_abc_6            fcc      "4 5 6 7 8 9",$80
 default_high        fcc      "     0",$80
 default_name        fcc      "AAA",$80
 thanks              fcc      "MALBAN, VECTREXER, DER LUCHS",$80
-thanks1             fcc      "VECTORX, TONY W, THOMAS S",$80
+thanks1             fcc      "VECTORX, TODD W, THOMAS S",$80
                     fcc      "SECRET GAME",$80
 credits             fcc      "PROGRAMMED BY GAUZE 2016-2018",$80 
                     FCC      "DISASSEMBLED BY MALBAN",$6B
