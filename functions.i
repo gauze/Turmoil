@@ -484,7 +484,7 @@ going_down_hs
                     lda      #50 
                     sta      temp1 
                     lda      hs_box_Yindex 
-                    cmpa     #5                           ; 5 is lowest row on screen !move 
+                    cmpa     #6                           ; 5 is lowest row on screen !move 
                     beq      jsdoneYhs 
                     inc      hs_box_Yindex 
 jsdoneYhs 
@@ -565,6 +565,10 @@ hsgridxpos          =        -59
                     ldb      #hsgridxpos 
                     ldu      #hs_abc_6 
                     jsr      Print_Str_d 
+                    lda      #28 
+                    ldb      #hsgridxpos 
+                    ldu      #hs_abc_7 
+                    jsr      Print_Str_d 
 ; test 
                     lda      #-50 
                     ldb      #-30 
@@ -604,12 +608,18 @@ change_underscore
 cursorchange_done 
                     clr      frm25cnt 
 no25cntresetHS 
-                    lda      #10 
+                    lda      #5 
                     inc      frm5cnt 
                     cmpa     frm5cnt 
                     bne      no5cntresetHS 
                     clr      frm5cnt 
 no5cntresetHS 
+                    lda      #2 
+                    inc      frm2cnt 
+                    cmpa     frm2cnt 
+                    bne      no2cntresetHS 
+                    clr      frm2cnt 
+no2cntresetHS 
 ;show_inst
                     RESET0REF  
                     ldd      Vec_Text_HW 
@@ -625,10 +635,15 @@ no5cntresetHS
                     dec      temp1 
                     bne      no_ent_inst 
 show_inst 
+				  lda      frm2cnt
+				  bne      noshow_3
                     lda      #-110 
                     ldb      #-120 
                     ldu      #press_btn3_text 
-                    jsr      Print_Str_d 
+                    jsr      Print_Str_d
+noshow_3 
+				  lda      frm2cnt
+                    beq      no_ent_inst
                     lda      #-120 
                     ldb      #-120 
                     ldu      #press_btn4_text 

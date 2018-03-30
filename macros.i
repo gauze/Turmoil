@@ -1561,9 +1561,9 @@ bullet6_miss
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 READ_BUTTONS        macro    
                     lda      Ship_Dead 
-                    bne      cant_shoot_while_dead
-				  lda      Demo_Mode
-				  bne      demo_mode_firing 
+                    bne      cant_shoot_while_dead 
+                    lda      Demo_Mode 
+                    bne      demo_mode_firing 
                     lda      In_Alley 
                     bne      cant_shoot_in_alley 
                     jsr      Read_Btns 
@@ -1582,7 +1582,7 @@ READ_BUTTONS        macro
                     lda      Vec_Btn_State 
                     beq      no_press 
                                                           ; adding bullet to alley if no other bullet is already there 
-demo_mode_firing
+demo_mode_firing 
                     lda      shipYpos 
                     asla     
                     ldx      #bullete_t 
@@ -1831,6 +1831,7 @@ MLF318:             lda      #$CE                         ;Blank low, zero high?
                     bra      MLF33D 
 
 MLF33B:             lda      #$04                         ;Wait for timer 1 
+; could insert some routines in here before checking countdown?
 MLF33D:             bitb     <VIA_int_flags 
                     beq      MLF33D 
 MLF341:             deca                                  ;Delay a moment 
@@ -1859,11 +1860,11 @@ READ_JOYSTICK       macro
 ; can't move, done 
                     lda      Demo_Mode 
                     beq      not_demo_rjs 
-				  lda      frm10cnt
-                    lbne      jsdone
-				  jsr      Random
-				  anda     #%00000001
-				  sta      shipdir					; set random ship direction
+                    lda      frm10cnt 
+                    lbne     jsdone 
+                    jsr      Random 
+                    anda     #%00000001 
+                    sta      shipdir                      ; set random ship direction 
                     lda      shipYdir                     ; 0 = up 1 = down 
                     bne      do_demo_dec 
                     lda      shipYpos 
@@ -2336,7 +2337,7 @@ CHKPRIZEEXIST       macro
 prize_exist 
                     endm     
 ;::::::::::::::::::::::::::::::::
-ALLEY_TIMEOUT       macro
+ALLEY_TIMEOUT       macro    
                     ldx      #alleyto_t 
                     lda      #6 
                     lsla     
@@ -2349,7 +2350,7 @@ cntatzero
                     deca     
                     lsla     
                     bge      respawncounter 
-				  endm
+                    endm     
 ;########################################################################################################
 ;#########################################################################################################
 ;########################DRAWING MACROS
@@ -2393,6 +2394,7 @@ draw_solid:         deca
                     sta      <VIA_shift_reg               ;Put pattern in shift register 
                     stb      <VIA_t1_cnt_hi               ;Set T1H (scale factor?) 
                     ldd      #$0040                       ;B-reg = T1 interrupt bit 
+; could insert some routines in here before checking countdown?
 dorgle:             bitb     <VIA_int_flags               ;Wait for T1 to time out 
                     beq      dorgle 
                     nop                                   ;Wait a moment more 
@@ -2444,9 +2446,9 @@ _timeout_pat        STA      <VIA_shift_reg               ;Put pattern in shift 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 DRAW_VECTOR_SCORE   macro    
                     lda      frm2cnt 
-                    lbeq     _no_print_vscore
-				  lda      Demo_Mode
-                    lbne      demo_score 
+                    lbeq     _no_print_vscore 
+                    lda      Demo_Mode 
+                    lbne     demo_score 
                     RESET0REF  
                     lda      #-127                        ; position before scaling 
                     ldb      #-20 
@@ -2471,14 +2473,14 @@ _is_zero
                     ldx      #zero 
                     DRAW_VL_MODE  
                     ldx      #numbers_t 
-                    bra      _scoreloop
-demo_score
-				  RESET0REF
-				  lda      #-127
-				  ldb      #-40
-				  ldu      #demolabel
-				  jsr      Print_Str_d 
+                    bra      _scoreloop 
 
+demo_score 
+                    RESET0REF  
+                    lda      #-127 
+                    ldb      #-40 
+                    ldu      #demolabel 
+                    jsr      Print_Str_d 
 score_done 
 _no_print_vscore 
                     endm     
@@ -2498,7 +2500,6 @@ _no_print_score
                     endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 PRINT_VECTOR_SHIPS  macro    
-    
                     RESET0REF  
                     lda      #-127 
                     ldb      #50 
@@ -2513,8 +2514,8 @@ _ships_left_loop
                     endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 PRINT_SHIPS         macro    
-				  lda      Demo_Mode
-				  bne      _no_print_ships
+                    lda      Demo_Mode 
+                    bne      _no_print_ships 
                     lda      frm2cnt 
                     bne      _no_print_ships 
                     RESET0REF  
@@ -2527,13 +2528,50 @@ PRINT_SHIPS         macro
 _no_print_ships 
                     endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-CHECK_DEMO          macro
-				  lda      Demo_Mode
-                    beq      no_check_needed
+CHECK_DEMO          macro    
+                    lda      Demo_Mode 
+                    beq      no_check_needed 
                     jsr      Read_Btns 
-                    lda      Vec_Button_1_3
-                    beq      no_check_needed
-				  clr      Demo_Mode
-                    jmp      restart 	 
-no_check_needed
-				  endm
+                    lda      Vec_Button_1_3 
+                    beq      no_check_needed 
+                    clr      Demo_Mode 
+                    jmp      restart 
+
+no_check_needed 
+                    endm     
+;&&&&&&&&&&&&&&&^^^^^^^^^^^^^^^^^^^^^^^^^&&&&&&&&&&&&&&&&&&&&&&&&&^^^^^^^^^^^^^^^^^
+MOVETO_D            macro    
+                    local     MLF33B,MLF33D,MLF341,MLF345,moveto_d_done 
+                    sta      <VIA_port_a                  ;Store Y in D/A register 
+                    clr      <VIA_port_b                  ;Enable mux 
+                    pshs     b,a                          ;Save D-register on stack 
+                    lda      #$CE                         ;Blank low, zero high? 
+                    sta      <VIA_cntl 
+                    clr      <VIA_shift_reg               ;Clear shift regigster 
+                    inc      <VIA_port_b                  ;Disable mux 
+                    stb      <VIA_port_a                  ;Store X in D/A register 
+                    clr      <VIA_t1_cnt_hi               ;timer 1 count high 
+                    puls     a,b                          ;Get back D-reg 
+                    jsr      Abs_a_b 
+                    stb      -1,s 
+                    ora      -1,s 
+                    ldb      #$40 
+                    cmpa     #$40 
+                    bls      MLF345 
+                    cmpa     #$64 
+                    bls      MLF33B 
+                    lda      #$08 
+                    bra      MLF33D 
+
+MLF33B:             lda      #$04                         ;Wait for timer 1 
+; could insert some routines in here before checking countdown?
+MLF33D:             bitb     <VIA_int_flags 
+                    beq      MLF33D 
+MLF341:             deca                                  ;Delay a moment 
+                    bne      MLF341 
+                    bra      moveto_d_done 
+
+MLF345:             bitb     <VIA_int_flags               ;Wait for timer 1 
+                    beq      MLF345 
+moveto_d_done 
+                    endm     

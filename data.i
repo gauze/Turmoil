@@ -446,16 +446,17 @@ nine:               fcb      0, -10*VNUM_SCALE, +0
 ; position of cursor
 cboxYpos_t          db       93,81,69,57                  ; position of box for JS conf 
 hsentrynYpos_t                                            ;        position of hs table 
-hsboxYpos_t         db       103,91,79,67,55,43           ; Y,X pos of hs initials entry cusor 
+hsboxYpos_t         db       103,91,79,67,55,43,31        ; Y,X pos of hs initials entry cusor 
 hsboxXpos_t         db       -54,-31,-9,13,35,58 
 ; high score entry grid tables
-hsgridrow           dw       hsgr0,hsgr1,hsgr2,hsgr3, hsgr4,hsgr5 
+hsgridrow           dw       hsgr0,hsgr1,hsgr2,hsgr3, hsgr4,hsgr5,hsgr6 
 hsgr0               db       "A", "B", "C", "D", "E", "F"   
 hsgr1               db       "G", "H", "I", "J", "K", "L"
 hsgr2               db       "M", "N", "O", "P", "Q", "R"
 hsgr3               db       "S", "T", "U", "V", "W", "X"
 hsgr4               db       "Y", "Z", "0", "1", "2", "3"
 hsgr5               db       "4", "5", "6", "7", "8", "9"
+hsgr6               db       " ", ".", "!", "?", "_", "$"
 hsentryn_t          dw       hsentry1n, hsentry2n, hsentry3n, hsentry4n, hsentry5n 
 hsentrys_t          dw       hsentry1s, hsentry2s, hsentry3s, hsentry4s, hsentry5s 
 ; game positions
@@ -653,6 +654,7 @@ hs_abc_3            fcc      "M N O P Q R",$80
 hs_abc_4            fcc      "S T U V W X",$80
 hs_abc_5            fcc      "Y Z 0 1 2 3",$80
 hs_abc_6            fcc      "4 5 6 7 8 9",$80
+hs_abc_7            fcc      "  . ! ? _ $",$80
 default_high        fcc      "     0",$80
 default_name        fcc      "AAA",$80
 thanks              fcc      "MALBAN, VECTREXER, DER LUCHS",$80
