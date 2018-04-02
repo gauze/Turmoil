@@ -35,7 +35,7 @@
                     fcb      -$40, $23                    ; hight, width, rel y, rel x (from 0,0) 
                     fcc      "-2018", $80                 ; 3 solid blocks ending with $80 
                     db       0                            ; end of game header 
-;                   bra restart ; TESTING skip intro to get right to it. 
+;                   bra restart ; TESTING skip intro to get right to it.   
                     bra      introSplash 
 
 ;***************************************************************************
@@ -55,12 +55,12 @@ introSplash
                     lda      #1 
                     sta      Demo_Mode                    ; in Demo_Mode on boot 
                     ldu      #ustacktemp 
-                    STU      ustacktempptr                ; only do this once 
+                    stu      ustacktempptr                ; only do this once 
                     jsr      setup                        ; remove when done testing 
-                    jsr      fill_hs_tbl 
+                    jsr      fill_hs_tbl 				; filling from ROM eventually pull from EPROM
                     jsr      titleScreen 
-                                                          ; jsr highscore_entry ; remove when done testing 
-                    jsr      joystick_config              ; move? 
+                                                         
+                    jsr      joystick_config              ; move else were? 
 restart 
                     ldd      #$3075 
                     std      Vec_Rfrsh                    ; make sure we are at 50hz 
@@ -90,7 +90,9 @@ main:
                     READ_JOYSTICK  
                     lda      #$5F 
                     INTENSITY_A  
+				  ldd     #$FFFF
                     DRAW_LINE_WALLS  
+				  ldd     #$FFFF
                     DRAW_SHIP  
                     READ_BUTTONS  
                     MOVE_BULLETS  
@@ -124,11 +126,11 @@ noprizecntdown
                     STALL_CHECK                           ; can't just sit in an open alley forever... 
                     ALLEY_TIMEOUT  
 ;
-                    lda      Level_Done                   ; check level_done flag, increment level if so. 
+                    lda      Level_Done                   ; check level_done flag 
                     lbeq     nolevel 
                     jsr      newlevel                     ; and run routine 
 nolevel 
-                    CHECK_DEMO                            ; routine to handle buton press during demo mode 
+                    CHECK_DEMO                            ; routine to handle button press during demo mode 
                     jmp      main                         ; and repeat forever, sorta 
 
 ; must go at bottom or fills up RAM instead of ROM 

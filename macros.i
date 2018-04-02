@@ -2443,6 +2443,210 @@ _timeout_pat        STA      <VIA_shift_reg               ;Put pattern in shift 
                     NOP                                   ;Wait a moment more 
                     CLR      <VIA_shift_reg               ;Clear shift register (blank output) 
                     endm     
+;;;;;;;;;;;; from BIOS optimized slightly ;;;;;;;;;;;;;;;;;;;;;;;;
+DRAW_LINE_D_PAT_1_L     macro    
+                    local    _timeout_pat 
+                    STA      <VIA_port_a                  ;Send Y to A/D 
+                    CLR      <VIA_port_b                  ;Enable mux 
+                    NOP                                   ;Wait a moment 
+                    INC      <VIA_port_b                  ;Disable mux 
+                    STB      <VIA_port_a                  ;Send X to A/D 
+                    LDA      Line_Pat                     ;Shift reg=$FF (solid line), T1H=0 
+                    CLR      <VIA_t1_cnt_hi               ;Set T1H (scale factor?) 
+                    LDB      #$40                         ;B-reg = T1 interrupt bit 
+_timeout_pat        STA      <VIA_shift_reg               ;Put pattern in shift register 
+                    BITB     <VIA_int_flags               ;Wait for T1 to time out 
+                    BEQ      _timeout_pat 
+                    NOP                                   ;Wait a moment more 
+                    CLR      <VIA_shift_reg               ;Clear shift register (blank output) 
+                    endm   
+;;;;;;;;;;;; from BIOS optimized slightly ;;;;;;;;;;;;;;;;;;;;;;;;
+DRAW_LINE_D_PAT_1_R     macro    
+                    local    _timeout_pat 
+                    STA      <VIA_port_a                  ;Send Y to A/D 
+                    CLR      <VIA_port_b                  ;Enable mux 
+                    NOP                                   ;Wait a moment 
+                    INC      <VIA_port_b                  ;Disable mux 
+                    STB      <VIA_port_a                  ;Send X to A/D 
+                    LDA      Line_Pat                     ;Shift reg=$FF (solid line), T1H=0 
+                    CLR      <VIA_t1_cnt_hi               ;Set T1H (scale factor?) 
+                    LDB      #$40                         ;B-reg = T1 interrupt bit 
+_timeout_pat        STA      <VIA_shift_reg               ;Put pattern in shift register 
+                    BITB     <VIA_int_flags               ;Wait for T1 to time out 
+                    BEQ      _timeout_pat 
+                    NOP                                   ;Wait a moment more 
+                    CLR      <VIA_shift_reg               ;Clear shift register (blank output) 
+                    endm  
+;;;;;;;;;;;; from BIOS optimized slightly ;;;;;;;;;;;;;;;;;;;;;;;;
+DRAW_LINE_D_PAT_2_L     macro    
+                    local    _timeout_pat 
+                    STA      <VIA_port_a                  ;Send Y to A/D 
+                    CLR      <VIA_port_b                  ;Enable mux 
+                    NOP                                   ;Wait a moment 
+                    INC      <VIA_port_b                  ;Disable mux 
+                    STB      <VIA_port_a                  ;Send X to A/D 
+                    LDA      Line_Pat                     ;Shift reg=$FF (solid line), T1H=0 
+                    CLR      <VIA_t1_cnt_hi               ;Set T1H (scale factor?) 
+                    LDB      #$40                         ;B-reg = T1 interrupt bit 
+_timeout_pat        STA      <VIA_shift_reg               ;Put pattern in shift register 
+                    BITB     <VIA_int_flags               ;Wait for T1 to time out 
+                    BEQ      _timeout_pat 
+                    NOP                                   ;Wait a moment more 
+                    CLR      <VIA_shift_reg               ;Clear shift register (blank output) 
+                    endm   
+;;;;;;;;;;;; from BIOS optimized slightly ;;;;;;;;;;;;;;;;;;;;;;;;
+DRAW_LINE_D_PAT_2_R     macro    
+                    local    _timeout_pat 
+                    STA      <VIA_port_a                  ;Send Y to A/D 
+                    CLR      <VIA_port_b                  ;Enable mux 
+                    NOP                                   ;Wait a moment 
+                    INC      <VIA_port_b                  ;Disable mux 
+                    STB      <VIA_port_a                  ;Send X to A/D 
+                    LDA      Line_Pat                     ;Shift reg=$FF (solid line), T1H=0 
+                    CLR      <VIA_t1_cnt_hi               ;Set T1H (scale factor?) 
+                    LDB      #$40                         ;B-reg = T1 interrupt bit 
+_timeout_pat        STA      <VIA_shift_reg               ;Put pattern in shift register 
+                    BITB     <VIA_int_flags               ;Wait for T1 to time out 
+                    BEQ      _timeout_pat 
+                    NOP                                   ;Wait a moment more 
+                    CLR      <VIA_shift_reg               ;Clear shift register (blank output) 
+                    endm
+;;;;;;;;;;;; from BIOS optimized slightly ;;;;;;;;;;;;;;;;;;;;;;;;
+DRAW_LINE_D_PAT_3_L     macro    
+                    local    _timeout_pat 
+                    STA      <VIA_port_a                  ;Send Y to A/D 
+                    CLR      <VIA_port_b                  ;Enable mux 
+                    NOP                                   ;Wait a moment 
+                    INC      <VIA_port_b                  ;Disable mux 
+                    STB      <VIA_port_a                  ;Send X to A/D 
+                    LDA      Line_Pat                     ;Shift reg=$FF (solid line), T1H=0 
+                    CLR      <VIA_t1_cnt_hi               ;Set T1H (scale factor?) 
+                    LDB      #$40                         ;B-reg = T1 interrupt bit 
+_timeout_pat        STA      <VIA_shift_reg               ;Put pattern in shift register 
+                    BITB     <VIA_int_flags               ;Wait for T1 to time out 
+                    BEQ      _timeout_pat 
+                    NOP                                   ;Wait a moment more 
+                    CLR      <VIA_shift_reg               ;Clear shift register (blank output) 
+                    endm   
+;;;;;;;;;;;; from BIOS optimized slightly ;;;;;;;;;;;;;;;;;;;;;;;;
+DRAW_LINE_D_PAT_3_R     macro    
+                    local    _timeout_pat 
+                    STA      <VIA_port_a                  ;Send Y to A/D 
+                    CLR      <VIA_port_b                  ;Enable mux 
+                    NOP                                   ;Wait a moment 
+                    INC      <VIA_port_b                  ;Disable mux 
+                    STB      <VIA_port_a                  ;Send X to A/D 
+                    LDA      Line_Pat                     ;Shift reg=$FF (solid line), T1H=0 
+                    CLR      <VIA_t1_cnt_hi               ;Set T1H (scale factor?) 
+                    LDB      #$40                         ;B-reg = T1 interrupt bit 
+_timeout_pat        STA      <VIA_shift_reg               ;Put pattern in shift register 
+                    BITB     <VIA_int_flags               ;Wait for T1 to time out 
+                    BEQ      _timeout_pat 
+                    NOP                                   ;Wait a moment more 
+                    CLR      <VIA_shift_reg               ;Clear shift register (blank output) 
+                    endm
+;;;;;;;;;;;; from BIOS optimized slightly ;;;;;;;;;;;;;;;;;;;;;;;;
+DRAW_LINE_D_PAT_4_L     macro    
+                    local    _timeout_pat 
+                    STA      <VIA_port_a                  ;Send Y to A/D 
+                    CLR      <VIA_port_b                  ;Enable mux 
+                    NOP                                   ;Wait a moment 
+                    INC      <VIA_port_b                  ;Disable mux 
+                    STB      <VIA_port_a                  ;Send X to A/D 
+                    LDA      Line_Pat                     ;Shift reg=$FF (solid line), T1H=0 
+                    CLR      <VIA_t1_cnt_hi               ;Set T1H (scale factor?) 
+                    LDB      #$40                         ;B-reg = T1 interrupt bit 
+_timeout_pat        STA      <VIA_shift_reg               ;Put pattern in shift register 
+                    BITB     <VIA_int_flags               ;Wait for T1 to time out 
+                    BEQ      _timeout_pat 
+                    NOP                                   ;Wait a moment more 
+                    CLR      <VIA_shift_reg               ;Clear shift register (blank output) 
+                    endm   
+;;;;;;;;;;;; from BIOS optimized slightly ;;;;;;;;;;;;;;;;;;;;;;;;
+DRAW_LINE_D_PAT_4_R     macro    
+                    local    _timeout_pat 
+                    STA      <VIA_port_a                  ;Send Y to A/D 
+                    CLR      <VIA_port_b                  ;Enable mux 
+                    NOP                                   ;Wait a moment 
+                    INC      <VIA_port_b                  ;Disable mux 
+                    STB      <VIA_port_a                  ;Send X to A/D 
+                    LDA      Line_Pat                     ;Shift reg=$FF (solid line), T1H=0 
+                    CLR      <VIA_t1_cnt_hi               ;Set T1H (scale factor?) 
+                    LDB      #$40                         ;B-reg = T1 interrupt bit 
+_timeout_pat        STA      <VIA_shift_reg               ;Put pattern in shift register 
+                    BITB     <VIA_int_flags               ;Wait for T1 to time out 
+                    BEQ      _timeout_pat 
+                    NOP                                   ;Wait a moment more 
+                    CLR      <VIA_shift_reg               ;Clear shift register (blank output) 
+                    endm
+;;;;;;;;;;;; from BIOS optimized slightly ;;;;;;;;;;;;;;;;;;;;;;;;
+DRAW_LINE_D_PAT_5_L     macro    
+                    local    _timeout_pat 
+                    STA      <VIA_port_a                  ;Send Y to A/D 
+                    CLR      <VIA_port_b                  ;Enable mux 
+                    NOP                                   ;Wait a moment 
+                    INC      <VIA_port_b                  ;Disable mux 
+                    STB      <VIA_port_a                  ;Send X to A/D 
+                    LDA      Line_Pat                     ;Shift reg=$FF (solid line), T1H=0 
+                    CLR      <VIA_t1_cnt_hi               ;Set T1H (scale factor?) 
+                    LDB      #$40                         ;B-reg = T1 interrupt bit 
+_timeout_pat        STA      <VIA_shift_reg               ;Put pattern in shift register 
+                    BITB     <VIA_int_flags               ;Wait for T1 to time out 
+                    BEQ      _timeout_pat 
+                    NOP                                   ;Wait a moment more 
+                    CLR      <VIA_shift_reg               ;Clear shift register (blank output) 
+                    endm   
+;;;;;;;;;;;; from BIOS optimized slightly ;;;;;;;;;;;;;;;;;;;;;;;;
+DRAW_LINE_D_PAT_5_R     macro    
+                    local    _timeout_pat 
+                    STA      <VIA_port_a                  ;Send Y to A/D 
+                    CLR      <VIA_port_b                  ;Enable mux 
+                    NOP                                   ;Wait a moment 
+                    INC      <VIA_port_b                  ;Disable mux 
+                    STB      <VIA_port_a                  ;Send X to A/D 
+                    LDA      Line_Pat                     ;Shift reg=$FF (solid line), T1H=0 
+                    CLR      <VIA_t1_cnt_hi               ;Set T1H (scale factor?) 
+                    LDB      #$40                         ;B-reg = T1 interrupt bit 
+_timeout_pat        STA      <VIA_shift_reg               ;Put pattern in shift register 
+                    BITB     <VIA_int_flags               ;Wait for T1 to time out 
+                    BEQ      _timeout_pat 
+                    NOP                                   ;Wait a moment more 
+                    CLR      <VIA_shift_reg               ;Clear shift register (blank output) 
+                    endm
+;;;;;;;;;;;; from BIOS optimized slightly ;;;;;;;;;;;;;;;;;;;;;;;;
+DRAW_LINE_D_PAT_6_L     macro    
+                    local    _timeout_pat 
+                    STA      <VIA_port_a                  ;Send Y to A/D 
+                    CLR      <VIA_port_b                  ;Enable mux 
+                    NOP                                   ;Wait a moment 
+                    INC      <VIA_port_b                  ;Disable mux 
+                    STB      <VIA_port_a                  ;Send X to A/D 
+                    LDA      Line_Pat                     ;Shift reg=$FF (solid line), T1H=0 
+                    CLR      <VIA_t1_cnt_hi               ;Set T1H (scale factor?) 
+                    LDB      #$40                         ;B-reg = T1 interrupt bit 
+_timeout_pat        STA      <VIA_shift_reg               ;Put pattern in shift register 
+                    BITB     <VIA_int_flags               ;Wait for T1 to time out 
+                    BEQ      _timeout_pat 
+                    NOP                                   ;Wait a moment more 
+                    CLR      <VIA_shift_reg               ;Clear shift register (blank output) 
+                    endm   
+;;;;;;;;;;;; from BIOS optimized slightly ;;;;;;;;;;;;;;;;;;;;;;;;
+DRAW_LINE_D_PAT_6_R     macro    
+                    local    _timeout_pat 
+                    STA      <VIA_port_a                  ;Send Y to A/D 
+                    CLR      <VIA_port_b                  ;Enable mux 
+                    NOP                                   ;Wait a moment 
+                    INC      <VIA_port_b                  ;Disable mux 
+                    STB      <VIA_port_a                  ;Send X to A/D 
+                    LDA      Line_Pat                     ;Shift reg=$FF (solid line), T1H=0 
+                    CLR      <VIA_t1_cnt_hi               ;Set T1H (scale factor?) 
+                    LDB      #$40                         ;B-reg = T1 interrupt bit 
+_timeout_pat        STA      <VIA_shift_reg               ;Put pattern in shift register 
+                    BITB     <VIA_int_flags               ;Wait for T1 to time out 
+                    BEQ      _timeout_pat 
+                    NOP                                   ;Wait a moment more 
+                    CLR      <VIA_shift_reg               ;Clear shift register (blank output) 
+                    endm          
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 DRAW_VECTOR_SCORE   macro    
                     lda      frm2cnt 
@@ -2540,8 +2744,8 @@ CHECK_DEMO          macro
 no_check_needed 
                     endm     
 ;&&&&&&&&&&&&&&&^^^^^^^^^^^^^^^^^^^^^^^^^&&&&&&&&&&&&&&&&&&&&&&&&&^^^^^^^^^^^^^^^^^
-MOVETO_D            macro    
-                    local     MLF33B,MLF33D,MLF341,MLF345,moveto_d_done 
+MOVETO_D_TEST       macro    
+                    local    MLF33B,MLF33D,MLF341,MLF345,moveto_d_done 
                     sta      <VIA_port_a                  ;Store Y in D/A register 
                     clr      <VIA_port_b                  ;Enable mux 
                     pshs     b,a                          ;Save D-register on stack 
