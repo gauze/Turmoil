@@ -452,7 +452,7 @@ check_highscore_entry:
                     std      Vec_Rfrsh 
 ; score compare see if we even need to do this
                     ldx      #hsentrys_t 
-                    ldx      8,x                          ; check lowest entry 
+                    ldx      8,x                          ; check lowest entry 0-4 index w/ 1 left shift
                     ldu      #score 
                     jsr      Compare_Score                ; result in A 
                     cmpa     #2 
@@ -496,16 +496,30 @@ jsdoneYhs
                     sta      temp1 
                     lda      hs_box_Xindex 
                     cmpa     #5 
-                    beq      jsdoneXhs                    ; 5 is highest slot on screen !move 
+                    beq      _wrapX                   ; 5 is highest slot on screen wrap ... 
                     inc      hs_box_Xindex 
                     bra      jsdoneXhs 
-
+_wrapX		  
+			      lda      hs_box_Yindex
+				  cmpa     #6						
+                    beq      jsdoneXhs
+				  clr      hs_box_Xindex
+				  inc      hs_box_Yindex
+				  bra      jsdoneXhs
 going_left_hs 
                     lda      #50 
                     sta      temp1 
                     lda      hs_box_Xindex 
-                    beq      jsdoneXhs 
-                    dec      hs_box_Xindex 
+                    beq      _unwrapX 				; if zero move one line up, & end of line
+                    dec      hs_box_Xindex
+				  bra      jsdoneXhs
+_unwrapX
+			      lda      hs_box_Yindex			; don't "un"wrap on zero	
+                    beq      jsdoneXhs
+				  lda      #5
+				  sta      hs_box_Xindex
+				  dec      hs_box_Yindex
+				;  bra      jsdoneXhs 
 jsdoneXhs 
 ; Buttons!!!
                     jsr      Read_Btns 

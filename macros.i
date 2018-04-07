@@ -2429,15 +2429,17 @@ timeout:            BITB     <VIA_int_flags               ;Wait for T1 to time o
 ;;;;;;;;;;;; from BIOS optimized slightly ;;;;;;;;;;;;;;;;;;;;;;;;
 DRAW_LINE_D_PAT     macro    
                     local    _timeout_pat 
+
+
                     STA      <VIA_port_a                  ;Send Y to A/D 
                     CLR      <VIA_port_b                  ;Enable mux 
                     NOP                                   ;Wait a moment 
                     INC      <VIA_port_b                  ;Disable mux 
                     STB      <VIA_port_a                  ;Send X to A/D 
-                    LDA      Line_Pat                     ;Shift reg=$FF (solid line), T1H=0 
                     CLR      <VIA_t1_cnt_hi               ;Set T1H (scale factor?) 
                     LDB      #$40                         ;B-reg = T1 interrupt bit 
-_timeout_pat        STA      <VIA_shift_reg               ;Put pattern in shift register 
+                    LDA      Line_Pat                     ;Shift reg=$FF (solid line), T1H=0 		  
+_timeout_pat        STA      <VIA_shift_reg               ;Put pattern in shift register
                     BITB     <VIA_int_flags               ;Wait for T1 to time out 
                     BEQ      _timeout_pat 
                     NOP                                   ;Wait a moment more 

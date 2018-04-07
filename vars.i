@@ -172,3 +172,9 @@ PRIZE               =        5
 CANNONBALL          =        7 
 ; U STACK for saving registers.
 ustacktemp          equ      $CBD0                        ; few down from default S stack so it doesn't get overwritten 
+; test
+				  struct   DICKFOR
+				  ds       length,2
+                    ds       girth,2
+                    ds       smell,1
+				  end struct
