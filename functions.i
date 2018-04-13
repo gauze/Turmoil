@@ -14,7 +14,7 @@ setup:                                                    ;        setting up ha
                     sta      Vec_Joy_Mux_2_Y 
                     ldx      #score 
                     jsr      Clear_Score 
-                    lda      #1 
+                    lda      #123 
                     sta      level 
                     bsr      setuplevel 
                     rts      
@@ -110,7 +110,7 @@ setuplevel:
                     sta      enemycnt 
                     std      prizecnt 
                     sta      Is_Prize 
-                  ;  sta      Demo_Mode 
+                                                          ; sta Demo_Mode 
                     sta      shipYdir 
                     sta      Ship_Dead 
                     sta      Level_Done 
@@ -180,13 +180,14 @@ goloop:
 
 ;################################################################
 levelsplash 
+                    clr      temp 
                     clr      stallcnt 
                     lda      Demo_Mode 
                     lbne     dundo_demo 
 splashloop 
                     jsr      Wait_Recal 
                     clr      Vec_Misc_Count 
-                    lda      #$80 
+                    lda      #$80                         ; scale 128 
                     sta      VIA_t1_cnt_lo 
                     jsr      Intensity_7F 
                     ldd      # 'L'*256+'E'
@@ -202,9 +203,10 @@ splashloop
                     blt      do_level 
                     lda      #$6C                         ; infinity sign 
                     sta      levelstr+1 
+                    lda      #$80 
+                    sta      levelstr+2 
                     bra      score_format_done 
 
-; @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 do_level 
 ; parse level into chars  $30-$39 0-9
                     lda      level 
@@ -224,9 +226,22 @@ one_digit
                     sta      levelstr+2 
 score_format_done 
                     ldu      #lvllabelstr 
-                    lda      -20 
-                    ldb      -10 
+                    lda      #-0 
+                    ldb      #-39 
                     jsr      Print_Str_d 
+; zoom code stuff
+                    lda      #2 
+                    ldb      #-39 
+                    MOVETO_D  
+                    ldx      #Level_Box1_nomode 
+                    DRAW_VLC  
+            
+                    lda      #10 
+                    ldb      #-5 
+                    MOVETO_D  
+                    ldx      #Level_Box2_nomode 
+                    DRAW_VLC  
+
                     inc      stallcnt 
                     lda      stallcnt 
                     cmpa     #100 
@@ -261,7 +276,7 @@ deathloop
                     sta      VIA_t1_cnt_lo 
                     jsr      Intensity_7F 
 ; dead
-                    ldu      #deadstring 
+;                    ldu      #deadstring 
                     lda      #-20 
                     ldb      #-10 
                     jsr      Print_Str_d 
@@ -452,7 +467,7 @@ check_highscore_entry:
                     std      Vec_Rfrsh 
 ; score compare see if we even need to do this
                     ldx      #hsentrys_t 
-                    ldx      8,x                          ; check lowest entry 0-4 index w/ 1 left shift
+                    ldx      8,x                          ; check lowest entry 0-4 index w/ 1 left shift 
                     ldu      #score 
                     jsr      Compare_Score                ; result in A 
                     cmpa     #2 
@@ -496,30 +511,33 @@ jsdoneYhs
                     sta      temp1 
                     lda      hs_box_Xindex 
                     cmpa     #5 
-                    beq      _wrapX                   ; 5 is highest slot on screen wrap ... 
+                    beq      _wrapX                       ; 5 is highest slot on screen wrap ... 
                     inc      hs_box_Xindex 
                     bra      jsdoneXhs 
-_wrapX		  
-			      lda      hs_box_Yindex
-				  cmpa     #6						
-                    beq      jsdoneXhs
-				  clr      hs_box_Xindex
-				  inc      hs_box_Yindex
-				  bra      jsdoneXhs
+
+_wrapX 
+                    lda      hs_box_Yindex 
+                    cmpa     #6 
+                    beq      jsdoneXhs 
+                    clr      hs_box_Xindex 
+                    inc      hs_box_Yindex 
+                    bra      jsdoneXhs 
+
 going_left_hs 
                     lda      #50 
                     sta      temp1 
                     lda      hs_box_Xindex 
-                    beq      _unwrapX 				; if zero move one line up, & end of line
-                    dec      hs_box_Xindex
-				  bra      jsdoneXhs
-_unwrapX
-			      lda      hs_box_Yindex			; don't "un"wrap on zero	
-                    beq      jsdoneXhs
-				  lda      #5
-				  sta      hs_box_Xindex
-				  dec      hs_box_Yindex
-				;  bra      jsdoneXhs 
+                    beq      _unwrapX                     ; if zero move one line up, & end of line 
+                    dec      hs_box_Xindex 
+                    bra      jsdoneXhs 
+
+_unwrapX 
+                    lda      hs_box_Yindex                ; don't "un"wrap on zero 
+                    beq      jsdoneXhs 
+                    lda      #5 
+                    sta      hs_box_Xindex 
+                    dec      hs_box_Yindex 
+                                                          ; bra jsdoneXhs 
 jsdoneXhs 
 ; Buttons!!!
                     jsr      Read_Btns 
@@ -649,18 +667,28 @@ no2cntresetHS
                     dec      temp1 
                     bne      no_ent_inst 
 show_inst 
-				  lda      frm2cnt
-				  bne      noshow_3
+                    lda      frm2cnt 
+                    bne      noshow_3 
                     lda      #-110 
                     ldb      #-120 
                     ldu      #press_btn3_text 
-                    jsr      Print_Str_d
+                    jsr      Print_Str_d 
 noshow_3 
-				  lda      frm2cnt
-                    beq      no_ent_inst
+                    lda      frm2cnt 
+                    beq      no_ent_inst 
+                    lda      hsentry_index 
+                    cmpa     #3                           ; if at last hs_entry cursor idx, show different text. 
+                    beq      change_btn4_text 
+                    ldu      #press_btn4_text 
                     lda      #-120 
                     ldb      #-120 
-                    ldu      #press_btn4_text 
+                    jsr      Print_Str_d 
+                    bra      no_ent_inst 
+
+change_btn4_text 
+                    ldu      #finish_btn4_text 
+                    lda      #-120 
+                    ldb      #-120 
                     jsr      Print_Str_d 
 no_ent_inst 
                     puls     d 

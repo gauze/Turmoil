@@ -26,6 +26,19 @@ Half_Wall:          fcb      3                            ; lda #3 ; sta $C823
                     fcb      3,0 
                     fcb      0,-115 
                     fcb      -3,0 
+; Level graphic
+Level_Box1_nomode:
+				  fcb      3
+				  fcb      0, 100
+                    fcb      -10, 0
+                    fcb      0, -100
+                    fcb      10, 0
+Level_Box2_nomode:
+				  fcb      3
+				  fcb      0, 110
+                    fcb      -30, 0
+                    fcb      0, -110
+                    fcb      30, 0
 ; SHIP 
 SHIP_SCALE=1 
 ShipR_nomode:       fcb      9 
@@ -636,18 +649,23 @@ alleyanxietylogo_data:
 ;***********$$$$$$$$$$$$$$$**************$$$$$$$$$$$$$$$**************$$$$$$$$$
 ; TEXT STRINGS
 ;$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-deadstring          fcc      "SHIP HIT!",$80
-demolabel           fcc      "DEMO MODE",$80
-gameoverstr         fcc      "GAME OVER",$80
-highscorelabel      fcc      "HIGH SCORE",$80
-newhslabel          fcc      "NEW HIGH SCORE",$80
-press_btn3_text     fcc      "PRESS BUTTON 3 TO BACKSPACE",$80
-press_btn4_text     fcc      "PRESS BUTTON 4 TO ENTER",$80
+;deadstring          fcc      "SHIP HIT!",$80
+; GENERAL
 joycal_label        fcc      "JOYSTICK SPEED",$80
 vslow_text          fcc      "VERY SLOW",$80
 slow_text           fcc      "SLOW",$80
 med_text            fcc      "MEDIUM",$80
 fast_text           fcc      "FAST",$80
+demolabel           fcc      "DEMO MODE",$80
+gameoverstr         fcc      "GAME OVER",$80
+highscorelabel      fcc      "HIGH SCORE",$80
+
+; HIGH SCORE ENTRY STUFF 
+newhslabel          fcc      "NEW HIGH SCORE",$80
+press_btn3_text     fcc      "PRESS BUTTON 3 TO BACKSPACE",$80
+press_btn4_text     fcc      "PRESS BUTTON 4 TO ENTER",$80
+finish_btn4_text    fcc      "PRESS BUTTON 4 TO FINISH",$80
+;
 hs_abc_1            fcc      "A B C D E F",$80
 hs_abc_2            fcc      "G H I J K L",$80
 hs_abc_3            fcc      "M N O P Q R",$80
@@ -656,8 +674,9 @@ hs_abc_5            fcc      "Y Z 0 1 2 3",$80
 hs_abc_6            fcc      "4 5 6 7 8 9",$80
 hs_abc_7            fcc      "  . ! ? _ $",$80
 default_high        fcc      "     0",$80
-default_name        fcc      "AAA",$80
-thanks              fcc      "MALBAN, VECTREXER, DER LUCHS",$80
+default_name        fcc      "GZE",$80
+; misc
+thanks0              fcc      "MALBAN, VECTREXER, DER LUCHS",$80
 thanks1             fcc      "VECTORX, TODD W, THOMAS S",$80
                     fcc      "SECRET GAME",$80
 credits             fcc      "PROGRAMMED BY GAUZE 2016-2018",$80 
