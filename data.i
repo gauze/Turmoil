@@ -598,6 +598,8 @@ Tank_R_t            fdb      Tank_R_1,Tank_R_2
 Prize_t             fdb      Prize_1,Prize_2,Prize_1,Prize_2 ; big/small animation 
 Wedge_L_t           fdb      Wedge_L_1, Wedge_L_2, Wedge_L_3, Wedge_L_2 
 Wedge_R_t           fdb      Wedge_R_1, Wedge_R_2, Wedge_R_3, Wedge_R_2 
+
+Demo_Label_t        fdb      demolabel, press_btn3_start_text, press_btn2_conf_text
 ;##################################################################################
 ; SOUND data SOUND SOUND SOUND SOUND
 ;##################################################################################
@@ -656,7 +658,7 @@ vslow_text          fcc      "VERY SLOW",$80
 slow_text           fcc      "SLOW",$80
 med_text            fcc      "MEDIUM",$80
 fast_text           fcc      "FAST",$80
-demolabel           fcc      "DEMO MODE",$80
+
 gameoverstr         fcc      "GAME OVER",$80
 highscorelabel      fcc      "HIGH SCORE",$80
 
@@ -665,6 +667,11 @@ newhslabel          fcc      "NEW HIGH SCORE",$80
 press_btn3_text     fcc      "PRESS BUTTON 3 TO BACKSPACE",$80
 press_btn4_text     fcc      "PRESS BUTTON 4 TO ENTER",$80
 finish_btn4_text    fcc      "PRESS BUTTON 4 TO FINISH",$80
+;
+; Demo button stuff
+demolabel           fcc      "     DEMO MODE    ",$80
+press_btn3_start_text fcc    "BUTTON 3 TO START",$80
+press_btn2_conf_text fcc     "BUTTON 2 TO CONFIG",$80
 ;
 hs_abc_1            fcc      "A B C D E F",$80
 hs_abc_2            fcc      "G H I J K L",$80

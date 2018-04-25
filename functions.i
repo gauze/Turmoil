@@ -14,9 +14,10 @@ setup:                                                    ;        setting up ha
                     sta      Vec_Joy_Mux_2_Y 
                     ldx      #score 
                     jsr      Clear_Score 
-                    lda      #123 
+                    lda      #1
                     sta      level 
                     bsr      setuplevel 
+				  
                     rts      
 
 setuplevel: 
@@ -139,44 +140,44 @@ _no_chk_hs
                     jmp      print_hs_tbl                 ; no RTS don't use jsr 
 
 ; everything below this comment is unreachable currently
-goloop: 
-                    jsr      Wait_Recal 
-                    clr      Vec_Misc_Count 
-                    lda      #$7F 
-                    sta      VIA_t1_cnt_lo                ; sets scale 
-                    jsr      Intensity_7F 
-                    RESET0REF  
-                    lda      #70 
-                    ldb      #-15 
-                    ldu      #gameoverstr 
-                    jsr      Print_Str_d 
-                    RESET0REF  
-                    lda      #-50 
-                    ldb      #-50 
-                    ldu      #score 
-                    jsr      Print_Str_d 
+;goloop: 
+;                    jsr      Wait_Recal 
+;                    clr      Vec_Misc_Count 
+;                    lda      #$7F 
+;                    sta      VIA_t1_cnt_lo                ; sets scale 
+;                    jsr      Intensity_7F 
+;                    RESET0REF  
+;                    lda      #70 
+;                    ldb      #-15 
+;                    ldu      #gameoverstr 
+;                    jsr      Print_Str_d 
+;                    RESET0REF  
+;                    lda      #-50 
+;                    ldb      #-50 
+;                    ldu      #score 
+;                    jsr      Print_Str_d 
 ; high score stuff
-                    ldu      #highscorelabel 
-                    lda      #$F0 
-                    ldb      -#127 
-                    jsr      Print_Str_d 
+;                    ldu      #highscorelabel 
+;                    lda      #$F0 
+;                    ldb      -#127 
+;                    jsr      Print_Str_d 
                                                           ; ldu #Vec_High_Score 
                                                           ; ldd #$F050 
                                                           ; jsr Print_Str_d 
 ; print name example
-                    ldx      #hsentryn_t 
-                    ldu      ,x 
-                    ldd      #$D400 
-                    jsr      Print_Str_d 
+;                    ldx      #hsentryn_t 
+;                    ldu      ,x 
+;                    ldd      #$D400 
+;                    jsr      Print_Str_d 
 ; print name example
-                    ldx      #hsentrys_t 
-                    ldu      ,x 
-                    ldd      #$D4B0 
-                    jsr      Print_Str_d 
-                    jsr      Read_Btns 
-                    lda      Vec_Button_1_3 
-                    lbne     restart 
-                    bra      goloop 
+;                    ldx      #hsentrys_t 
+;                    ldu      ,x 
+;                    ldd      #$D4B0 
+;                    jsr      Print_Str_d 
+;                    jsr      Read_Btns 
+;                    lda      Vec_Button_1_3 
+;                    lbne     restart 
+;                    bra      goloop 
 
 ;################################################################
 levelsplash 
@@ -190,7 +191,7 @@ splashloop
                     lda      #$80                         ; scale 128 
                     sta      VIA_t1_cnt_lo 
                     jsr      Intensity_7F 
-                    ldd      # 'L'*256+'E'
+                    ldd      # 'L'*256+'E'				; "LEVEL "
                     std      lvllabelstr 
                     ldd      # 'V'*256+'E'
                     std      lvllabelstr+2 
@@ -200,8 +201,8 @@ splashloop
                     sta      levelstr 
                     lda      level 
                     cmpa     #100 
-                    blt      do_level 
-                    lda      #$6C                         ; infinity sign 
+                    blt      do_level 					; if level over 99
+                    lda      #$6C                         ; just show infinity sign 
                     sta      levelstr+1 
                     lda      #$80 
                     sta      levelstr+2 

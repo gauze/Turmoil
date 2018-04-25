@@ -77,7 +77,7 @@ restart
                     stb      shipdir 
                     ldx      #score 
                     jsr      Clear_Score 
-                    lda      #1                           ; normally 5 FIX 
+                    lda      #3                           ; normally 5 FIX 
                     sta      shipcnt 
                     lda      #$5F                         ; for high score input _ under scores _ 
                     sta      hstempstr 
@@ -85,6 +85,7 @@ restart
                     sta      hstempstr+2 
                     lda      #$80                         ; EOL 
                     sta      hstempstr+3 
+			       clr      demo_label_cnt
 ;----------------------------------------------------------------------------
 main: 
                     jsr      Wait_Recal 
@@ -92,9 +93,9 @@ main:
                     READ_JOYSTICK  
                     lda      #$5F 
                     INTENSITY_A  
-				  ldd     #$FFFF
+				 ; ldd     #$FFFF
                     DRAW_LINE_WALLS  
-				  ldd     #$FFFF
+				 ; ldd     #$FFFF
                     DRAW_SHIP  
                     READ_BUTTONS  
                     MOVE_BULLETS  
@@ -105,11 +106,11 @@ main:
                     INTENSITY_A  
                                                           ; display score and ships left 
                     DRAW_VECTOR_SCORE  
-                    lda      #127                         ; scale 
+                    lda      #127                         ; restore scale 
                     sta      VIA_t1_cnt_lo 
                     PRINT_SHIPS  
 ; decrement counters on alley respawn timeouts                                    ; jmp no_score 
-no_score: 
+;no_score: 
                     ldd      prizecnt                     ; minumum counter for time between prize spawns 
                     addd     #1 
                     std      prizecnt 
@@ -139,4 +140,5 @@ nolevel
                     include  "functions.i"
                     include  "data.i"
                     include  "rasterDraw.asm"
+				;  include   "eprom.i"
 end 

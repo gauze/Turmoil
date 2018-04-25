@@ -18,7 +18,7 @@ hs_box_Xindex       ds       1
 ;
 ; your ship related variables, X,Y position and direction facing L/R, and number left
 shipdir             ds       1                            ; left or right 
-shipYdir            ds       1                            ; up or down for Demo_Mode
+shipYdir            ds       1                            ; up or down for Demo_Mode 
 shipYpos            ds       1 
 shipXpos            ds       1 
 shipcnt             ds       1                            ; 
@@ -127,18 +127,18 @@ spawntemp           ds       1
 ;masktemp            ds       1 
 bulletYtemp         ds       1 
 enemytemp           ds       1 
-hsentry_index       ds       1
-hsentry1n           ds       4
-hsentry1s           ds       7
-hsentry2n           ds       4
-hsentry2s           ds       7
-hsentry3n           ds       4
-hsentry3s           ds       7
-hsentry4n           ds       4
-hsentry4s           ds       7
-hsentry5n           ds       4
-hsentry5s           ds       7
-hstempstr		  ds       4
+hsentry_index       ds       1 
+hsentry1n           ds       4 
+hsentry1s           ds       7 
+hsentry2n           ds       4 
+hsentry2s           ds       7 
+hsentry3n           ds       4 
+hsentry3s           ds       7 
+hsentry4n           ds       4 
+hsentry4s           ds       7 
+hsentry5n           ds       4 
+hsentry5s           ds       7 
+hstempstr           ds       4 
 ;
 enemylvlcnt         ds       1                            ; how many enemies left in this level? 
 ; STATE FLAGS
@@ -156,6 +156,9 @@ Demo_Mode           ds       1                            ; arcade selfplay mode
 Line_Pat            ds       1                            ; this is for LINE_DRAW_D stuff , 00000000 is nothing 11111111 is line 10101010 is dotted line 
 ustacktempptr       ds       2                            ; for saving location of ustacktemp 
 calibrationValue    ds       1 
+current_eprom_blocksize  ds  1 
+current_eprom_blockadr ds    1
+demo_label_cnt      ds       1
 ;
 ; CONSTANTS place after VARIABLES
 ;ALLEYWIDTH          =        17 
@@ -173,8 +176,8 @@ CANNONBALL          =        7
 ; U STACK for saving registers.
 ustacktemp          equ      $CBD0                        ; few down from default S stack so it doesn't get overwritten 
 ; test
-				  struct   DICKFOR
-				  ds       length,2
-                    ds       girth,2
-                    ds       smell,1
-				  end struct
+                    struct   DICKFOR 
+                    ds       length,2 
+                    ds       girth,2 
+                    ds       smell,1 
+                    end struct 

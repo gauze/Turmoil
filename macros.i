@@ -63,20 +63,6 @@ shitballs
 _donuthin1 
                     DRAW_VLC                              ; jsr Draw_VLc ;_mode 
                     endm     
-;::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-DRAW_WALLS          macro    
-                    lda      #-60 
-                    ldb      #-127 
-                    MOVETO_D  
-                    ldx      #Full_Wall_nomode 
-                    DRAW_VLC                              ;jsr Draw_VLc 
-                    RESET0REF  
-                    lda      #60 
-                    ldb      #-127 
-                    MOVETO_D  
-                    ldx      #Full_Wall_nomode 
-                    DRAW_VLC                              ; jsr Draw_VLc 
-                    endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ALLEYWALL_Y         =        60 
 ALLEYHEIGHT         =        17 
@@ -89,7 +75,7 @@ DRAW_LINE_WALLS     macro
 _topline 
                     lda      #(ALLEYWALL_Y) 
                     ldb      #-128 
-                    MOVETO_D  
+                    MOVETO_D                              ; PLACE EXTRA CODE VERSION HERE 
                     ldd      #$007F                       ; start far left, end middle 
                     DRAW_LINE_D  
                     LDD      #$007F                       ; start middle, end far right 
@@ -99,7 +85,7 @@ _toplineEnd
 _line1 
                     lda      #(ALLEYWALL_Y - (ALLEYHEIGHT*1) ) 
                     ldb      #-127 
-                    MOVETO_D  
+                    MOVETO_D                              ; PLACE EXTRA CODE VERSION HERE 
                     ldd      #$0074 
                     DRAW_LINE_D_PAT                       ; dotted line 
                     LDD      #$0016 
@@ -111,7 +97,7 @@ _line1End
 _line2 
                     lda      #(ALLEYWALL_Y - (ALLEYHEIGHT*2) ) 
                     ldb      #-127 
-                    MOVETO_D  
+                    MOVETO_D                              ; PLACE EXTRA CODE VERSION HERE 
                     ldd      #$0074 
                     DRAW_LINE_D_PAT  
                     LDD      #$0016 
@@ -123,7 +109,7 @@ _line2End
 _line3 
                     lda      #(ALLEYWALL_Y-(ALLEYHEIGHT*3)) 
                     ldb      #-127 
-                    MOVETO_D  
+                    MOVETO_D                              ; PLACE EXTRA CODE VERSION HERE 
                     ldd      #$0074 
                     DRAW_LINE_D_PAT  
                     LDD      #$0016 
@@ -135,7 +121,7 @@ _line3End
 _line4 
                     lda      #(ALLEYWALL_Y-(ALLEYHEIGHT*4)) 
                     ldb      #-127 
-                    MOVETO_D  
+                    MOVETO_D                              ; PLACE EXTRA CODE VERSION HERE 
                     ldd      #$0074 
                     DRAW_LINE_D_PAT  
                     LDD      #$0016 
@@ -147,7 +133,7 @@ _line4End
 _line5 
                     lda      #(ALLEYWALL_Y-(ALLEYHEIGHT*5)) 
                     ldb      #-127 
-                    MOVETO_D  
+                    MOVETO_D                              ; PLACE EXTRA CODE VERSION HERE 
                     ldd      #$0074 
                     DRAW_LINE_D_PAT  
                     LDD      #$0016 
@@ -159,7 +145,7 @@ _line5End
 _line6 
                     lda      #(ALLEYWALL_Y-(ALLEYHEIGHT*6)) 
                     ldb      #-127 
-                    MOVETO_D  
+                    MOVETO_D                              ; PLACE EXTRA CODE VERSION HERE 
                     ldd      #$0074 
                     DRAW_LINE_D_PAT  
                     LDD      #$0016 
@@ -171,7 +157,7 @@ _line6End
 _bottomLine 
                     lda      #(ALLEYWALL_Y-(ALLEYHEIGHT*7)) 
                     ldb      #-127 
-                    MOVETO_D  
+                    MOVETO_D                              ; PLACE EXTRA CODE VERSION HERE
                     ldd      #$007F 
                     DRAW_LINE_D  
                     ldd      #$007F                       ; start far left end far right 
@@ -195,7 +181,7 @@ DRAW_ENEMYS         macro
                     lda      #0 
                     lda      a,x                          ; Y 
                     ldb      alley0x                      ; X 
-                    MOVETO_D  
+                    MOVETO_D                              ; PLACE EXTRA CODE VERSION HERE
 ; *_f  frame count -> index list of frames, see definition in data.i 
                     lda      alley0e 
                     lsla     
@@ -253,7 +239,7 @@ skip1a
                     lda      #2 
                     lda      a,x                          ; Y 
                     ldb      alley2x                      ; X 
-                    MOVETO_D  
+                    MOVETO_D                              ; PLACE EXTRA CODE VERSION HERE
 ; *_f  frame count -> index list of frames, see definition in data.i 
                     lda      alley2e 
                     lsla     
@@ -282,7 +268,7 @@ skip2a
                     lda      #3 
                     lda      a,x                          ; Y 
                     ldb      alley3x                      ; X 
-                    MOVETO_D  
+                    MOVETO_D                              ; PLACE EXTRA CODE VERSION HERE
 ; *_f  frame count -> index list of frames, see definition in data.i 
                     lda      alley3e 
                     lsla     
@@ -311,7 +297,7 @@ skip3a
                     lda      #4 
                     lda      a,x                          ; Y 
                     ldb      alley4x                      ; X 
-                    MOVETO_D  
+                    MOVETO_D                              ; PLACE EXTRA CODE VERSION HERE
 ; *_f  frame count -> index list of frames, see definition in data.i 
                     lda      alley4e 
                     lsla     
@@ -340,7 +326,7 @@ skip4a
                     lda      #5 
                     lda      a,x                          ; Y 
                     ldb      alley5x                      ; X 
-                    MOVETO_D  
+                    MOVETO_D                              ; PLACE EXTRA CODE VERSION HERE
 ; *_f  frame count -> index list of frames, see definition in data.i 
                     lda      alley5e 
                     lsla     
@@ -369,7 +355,7 @@ skip5a
                     lda      #6 
                     lda      a,x                          ; Y 
                     ldb      alley6x                      ; X 
-                    MOVETO_D  
+                    MOVETO_D                              ; PLACE EXTRA CODE VERSION HERE
 ; *_f  frame count -> index list of frames, see definition in data.i 
                     lda      alley6e 
                     lsla     
@@ -2188,7 +2174,8 @@ ghost_d_done
                     stb      [a,x] 
 ;  END add ghost stuff, must tweak
 no_ghost 
-                    endm     
+                    endm
+;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%     
 FRAME_CNTS          macro    
 ; increment the Test frame counter
 ; add more logic to set/increment SHAPE_f counters for desired animations
@@ -2240,10 +2227,11 @@ no20cntreset
                     inc      Wedge_f 
 no25cntreset 
                     lda      #50 
-                    inc      frm50cnt 
+                    inc      frm50cnt
                     cmpa     frm50cnt 
                     bne      no50cntreset 
                     clr      frm50cnt 
+				  inc      demo_label_cnt
                     lda      #1 
                     sta      Arrow_f 
                     sta      Dash_f 
@@ -2267,6 +2255,11 @@ no50cntreset
                     sta      Tank_f 
                     sta      Explode_f 
 no100cntreset 
+				  lda      demo_label_cnt
+				  cmpa    #3
+                    bne     noclrdlc
+				  clr     demo_label_cnt		  
+noclrdlc
                     endm     
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 CHECK_GAMEOVER      macro    
@@ -2429,8 +2422,6 @@ timeout:            BITB     <VIA_int_flags               ;Wait for T1 to time o
 ;;;;;;;;;;;; from BIOS optimized slightly ;;;;;;;;;;;;;;;;;;;;;;;;
 DRAW_LINE_D_PAT     macro    
                     local    _timeout_pat 
-
-
                     STA      <VIA_port_a                  ;Send Y to A/D 
                     CLR      <VIA_port_b                  ;Enable mux 
                     NOP                                   ;Wait a moment 
@@ -2438,217 +2429,14 @@ DRAW_LINE_D_PAT     macro
                     STB      <VIA_port_a                  ;Send X to A/D 
                     CLR      <VIA_t1_cnt_hi               ;Set T1H (scale factor?) 
                     LDB      #$40                         ;B-reg = T1 interrupt bit 
-                    LDA      Line_Pat                     ;Shift reg=$FF (solid line), T1H=0 		  
-_timeout_pat        STA      <VIA_shift_reg               ;Put pattern in shift register
+                    LDA      Line_Pat                     ;Shift reg=$FF (solid line), T1H=0 
+_timeout_pat        STA      <VIA_shift_reg               ;Put pattern in shift register 
                     BITB     <VIA_int_flags               ;Wait for T1 to time out 
                     BEQ      _timeout_pat 
                     NOP                                   ;Wait a moment more 
                     CLR      <VIA_shift_reg               ;Clear shift register (blank output) 
                     endm     
-;;;;;;;;;;;; from BIOS optimized slightly ;;;;;;;;;;;;;;;;;;;;;;;;
-DRAW_LINE_D_PAT_1_L     macro    
-                    local    _timeout_pat 
-                    STA      <VIA_port_a                  ;Send Y to A/D 
-                    CLR      <VIA_port_b                  ;Enable mux 
-                    NOP                                   ;Wait a moment 
-                    INC      <VIA_port_b                  ;Disable mux 
-                    STB      <VIA_port_a                  ;Send X to A/D 
-                    LDA      Line_Pat                     ;Shift reg=$FF (solid line), T1H=0 
-                    CLR      <VIA_t1_cnt_hi               ;Set T1H (scale factor?) 
-                    LDB      #$40                         ;B-reg = T1 interrupt bit 
-_timeout_pat        STA      <VIA_shift_reg               ;Put pattern in shift register 
-                    BITB     <VIA_int_flags               ;Wait for T1 to time out 
-                    BEQ      _timeout_pat 
-                    NOP                                   ;Wait a moment more 
-                    CLR      <VIA_shift_reg               ;Clear shift register (blank output) 
-                    endm   
-;;;;;;;;;;;; from BIOS optimized slightly ;;;;;;;;;;;;;;;;;;;;;;;;
-DRAW_LINE_D_PAT_1_R     macro    
-                    local    _timeout_pat 
-                    STA      <VIA_port_a                  ;Send Y to A/D 
-                    CLR      <VIA_port_b                  ;Enable mux 
-                    NOP                                   ;Wait a moment 
-                    INC      <VIA_port_b                  ;Disable mux 
-                    STB      <VIA_port_a                  ;Send X to A/D 
-                    LDA      Line_Pat                     ;Shift reg=$FF (solid line), T1H=0 
-                    CLR      <VIA_t1_cnt_hi               ;Set T1H (scale factor?) 
-                    LDB      #$40                         ;B-reg = T1 interrupt bit 
-_timeout_pat        STA      <VIA_shift_reg               ;Put pattern in shift register 
-                    BITB     <VIA_int_flags               ;Wait for T1 to time out 
-                    BEQ      _timeout_pat 
-                    NOP                                   ;Wait a moment more 
-                    CLR      <VIA_shift_reg               ;Clear shift register (blank output) 
-                    endm  
-;;;;;;;;;;;; from BIOS optimized slightly ;;;;;;;;;;;;;;;;;;;;;;;;
-DRAW_LINE_D_PAT_2_L     macro    
-                    local    _timeout_pat 
-                    STA      <VIA_port_a                  ;Send Y to A/D 
-                    CLR      <VIA_port_b                  ;Enable mux 
-                    NOP                                   ;Wait a moment 
-                    INC      <VIA_port_b                  ;Disable mux 
-                    STB      <VIA_port_a                  ;Send X to A/D 
-                    LDA      Line_Pat                     ;Shift reg=$FF (solid line), T1H=0 
-                    CLR      <VIA_t1_cnt_hi               ;Set T1H (scale factor?) 
-                    LDB      #$40                         ;B-reg = T1 interrupt bit 
-_timeout_pat        STA      <VIA_shift_reg               ;Put pattern in shift register 
-                    BITB     <VIA_int_flags               ;Wait for T1 to time out 
-                    BEQ      _timeout_pat 
-                    NOP                                   ;Wait a moment more 
-                    CLR      <VIA_shift_reg               ;Clear shift register (blank output) 
-                    endm   
-;;;;;;;;;;;; from BIOS optimized slightly ;;;;;;;;;;;;;;;;;;;;;;;;
-DRAW_LINE_D_PAT_2_R     macro    
-                    local    _timeout_pat 
-                    STA      <VIA_port_a                  ;Send Y to A/D 
-                    CLR      <VIA_port_b                  ;Enable mux 
-                    NOP                                   ;Wait a moment 
-                    INC      <VIA_port_b                  ;Disable mux 
-                    STB      <VIA_port_a                  ;Send X to A/D 
-                    LDA      Line_Pat                     ;Shift reg=$FF (solid line), T1H=0 
-                    CLR      <VIA_t1_cnt_hi               ;Set T1H (scale factor?) 
-                    LDB      #$40                         ;B-reg = T1 interrupt bit 
-_timeout_pat        STA      <VIA_shift_reg               ;Put pattern in shift register 
-                    BITB     <VIA_int_flags               ;Wait for T1 to time out 
-                    BEQ      _timeout_pat 
-                    NOP                                   ;Wait a moment more 
-                    CLR      <VIA_shift_reg               ;Clear shift register (blank output) 
-                    endm
-;;;;;;;;;;;; from BIOS optimized slightly ;;;;;;;;;;;;;;;;;;;;;;;;
-DRAW_LINE_D_PAT_3_L     macro    
-                    local    _timeout_pat 
-                    STA      <VIA_port_a                  ;Send Y to A/D 
-                    CLR      <VIA_port_b                  ;Enable mux 
-                    NOP                                   ;Wait a moment 
-                    INC      <VIA_port_b                  ;Disable mux 
-                    STB      <VIA_port_a                  ;Send X to A/D 
-                    LDA      Line_Pat                     ;Shift reg=$FF (solid line), T1H=0 
-                    CLR      <VIA_t1_cnt_hi               ;Set T1H (scale factor?) 
-                    LDB      #$40                         ;B-reg = T1 interrupt bit 
-_timeout_pat        STA      <VIA_shift_reg               ;Put pattern in shift register 
-                    BITB     <VIA_int_flags               ;Wait for T1 to time out 
-                    BEQ      _timeout_pat 
-                    NOP                                   ;Wait a moment more 
-                    CLR      <VIA_shift_reg               ;Clear shift register (blank output) 
-                    endm   
-;;;;;;;;;;;; from BIOS optimized slightly ;;;;;;;;;;;;;;;;;;;;;;;;
-DRAW_LINE_D_PAT_3_R     macro    
-                    local    _timeout_pat 
-                    STA      <VIA_port_a                  ;Send Y to A/D 
-                    CLR      <VIA_port_b                  ;Enable mux 
-                    NOP                                   ;Wait a moment 
-                    INC      <VIA_port_b                  ;Disable mux 
-                    STB      <VIA_port_a                  ;Send X to A/D 
-                    LDA      Line_Pat                     ;Shift reg=$FF (solid line), T1H=0 
-                    CLR      <VIA_t1_cnt_hi               ;Set T1H (scale factor?) 
-                    LDB      #$40                         ;B-reg = T1 interrupt bit 
-_timeout_pat        STA      <VIA_shift_reg               ;Put pattern in shift register 
-                    BITB     <VIA_int_flags               ;Wait for T1 to time out 
-                    BEQ      _timeout_pat 
-                    NOP                                   ;Wait a moment more 
-                    CLR      <VIA_shift_reg               ;Clear shift register (blank output) 
-                    endm
-;;;;;;;;;;;; from BIOS optimized slightly ;;;;;;;;;;;;;;;;;;;;;;;;
-DRAW_LINE_D_PAT_4_L     macro    
-                    local    _timeout_pat 
-                    STA      <VIA_port_a                  ;Send Y to A/D 
-                    CLR      <VIA_port_b                  ;Enable mux 
-                    NOP                                   ;Wait a moment 
-                    INC      <VIA_port_b                  ;Disable mux 
-                    STB      <VIA_port_a                  ;Send X to A/D 
-                    LDA      Line_Pat                     ;Shift reg=$FF (solid line), T1H=0 
-                    CLR      <VIA_t1_cnt_hi               ;Set T1H (scale factor?) 
-                    LDB      #$40                         ;B-reg = T1 interrupt bit 
-_timeout_pat        STA      <VIA_shift_reg               ;Put pattern in shift register 
-                    BITB     <VIA_int_flags               ;Wait for T1 to time out 
-                    BEQ      _timeout_pat 
-                    NOP                                   ;Wait a moment more 
-                    CLR      <VIA_shift_reg               ;Clear shift register (blank output) 
-                    endm   
-;;;;;;;;;;;; from BIOS optimized slightly ;;;;;;;;;;;;;;;;;;;;;;;;
-DRAW_LINE_D_PAT_4_R     macro    
-                    local    _timeout_pat 
-                    STA      <VIA_port_a                  ;Send Y to A/D 
-                    CLR      <VIA_port_b                  ;Enable mux 
-                    NOP                                   ;Wait a moment 
-                    INC      <VIA_port_b                  ;Disable mux 
-                    STB      <VIA_port_a                  ;Send X to A/D 
-                    LDA      Line_Pat                     ;Shift reg=$FF (solid line), T1H=0 
-                    CLR      <VIA_t1_cnt_hi               ;Set T1H (scale factor?) 
-                    LDB      #$40                         ;B-reg = T1 interrupt bit 
-_timeout_pat        STA      <VIA_shift_reg               ;Put pattern in shift register 
-                    BITB     <VIA_int_flags               ;Wait for T1 to time out 
-                    BEQ      _timeout_pat 
-                    NOP                                   ;Wait a moment more 
-                    CLR      <VIA_shift_reg               ;Clear shift register (blank output) 
-                    endm
-;;;;;;;;;;;; from BIOS optimized slightly ;;;;;;;;;;;;;;;;;;;;;;;;
-DRAW_LINE_D_PAT_5_L     macro    
-                    local    _timeout_pat 
-                    STA      <VIA_port_a                  ;Send Y to A/D 
-                    CLR      <VIA_port_b                  ;Enable mux 
-                    NOP                                   ;Wait a moment 
-                    INC      <VIA_port_b                  ;Disable mux 
-                    STB      <VIA_port_a                  ;Send X to A/D 
-                    LDA      Line_Pat                     ;Shift reg=$FF (solid line), T1H=0 
-                    CLR      <VIA_t1_cnt_hi               ;Set T1H (scale factor?) 
-                    LDB      #$40                         ;B-reg = T1 interrupt bit 
-_timeout_pat        STA      <VIA_shift_reg               ;Put pattern in shift register 
-                    BITB     <VIA_int_flags               ;Wait for T1 to time out 
-                    BEQ      _timeout_pat 
-                    NOP                                   ;Wait a moment more 
-                    CLR      <VIA_shift_reg               ;Clear shift register (blank output) 
-                    endm   
-;;;;;;;;;;;; from BIOS optimized slightly ;;;;;;;;;;;;;;;;;;;;;;;;
-DRAW_LINE_D_PAT_5_R     macro    
-                    local    _timeout_pat 
-                    STA      <VIA_port_a                  ;Send Y to A/D 
-                    CLR      <VIA_port_b                  ;Enable mux 
-                    NOP                                   ;Wait a moment 
-                    INC      <VIA_port_b                  ;Disable mux 
-                    STB      <VIA_port_a                  ;Send X to A/D 
-                    LDA      Line_Pat                     ;Shift reg=$FF (solid line), T1H=0 
-                    CLR      <VIA_t1_cnt_hi               ;Set T1H (scale factor?) 
-                    LDB      #$40                         ;B-reg = T1 interrupt bit 
-_timeout_pat        STA      <VIA_shift_reg               ;Put pattern in shift register 
-                    BITB     <VIA_int_flags               ;Wait for T1 to time out 
-                    BEQ      _timeout_pat 
-                    NOP                                   ;Wait a moment more 
-                    CLR      <VIA_shift_reg               ;Clear shift register (blank output) 
-                    endm
-;;;;;;;;;;;; from BIOS optimized slightly ;;;;;;;;;;;;;;;;;;;;;;;;
-DRAW_LINE_D_PAT_6_L     macro    
-                    local    _timeout_pat 
-                    STA      <VIA_port_a                  ;Send Y to A/D 
-                    CLR      <VIA_port_b                  ;Enable mux 
-                    NOP                                   ;Wait a moment 
-                    INC      <VIA_port_b                  ;Disable mux 
-                    STB      <VIA_port_a                  ;Send X to A/D 
-                    LDA      Line_Pat                     ;Shift reg=$FF (solid line), T1H=0 
-                    CLR      <VIA_t1_cnt_hi               ;Set T1H (scale factor?) 
-                    LDB      #$40                         ;B-reg = T1 interrupt bit 
-_timeout_pat        STA      <VIA_shift_reg               ;Put pattern in shift register 
-                    BITB     <VIA_int_flags               ;Wait for T1 to time out 
-                    BEQ      _timeout_pat 
-                    NOP                                   ;Wait a moment more 
-                    CLR      <VIA_shift_reg               ;Clear shift register (blank output) 
-                    endm   
-;;;;;;;;;;;; from BIOS optimized slightly ;;;;;;;;;;;;;;;;;;;;;;;;
-DRAW_LINE_D_PAT_6_R     macro    
-                    local    _timeout_pat 
-                    STA      <VIA_port_a                  ;Send Y to A/D 
-                    CLR      <VIA_port_b                  ;Enable mux 
-                    NOP                                   ;Wait a moment 
-                    INC      <VIA_port_b                  ;Disable mux 
-                    STB      <VIA_port_a                  ;Send X to A/D 
-                    LDA      Line_Pat                     ;Shift reg=$FF (solid line), T1H=0 
-                    CLR      <VIA_t1_cnt_hi               ;Set T1H (scale factor?) 
-                    LDB      #$40                         ;B-reg = T1 interrupt bit 
-_timeout_pat        STA      <VIA_shift_reg               ;Put pattern in shift register 
-                    BITB     <VIA_int_flags               ;Wait for T1 to time out 
-                    BEQ      _timeout_pat 
-                    NOP                                   ;Wait a moment more 
-                    CLR      <VIA_shift_reg               ;Clear shift register (blank output) 
-                    endm          
+;;;;;;;;;;;; from BIOS optimized slightly ;;;;;;;;;;;;;;;;;;;;;;;;    
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 DRAW_VECTOR_SCORE   macro    
                     lda      frm2cnt 
@@ -2683,9 +2471,15 @@ _is_zero
 
 demo_score 
                     RESET0REF  
+					
+
+				  lda      demo_label_cnt
+				  lsla
+				  ldu      #Demo_Label_t
+				  ldu      a,u
                     lda      #-127 
-                    ldb      #-40 
-                    ldu      #demolabel 
+                    ldb      #-100 
+                 ;   ldu      #demolabel 
                     jsr      Print_Str_d 
 score_done 
 _no_print_vscore 
@@ -2738,6 +2532,10 @@ CHECK_DEMO          macro
                     lda      Demo_Mode 
                     beq      no_check_needed 
                     jsr      Read_Btns 
+				  lda      Vec_Button_1_2
+                    beq      no_conf_press
+				  jsr      joystick_config
+no_conf_press
                     lda      Vec_Button_1_3 
                     beq      no_check_needed 
                     clr      Demo_Mode 
