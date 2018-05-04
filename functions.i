@@ -352,7 +352,7 @@ _tsdone
                     LDU      ustacktempptr                ; loading 2 registers off U stack 
                     PULU     d 
                     STD      Vec_Text_HW                  ; restoring 
-                                                          ;STB Vec_Text_Width 
+                                                         
                     STU      ustacktempptr                ; save for later 
                     LDA      #0 
                     STA      Vec_Music_Flag 
@@ -435,7 +435,13 @@ no_press_cal
                     ldb      #-59 
                     MOVETO_D  
                     ldx      #Conf_Box_nomode 
-                    DRAW_VLC  
+                    DRAW_VLC
+                    RESET0REF
+				  lda      #-120 
+                    ldb      #-120
+                    ldu      #finish_btn4_text
+                    jsr      Print_Str_d 
+
                     lda      #10 
                     inc      frm10cnt 
                     cmpa     frm10cnt 
@@ -774,7 +780,7 @@ hs_check_done
 fill_hs_tbl: 
 ;name
                     ldb      #4                           ; 5 entries, 0 index 
-                    lslb                                  ; 2 btye table 
+                    lslb                                  ; 2 byte table 
 get_nentry 
                     ldx      #hsentryn_t 
                     ldx      b,x 
@@ -842,6 +848,10 @@ _hsprtloop
                     jsr      Read_Btns 
                     lda      Vec_Button_1_3 
                     bne      leave_demo_mode_hs           ; break out 
+			       lda      Vec_Button_1_2
+			       beq      noconfpress
+				  jsr      joystick_config
+noconfpress
 ; count down to next screen without button press
                     jsr      Dec_3_Counters 
                     tst      Vec_Counter_1 
