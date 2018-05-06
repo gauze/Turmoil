@@ -14,10 +14,9 @@ setup:                                                    ;        setting up ha
                     sta      Vec_Joy_Mux_2_Y 
                     ldx      #score 
                     jsr      Clear_Score 
-                    lda      #1
+                    lda      #1 
                     sta      level 
                     bsr      setuplevel 
-				  
                     rts      
 
 setuplevel: 
@@ -178,7 +177,6 @@ _no_chk_hs
 ;                    lda      Vec_Button_1_3 
 ;                    lbne     restart 
 ;                    bra      goloop 
-
 ;################################################################
 levelsplash 
                     clr      temp 
@@ -191,7 +189,7 @@ splashloop
                     lda      #$80                         ; scale 128 
                     sta      VIA_t1_cnt_lo 
                     jsr      Intensity_7F 
-                    ldd      # 'L'*256+'E'				; "LEVEL "
+                    ldd      # 'L'*256+'E' ; "LEVEL "
                     std      lvllabelstr 
                     ldd      # 'V'*256+'E'
                     std      lvllabelstr+2 
@@ -201,7 +199,7 @@ splashloop
                     sta      levelstr 
                     lda      level 
                     cmpa     #100 
-                    blt      do_level 					; if level over 99
+                    blt      do_level                     ; if level over 99 
                     lda      #$6C                         ; just show infinity sign 
                     sta      levelstr+1 
                     lda      #$80 
@@ -236,13 +234,11 @@ score_format_done
                     MOVETO_D  
                     ldx      #Level_Box1_nomode 
                     DRAW_VLC  
-            
                     lda      #10 
                     ldb      #-5 
                     MOVETO_D  
                     ldx      #Level_Box2_nomode 
                     DRAW_VLC  
-
                     inc      stallcnt 
                     lda      stallcnt 
                     cmpa     #100 
@@ -352,7 +348,6 @@ _tsdone
                     LDU      ustacktempptr                ; loading 2 registers off U stack 
                     PULU     d 
                     STD      Vec_Text_HW                  ; restoring 
-                                                         
                     STU      ustacktempptr                ; save for later 
                     LDA      #0 
                     STA      Vec_Music_Flag 
@@ -435,13 +430,12 @@ no_press_cal
                     ldb      #-59 
                     MOVETO_D  
                     ldx      #Conf_Box_nomode 
-                    DRAW_VLC
-                    RESET0REF
-				  lda      #-120 
-                    ldb      #-120
-                    ldu      #finish_btn4_text
+                    DRAW_VLC  
+                    RESET0REF  
+                    lda      #-120 
+                    ldb      #-120 
+                    ldu      #finish_btn4_text 
                     jsr      Print_Str_d 
-
                     lda      #10 
                     inc      frm10cnt 
                     cmpa     frm10cnt 
@@ -784,7 +778,8 @@ fill_hs_tbl:
 get_nentry 
                     ldx      #hsentryn_t 
                     ldx      b,x 
-                    ldy      #default_name 
+                    ldy      #default_name_t 
+                    ldy      b,y 
 _fill_nloop 
                     lda      ,y+ 
                     sta      ,x+ 
@@ -798,7 +793,8 @@ _fill_nloop
 get_sentry 
                     ldx      #hsentrys_t 
                     ldx      b,x 
-                    ldy      #default_high 
+                    ldy      #default_high_t
+				  ldy      b,y 
 _fill_sloop 
                     lda      ,y+ 
                     sta      ,x+ 
@@ -848,10 +844,10 @@ _hsprtloop
                     jsr      Read_Btns 
                     lda      Vec_Button_1_3 
                     bne      leave_demo_mode_hs           ; break out 
-			       lda      Vec_Button_1_2
-			       beq      noconfpress
-				  jsr      joystick_config
-noconfpress
+                    lda      Vec_Button_1_2 
+                    beq      noconfpress 
+                    jsr      joystick_config 
+noconfpress 
 ; count down to next screen without button press
                     jsr      Dec_3_Counters 
                     tst      Vec_Counter_1 
@@ -864,6 +860,11 @@ keepgoinghs
                     bra      _keepshow 
 
 do_demohs 
+				  jsr      Random_3
+				  cmpa     #64
+                    bgt      no_thanks
+				  jsr      credits_thanks
+no_thanks
                     jsr      titleScreen 
                     lda      #1 
                     sta      Demo_Mode 
@@ -876,5 +877,77 @@ leave_demo_mode_hs
                                                           ; bra _keepshow 
 ; unreachable  so comment                  rts      
 ;((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((
-sort_hs_tbl 
+credits_thanks: 
+                    ldd      Vec_Text_HW 
+                    std      temp                         ; save 
+				  ldd      #$FB50
+				  std      Vec_Text_HW
+                    lda      #128 
+                    sta      temp2 
+                    lda      #255 
+                    sta      temp3 
+                    clr      temp4 
+_ct_loop 
+                    lda      temp2 
+                    sta      Vec_Text_Height 
+                    jsr      Wait_Recal 
+                    jsr      Intensity_5F 
+                    ldx      #thanks_t 
+                    lda      temp4 
+                    lsla     
+                    ldu      a,x 
+                    lda      #50 
+                    ldb      #-110 
+                    jsr      Print_Str_d 
+                    RESET0REF  
+                    ldx      #thanks_t 
+                    lda      temp4 
+                    inca     
+                    lsla     
+                    ldu      a,x 
+                    lda      #30 
+                    ldb      #-110 
+                    jsr      Print_Str_d 
+                    RESET0REF  
+                    ldx      #thanks_t 
+                    lda      temp4 
+                    inca
+				  inca     
+                    lsla     
+                    ldu      a,x 
+                    lda      #10 
+                    ldb      #-110 
+                    jsr      Print_Str_d 
+				  RESET0REF
+				  ldu      #thankstolabel
+                    lda      #70 
+                    ldb      #-110 
+                    jsr      Print_Str_d 
+
+                    lda      temp2 
+                    cmpa     temp                  ; should be $F8
+                    beq      dontdec2 
+                    dec      temp2 
+                    dec      temp2 
+				  dec      temp2
+dontdec2 
+                    dec      temp3 
+                    lda      temp3 
+                    bne      dontinctemp4 
+                    lda      #128 
+                    sta      temp2 
+                    lda      #255 
+                    sta      temp3 
+                    inc      temp4 
+				  inc      temp4
+                    inc      temp4
+                    lda      temp4 
+                    cmpa     #6 
+                    beq      creditsdone 
+dontinctemp4 
+                    bra      _ct_loop 
+
+creditsdone 
+                    ldd      temp 
+                    std      Vec_Text_HW 
                     rts      

@@ -118,8 +118,11 @@ frm2cnt             ds       1
 fmt1cnt             ds       1 
 fmt0cnt             ds       1 
 ; temporary storage
-temp                ds       1                            ; generic 1 byte temp 
-temp1               ds       1 
+temp                ds       2                            ; generic 2 byte temp 
+temp1               ds       2 
+temp2               ds       2
+temp3               ds       2
+temp4		       ds         2
 speedtemp           ds       1 
 speeddtemp          ds       1 
 speeditemp          ds       1 

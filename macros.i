@@ -893,6 +893,8 @@ subdone6
 SHIP_Y_COLLISION_DETECT  macro  
                     lda      Ship_Dead                    ; if SHip_Dead do not do collision routine 
                     bne      no_hit 
+				  lda      In_Alley
+				  bne      no_hit
                     lda      shipYpos 
                     lsla     
                     ldx      #alleye_t 
@@ -905,7 +907,7 @@ SHIP_Y_COLLISION_DETECT  macro
                     ldx      a,x 
                     ldb      ,x 
                     jsr      Abs_b 
-                    cmpb     #10 
+                    cmpb     #24 
                     bgt      no_hit 
                     dec      shipcnt                      ; lose one ship 
                     clrb     
@@ -1044,6 +1046,8 @@ SHOT_COLLISION_DETECT  macro
                     lda      alley0e                      ; can't destroy Ghost 
                     cmpa     #GHOST 
                     lbeq     bullet0_done 
+				  cmpa     #PRIZE						; NEW TESTING
+				  lbeq     bullet0_done
                     lda      bullet0d 
                     beq      bullet0d_l 
                     ldb      bullet0x                     ; test bullet going right 0-127 possible hit range 
@@ -1116,6 +1120,8 @@ bullet0_miss
                     lda      alley1e                      ; can't destroy Ghost 
                     cmpa     #GHOST 
                     lbeq     bullet1_done 
+				  cmpa     #PRIZE
+				  lbeq     bullet1_done
                     lda      bullet1d 
                     beq      bullet1d_l 
                     ldb      bullet1x                     ; test bullet going right 1-127 possible hit range 
@@ -1187,7 +1193,9 @@ bullet1_miss
                     lbeq     bullet2_done 
                     lda      alley2e                      ; can't destroy Ghost 
                     cmpa     #GHOST 
-                    lbeq     bullet2_done 
+                    lbeq     bullet2_done
+				  cmpa     #PRIZE
+				  lbeq     bullet2_done 
                     lda      bullet2d 
                     beq      bullet2d_l 
                     ldb      bullet2x                     ; test bullet going right 2-127 possible hit range 
@@ -1259,7 +1267,9 @@ bullet2_miss
                     lbeq     bullet3_done 
                     lda      alley3e                      ; can't destroy Ghost 
                     cmpa     #GHOST 
-                    lbeq     bullet3_done 
+                    lbeq     bullet3_done
+				  cmpa     #PRIZE
+				  lbeq     bullet3_done 
                     lda      bullet3d 
                     beq      bullet3d_l 
                     ldb      bullet3x                     ; test bullet going right 3-127 possible hit range 
@@ -1331,7 +1341,9 @@ bullet3_miss
                     lbeq     bullet4_done 
                     lda      alley4e                      ; can't destroy Ghost 
                     cmpa     #GHOST 
-                    lbeq     bullet4_done 
+                    lbeq     bullet4_done
+				  cmpa     #PRIZE
+				  lbeq     bullet4_done 
                     lda      bullet4d 
                     beq      bullet4d_l 
                     ldb      bullet4x                     ; test bullet going right 4-127 possible hit range 
@@ -1403,7 +1415,9 @@ bullet4_miss
                     lbeq     bullet5_done 
                     lda      alley5e                      ; can't destroy Ghost 
                     cmpa     #GHOST 
-                    lbeq     bullet5_done 
+                    lbeq     bullet5_done
+				  cmpa     #PRIZE
+				  lbeq     bullet5_done 
                     lda      bullet5d 
                     beq      bullet5d_l 
                     ldb      bullet5x                     ; test bullet going right 5-127 possible hit range 
@@ -1475,7 +1489,9 @@ bullet5_miss
                     lbeq     bullet6_done 
                     lda      alley6e                      ; can't destroy Ghost 
                     cmpa     #GHOST 
-                    lbeq     bullet6_done 
+                    lbeq     bullet6_done
+				  cmpa     #PRIZE
+				  lbeq     bullet6_done 
                     lda      bullet6d 
                     beq      bullet6d_l 
                     ldb      bullet6x                     ; test bullet going right 6-127 possible hit range 
@@ -1591,12 +1607,12 @@ demo_mode_firing
                     ldx      a,x 
                     ldb      shipdir 
                     beq      negstart 
-                    ldb      #7                           ; trying to line up bullet creation with tip of ships nose 
+                    ldb      #11                           ; trying to line up bullet creation with tip of ships nose 
                     stb      ,x                           ; set start X 
                     bra      newshotdone 
 
 negstart 
-                    ldb      #-7 
+                    ldb      #-11 
                     stb      ,x                           ; set start -X 
 newshotdone 
 no_press 

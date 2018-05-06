@@ -27,18 +27,18 @@ Half_Wall:          fcb      3                            ; lda #3 ; sta $C823
                     fcb      0,-115 
                     fcb      -3,0 
 ; Level graphic
-Level_Box1_nomode:
-				  fcb      3
-				  fcb      0, 100
-                    fcb      -10, 0
-                    fcb      0, -100
-                    fcb      10, 0
-Level_Box2_nomode:
-				  fcb      3
-				  fcb      0, 110
-                    fcb      -30, 0
-                    fcb      0, -110
-                    fcb      30, 0
+Level_Box1_nomode: 
+                    fcb      3 
+                    fcb      0, 100 
+                    fcb      -10, 0 
+                    fcb      0, -100 
+                    fcb      10, 0 
+Level_Box2_nomode: 
+                    fcb      3 
+                    fcb      0, 110 
+                    fcb      -30, 0 
+                    fcb      0, -110 
+                    fcb      30, 0 
 ; SHIP 
 SHIP_SCALE=1 
 ShipR_nomode:       fcb      9 
@@ -598,8 +598,10 @@ Tank_R_t            fdb      Tank_R_1,Tank_R_2
 Prize_t             fdb      Prize_1,Prize_2,Prize_1,Prize_2 ; big/small animation 
 Wedge_L_t           fdb      Wedge_L_1, Wedge_L_2, Wedge_L_3, Wedge_L_2 
 Wedge_R_t           fdb      Wedge_R_1, Wedge_R_2, Wedge_R_3, Wedge_R_2 
-
-Demo_Label_t        fdb      demolabel, press_btn3_start_text, press_btn2_conf_text
+Demo_Label_t        fdb      demolabel, press_btn3_start_text, press_btn2_conf_text 
+default_name_t      fdb      default_name0,default_name1,default_name2,default_name3,default_name4 
+default_high_t      fdb      default_high0,default_high1,default_high2,default_high3,default_high4 
+thanks_t            fdb      thanks0,thanks1,thanks2,thanks3,thanks4, thanks5 
 ;##################################################################################
 ; SOUND data SOUND SOUND SOUND SOUND
 ;##################################################################################
@@ -658,10 +660,9 @@ vslow_text          fcc      "VERY SLOW",$80
 slow_text           fcc      "SLOW",$80
 med_text            fcc      "MEDIUM",$80
 fast_text           fcc      "FAST",$80
-
 gameoverstr         fcc      "GAME OVER",$80
 highscorelabel      fcc      "HIGH SCORE",$80
-
+thankstolabel       fcc      "THANKS TO:",$80
 ; HIGH SCORE ENTRY STUFF 
 newhslabel          fcc      "NEW HIGH SCORE",$80
 press_btn3_text     fcc      "PRESS BUTTON 3 TO BACKSPACE",$80
@@ -670,9 +671,9 @@ finish_btn4_text    fcc      "PRESS BUTTON 4 TO FINISH",$80
 ;
 ; Demo button stuff
 demolabel           fcc      "     DEMO MODE    ",$80
-press_btn3_start_text fcc    "BUTTON 3 TO START",$80
-press_btn2_conf_text fcc     "BUTTON 2 TO CONFIG",$80
-;
+press_btn3_start_text  fcc   "BUTTON 3 TO START",$80
+press_btn2_conf_text  fcc    "BUTTON 2 TO CONFIG",$80
+; high score entry 
 hs_abc_1            fcc      "A B C D E F",$80
 hs_abc_2            fcc      "G H I J K L",$80
 hs_abc_3            fcc      "M N O P Q R",$80
@@ -680,11 +681,23 @@ hs_abc_4            fcc      "S T U V W X",$80
 hs_abc_5            fcc      "Y Z 0 1 2 3",$80
 hs_abc_6            fcc      "4 5 6 7 8 9",$80
 hs_abc_7            fcc      "  . ! ? _ $",$80
-default_high        fcc      "     0",$80
-default_name        fcc      "GZE",$80
+default_high0       fcc      "  5000",$80
+default_high1       fcc      "  4000",$80
+default_high2       fcc      "  3000",$80
+default_high3       fcc      "  2000",$80
+default_high4       fcc      "  1000",$80
+default_name0       fcc      "GOZ",$80
+default_name1       fcc      "JAW",$80
+default_name2       fcc      "GGG",$80
+default_name3       fcc      "GCE",$80
+default_name4       fcc      "GZE",$80
 ; misc
-thanks0              fcc      "MALBAN, VECTREXER, DER LUCHS",$80
-thanks1             fcc      "VECTORX, TODD W, THOMAS S",$80
+thanks0             fcc      "   MALBAN, VECTREXER   ",$80
+thanks1             fcc      "    VECTORX, TODD W    ",$80
+thanks2             fcc      "   CHRIS BINARYSTAR    ",$80
+thanks3             fcc      "THOMAS S, CHRIS PARSONS",$80 
+thanks4             fcc      " ARCADE WEDNESDAY CREW ",$80
+thanks5             fcc      "   DER LUCHS, V.ROLI   ",$80
                     fcc      "SECRET GAME",$80
 credits             fcc      "PROGRAMMED BY GAUZE 2016-2018",$80 
                     FCC      "DISASSEMBLED BY MALBAN",$6B

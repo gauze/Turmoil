@@ -36,7 +36,6 @@
                     fcc      "-2018", $80                 ; 3 solid blocks ending with $80 
                     db       0                            ; end of game header 
 ;                   bra restart ; TESTING skip intro to get right to it.  
-		
                     bra      introSplash 
 
 ;***************************************************************************
@@ -58,9 +57,8 @@ introSplash
                     ldu      #ustacktemp 
                     stu      ustacktempptr                ; only do this once 
                     jsr      setup                        ; remove when done testing 
-                    jsr      fill_hs_tbl 				; filling from ROM eventually pull from EPROM
+                    jsr      fill_hs_tbl                  ; filling from ROM eventually pull from EPROM 
                     jsr      titleScreen 
-                                                         
                     jsr      joystick_config              ; move else were? 
 restart 
                     ldd      #$3075 
@@ -85,17 +83,17 @@ restart
                     sta      hstempstr+2 
                     lda      #$80                         ; EOL 
                     sta      hstempstr+3 
-			       clr      demo_label_cnt
+                    clr      demo_label_cnt 
 ;----------------------------------------------------------------------------
 main: 
                     jsr      Wait_Recal 
-				  jsr      Do_Sound
+                    jsr      Do_Sound 
                     READ_JOYSTICK  
                     lda      #$5F 
                     INTENSITY_A  
-				 ; ldd     #$FFFF
+                                                          ; ldd #$FFFF 
                     DRAW_LINE_WALLS  
-				 ; ldd     #$FFFF
+                                                          ; ldd #$FFFF 
                     DRAW_SHIP  
                     READ_BUTTONS  
                     MOVE_BULLETS  
@@ -134,11 +132,12 @@ noprizecntdown
                     jsr      newlevel                     ; and run routine 
 nolevel 
                     CHECK_DEMO                            ; routine to handle button press during demo mode 
+
                     jmp      main                         ; and repeat forever, sorta 
 
 ; must go at bottom or fills up RAM instead of ROM 
                     include  "functions.i"
                     include  "data.i"
                     include  "rasterDraw.asm"
-				;  include   "eprom.i"
+                                                          ; include "eprom.i" 
 end 
