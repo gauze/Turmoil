@@ -46,7 +46,7 @@ ShipR_nomode:       fcb      9
                     fcb      +2*SHIP_SCALE, +0*SHIP_SCALE 
                     fcb      +0*SHIP_SCALE, -9*SHIP_SCALE 
                     fcb      +6*SHIP_SCALE, +18*SHIP_SCALE 
-                    fcb      +1*SHIP_SCALE, 0*SHIP_SCALE  ; center 
+                    fcb      +1*SHIP_SCALE, 0*SHIP_SCALE  ; center Move this to end ?
                     fcb      +6*SHIP_SCALE, -18*SHIP_SCALE 
                     fcb      +0*SHIP_SCALE, +9*SHIP_SCALE 
                     fcb      +2*SHIP_SCALE, +0*SHIP_SCALE 
@@ -63,7 +63,8 @@ ShipL_nomode:       fcb      9
                     fcb      +2*SHIP_SCALE, +0*SHIP_SCALE 
                     fcb      +0*SHIP_SCALE, +12*SHIP_SCALE 
                     fcb      -17*SHIP_SCALE, +0*SHIP_SCALE 
-Shot:               fcb      2,0,10                       ; UNUSED 
+; UNUSED 
+Shot:               fcb      2,0,10                      
                     fcb      2,1,0 
                     fcb      2,0,-10 
                     fcb      2,1,0 
@@ -449,7 +450,6 @@ nine:               fcb      0, -10*VNUM_SCALE, +0
                     fcb      2, -6*VNUM_SCALE, +0 
                     fcb      2, +0, +8*VNUM_SCALE 
                     fcb      0, +6*VNUM_SCALE, +0+NUM_GAP 
-                                                          ; fcb 0, +0, +0+NUM_GAP 
                     fcb      1 
 ;****************************************************************************************
 ; TABLES TABLES TABLES TABLES TABLES TABLES TABLES TABLES TABLES TABLES TABLES TABLES 
@@ -457,8 +457,8 @@ nine:               fcb      0, -10*VNUM_SCALE, +0
                                                           ; align $100 
 ;shippos_t          fcb      -3*ALLEYWIDTH,-2*ALLEYWIDTH,-1*ALLEYWIDTH,0,1*ALLEYWIDTH,2*ALLEYWIDTH,3*ALLEYWIDTH ; Y pos of ship 
 ; position of cursor
-cboxYpos_t          db       93,81,69,57                  ; position of box for JS conf 
-hsentrynYpos_t                                            ;        position of hs table 
+cboxYpos_t          db       93,81,69,57                  ; position of select box for Joystick conf 
+hsentrynYpos_t                                            ; position of hs table 
 hsboxYpos_t         db       103,91,79,67,55,43,31        ; Y,X pos of hs initials entry cusor 
 hsboxXpos_t         db       -54,-31,-9,13,35,58 
 ; high score entry grid tables
@@ -473,10 +473,10 @@ hsgr6               db       " ", ".", "!", "?", "_", "$"
 hsentryn_t          dw       hsentry1n, hsentry2n, hsentry3n, hsentry4n, hsentry5n 
 hsentrys_t          dw       hsentry1s, hsentry2s, hsentry3s, hsentry4s, hsentry5s 
 ; game positions
-BULLETYPOS          =        103                          ;; trail and error 
+BULLETYPOS          =        103                          ;; trail and error for top alley
 shippos_t 
 bulletYpos_t        fcb      BULLETYPOS-(ALLEYHEIGHT*6*2), BULLETYPOS-(ALLEYHEIGHT*5*2), BULLETYPOS-(ALLEYHEIGHT*4*2), BULLETYPOS-(ALLEYHEIGHT*3*2), BULLETYPOS-(ALLEYHEIGHT*2*2),BULLETYPOS-(ALLEYHEIGHT*1*2), BULLETYPOS-(ALLEYHEIGHT*0*2) 
-;bulletYpos_t        fcb      -90,-56,-22,12,46,80, BULLETPOS-(ALLEYHEIGHT*0)     ; Y pos of bullet/ship/enemy per alley || 0-7 index table
+
 bullete_t           fdb      bullet0e,bullet1e,bullet2e,bullet3e,bullet4e,bullet5e,bullet6e ; exists 0=false, !0= true 
 bulletd_t           fdb      bullet0d,bullet1d,bullet2d,bullet3d,bullet4d,bullet5d,bullet6d ; direction left/right 
 bulletx_t           fdb      bullet0x,bullet1x,bullet2x,bullet3x,bullet4x,bullet5x,bullet6x ; X position 
@@ -686,6 +686,7 @@ default_high1       fcc      "  4000",$80
 default_high2       fcc      "  3000",$80
 default_high3       fcc      "  2000",$80
 default_high4       fcc      "  1000",$80
+;test_score          fcc      " 50000",$80
 default_name0       fcc      "GOZ",$80
 default_name1       fcc      "JAW",$80
 default_name2       fcc      "GGG",$80
@@ -702,6 +703,6 @@ thanks5             fcc      "   DER LUCHS, V.ROLI   ",$80
 credits             fcc      "PROGRAMMED BY GAUZE 2016-2018",$80 
                     FCC      "DISASSEMBLED BY MALBAN",$6B
                     fcc      "KARRSOFT82LDMCBCJT82LDMCBCJ"
-                                                          ; table negative indexs start here 128-255 leave as reminder 
+; table negative indexes start here 128-255 leave as reminder 
 ;                     db       128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,150,151,152,153,154,155,156,157,158,159,160,161,162,163,164,165,166,167,168,169,170,171,172,173,174,175,176,177,178,179,180,181,182,183,184,185,186,187,188,189,190,191,192,193,194,195,196,197,198,199,200,201,202,203,204,205,206,207,208,209,210,211,212,213,214,215,216,217,218,219,220,221,222,223,224,225,226,227,228,229,230,231,232,233,234,235,236,237,238,239,240,241,242,243,244,245,246,247,248,249,250,251,252,253,254,255
 ;shit_t               db       0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127, 42, 69

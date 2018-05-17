@@ -120,9 +120,9 @@ fmt0cnt             ds       1
 ; temporary storage
 temp                ds       2                            ; generic 2 byte temp 
 temp1               ds       2 
-temp2               ds       2
-temp3               ds       2
-temp4		       ds         2
+temp2               ds       2 
+temp3               ds       2 
+temp4               ds       2 
 speedtemp           ds       1 
 speeddtemp          ds       1 
 speeditemp          ds       1 
@@ -160,8 +160,8 @@ Line_Pat            ds       1                            ; this is for LINE_DRA
 ustacktempptr       ds       2                            ; for saving location of ustacktemp 
 calibrationValue    ds       1 
 current_eprom_blocksize  ds  1 
-current_eprom_blockadr ds    1
-demo_label_cnt      ds       1
+current_eprom_blockadr  ds   1 
+demo_label_cnt      ds       1 
 ;
 ; CONSTANTS place after VARIABLES
 ;ALLEYWIDTH          =        17 

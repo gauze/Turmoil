@@ -53,6 +53,7 @@ scale_done
 change_dir 
                     clr      Ship_Dead_Anim 
                     clr      Ship_Dead_Cnt                ; don't let it go minus. UNSIGNED 
+                    CHECK_GAMEOVER 
 shitballs 
                     ldx      #ShipL_nomode 
                     ldb      shipdir                      ; testing for 0|LEFT 1|RIGHT 
@@ -395,7 +396,7 @@ framecont0
                     lda      alley0x 
                     sta      temp 
                     ldb      alley0d 
-                    bne      add0 
+                    bne      add0 						; moving left
                     suba     alley0s 
                     bvs      alley0of 
                     sta      alley0x 
@@ -414,7 +415,7 @@ prize2cannonball0
                     bra      subdone0 
 
 add0 
-                    adda     alley0s 
+                    adda     alley0s 					; moving right
                     bvs      alley0of 
                     sta      alley0x 
                     bra      subdone0 
@@ -898,16 +899,16 @@ SHIP_Y_COLLISION_DETECT  macro
                     lda      shipYpos 
                     lsla     
                     ldx      #alleye_t 
-                    ldx      a,x 
-                    lda      ,x 
+                    ;ldx      a,x 
+                    lda      [a,x] 
                     beq      no_hit 
                     lda      shipYpos 
                     lsla     
                     ldx      #alleyx_t 
-                    ldx      a,x 
-                    ldb      ,x 
+                    ;ldx      a,x 
+                    ldb      [a,x] 
                     jsr      Abs_b 
-                    cmpb     #24 
+                    cmpb     #23 						; why is this so high??? TODO
                     bgt      no_hit 
                     dec      shipcnt                      ; lose one ship 
                     clrb     
@@ -915,21 +916,22 @@ SHIP_Y_COLLISION_DETECT  macro
                     lsla     
                     ldx      #alleye_t 
                     stb      [a,x] 
-                    ldx      #alleys_t 
+                    ldx      #alleyd_t 
                     stb      [a,x] 
                     ldx      #alleyx_t 
                     stb      [a,x] 
-                    ldx      #alleyd_t 
+                    ldx      #alleys_t 
                     stb      [a,x] 
+TATER
                     dec      enemycnt 
                                                           ; jsr deathsplash 
-                    lda      #127                         ; sets counter for 100 frames 2 seconds 
+                    lda      #127                         ; sets counter for 127 frames 2.5 seconds 
                     sta      Ship_Dead_Cnt 
                     inc      Ship_Dead 
                     inc      Ship_Dead_Anim 
 ;skipme
 no_hit 
-                    CHECK_GAMEOVER  
+ 
                     endm     
 ;^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 
 SHIP_X_COLLISION_DETECT  macro  
@@ -957,12 +959,10 @@ not_ghost
                     lsla     
                     ldx      #alleyd_t 
                     ldb      [a,x] 
-                    stb      temp                         ; temp has direction 
-                                                          ; ldx #alleyx_t 
-                                                          ; ldb [a,x] ; b has X 
+                    stb      temp                         
                     lda      shipdir 
                     bne      ship_moving_right 
-ship_moving_left                                          ;        TODO add test for which side prize is on for collision with prize logic 
+ship_moving_left                                          
                     lda      temp                         ; temp is side prze is on 
                     beq      no_prize_score 
                     lda      -#106 
@@ -978,7 +978,8 @@ ship_moving_right
                     blt      no_prize_score 
 ; prize score is done like this:  800 == #2048 == 100 0000 0000 BCD value 
 wee_prize_score 
-                    ldd      #2048 
+                    ;ldd      #2048 
+				  ldd      #$800
                     ldx      #score 
                     jsr      Add_Score_d 
                     lda      shipYpos 
@@ -2278,7 +2279,7 @@ no100cntreset
 noclrdlc
                     endm     
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-CHECK_GAMEOVER      macro    
+CHECK_GAMEOVER      macro     ; TO DO add some kind of ship destruction animation
                     lda      shipcnt 
                     bne      notgameover 
                     jmp      gameover 
@@ -2445,7 +2446,7 @@ DRAW_LINE_D_PAT     macro
                     STB      <VIA_port_a                  ;Send X to A/D 
                     CLR      <VIA_t1_cnt_hi               ;Set T1H (scale factor?) 
                     LDB      #$40                         ;B-reg = T1 interrupt bit 
-                    LDA      Line_Pat                     ;Shift reg=$FF (solid line), T1H=0 
+                    LDA      Line_Pat                     ;Shift reg
 _timeout_pat        STA      <VIA_shift_reg               ;Put pattern in shift register 
                     BITB     <VIA_int_flags               ;Wait for T1 to time out 
                     BEQ      _timeout_pat 

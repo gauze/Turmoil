@@ -52,6 +52,7 @@
 ;***************************************************************************
 ; here the cartridge program starts off   
 introSplash 
+				;  jsr      credits_thanks
                     lda      #1 
                     sta      Demo_Mode                    ; in Demo_Mode on boot 
                     ldu      #ustacktemp 
@@ -73,8 +74,8 @@ restart
                     sta      Ship_Dead 
                     ldb      #LEFT 
                     stb      shipdir 
-                    ldx      #score 
-                    jsr      Clear_Score 
+                    ldx      #score
+                    jsr      Clear_Score
                     lda      #3                           ; normally 5 FIX 
                     sta      shipcnt 
                     lda      #$5F                         ; for high score input _ under scores _ 

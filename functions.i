@@ -793,8 +793,8 @@ _fill_nloop
 get_sentry 
                     ldx      #hsentrys_t 
                     ldx      b,x 
-                    ldy      #default_high_t
-				  ldy      b,y 
+                    ldy      #default_high_t 
+                    ldy      b,y 
 _fill_sloop 
                     lda      ,y+ 
                     sta      ,x+ 
@@ -860,11 +860,12 @@ keepgoinghs
                     bra      _keepshow 
 
 do_demohs 
-				  jsr      Random_3
-				  cmpa     #64
-                    bgt      no_thanks
-				  jsr      credits_thanks
-no_thanks
+                    jsr      credits_thanks   ; remove after testing
+                    jsr      Random_3 
+                    cmpa     #64 
+                    blt      no_thanks 
+                    jsr      credits_thanks 
+no_thanks 
                     jsr      titleScreen 
                     lda      #1 
                     sta      Demo_Mode 
@@ -874,19 +875,21 @@ leave_demo_mode_hs
                     clr      Demo_Mode 
                     jmp      restart 
 
-                                                          ; bra _keepshow 
-; unreachable  so comment                  rts      
 ;((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((
 credits_thanks: 
+				  lda      #127
+				  sta       VIA_t1_cnt_lo
                     ldd      Vec_Text_HW 
-                    std      temp                         ; save 
-				  ldd      #$FB50
-				  std      Vec_Text_HW
+                    std      temp                         ; save TText_HW on entry and restore at end 
+                    ldd      #$F850 
+                    std      Vec_Text_HW 
+                    
                     lda      #128 
-                    sta      temp2 
+                    sta      temp2                        ; temp2 is text Height, start high and dec till normal 
                     lda      #255 
-                    sta      temp3 
-                    clr      temp4 
+                    sta      temp3                        ; temp3 is timer on how long text is displayed 
+                    clr      temp4                        ; temp4 is counter for which text string to displayed 
+ 				  clr      temp1                        ; temp1 direction of text height 0 dec & 1 inc
 _ct_loop 
                     lda      temp2 
                     sta      Vec_Text_Height 
@@ -911,36 +914,50 @@ _ct_loop
                     RESET0REF  
                     ldx      #thanks_t 
                     lda      temp4 
-                    inca
-				  inca     
+                    inca     
+                    inca     
                     lsla     
                     ldu      a,x 
                     lda      #10 
                     ldb      #-110 
                     jsr      Print_Str_d 
-				  RESET0REF
-				  ldu      #thankstolabel
+                    RESET0REF  
+                    ldu      #thankstolabel 
                     lda      #70 
                     ldb      #-110 
                     jsr      Print_Str_d 
-
                     lda      temp2 
-                    cmpa     temp                  ; should be $F8
+                    cmpa     temp                         ; should be $F8 
                     beq      dontdec2 
+                    lda      temp1 
+                    bne      HeightDec 
                     dec      temp2 
                     dec      temp2 
-				  dec      temp2
+                    dec      temp2 
+				  bra      donedec2
+HeightDec 
+                    inc      temp2 
+                    inc      temp2 
+                    inc      temp2 
+donedec2
 dontdec2 
                     dec      temp3 
                     lda      temp3 
-                    bne      dontinctemp4 
-                    lda      #128 
+                    bne      dontinctemp4
+				  lda 	  temp1
+				  bne      noinctemp1
+				  inc      temp1 						; set up next round of text lines
+				  bra      donetemp1
+noinctemp1
+				  clr      temp1
+donetemp1
+                    lda      #126 
                     sta      temp2 
                     lda      #255 
                     sta      temp3 
                     inc      temp4 
-				  inc      temp4
-                    inc      temp4
+                    inc      temp4 
+                    inc      temp4 
                     lda      temp4 
                     cmpa     #6 
                     beq      creditsdone 
