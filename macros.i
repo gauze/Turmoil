@@ -10,7 +10,7 @@ DRAW_SHIP           macro
                     lda      shipYpos 
                     ldx      #bulletYpos_t 
                     lda      a,x                          ; get pos from shippos_t table 
-                    suba     #8                           ; small offset to center in lane horizontally 
+                                                          ; suba #8 ; small offset to center in lane horizontally 
                     ldb      shipXpos 
                                                           ;TEST addb #+12 
                     tst      shipdir                      ; testing for 0|LEFT 1|RIGHT 
@@ -53,14 +53,13 @@ scale_done
 change_dir 
                     clr      Ship_Dead_Anim 
                     clr      Ship_Dead_Cnt                ; don't let it go minus. UNSIGNED 
-                    CHECK_GAMEOVER 
 shitballs 
                     ldx      #ShipL_nomode 
                     ldb      shipdir                      ; testing for 0|LEFT 1|RIGHT 
                     beq      _donuthin1 
                     ldx      #ShipR_nomode 
-                    bra      _donuthin1 
-
+                                                          ; bra _donuthin1 
+                    CHECK_GAMEOVER  
 _donuthin1 
                     DRAW_VLC                              ; jsr Draw_VLc ;_mode 
                     endm     
@@ -158,7 +157,7 @@ _line6End
 _bottomLine 
                     lda      #(ALLEYWALL_Y-(ALLEYHEIGHT*7)) 
                     ldb      #-127 
-                    MOVETO_D                              ; PLACE EXTRA CODE VERSION HERE
+                    MOVETO_D                              ; PLACE EXTRA CODE VERSION HERE 
                     ldd      #$007F 
                     DRAW_LINE_D  
                     ldd      #$007F                       ; start far left end far right 
@@ -182,7 +181,7 @@ DRAW_ENEMYS         macro
                     lda      #0 
                     lda      a,x                          ; Y 
                     ldb      alley0x                      ; X 
-                    MOVETO_D                              ; PLACE EXTRA CODE VERSION HERE
+                    MOVETO_D                              ; PLACE EXTRA CODE VERSION HERE 
 ; *_f  frame count -> index list of frames, see definition in data.i 
                     lda      alley0e 
                     lsla     
@@ -240,7 +239,7 @@ skip1a
                     lda      #2 
                     lda      a,x                          ; Y 
                     ldb      alley2x                      ; X 
-                    MOVETO_D                              ; PLACE EXTRA CODE VERSION HERE
+                    MOVETO_D                              ; PLACE EXTRA CODE VERSION HERE 
 ; *_f  frame count -> index list of frames, see definition in data.i 
                     lda      alley2e 
                     lsla     
@@ -269,7 +268,7 @@ skip2a
                     lda      #3 
                     lda      a,x                          ; Y 
                     ldb      alley3x                      ; X 
-                    MOVETO_D                              ; PLACE EXTRA CODE VERSION HERE
+                    MOVETO_D                              ; PLACE EXTRA CODE VERSION HERE 
 ; *_f  frame count -> index list of frames, see definition in data.i 
                     lda      alley3e 
                     lsla     
@@ -298,7 +297,7 @@ skip3a
                     lda      #4 
                     lda      a,x                          ; Y 
                     ldb      alley4x                      ; X 
-                    MOVETO_D                              ; PLACE EXTRA CODE VERSION HERE
+                    MOVETO_D                              ; PLACE EXTRA CODE VERSION HERE 
 ; *_f  frame count -> index list of frames, see definition in data.i 
                     lda      alley4e 
                     lsla     
@@ -327,7 +326,7 @@ skip4a
                     lda      #5 
                     lda      a,x                          ; Y 
                     ldb      alley5x                      ; X 
-                    MOVETO_D                              ; PLACE EXTRA CODE VERSION HERE
+                    MOVETO_D                              ; PLACE EXTRA CODE VERSION HERE 
 ; *_f  frame count -> index list of frames, see definition in data.i 
                     lda      alley5e 
                     lsla     
@@ -356,7 +355,7 @@ skip5a
                     lda      #6 
                     lda      a,x                          ; Y 
                     ldb      alley6x                      ; X 
-                    MOVETO_D                              ; PLACE EXTRA CODE VERSION HERE
+                    MOVETO_D                              ; PLACE EXTRA CODE VERSION HERE 
 ; *_f  frame count -> index list of frames, see definition in data.i 
                     lda      alley6e 
                     lsla     
@@ -396,7 +395,7 @@ framecont0
                     lda      alley0x 
                     sta      temp 
                     ldb      alley0d 
-                    bne      add0 						; moving left
+                    bne      add0                         ; moving left 
                     suba     alley0s 
                     bvs      alley0of 
                     sta      alley0x 
@@ -415,7 +414,7 @@ prize2cannonball0
                     bra      subdone0 
 
 add0 
-                    adda     alley0s 					; moving right
+                    adda     alley0s                      ; moving right 
                     bvs      alley0of 
                     sta      alley0x 
                     bra      subdone0 
@@ -894,21 +893,21 @@ subdone6
 SHIP_Y_COLLISION_DETECT  macro  
                     lda      Ship_Dead                    ; if SHip_Dead do not do collision routine 
                     bne      no_hit 
-				  lda      In_Alley
-				  bne      no_hit
+                    lda      In_Alley 
+                    bne      no_hit 
                     lda      shipYpos 
                     lsla     
                     ldx      #alleye_t 
-                    ;ldx      a,x 
+                                                          ;ldx a,x 
                     lda      [a,x] 
                     beq      no_hit 
                     lda      shipYpos 
                     lsla     
                     ldx      #alleyx_t 
-                    ;ldx      a,x 
+                                                          ;ldx a,x 
                     ldb      [a,x] 
                     jsr      Abs_b 
-                    cmpb     #23 						; why is this so high??? TODO
+                    cmpb     #15                          ; why is this so high??? TODO 
                     bgt      no_hit 
                     dec      shipcnt                      ; lose one ship 
                     clrb     
@@ -922,7 +921,7 @@ SHIP_Y_COLLISION_DETECT  macro
                     stb      [a,x] 
                     ldx      #alleys_t 
                     stb      [a,x] 
-TATER
+TATER 
                     dec      enemycnt 
                                                           ; jsr deathsplash 
                     lda      #127                         ; sets counter for 127 frames 2.5 seconds 
@@ -931,18 +930,12 @@ TATER
                     inc      Ship_Dead_Anim 
 ;skipme
 no_hit 
- 
                     endm     
 ;^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 
 SHIP_X_COLLISION_DETECT  macro  
-                                                          ; used when inside an alley 
+                                                          ; ONLY used when inside an alley 
                     lda      In_Alley 
-                    beq      not_in_alley 
-                                                          ; prize score is done like this: 
-                                                          ; ldd #2048 
-                                                          ; jsr Add_Score_d 
-                                                          ; #2048 = 0000 0100 0000 0000 BCD value 
-                                                          ; that's 800 DEC 
+                    lbeq     not_in_alley 
                     lda      shipYpos 
                     lsla     
                     ldx      #alleye_t 
@@ -950,36 +943,34 @@ SHIP_X_COLLISION_DETECT  macro
                     cmpa     #CANNONBALL 
                     beq      can_collide 
                     cmpa     #GHOST 
-                    bne      not_ghost 
-can_collide 
-not_ghost 
-                    cmpa     #PRIZE 
-                    bne      not_in_alley                 ; how are we even in the alley?!??!?! 
+                    beq      can_collide 
+;                    cmpa     #PRIZE 
+;                    bne      not_in_alley                 ; how are we even in the alley?!??!?! 
                     lda      shipYpos 
                     lsla     
                     ldx      #alleyd_t 
                     ldb      [a,x] 
-                    stb      temp                         
+                    stb      temp 
                     lda      shipdir 
                     bne      ship_moving_right 
-ship_moving_left                                          
-                    lda      temp                         ; temp is side prze is on 
-                    beq      no_prize_score 
+ship_moving_left 
+                    lda      temp                         ; temp is side prize is on 
+                    lbeq     no_prize_score 
                     lda      -#106 
                     cmpa     shipXpos 
                     bvs      wee_prize_score 
-                    bra      no_prize_score 
+                    lbra     no_prize_score 
 
 ship_moving_right 
-                    lda      temp                         ; temp is side prze is on 
-                    bne      no_prize_score 
+                    lda      temp                         ; temp is side prize is on 
+                    lbne     no_prize_score 
                     lda      shipXpos 
                     cmpa     #106 
-                    blt      no_prize_score 
+                    lblt     no_prize_score 
 ; prize score is done like this:  800 == #2048 == 100 0000 0000 BCD value 
 wee_prize_score 
-                    ;ldd      #2048 
-				  ldd      #$800
+                                                          ;ldd #2048 
+                    ldd      #$800 
                     ldx      #score 
                     jsr      Add_Score_d 
                     lda      shipYpos 
@@ -1003,8 +994,41 @@ set_dir_l
 done_set_dir 
                     ldx      #alleyx_t 
                     stb      [a,x] 
+                    bra      donezo 
+
+can_collide 
+                    lda      shipXpos 
+                    cmpa     #$80 
+                    bne      no_inc_shipos 
+                    inc      shipXpos 
+no_inc_shipos 
+                    lda      shipYpos 
+                    lsla     
+                    ldx      #alleyx_t 
+                    ldb      [a,x] 
+                    subb     shipXpos 
+                    jsr      Abs_b 
+                    bgt      donezo 
+Xhit                dec      shipcnt                      ; lose one ship 
+                    clrb                                  ; set to zero and use to reset alley vars 
+                    lda      shipYpos                     ; clear e exist flag for this alley, ie destroy it 
+                    lsla     
+                    ldx      #alleye_t 
+                    stb      [a,x] 
+                    ldx      #alleyd_t 
+                    stb      [a,x] 
+                    ldx      #alleyx_t 
+                    stb      [a,x] 
+                    ldx      #alleys_t 
+                    stb      [a,x] 
+                    dec      enemycnt 
+                    lda      #127                         ; sets counter for 127 frames 2.5 seconds 
+                    sta      Ship_Dead_Cnt 
+                    inc      Ship_Dead 
+                    inc      Ship_Dead_Anim 
 not_in_alley 
 no_prize_score 
+donezo 
                     endm     
 ;-----------------------------------------------------------------------------------
 SHOT_COLLISION_DETECT  macro  
@@ -1047,8 +1071,8 @@ SHOT_COLLISION_DETECT  macro
                     lda      alley0e                      ; can't destroy Ghost 
                     cmpa     #GHOST 
                     lbeq     bullet0_done 
-				  cmpa     #PRIZE						; NEW TESTING
-				  lbeq     bullet0_done
+                    cmpa     #PRIZE                       ; NEW TESTING 
+                    lbeq     bullet0_done 
                     lda      bullet0d 
                     beq      bullet0d_l 
                     ldb      bullet0x                     ; test bullet going right 0-127 possible hit range 
@@ -1121,8 +1145,8 @@ bullet0_miss
                     lda      alley1e                      ; can't destroy Ghost 
                     cmpa     #GHOST 
                     lbeq     bullet1_done 
-				  cmpa     #PRIZE
-				  lbeq     bullet1_done
+                    cmpa     #PRIZE 
+                    lbeq     bullet1_done 
                     lda      bullet1d 
                     beq      bullet1d_l 
                     ldb      bullet1x                     ; test bullet going right 1-127 possible hit range 
@@ -1194,9 +1218,9 @@ bullet1_miss
                     lbeq     bullet2_done 
                     lda      alley2e                      ; can't destroy Ghost 
                     cmpa     #GHOST 
-                    lbeq     bullet2_done
-				  cmpa     #PRIZE
-				  lbeq     bullet2_done 
+                    lbeq     bullet2_done 
+                    cmpa     #PRIZE 
+                    lbeq     bullet2_done 
                     lda      bullet2d 
                     beq      bullet2d_l 
                     ldb      bullet2x                     ; test bullet going right 2-127 possible hit range 
@@ -1268,9 +1292,9 @@ bullet2_miss
                     lbeq     bullet3_done 
                     lda      alley3e                      ; can't destroy Ghost 
                     cmpa     #GHOST 
-                    lbeq     bullet3_done
-				  cmpa     #PRIZE
-				  lbeq     bullet3_done 
+                    lbeq     bullet3_done 
+                    cmpa     #PRIZE 
+                    lbeq     bullet3_done 
                     lda      bullet3d 
                     beq      bullet3d_l 
                     ldb      bullet3x                     ; test bullet going right 3-127 possible hit range 
@@ -1342,9 +1366,9 @@ bullet3_miss
                     lbeq     bullet4_done 
                     lda      alley4e                      ; can't destroy Ghost 
                     cmpa     #GHOST 
-                    lbeq     bullet4_done
-				  cmpa     #PRIZE
-				  lbeq     bullet4_done 
+                    lbeq     bullet4_done 
+                    cmpa     #PRIZE 
+                    lbeq     bullet4_done 
                     lda      bullet4d 
                     beq      bullet4d_l 
                     ldb      bullet4x                     ; test bullet going right 4-127 possible hit range 
@@ -1416,9 +1440,9 @@ bullet4_miss
                     lbeq     bullet5_done 
                     lda      alley5e                      ; can't destroy Ghost 
                     cmpa     #GHOST 
-                    lbeq     bullet5_done
-				  cmpa     #PRIZE
-				  lbeq     bullet5_done 
+                    lbeq     bullet5_done 
+                    cmpa     #PRIZE 
+                    lbeq     bullet5_done 
                     lda      bullet5d 
                     beq      bullet5d_l 
                     ldb      bullet5x                     ; test bullet going right 5-127 possible hit range 
@@ -1490,9 +1514,9 @@ bullet5_miss
                     lbeq     bullet6_done 
                     lda      alley6e                      ; can't destroy Ghost 
                     cmpa     #GHOST 
-                    lbeq     bullet6_done
-				  cmpa     #PRIZE
-				  lbeq     bullet6_done 
+                    lbeq     bullet6_done 
+                    cmpa     #PRIZE 
+                    lbeq     bullet6_done 
                     lda      bullet6d 
                     beq      bullet6d_l 
                     ldb      bullet6x                     ; test bullet going right 6-127 possible hit range 
@@ -1608,12 +1632,12 @@ demo_mode_firing
                     ldx      a,x 
                     ldb      shipdir 
                     beq      negstart 
-                    ldb      #11                           ; trying to line up bullet creation with tip of ships nose 
+                    ldb      #7                           ; trying to line up bullet creation with tip of ships nose 
                     stb      ,x                           ; set start X 
                     bra      newshotdone 
 
 negstart 
-                    ldb      #-11 
+                    ldb      #-7 
                     stb      ,x                           ; set start -X 
 newshotdone 
 no_press 
@@ -2191,7 +2215,7 @@ ghost_d_done
                     stb      [a,x] 
 ;  END add ghost stuff, must tweak
 no_ghost 
-                    endm
+                    endm     
 ;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%     
 FRAME_CNTS          macro    
 ; increment the Test frame counter
@@ -2244,11 +2268,11 @@ no20cntreset
                     inc      Wedge_f 
 no25cntreset 
                     lda      #50 
-                    inc      frm50cnt
+                    inc      frm50cnt 
                     cmpa     frm50cnt 
                     bne      no50cntreset 
                     clr      frm50cnt 
-				  inc      demo_label_cnt
+                    inc      demo_label_cnt 
                     lda      #1 
                     sta      Arrow_f 
                     sta      Dash_f 
@@ -2272,14 +2296,14 @@ no50cntreset
                     sta      Tank_f 
                     sta      Explode_f 
 no100cntreset 
-				  lda      demo_label_cnt
-				  cmpa    #3
-                    bne     noclrdlc
-				  clr     demo_label_cnt		  
-noclrdlc
+                    lda      demo_label_cnt 
+                    cmpa     #3 
+                    bne      noclrdlc 
+                    clr      demo_label_cnt 
+noclrdlc 
                     endm     
 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-CHECK_GAMEOVER      macro     ; TO DO add some kind of ship destruction animation
+CHECK_GAMEOVER      macro                                 ; TO DO add some kind of ship destruction animation 
                     lda      shipcnt 
                     bne      notgameover 
                     jmp      gameover 
@@ -2446,7 +2470,7 @@ DRAW_LINE_D_PAT     macro
                     STB      <VIA_port_a                  ;Send X to A/D 
                     CLR      <VIA_t1_cnt_hi               ;Set T1H (scale factor?) 
                     LDB      #$40                         ;B-reg = T1 interrupt bit 
-                    LDA      Line_Pat                     ;Shift reg
+                    LDA      Line_Pat                     ;Shift reg 
 _timeout_pat        STA      <VIA_shift_reg               ;Put pattern in shift register 
                     BITB     <VIA_int_flags               ;Wait for T1 to time out 
                     BEQ      _timeout_pat 
@@ -2488,15 +2512,13 @@ _is_zero
 
 demo_score 
                     RESET0REF  
-					
-
-				  lda      demo_label_cnt
-				  lsla
-				  ldu      #Demo_Label_t
-				  ldu      a,u
+                    lda      demo_label_cnt 
+                    lsla     
+                    ldu      #Demo_Label_t 
+                    ldu      a,u 
                     lda      #-127 
                     ldb      #-100 
-                 ;   ldu      #demolabel 
+                                                          ; ldu #demolabel 
                     jsr      Print_Str_d 
 score_done 
 _no_print_vscore 
@@ -2549,10 +2571,10 @@ CHECK_DEMO          macro
                     lda      Demo_Mode 
                     beq      no_check_needed 
                     jsr      Read_Btns 
-				  lda      Vec_Button_1_2
-                    beq      no_conf_press
-				  jsr      joystick_config
-no_conf_press
+                    lda      Vec_Button_1_2 
+                    beq      no_conf_press 
+                    jsr      joystick_config 
+no_conf_press 
                     lda      Vec_Button_1_3 
                     beq      no_check_needed 
                     clr      Demo_Mode 

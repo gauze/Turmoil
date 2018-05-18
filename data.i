@@ -41,37 +41,61 @@ Level_Box2_nomode:
                     fcb      30, 0 
 ; SHIP 
 SHIP_SCALE=1 
+;ShipR_nomode:       fcb      9 
+;                    fcb      +0*SHIP_SCALE, +12*SHIP_SCALE 
+;                    fcb      +2*SHIP_SCALE, +0*SHIP_SCALE 
+;                    fcb      +0*SHIP_SCALE, -9*SHIP_SCALE 
+;                    fcb      +6*SHIP_SCALE, +18*SHIP_SCALE 
+;                    fcb      +1*SHIP_SCALE, 0*SHIP_SCALE  ; center Move this to end ?
+;                    fcb      +6*SHIP_SCALE, -18*SHIP_SCALE 
+;                    fcb      +0*SHIP_SCALE, +9*SHIP_SCALE 
+;                    fcb      +2*SHIP_SCALE, +0*SHIP_SCALE 
+;                    fcb      +0*SHIP_SCALE, -12*SHIP_SCALE 
+;                    fcb      -17*SHIP_SCALE, +0*SHIP_SCALE 
+;ShipL_nomode:       fcb      9 
+;                    fcb      +0*SHIP_SCALE, -12*SHIP_SCALE 
+;                    fcb      +2*SHIP_SCALE, +0*SHIP_SCALE 
+;                    fcb      +0*SHIP_SCALE, +9*SHIP_SCALE 
+;                    fcb      +6*SHIP_SCALE, -18*SHIP_SCALE 
+;                    fcb      +1*SHIP_SCALE, 0*SHIP_SCALE  ; center 
+;                    fcb      +6*SHIP_SCALE, +18*SHIP_SCALE 
+;                    fcb      +0*SHIP_SCALE, -9*SHIP_SCALE 
+;                    fcb      +2*SHIP_SCALE, +0*SHIP_SCALE 
+;                    fcb      +0*SHIP_SCALE, +12*SHIP_SCALE 
+;                    fcb      -17*SHIP_SCALE, +0*SHIP_SCALE 
 ShipR_nomode:       fcb      9 
-                    fcb      +0*SHIP_SCALE, +12*SHIP_SCALE 
-                    fcb      +2*SHIP_SCALE, +0*SHIP_SCALE 
-                    fcb      +0*SHIP_SCALE, -9*SHIP_SCALE 
-                    fcb      +6*SHIP_SCALE, +18*SHIP_SCALE 
-                    fcb      +1*SHIP_SCALE, 0*SHIP_SCALE  ; center Move this to end ?
+				  fcb      +0, +10*SHIP_SCALE
+                  ;  fcb      +1*SHIP_SCALE, 0*SHIP_SCALE  ; center Move this to end ?
                     fcb      +6*SHIP_SCALE, -18*SHIP_SCALE 
                     fcb      +0*SHIP_SCALE, +9*SHIP_SCALE 
                     fcb      +2*SHIP_SCALE, +0*SHIP_SCALE 
                     fcb      +0*SHIP_SCALE, -12*SHIP_SCALE 
                     fcb      -17*SHIP_SCALE, +0*SHIP_SCALE 
+                    fcb      +0*SHIP_SCALE, +12*SHIP_SCALE  ; upper left corner
+                    fcb      +2*SHIP_SCALE, +0*SHIP_SCALE 
+                    fcb      +0*SHIP_SCALE, -9*SHIP_SCALE 
+                    fcb      +6*SHIP_SCALE, +18*SHIP_SCALE 
 ShipL_nomode:       fcb      9 
-                    fcb      +0*SHIP_SCALE, -12*SHIP_SCALE 
-                    fcb      +2*SHIP_SCALE, +0*SHIP_SCALE 
-                    fcb      +0*SHIP_SCALE, +9*SHIP_SCALE 
-                    fcb      +6*SHIP_SCALE, -18*SHIP_SCALE 
-                    fcb      +1*SHIP_SCALE, 0*SHIP_SCALE  ; center 
+				  fcb      +0, -10*SHIP_SCALE
+                ;    fcb      +1*SHIP_SCALE, 0*SHIP_SCALE  ; center 
                     fcb      +6*SHIP_SCALE, +18*SHIP_SCALE 
                     fcb      +0*SHIP_SCALE, -9*SHIP_SCALE 
                     fcb      +2*SHIP_SCALE, +0*SHIP_SCALE 
                     fcb      +0*SHIP_SCALE, +12*SHIP_SCALE 
                     fcb      -17*SHIP_SCALE, +0*SHIP_SCALE 
+                    fcb      +0*SHIP_SCALE, -12*SHIP_SCALE  ; upper right corner
+                    fcb      +2*SHIP_SCALE, +0*SHIP_SCALE 
+                    fcb      +0*SHIP_SCALE, +9*SHIP_SCALE 
+                    fcb      +6*SHIP_SCALE, -18*SHIP_SCALE 
 ; UNUSED 
-Shot:               fcb      2,0,10                      
-                    fcb      2,1,0 
-                    fcb      2,0,-10 
-                    fcb      2,1,0 
-                    fcb      2,0,10 
-                    fcb      1 
+;Shot:               fcb      2,0,10                      
+;                    fcb      2,1,0 
+;                    fcb      2,0,-10 
+;                    fcb      2,1,0 
+;                    fcb      2,0,10 
+;                    fcb      1 
 ; number of guys left 
-Ship_Marker:                                              ;        UNUSED 
+Ship_Marker:                                              ;        UNUSED but makes assembly fail LEAVE IT
                     fcb      3 
                     fcb      -7, +0 
                     fcb      +9, +3 
