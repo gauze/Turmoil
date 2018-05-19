@@ -162,6 +162,8 @@ calibrationValue    ds       1
 current_eprom_blocksize  ds  1 
 current_eprom_blockadr  ds   1 
 demo_label_cnt      ds       1 
+bigger              ds       1
+smaller             ds       1
 ;
 ; CONSTANTS place after VARIABLES
 ;ALLEYWIDTH          =        17 

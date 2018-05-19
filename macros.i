@@ -997,17 +997,42 @@ done_set_dir
                     bra      donezo 
 
 can_collide 
+;first test of both numbers are same sign
+                    lda      shipYpos 
+                    lsla     
+                    ldx      #alleyx_t 
+                    lda      [a,x] 
+                    sta      temp2 
+                    anda     #%10000000                   ; load alleyX with then AND for sign 
+                    sta      temp1                        ; store 
+                    lda      shipXpos                     ; load shipXpos then AND for sign 
+                    anda     #%10000000 
+                    eora     temp1                        ; eor == XOR only check collision if signs match 
+                    bne      donezo 
+; work around for Abs_b odd behaviour with $80
                     lda      shipXpos 
                     cmpa     #$80 
                     bne      no_inc_shipos 
                     inc      shipXpos 
 no_inc_shipos 
-                    lda      shipYpos 
-                    lsla     
-                    ldx      #alleyx_t 
-                    ldb      [a,x] 
-                    subb     shipXpos 
-                    jsr      Abs_b 
+; collision check, write different ones for left and right sides?  
+                    lda      temp2 
+                    cmpa     shipXpos 
+                    bhs      stres 
+                    lda      shipXpos 
+                    ldb      temp2 
+                    sta      bigger 
+                    stb      smaller 
+                    bra      nostres 
+
+stres 
+                    ldb      shipXpos 
+                    lda      temp2 
+                    sta      bigger 
+                    stb      smaller 
+nostres 
+                    suba     smaller 
+                    cmpa     #8 
                     bgt      donezo 
 Xhit                dec      shipcnt                      ; lose one ship 
                     clrb                                  ; set to zero and use to reset alley vars 
