@@ -460,8 +460,103 @@ conf_done
                     lda      conf_box_index 
                     inca     
                     sta      shipspeed                    ; ship verical speed 
+					jsr      game_select
                     rts      
+;********************************************************************************************
+game_select
+                    lda      #10 
+                    sta      temp1 
+                    lda      #$FF 
+                    sta      Vec_Counter_1 
+                    lda      #0 
+                    sta      conf_box_index 
+                    sta      frm10cnt 
+gs_loop 
+                    jsr      Wait_Recal 
+                    jsr      Intensity_5F 
+                    lda      frm10cnt 
+                    bne      gsdoneYcal 
+                    jsr      Joy_Digital 
+                    nop      
+                    lda      Vec_Joy_1_Y 
+                    beq      gsdoneYcal                   ; no Y motion 
+                    bmi      going_down_gs 
+                    lda      conf_box_index 
+                    beq      gsdoneYcal                   ; 0 is highest slot on screen !move 
+                    dec      conf_box_index 
+                    bra      gsdoneYcal 
 
+going_down_gs
+                    lda      conf_box_index 
+                    cmpa     #1                           ; 3 is lowest slot on screen !move 
+                    beq      gsdoneYcal 
+                    inc      conf_box_index 
+gsdoneYcal 
+                    jsr      Read_Btns 
+                    lda      Vec_Button_1_4 
+                    beq      no_pressgs 
+                    jmp      gs_done 
+
+no_pressgs 
+                    RESET0REF  
+                    lda      #110 
+                    ldb      #-81 
+                    ldu      #gamesel_label 
+                    jsr      Print_Str_d 
+                    lda      #90 
+                    ldb      #-62 
+                    ldu      #reggame_text 
+                    jsr      Print_Str_d 
+                    lda      #78 
+                    ldb      #-58 
+                    ldu      #supergame_text 
+                    jsr      Print_Str_d 
+                ;    lda      #66 
+               ;     ldb      #-33 
+               ;     ldu      #slow_text 
+               ;     jsr      Print_Str_d 
+               ;     lda      #54 
+               ;     ldb      #-60 
+               ;     ldu      #vslow_text 
+               ;     jsr      Print_Str_d 
+                    RESET0REF  
+                    lda      conf_box_index 
+                    ldx      #cboxYpos_t 
+                    lda      a,x 
+                    ldb      #-60 
+                    MOVETO_D  
+                    ldx      #Game_Sel_Box_nomode 
+                    DRAW_VLC  
+                    RESET0REF  
+                    lda      #-120 
+                    ldb      #-120 
+                    ldu      #finish_btn4_text 
+                    jsr      Print_Str_d 
+                    lda      #10 
+                    inc      frm10cnt 
+                    cmpa     frm10cnt 
+                    bne      no10cntresetD 
+                    clr      frm10cnt 
+no10cntresetD 
+                    jsr      Dec_3_Counters 
+                    tst      Vec_Counter_1 
+                    bne      gskeepgoing 
+                    dec      temp1 
+                    beq      do_demogs 
+                    lda      #$FF 
+                    sta      Vec_Counter_1 
+gskeepgoing 
+                    bra      gs_loop 
+
+do_demogs             lda      #1 
+                    sta      Demo_Mode 
+                    jmp      restart 
+
+gs_done 
+                    lda      conf_box_index 
+                  ;  inca     
+                    sta      Super_Game                    ; ship verical speed 
+					rts
 ;***************    ********************************************************************** 
 check_highscore_entry: 
                     ldd      #$9411                       ; change refresh rate 
@@ -860,7 +955,7 @@ keepgoinghs
                     bra      _keepshow 
 
 do_demohs 
-                    jsr      credits_thanks   ; remove after testing
+          ;          jsr      credits_thanks   ; remove after testing
                     jsr      Random_3 
                     cmpa     #64 
                     blt      no_thanks 

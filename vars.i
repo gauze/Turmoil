@@ -145,6 +145,7 @@ hstempstr           ds       4
 ;
 enemylvlcnt         ds       1                            ; how many enemies left in this level? 
 ; STATE FLAGS
+Super_Game          ds       1
 Ship_Dead           ds       1 
 Ship_Dead_Anim      ds       1 
 Ship_Dead_Cnt       ds       1 

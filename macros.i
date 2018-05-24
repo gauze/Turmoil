@@ -13,11 +13,11 @@ DRAW_SHIP           macro
                                                           ; suba #8 ; small offset to center in lane horizontally 
                     ldb      shipXpos 
                                                           ;TEST addb #+12 
-                    tst      shipdir                      ; testing for 0|LEFT 1|RIGHT 
-                    beq      _donuthin 
+;                    tst      shipdir                      ; testing for 0|LEFT 1|RIGHT 
+;                    beq      _donuthin 
                                                           ;TEST subb #+24 
                                                           ; bra _donuthin 
-_donuthin 
+;_donuthin 
                     MOVETO_D  
 ; test if we are dead.
                     lda      #127 
@@ -169,29 +169,27 @@ DRAW_ENEMYS         macro
                     RESET0REF  
                     lda      alley0e 
                     lbeq     skip0a 
+break1 
                     ldx      #enemy_t 
-                    lda      alley0e 
                     lsla     
                     ldx      a,x                          ; sets *_D 
                     lda      alley0d 
                     lsla     
                     ldx      a,x                          ; gets *_t 
                     pshs     x                            ; store it 
-                    ldx      #bulletYpos_t 
-                    lda      #0 
-                    lda      a,x                          ; Y 
-                    ldb      alley0x                      ; X 
+                    ldx      #bulletYpos_t                ; also enemy Y table 
+                    lda      ,x                           ; Y enemy 
+                    ldb      alley0x                      ; X enemy 
                     MOVETO_D                              ; PLACE EXTRA CODE VERSION HERE 
 ; *_f  frame count -> index list of frames, see definition in data.i 
                     lda      alley0e 
                     lsla     
                     ldx      #enemyframe_t 
-                    ldx      a,x 
-                    lda      ,x                           ; A = *_f var 
-                    lsla     
+                    lda      [a,x]                        ; A = *_f var 
+                    lsla                                  ; sets enemy type X and which frame a 
                     puls     x                            ; pull X back 
                     ldx      a,x 
-                                                          ; jsr Draw_VL_mode 
+break2 
                     DRAW_VL_MODE  
 skip0a 
 ;################################################################################################
@@ -199,7 +197,6 @@ skip0a
                     lda      alley1e 
                     lbeq     skip1a 
                     ldx      #enemy_t 
-                    lda      alley1e 
                     lsla     
                     ldx      a,x                          ; sets *_D 
                     lda      alley1d 
@@ -207,20 +204,17 @@ skip0a
                     ldx      a,x                          ; gets *_t 
                     pshs     x                            ; store it 
                     ldx      #bulletYpos_t 
-                    lda      #1 
-                    lda      a,x                          ; Y 
+                    lda      1,x                          ; Y 
                     ldb      alley1x                      ; X 
                     MOVETO_D  
 ; *_f  frame count -> index list of frames, see definition in data.i 
                     lda      alley1e 
                     lsla     
                     ldx      #enemyframe_t 
-                    ldx      a,x 
-                    lda      ,x                           ; A = *_f var 
+                    lda      [a,x]                        ; A = *_f var 
                     lsla     
                     puls     x                            ; pull X back 
                     ldx      a,x 
-                                                          ; jsr Draw_VL_mode 
                     DRAW_VL_MODE  
 skip1a 
 ;###########################################################################
@@ -228,7 +222,6 @@ skip1a
                     lda      alley2e 
                     lbeq     skip2a 
                     ldx      #enemy_t 
-                    lda      alley2e 
                     lsla     
                     ldx      a,x                          ; sets *_D 
                     lda      alley2d 
@@ -236,20 +229,17 @@ skip1a
                     ldx      a,x                          ; gets *_t 
                     pshs     x                            ; store it 
                     ldx      #bulletYpos_t 
-                    lda      #2 
-                    lda      a,x                          ; Y 
+                    lda      2,x                          ; Y 
                     ldb      alley2x                      ; X 
-                    MOVETO_D                              ; PLACE EXTRA CODE VERSION HERE 
+                    MOVETO_D  
 ; *_f  frame count -> index list of frames, see definition in data.i 
                     lda      alley2e 
                     lsla     
                     ldx      #enemyframe_t 
-                    ldx      a,x 
-                    lda      ,x                           ; A = *_f var 
+                    lda      [a,x]                        ; A = *_f var 
                     lsla     
                     puls     x                            ; pull X back 
                     ldx      a,x 
-                                                          ; jsr Draw_VL_mode 
                     DRAW_VL_MODE  
 skip2a 
 ;###########################################################################
@@ -257,7 +247,6 @@ skip2a
                     lda      alley3e 
                     lbeq     skip3a 
                     ldx      #enemy_t 
-                    lda      alley3e 
                     lsla     
                     ldx      a,x                          ; sets *_D 
                     lda      alley3d 
@@ -265,20 +254,17 @@ skip2a
                     ldx      a,x                          ; gets *_t 
                     pshs     x                            ; store it 
                     ldx      #bulletYpos_t 
-                    lda      #3 
-                    lda      a,x                          ; Y 
+                    lda      3,x                          ; Y 
                     ldb      alley3x                      ; X 
-                    MOVETO_D                              ; PLACE EXTRA CODE VERSION HERE 
+                    MOVETO_D  
 ; *_f  frame count -> index list of frames, see definition in data.i 
                     lda      alley3e 
                     lsla     
                     ldx      #enemyframe_t 
-                    ldx      a,x 
-                    lda      ,x                           ; A = *_f var 
+                    lda      [a,x]                        ; A = *_f var 
                     lsla     
                     puls     x                            ; pull X back 
                     ldx      a,x 
-                                                          ; jsr Draw_VL_mode 
                     DRAW_VL_MODE  
 skip3a 
 ;###########################################################################
@@ -286,7 +272,6 @@ skip3a
                     lda      alley4e 
                     lbeq     skip4a 
                     ldx      #enemy_t 
-                    lda      alley4e 
                     lsla     
                     ldx      a,x                          ; sets *_D 
                     lda      alley4d 
@@ -294,20 +279,17 @@ skip3a
                     ldx      a,x                          ; gets *_t 
                     pshs     x                            ; store it 
                     ldx      #bulletYpos_t 
-                    lda      #4 
-                    lda      a,x                          ; Y 
+                    lda      4,x                          ; Y 
                     ldb      alley4x                      ; X 
-                    MOVETO_D                              ; PLACE EXTRA CODE VERSION HERE 
+                    MOVETO_D  
 ; *_f  frame count -> index list of frames, see definition in data.i 
                     lda      alley4e 
                     lsla     
                     ldx      #enemyframe_t 
-                    ldx      a,x 
-                    lda      ,x                           ; A = *_f var 
+                    lda      [a,x]                        ; A = *_f var 
                     lsla     
                     puls     x                            ; pull X back 
                     ldx      a,x 
-                                                          ; jsr Draw_VL_mode 
                     DRAW_VL_MODE  
 skip4a 
 ;###########################################################################
@@ -315,7 +297,6 @@ skip4a
                     lda      alley5e 
                     lbeq     skip5a 
                     ldx      #enemy_t 
-                    lda      alley5e 
                     lsla     
                     ldx      a,x                          ; sets *_D 
                     lda      alley5d 
@@ -323,20 +304,17 @@ skip4a
                     ldx      a,x                          ; gets *_t 
                     pshs     x                            ; store it 
                     ldx      #bulletYpos_t 
-                    lda      #5 
-                    lda      a,x                          ; Y 
+                    lda      5,x                          ; Y 
                     ldb      alley5x                      ; X 
-                    MOVETO_D                              ; PLACE EXTRA CODE VERSION HERE 
+                    MOVETO_D  
 ; *_f  frame count -> index list of frames, see definition in data.i 
                     lda      alley5e 
                     lsla     
                     ldx      #enemyframe_t 
-                    ldx      a,x 
-                    lda      ,x                           ; A = *_f var 
+                    lda      [a,x]                        ; A = *_f var 
                     lsla     
                     puls     x                            ; pull X back 
                     ldx      a,x 
-                                                          ;jsr Draw_VL_mode 
                     DRAW_VL_MODE  
 skip5a 
 ;###########################################################################
@@ -344,7 +322,6 @@ skip5a
                     lda      alley6e 
                     lbeq     skip6a 
                     ldx      #enemy_t 
-                    lda      alley6e 
                     lsla     
                     ldx      a,x                          ; sets *_D 
                     lda      alley6d 
@@ -352,20 +329,17 @@ skip5a
                     ldx      a,x                          ; gets *_t 
                     pshs     x                            ; store it 
                     ldx      #bulletYpos_t 
-                    lda      #6 
-                    lda      a,x                          ; Y 
+                    lda      6,x                          ; Y 
                     ldb      alley6x                      ; X 
-                    MOVETO_D                              ; PLACE EXTRA CODE VERSION HERE 
+                    MOVETO_D  
 ; *_f  frame count -> index list of frames, see definition in data.i 
                     lda      alley6e 
                     lsla     
                     ldx      #enemyframe_t 
-                    ldx      a,x 
-                    lda      ,x                           ; A = *_f var 
+                    lda      [a,x]                        ; A = *_f var 
                     lsla     
                     puls     x                            ; pull X back 
                     ldx      a,x 
-                                                          ; jsr Draw_VL_mode 
                     DRAW_VL_MODE  
 skip6a 
 ;###########################################################################
@@ -891,7 +865,7 @@ subdone6
                     endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 SHIP_Y_COLLISION_DETECT  macro  
-                    lda      Ship_Dead                    ; if SHip_Dead do not do collision routine 
+                    lda      Ship_Dead                    ; if Ship_Dead do not do collision routine 
                     bne      no_hit 
                     lda      In_Alley 
                     bne      no_hit 
@@ -907,7 +881,7 @@ SHIP_Y_COLLISION_DETECT  macro
                                                           ;ldx a,x 
                     ldb      [a,x] 
                     jsr      Abs_b 
-                    cmpb     #15                          ; why is this so high??? TODO 
+                    cmpb     #15                          ; trial and error 
                     bgt      no_hit 
                     dec      shipcnt                      ; lose one ship 
                     clrb     
@@ -933,8 +907,9 @@ no_hit
                     endm     
 ;^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 
 SHIP_X_COLLISION_DETECT  macro  
-                                                          ; ONLY used when inside an alley 
-                    lda      In_Alley 
+                    lda      Ship_Dead                    ; if Ship_Dead do not do collision routine 
+                    lbne     donezo 
+                    lda      In_Alley                     ; ONLY used when inside an alley 
                     lbeq     not_in_alley 
                     lda      shipYpos 
                     lsla     
@@ -969,7 +944,6 @@ ship_moving_right
                     lblt     no_prize_score 
 ; prize score is done like this:  800 == #2048 == 100 0000 0000 BCD value 
 wee_prize_score 
-                                                          ;ldd #2048 
                     ldd      #$800 
                     ldx      #score 
                     jsr      Add_Score_d 
@@ -1015,7 +989,7 @@ can_collide
                     bne      no_inc_shipos 
                     inc      shipXpos 
 no_inc_shipos 
-; collision check, write different ones for left and right sides?  
+; collision check
                     lda      temp2 
                     cmpa     shipXpos 
                     bhs      stres 
@@ -1613,27 +1587,43 @@ bullet6_miss
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 READ_BUTTONS        macro    
                     lda      Ship_Dead 
-                    bne      cant_shoot_while_dead 
+                    lbne     cant_shoot_while_dead 
                     lda      Demo_Mode 
-                    bne      demo_mode_firing 
+                    lbne     demo_mode_firing 
                     lda      In_Alley 
-                    bne      cant_shoot_in_alley 
+                    lbne     cant_shoot_in_alley 
                     jsr      Read_Btns 
 ; don't shoot at Prize or explosion
                     lda      shipYpos 
                     asla     
                     ldx      #alleye_t 
-                                                          ; ldx a,x 
-                                                          ; lda ,x 
                     lda      [a,x] 
                     cmpa     #EXPLOSION 
-                    beq      noshootexplode 
+                    lbeq     noshootexplode 
                     cmpa     #PRIZE 
-                    beq      noshootprize 
+                    lbeq     noshootprize 
 ;
                     lda      Vec_Btn_State 
-                    beq      no_press 
-                                                          ; adding bullet to alley if no other bullet is already there 
+                    lbeq     no_press 
+                    lda      Super_Game 
+                    lbeq     not_super 
+                    lda      Vec_Button_1_1 
+                    lbeq     no_warp 
+warp 
+                    jsr      Random 
+                    anda     #%00000111 
+                    cmpa     #7 
+                    beq      warp 
+                    sta      shipYpos
+					jmp      no_press 
+no_warp 
+                    lda      Vec_Button_1_2 
+                    lbeq     no_smart_bomb 
+                    SMART_BOMB
+					jmp     no_press  
+no_smart_bomb 
+not_super 
+; adding bullet to alley if no other bullet is already there 
 demo_mode_firing 
                     lda      shipYpos 
                     asla     
@@ -1657,12 +1647,12 @@ demo_mode_firing
                     ldx      a,x 
                     ldb      shipdir 
                     beq      negstart 
-                    ldb      #7                           ; trying to line up bullet creation with tip of ships nose 
+                    ldb      #6                           ; trying to line up bullet creation with tip of ships nose 
                     stb      ,x                           ; set start X 
                     bra      newshotdone 
 
 negstart 
-                    ldb      #-7 
+                    ldb      #-6 
                     stb      ,x                           ; set start -X 
 newshotdone 
 no_press 
@@ -2642,4 +2632,105 @@ MLF341:             deca                                  ;Delay a moment
 MLF345:             bitb     <VIA_int_flags               ;Wait for timer 1 
                     beq      MLF345 
 moveto_d_done 
+                    endm     
+;###################################################################################
+SMART_BOMB          macro    
+                    lda      #EXPLOSION 
+                    ldb      alley0e 
+                    beq      no_enemy0 
+                    sta      alley0e 
+                    lda      #1 
+                    sta      alley0sd 
+                    tst      alley0x 
+                    bpl      pos0 
+                    clra     
+pos0 
+                    sta      alley0d 
+                    lda      #2 
+                    sta      alley0s 
+no_enemy0 
+                    lda      #EXPLOSION 
+                    ldb      alley1e 
+                    beq      no_enemy1 
+                    sta      alley1e 
+                    lda      #1 
+                    sta      alley1sd 
+                    tst      alley1x 
+                    bpl      pos1 
+                    clra     
+pos1 
+                    sta      alley1d 
+                    lda      #2 
+                    sta      alley1s 
+no_enemy1 
+                    lda      #EXPLOSION 
+                    ldb      alley2e 
+                    beq      no_enemy2 
+                    sta      alley2e 
+                    lda      #1 
+                    sta      alley2sd 
+                    tst      alley2x 
+                    bpl      pos2 
+                    clra     
+pos2 
+                    sta      alley2d 
+                    lda      #2 
+                    sta      alley2s 
+no_enemy2 
+                    lda      #EXPLOSION 
+                    ldb      alley3e 
+                    beq      no_enemy3 
+                    sta      alley3e 
+                    lda      #1 
+                    sta      alley3sd 
+                    tst      alley3x 
+                    bpl      pos3 
+                    clra     
+pos3 
+                    sta      alley3d 
+                    lda      #2 
+                    sta      alley3s 
+no_enemy3 
+                    lda      #EXPLOSION 
+                    ldb      alley4e 
+                    beq      no_enemy4 
+                    sta      alley4e 
+                    lda      #1 
+                    sta      alley4sd 
+                    tst      alley4x 
+                    bpl      pos4 
+                    clra     
+pos4 
+                    sta      alley4d 
+                    lda      #2 
+                    sta      alley4s 
+no_enemy4 
+                    lda      #EXPLOSION 
+                    ldb      alley5e 
+                    beq      no_enemy5 
+                    sta      alley5e 
+                    lda      #1 
+                    sta      alley5sd 
+                    tst      alley5x 
+                    bpl      pos5 
+                    clra     
+pos5 
+                    sta      alley5d 
+                    lda      #2 
+                    sta      alley5s 
+no_enemy5 
+                    lda      #EXPLOSION 
+                    ldb      alley6e 
+                    beq      no_enemy6 
+                    sta      alley6e 
+                    lda      #1 
+                    sta      alley6sd 
+                    tst      alley6x 
+                    bpl      pos6                         ; a is 1 just store it 
+                    clra                                  ; X is less than 0 so A = 0 (right) 
+pos6 
+                    sta      alley6d 
+                    lda      #2 
+                    sta      alley6s 
+no_enemy6 
                     endm     

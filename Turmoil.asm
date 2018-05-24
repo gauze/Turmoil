@@ -52,7 +52,7 @@
 ;***************************************************************************
 ; here the cartridge program starts off   
 introSplash 
-				;  jsr      credits_thanks
+                                                          ; jsr credits_thanks 
                     lda      #1 
                     sta      Demo_Mode                    ; in Demo_Mode on boot 
                     ldu      #ustacktemp 
@@ -74,8 +74,8 @@ restart
                     sta      Ship_Dead 
                     ldb      #LEFT 
                     stb      shipdir 
-                    ldx      #score
-                    jsr      Clear_Score
+                    ldx      #score 
+                    jsr      Clear_Score 
                     lda      #3                           ; normally 5 FIX 
                     sta      shipcnt 
                     lda      #$5F                         ; for high score input _ under scores _ 
@@ -90,11 +90,9 @@ main:
                     jsr      Wait_Recal 
                     jsr      Do_Sound 
                     READ_JOYSTICK  
-                    lda      #$5F 
-                    INTENSITY_A  
-                                                          ; ldd #$FFFF 
-                    DRAW_LINE_WALLS  
-                                                          ; ldd #$FFFF 
+                    lda      #$3F 
+                    INTENSITY_A                                         
+                    DRAW_LINE_WALLS                                           
                     DRAW_SHIP  
                     READ_BUTTONS  
                     MOVE_BULLETS  
@@ -133,12 +131,13 @@ noprizecntdown
                     jsr      newlevel                     ; and run routine 
 nolevel 
                     CHECK_DEMO                            ; routine to handle button press during demo mode 
-
                     jmp      main                         ; and repeat forever, sorta 
 
 ; must go at bottom or fills up RAM instead of ROM 
                     include  "functions.i"
                     include  "data.i"
                     include  "rasterDraw.asm"
+                ;    include  "ds2431LowLevel.i"
+                 ;   include  "ds2431HighLevel.i"
                                                           ; include "eprom.i" 
 end 
