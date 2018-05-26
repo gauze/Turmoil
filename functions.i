@@ -109,14 +109,18 @@ setuplevel:
                     sta      Tank_f 
                     sta      enemycnt 
                     std      prizecnt 
-                    sta      Is_Prize 
-                                                          ; sta Demo_Mode 
+                    sta      Is_Prize                                                       
                     sta      shipYdir 
                     sta      Ship_Dead 
                     sta      Level_Done 
                     sta      Line_Pat 
-                    inc      Line_Pat                     ; never want this 0 based on how it works on ROL 
-                                                          ; inc Demo_Mode ;TESTING 
+                    inc      Line_Pat                     ; never want this 0 based on how it works on ROL
+					lda      Super_Game
+					beq      not_superg
+					lda      #1
+					sta      smartbombcnt
+not_superg 
+                                                          
                     rts      
 
 newlevel: 

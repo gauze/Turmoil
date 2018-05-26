@@ -11,17 +11,18 @@
 score               ds       7                            ; 7 bytes 
 ;highscore           ds       7                            ; 7 bytes ;use built in instead.
 level               ds       1 
-shipspeed           ds       1 
+shipspeed           ds       1 							  ; vertical speed 
 conf_box_index      ds       1 
 hs_box_Yindex       ds       1 
 hs_box_Xindex       ds       1 
 ;
 ; your ship related variables, X,Y position and direction facing L/R, and number left
 shipdir             ds       1                            ; left or right 
-shipYdir            ds       1                            ; up or down for Demo_Mode 
+shipYdir            ds       1                            ; up or down for Demo_Mode only
 shipYpos            ds       2 
 shipXpos            ds       2 
 shipcnt             ds       1                            ; 
+smartbombcnt        ds       1                            ; only in Super_Game
 ; limits 
 enemycnt            ds       1 
 bulletcnt           ds       1                            ; 
@@ -58,7 +59,7 @@ alley3e             ds       1
 alley4e             ds       1 
 alley5e             ds       1 
 alley6e             ds       1 
-alley0d             ds       1                            ; which way is the monster moving? 
+alley0d             ds       1                            ; which way is the monster moving? (Direction)
 alley1d             ds       1 
 alley2d             ds       1 
 alley3d             ds       1 
@@ -118,7 +119,7 @@ frm2cnt             ds       1
 fmt1cnt             ds       1 
 fmt0cnt             ds       1 
 ; temporary storage
-temp                ds       2                            ; generic 2 byte temp 
+temp                ds       2                            ; generic 2 byte temps 
 temp1               ds       2 
 temp2               ds       2 
 temp3               ds       2 
@@ -181,9 +182,4 @@ PRIZE               =        5
 CANNONBALL          =        7 
 ; U STACK for saving registers.
 ustacktemp          equ      $CBD0                        ; few down from default S stack so it doesn't get overwritten 
-; test
-                    struct   DICKFOR 
-                    ds       length,2 
-                    ds       girth,2 
-                    ds       smell,1 
-                    end struct 
+

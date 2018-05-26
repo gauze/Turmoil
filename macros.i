@@ -53,13 +53,13 @@ scale_done
 change_dir 
                     clr      Ship_Dead_Anim 
                     clr      Ship_Dead_Cnt                ; don't let it go minus. UNSIGNED 
+                    CHECK_GAMEOVER  
 shitballs 
                     ldx      #ShipL_nomode 
                     ldb      shipdir                      ; testing for 0|LEFT 1|RIGHT 
                     beq      _donuthin1 
                     ldx      #ShipR_nomode 
                                                           ; bra _donuthin1 
-                    CHECK_GAMEOVER  
 _donuthin1 
                     DRAW_VLC                              ; jsr Draw_VLc ;_mode 
                     endm     
@@ -915,12 +915,15 @@ SHIP_X_COLLISION_DETECT  macro
                     lsla     
                     ldx      #alleye_t 
                     lda      [a,x] 
-                    cmpa     #CANNONBALL 
-                    beq      can_collide 
-                    cmpa     #GHOST 
-                    beq      can_collide 
-;                    cmpa     #PRIZE 
-;                    bne      not_in_alley                 ; how are we even in the alley?!??!?! 
+;                    cmpa     #CANNONBALL 
+;                    beq      can_collide 
+;                    cmpa     #GHOST 
+;                    beq      can_collide 
+                    cmpa     #PRIZE 
+					beq      prize_test
+					tsta								; testing A to see if there is anything in the alley
+                    bne      can_collide                 
+prize_test
                     lda      shipYpos 
                     lsla     
                     ldx      #alleyd_t 
@@ -1590,9 +1593,35 @@ READ_BUTTONS        macro
                     lbne     cant_shoot_while_dead 
                     lda      Demo_Mode 
                     lbne     demo_mode_firing 
-                    lda      In_Alley 
-                    lbne     cant_shoot_in_alley 
                     jsr      Read_Btns 
+                    lda      Vec_Btn_State 
+                    lbeq     no_press 
+                    lda      Super_Game 
+                    lbeq     not_super 
+                    lda      Vec_Button_1_1 
+                    lbeq     no_warp 
+warp 
+                    lda      In_Alley 
+                    lbne     cant_warp_in_alley 
+                    jsr      Random 
+                    anda     #%00000111 
+                    cmpa     #7 
+                    beq      warp 
+                    sta      shipYpos 
+                    jmp      no_press 
+cant_warp_in_alley
+no_warp 
+                    lda      smartbombcnt 
+                    lbeq     no_smart_bomb 
+                    lda      Vec_Button_1_2 
+                    lbeq     no_smart_bomb 
+                    SMART_BOMB  
+                    jmp      no_press 
+
+no_smart_bomb 
+not_super 
+; adding bullet to alley if no other bullet is already there 
+demo_mode_firing 
 ; don't shoot at Prize or explosion
                     lda      shipYpos 
                     asla     
@@ -1602,29 +1631,8 @@ READ_BUTTONS        macro
                     lbeq     noshootexplode 
                     cmpa     #PRIZE 
                     lbeq     noshootprize 
-;
-                    lda      Vec_Btn_State 
-                    lbeq     no_press 
-                    lda      Super_Game 
-                    lbeq     not_super 
-                    lda      Vec_Button_1_1 
-                    lbeq     no_warp 
-warp 
-                    jsr      Random 
-                    anda     #%00000111 
-                    cmpa     #7 
-                    beq      warp 
-                    sta      shipYpos
-					jmp      no_press 
-no_warp 
-                    lda      Vec_Button_1_2 
-                    lbeq     no_smart_bomb 
-                    SMART_BOMB
-					jmp     no_press  
-no_smart_bomb 
-not_super 
-; adding bullet to alley if no other bullet is already there 
-demo_mode_firing 
+                    lda      In_Alley 
+                    lbne     cant_shoot_in_alley 
                     lda      shipYpos 
                     asla     
                     ldx      #bullete_t 
@@ -2733,4 +2741,5 @@ pos6
                     lda      #2 
                     sta      alley6s 
 no_enemy6 
+                    clr      smartbombcnt 
                     endm     
