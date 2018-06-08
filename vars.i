@@ -11,18 +11,18 @@
 score               ds       7                            ; 7 bytes 
 ;highscore           ds       7                            ; 7 bytes ;use built in instead.
 level               ds       1 
-shipspeed           ds       1 							  ; vertical speed 
+shipspeed           ds       1                            ; vertical speed 
 conf_box_index      ds       1 
 hs_box_Yindex       ds       1 
 hs_box_Xindex       ds       1 
 ;
 ; your ship related variables, X,Y position and direction facing L/R, and number left
 shipdir             ds       1                            ; left or right 
-shipYdir            ds       1                            ; up or down for Demo_Mode only
+shipYdir            ds       1                            ; up or down for Demo_Mode only 
 shipYpos            ds       2 
 shipXpos            ds       2 
 shipcnt             ds       1                            ; 
-smartbombcnt        ds       1                            ; only in Super_Game
+smartbombcnt        ds       1                            ; only in Super_Game 
 ; limits 
 enemycnt            ds       1 
 bulletcnt           ds       1                            ; 
@@ -59,7 +59,7 @@ alley3e             ds       1
 alley4e             ds       1 
 alley5e             ds       1 
 alley6e             ds       1 
-alley0d             ds       1                            ; which way is the monster moving? (Direction)
+alley0d             ds       1                            ; which way is the monster moving? (Direction) 
 alley1d             ds       1 
 alley2d             ds       1 
 alley3d             ds       1 
@@ -131,6 +131,7 @@ spawntemp           ds       1
 ;masktemp            ds       1 
 bulletYtemp         ds       1 
 enemytemp           ds       1 
+; high score entry screen stuff see also top of list for a couple more
 hsentry_index       ds       1 
 hsentry1n           ds       4 
 hsentry1s           ds       7 
@@ -146,32 +147,32 @@ hstempstr           ds       4
 ;
 enemylvlcnt         ds       1                            ; how many enemies left in this level? 
 ; STATE FLAGS
-Super_Game          ds       1
+Super_Game          ds       1 
 Ship_Dead           ds       1 
 Ship_Dead_Anim      ds       1 
-Ship_Dead_Cnt       ds       1 
+Ship_Dead_Cnt       ds       1                            ; used for scale control 
 In_Alley            ds       1                            ; ship is in 
 Is_Prize            ds       1                            ; alley contains "prize" 
-;
+Level_Done          ds       1 
+Demo_Mode           ds       1                            ; arcade selfplay mode. 
+; used during jsr levelsplash
 lvllabelstr         ds       6 
 levelstr            ds       2 
 ;lvlstrterm          ds       1 
-Level_Done          ds       1 
-Demo_Mode           ds       1                            ; arcade selfplay mode. 
 Line_Pat            ds       1                            ; this is for LINE_DRAW_D stuff , 00000000 is nothing 11111111 is line 10101010 is dotted line 
 ustacktempptr       ds       2                            ; for saving location of ustacktemp 
 calibrationValue    ds       1 
 current_eprom_blocksize  ds  1 
 current_eprom_blockadr  ds   1 
-demo_label_cnt      ds       1 
-bigger              ds       1
-smaller             ds       1
+demo_label_cnt      ds       1                            ; for rotating list of info during demo 
+bigger              ds       1 
+smaller             ds       1 
 ;
 ; CONSTANTS place after VARIABLES
-;ALLEYWIDTH          =        17 
+;ALLEYWIDTH          =        17                           ; moved to macros.i
 LEFT                =        0 
 RIGHT               =        1 
-SCORE               =        10                           ; score 10 times sped/level something 
+SCORE               =        10                           ; score 10 times speed/level something 
 MOVEAMOUNT          =        8                            ; how many 'pixels per frame' TODO/FIX/something 
 ;
 GHOST               =        8                            ; various values for quick testing. positions are 
@@ -182,4 +183,3 @@ PRIZE               =        5
 CANNONBALL          =        7 
 ; U STACK for saving registers.
 ustacktemp          equ      $CBD0                        ; few down from default S stack so it doesn't get overwritten 
-

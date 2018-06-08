@@ -240,7 +240,8 @@ score_format_done
                     DRAW_VLC  
                     lda      #10 
                     ldb      #-5 
-                    MOVETO_D  
+                    MOVETO_D;_BEFORE
+				;	MOVETO_D_AFTER  
                     ldx      #Level_Box2_nomode 
                     DRAW_VLC  
                     inc      stallcnt 

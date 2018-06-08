@@ -920,10 +920,10 @@ SHIP_X_COLLISION_DETECT  macro
 ;                    cmpa     #GHOST 
 ;                    beq      can_collide 
                     cmpa     #PRIZE 
-					beq      prize_test
-					tsta								; testing A to see if there is anything in the alley
-                    bne      can_collide                 
-prize_test
+                    beq      prize_test 
+                    tsta                                  ; testing A to see if there is anything in the alley 
+                    bne      can_collide 
+prize_test 
                     lda      shipYpos 
                     lsla     
                     ldx      #alleyd_t 
@@ -1609,7 +1609,8 @@ warp
                     beq      warp 
                     sta      shipYpos 
                     jmp      no_press 
-cant_warp_in_alley
+
+cant_warp_in_alley 
 no_warp 
                     lda      smartbombcnt 
                     lbeq     no_smart_bomb 
@@ -2606,8 +2607,7 @@ no_conf_press
 no_check_needed 
                     endm     
 ;&&&&&&&&&&&&&&&^^^^^^^^^^^^^^^^^^^^^^^^^&&&&&&&&&&&&&&&&&&&&&&&&&^^^^^^^^^^^^^^^^^
-MOVETO_D_TEST       macro    
-                    local    MLF33B,MLF33D,MLF341,MLF345,moveto_d_done 
+MOVETO_D_BEFORE     macro    
                     sta      <VIA_port_a                  ;Store Y in D/A register 
                     clr      <VIA_port_b                  ;Enable mux 
                     pshs     b,a                          ;Save D-register on stack 
@@ -2629,17 +2629,21 @@ MOVETO_D_TEST       macro
                     lda      #$08 
                     bra      MLF33D 
 
-MLF33B:             lda      #$04                         ;Wait for timer 1 
+                    endm     
+; ^%^%$^%@*&^@(  
+MOVETO_D_AFTER      macro    
+                    local    AMLF33B,AMLF33D,AMLF341,AMLF345,moveto_d_a_done 
+AMLF33B:            lda      #$04                         ;Wait for timer 1 
 ; could insert some routines in here before checking countdown?
-MLF33D:             bitb     <VIA_int_flags 
+AMLF33D:            bitb     <VIA_int_flags 
                     beq      MLF33D 
-MLF341:             deca                                  ;Delay a moment 
+AMLF341:            deca                                  ;Delay a moment 
                     bne      MLF341 
                     bra      moveto_d_done 
 
-MLF345:             bitb     <VIA_int_flags               ;Wait for timer 1 
+AMLF345:            bitb     <VIA_int_flags               ;Wait for timer 1 
                     beq      MLF345 
-moveto_d_done 
+moveto_d_a_done 
                     endm     
 ;###################################################################################
 SMART_BOMB          macro    
