@@ -22,7 +22,6 @@ DS2431_READMEM  equ     $f0     ; As READSP, but copies EEPROM to SP first
 ;DS2430_VALKEY   equ     $a5     ; Validation byte for COPYSP and LOCKAR
 
 
-
 ; DS2431 Timings
 
 DS2431_COPYDUR  equ     $983a   ; $3a98 = 15000 cycles = 10ms (A1: 12.5ms, A2 and later: 10ms)
@@ -85,7 +84,7 @@ ds2431load_exit
 ; ds2430_save
 ;
 ; function:
-;       save RAM to DS2430 EEPROM
+;       save RAM to DS2431 EEPROM
 ;
 ; on entry:
 ;       x = address of data to save

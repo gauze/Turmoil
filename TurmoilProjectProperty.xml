@@ -17,7 +17,7 @@
 		<BankMainFiless>
 			<BankMainFiles>Turmoil.asm</BankMainFiles>
 		</BankMainFiless>
-		<Extras>0</Extras>
+		<Extras>65536</Extras>
 		<ProjectPreScriptClass></ProjectPreScriptClass>
 		<ProjectPreScriptName></ProjectPreScriptName>
 		<ProjectPostScriptClass></ProjectPostScriptClass>

@@ -1,31 +1,87 @@
-
 ;
-;   2016 Thomas G. Sontowski:
-;   based on Alex Herbert's ds2430 driver
+;
+; DS1W - Dallas Semiconductor 1-Wire Driver
+;
+;
+; Copyright (c) 2002 Alex Herbert
+;
 ;
 
+; Memory Base Addresses
+
+GAMCRT  equ     $0000   ; Cartridge ROM ($0000-$7fff = 32k)
+RAM     equ     $c800   ; Internal RAM  ($c800-$cbff = 1k)
+LASRAM  equ     $c880   ; Free RAM      ($c880-stack)
+PWRUP   equ     $f000   ; Executive ROM ($f000-$ffff = 4k)
+
+
+; PIA Registers
+
+CNTRL   equ     $d000   ; ORB / IRB - Output Register B / Input Register B
+DAC     equ     $d001   ; ORA / IRA - Output Register A / Input Register A
+DCNTRL  equ     $d002   ; DDRB      - Data Direction Register B
+DDAC    equ     $d003   ; DDRA      - Data Direction Register A
+T1LOLC  equ     $d004   ; T1C-L     - Timer 1 Counter/Latch Low byte
+T1HOC   equ     $d005   ; T1C-H     - Timer 1 Counter High byte
+T1LOL   equ     $d006   ; T1L-L     - Timer 1 Latch Low byte
+T1HOL   equ     $d007   ; T1L-H     - Timer 1 Latch High byte
+T2LOLC  equ     $d008   ; T2C-L     - Timer 2 Counter/Latch Low byte
+T2HOC   equ     $d009   ; T2C-H     - Timer 2 Counter High byte
+SHIFT   equ     $d00a   ; SR        - Shift Register
+ACNTRL  equ     $d00b   ; ACR       - Auxiliary Control Register
+PCNTRL  equ     $d00c   ; PCR       - Peripheral Control Register
+IFLAG   equ     $d00d   ; IFR       - Interrupt Flag Register
+IENABL  equ     $d00e   ; IER       - Interrupt Enable Register
+
+
+; Direct Page Macros
+
+DP_RAM  macro
+        lda     #RAM>>8
+        tfr     a,dp
+        direct  RAM
+        endm
+
+DP_IO   macro
+        lda     #CNTRL>>8
+        tfr     a,dp
+        direct  CNTRL
+        endm
 
 
 
-; DS2431 Commands
-
-DS2431_WRITESP  equ     $0f     ; Write bytes to Scratch Pad
-DS2431_COPYSP   equ     $55     ; Copy entire Scratch Pad to EEPROM
-DS2431_READSP   equ     $aa     ; Read bytes from Scratch Pad
-DS2431_READMEM  equ     $f0     ; As READSP, but copies EEPROM to SP first
-
-;DS2430_LOCKAR   equ     $5a     ; Lock Application Register
-;DS2430_READSR   equ     $66     ; Read Status Register
-;DS2430_WRITEAR  equ     $99     ; Write bytes to Application Register
-;DS2430_READAR   equ     $c3     ; Read bytes from Application Register
-
-;DS2430_VALKEY   equ     $a5     ; Validation byte for COPYSP and LOCKAR
+; 1-Wire Timing constants
 
 
+DS1W_RESETDUR   equ     $2a03   ; Reset Pulse duration
+                                ; $032a = 810 cycles = 540us
 
-; DS2431 Timings
+DS1W_PRESDUR    equ     $d002   ; Presence Pulse duration
+                                ; $02d0 = 720 cycles = 480us
 
-DS2431_COPYDUR  equ     $983a   ; $3a98 = 15000 cycles = 10ms (A1: 12.5ms, A2 and later: 10ms)
+DS1W_TSLOTDUR   equ     $78     ; Time Slot duration
+                                ; $78 = 120cycles = 80us
+
+
+; Note:
+;
+; For reliability DS1W_RESETDUR and DS1W_TSLOTDUR are set above the
+; minimums specified by the datasheet. To improve performance, values
+; closer to the specified minimums may be used.
+;
+; DS1W_RESETDUR minimum = 480us
+; DS1W_TSLOTDUR minimum = 60us
+
+
+
+
+; 1-Wire ROM commands
+
+DS1W_READROM    equ     $33
+DS1W_SKIPROM    equ     $cc
+
+DS1W_MATCHROM   equ     $55
+DS1W_SEARCHROM  equ     $f0
 
 
 
@@ -34,192 +90,233 @@ DS2431_COPYDUR  equ     $983a   ; $3a98 = 15000 cycles = 10ms (A1: 12.5ms, A2 an
 
         code
 
+        direct  CNTRL
 
 
-; ds2431_load
+
+; ds1w_open
 ;
 ; function:
-;       load DS2431 EEPROM to RAM
+;       Prepares Vectrex I/O hardware (6522) for 1-Wire communication.
 ;
 ; on entry:
-;       x = load address
+;       dp = $d0
 ;
 ; on exit:
-;       a = 0 if no error,
-;           non-zero if error
+;       d  = undefined
 
-ds2431_load
-        lda     #EEPROM_STORESIZE ; number of bytes to save (loop counter)
-        pshs    d,x             ; stack used registers
 
- DP_IO
-
-        jsr     ds1w_open       ; open 1-wire port
-
-        jsr     ds1w_reset      ; reset device
-        bmi     ds2431load_exit ; exit if no device present
-
-        lda     #DS1W_SKIPROM   ; no need to access rom, non-overdrive version
-        jsr     ds1w_txbyte     ; send command
-
-        lda     #DS2431_READMEM ; read memory
-        jsr     ds1w_txbyte     ; send command
-
-        clra                    ; address of first byte to load
-        jsr     ds1w_txbyte     ; send address
-        clra                    ; address of first byte to load
-        jsr     ds1w_txbyte     ; send address
-
-ds2431load_loop
-        jsr     ds1w_rxbyte     ; read byte from scratch pad
-        sta     ,x+             ; save to ram
-        dec     ,s              ; decrement loop counter
-        bne     ds2431load_loop ; until all bytes are read
-
-ds2431load_exit
-        jsr     ds1w_close      ; close port
-        puls    d,x,pc          ; restore registers from stack and return
+ds1w_open
+        ldd     #$8118
+        sta     CNTRL           ; make sure PB7 is set, PB6 is cleared
+        stb     ACNTRL          ; Disable T1 output on PB7 (RAMP)
+        rts
 
 
 
-; ds2430_save
+
+; ds1w_close
 ;
 ; function:
-;       save RAM to DS2430 EEPROM
+;       Restores Vectrex I/O hardware (6522) defaults.
 ;
 ; on entry:
-;       x = address of data to save
-; 
+;       dp = $d0
+;
 ; on exit:
-;       a = 0 if no error,
-;           non-zero if error
-ds2431_save 
-        ldd     #EEPROM_STORESIZE*256    ; number of bytes to save (loop counter)
-ds2431_save_all
-        pshs    d,x             ; stack used registers
+;       b  = undefined
 
-        jsr     ds1w_open       ; open 1-wire port
 
-ds2431_scratchpadloop
-        jsr     ds1w_reset      ; reset device
-        bmi     dssave_exit     ; exit if no device present
+ds1w_close
+        ldb     #$98
+        stb     ACNTRL          ; Enable T1 output on PB7 (RAMP)
+        rts
 
-        lda     #DS1W_SKIPROM   ; no need to access rom
-        jsr     ds1w_txbyte     ; send command
 
-        lda     #DS2431_WRITESP ; write bytes to scratch pad
-        jsr     ds1w_txbyte     ; send command
 
-        lda     1,s             ; address
-        jsr     ds1w_txbyte     ; send address
-        clra
-        jsr     ds1w_txbyte
 
-dssave_loop
-        lda     ,x+             ; get byte from ram
-        jsr     ds1w_txbyte     ; send byte
-        dec     ,s              ; decrement loop counter
-        lda     ,s
-        bita    #$7
-        bne     dssave_loop     ; until 8 bytes are sent
+; ds1w_reset
+;
+; function:
+;       Reset 1-Wire device(s), and detect if device is present.
+;
+; on entry:
+;       dp = $d0
+;
+; on exit:
+;       a  = 0 if device is present, -1 if not.
+;       b  = undefined
+;       cc = z=1 and n=0 if device present,
+;            z=0 and n=1 if device not present.
 
-        jsr     ds1w_reset      ; reset device
 
-        lda     #DS1W_SKIPROM   ; no need to access rom
-        jsr     ds1w_txbyte     ; send command
+ds1w_reset
+        ldd     #DS1W_RESETDUR  ; reset pulse duration
+        std     T1LOLC          ; start timer
 
-        lda     #DS2431_READSP
-        jsr     ds1w_txbyte     ; send command
+        ; generate reset pulse
 
-        ; read the authorization code
-        jsr     ds1w_rxbyte     ; read byte from scratch pad
-        sta     -6,s            ; TA1
-        jsr     ds1w_rxbyte     ; read byte from scratch pad
-        sta     -5,s            ; TA2
-        jsr     ds1w_rxbyte     ; read byte from scratch pad
-        sta     -4,s            ; E/S
+        lda     #$df
+        sta     DCNTRL          ; PB6 direction = output
 
-        jsr     ds1w_reset      ; reset device
+        ldb     #$40
+dsreset_loop1
+        bitb    IFLAG
+        beq     dsreset_loop1   ; wait for timer
 
-        lda     #DS1W_SKIPROM   ; no need to access rom
-        jsr     ds1w_txbyte     ; send command
+        lda     #$9f
+        sta     DCNTRL          ; PB6 direction = input
 
-        lda     #DS2431_COPYSP  ; copy scratch pad to eeprom
-        jsr     ds1w_txbyte     ; send command
+        ; check for presence pulse
 
-        lda     -6,s
-        jsr     ds1w_txbyte     ; send validation
-        lda     -5,s
-        jsr     ds1w_txbyte     ; send validation
-        lda     -4,s
-        jsr     ds1w_txbyte     ; send validation
+        bitb    CNTRL           ; test PB6
+        beq     ds1w_notpresent ; PB6 was low too early (emulator?)
 
-        ldd     #DS2431_COPYDUR ; eeprom write (scratch pad copy) duration
+        ldd     #DS1W_PRESDUR   ; presence pulse detect duration
         std     T1LOLC          ; start timer
 
         ldb     #$40
-dssave_loop2
+dsreset_loop2
+        bitb    CNTRL           ; test PB6
+        beq     dsreset_loop3
+        bitb    IFLAG           ; timeout?
+        beq     dsreset_loop2
+        bra     ds1w_notpresent ; PB6 didn't go low (no device attached?)
+
+dsreset_loop3
         bitb    IFLAG
-        beq     dssave_loop2    ; wait for timer
-        tst     ,s
-        beq     dssave_exit
-        lda     1,s
-        adda    #8
-        sta     1,s
-        bra     ds2431_scratchpadloop
+        beq     dsreset_loop3   ; wait for timer
 
-dssave_exit
-        jsr     ds1w_close      ; close port
-        puls    d,x,pc          ; restore registers from stack and return
+        bitb    CNTRL
+        beq     ds1w_notpresent ; PB6 stayed low too long (fault?)
 
-        direct  -1
+ds1w_present
+        lda     #DS1W_TSLOTDUR  ; time slot duration
+        sta     T1LOLC          ; load timer latch
+
+        clra                    ; return "no error"
+        rts
+
+ds1w_notpresent
+        lda     #-1             ; return "device not present"
+        rts
 
 
-; ds2431_verify
+
+
+; ds1w_txbyte
 ;
 ; function:
-;       compare DS2431 EEPROM to RAM
+;       Transmit byte to 1-Wire device.
 ;
 ; on entry:
-;       x = data address
+;       a  = byte to send
+;       dp = $d0
 ;
 ; on exit:
-;       a = 0 if same,
-;           non-zero if different
+;       d  = undefined
 
 
-ds2431_verify
-        lda     #EEPROM_STORESIZE ; number of bytes to verify (loop counter)
-        pshs    d,x             ; stack used registers
+ds1w_txbyte
+        ldb     #$08            ; bits in byte
+        stb     -1,sp           ; put loop counter 'above' stack
 
-        jsr     ds1w_open       ; open 1-wire port
+ds1w_txbits
+        lsra                    ; shift data into carry
+        bcs     ds1w_txbit1
 
-        jsr     ds1w_reset      ; reset device
-        bmi     dsverify_exit   ; exit if no device present
+ds1w_txbit0
+        clr     T1HOC           ; start timer
 
-        lda     #DS1W_SKIPROM   ; no need to access rom
-        jsr     ds1w_txbyte     ; send command
+        ; long pulse low  ~~\________/~~
 
-        lda     #DS2431_READMEM ; copy eeprom to scratch pad
-        jsr     ds1w_txbyte     ; send command
+        ldb     #$df
+        stb     DCNTRL          ; PB6 direction = output
 
-        clra                    ; address of first byte to verify
-        jsr     ds1w_txbyte     ; send address
-        clra                    ; address of first byte to verify
-        jsr     ds1w_txbyte     ; send address
+        ldb     #$40
+dstx0_loop
+        bitb    IFLAG
+        beq     dstx0_loop      ; wait for end of time slot
 
-dsverify_loop
-        jsr     ds1w_rxbyte     ; read byte from scratch pad
-        cmpa    ,x+             ; compare to ram
-        bne     dsverify_exit   ; exit if not same
-        dec     ,s              ; decrement loop counter
-        bne     dsverify_loop   ; until all bytes are read
+        ldb     #$9f
+        stb     DCNTRL          ; PB6 direction = input
 
-dsverify_exit
-        jsr     ds1w_close      ; close port
-        puls    d,x,pc          ; restore registers from stack and return
+        dec     -1,sp
+        bne     ds1w_txbits
+        rts
 
-;        direct  -1
+ds1w_txbit1
+        clr     T1HOC           ; start timer
+
+        ; short pulse low  ~~\_/~~~~~~~~~
+
+        ldb     #$df
+        stb     DCNTRL          ; PB6 direction = output
+
+        ldb     #$9f
+        stb     DCNTRL          ; PB6 direction = input
+
+        ldb     #$40
+dstx1_loop
+        bitb    IFLAG
+        beq     dstx1_loop      ; wait for end of time slot
+
+        dec     -1,sp
+        bne     ds1w_txbits
+        rts
+
+
+
+
+; ds1w_rxbyte
+;
+; function:
+;       Receive byte from 1-Wire device.
+;
+; on entry:
+;       dp = $d0
+;
+; on exit:
+;       a  = received byte
+;       b  = undefined
+
+
+ds1w_rxbyte
+        ldb     #$08            ; bits in byte
+        stb     -1,sp           ; put loop counter 'above' stack
+
+ds1w_rxbits
+        clr     T1HOC           ; start timer
+
+        ; short pulse low  ~~\_xxxxxx~~~~
+
+        ldb     #$df
+        stb     DCNTRL          ; PB6 direction = output
+
+        ldb     #$9f
+        stb     DCNTRL          ; PB6 direction = input
+
+        ; read response
+
+        nop                     ; timing
+
+        ldb     CNTRL           ; read PB
+        lslb                    ; shift PB6...
+        lslb                    ; ...into carry...
+        rora                    ; ...and rotate into result byte
+
+        ldb     #$40
+dsrx_loop
+        bitb    IFLAG
+        beq     dsrx_loop       ; wait for end of time slot
+
+        dec     -1,sp
+        bne     ds1w_rxbits
+        rts
+
+
+
+        direct  -1
 
 
 

@@ -156,24 +156,39 @@ Is_Prize            ds       1                            ; alley contains "priz
 Level_Done          ds       1 
 Demo_Mode           ds       1                            ; arcade selfplay mode. 
 ; used during jsr levelsplash
-lvllabelstr         ds       6 
-levelstr            ds       2 
+lvllabelstr         ds       6 							  ; "LEVEL "
+levelstr            ds       2 							  ; 1-2 digits (1-99) or infinity sign ∞
 ;lvlstrterm          ds       1 
 Line_Pat            ds       1                            ; this is for LINE_DRAW_D stuff , 00000000 is nothing 11111111 is line 10101010 is dotted line 
 ustacktempptr       ds       2                            ; for saving location of ustacktemp 
-calibrationValue    ds       1 
-current_eprom_blocksize  ds  1 
-current_eprom_blockadr  ds   1 
-demo_label_cnt      ds       1                            ; for rotating list of info during demo 
-bigger              ds       1 
-smaller             ds       1 
+;calibrationValue    ds       1 
+demo_label_cnt      ds       1                            ; for rotating list of info during Demo_Mode
+bigger              ds       1 							  ; used in X collision math
+smaller             ds       1 							  ; used in X collision math
+; DS2431+ EEPROM stuff
+EEPROM_CHECKSUM equ     $69             ; any value other than $00 or $e0
+EEPROM_STORESIZE  equ     128
+; Variables 
+eeprom_buffer   ; everything
+eeprom_buffer0   ds      32 
+eeprom_buffer1   ds      32              
+eeprom_buffer2   ds      32            
+eeprom_buffer3   ds      32             
+eeprom_buffer4   ds      32   
+;          
+eeprom_buffer5   ds      32             
+eeprom_buffer6   ds      32 
+eeprom_buffer7   ds      32 
+eeprom_buffer8   ds      32 
+eeprom_buffer9   ds      32 
+
 ;
 ; CONSTANTS place after VARIABLES
-;ALLEYWIDTH          =        17                           ; moved to macros.i
+;ALLEYWIDTH          =        17                           ; moved to macros.i near where it's used for quick access
 LEFT                =        0 
 RIGHT               =        1 
 SCORE               =        10                           ; score 10 times speed/level something 
-MOVEAMOUNT          =        8                            ; how many 'pixels per frame' TODO/FIX/something 
+MOVEAMOUNT          =        8                            ; how many 'pixels per frame'
 ;
 GHOST               =        8                            ; various values for quick testing. positions are 
 TANK                =        6                            ; from Enemy_t table 

@@ -59,6 +59,8 @@ introSplash
                     stu      ustacktempptr                ; only do this once 
                     jsr      setup                        ; remove when done testing 
                     jsr      fill_hs_tbl                  ; filling from ROM eventually pull from EPROM 
+					jsr      eeprom_load
+				    jsr      eeprom_save
                     jsr      titleScreen 
                     jsr      joystick_config              ; move else were? 
 restart 
@@ -91,8 +93,8 @@ main:
                     jsr      Do_Sound 
                     READ_JOYSTICK  
                     lda      #$3F 
-                    INTENSITY_A                                         
-                    DRAW_LINE_WALLS                                           
+                    INTENSITY_A  
+                    DRAW_LINE_WALLS  
                     DRAW_SHIP  
                     READ_BUTTONS  
                     MOVE_BULLETS  
@@ -137,7 +139,7 @@ nolevel
                     include  "functions.i"
                     include  "data.i"
                     include  "rasterDraw.asm"
-                ;    include  "ds2431LowLevel.i"
-                 ;   include  "ds2431HighLevel.i"
-                                                          ; include "eprom.i" 
+                    include  "ds2431LowLevel.i"
+                    include  "ds2431HighLevel.i"
+                    include "eprom.i" 
 end 
