@@ -1622,8 +1622,10 @@ no_warp
 no_smart_bomb 
 not_super 
 ; adding bullet to alley if no other bullet is already there 
-demo_mode_firing 
+demo_mode_firing 		
 ; don't shoot at Prize or explosion
+				  lda      #10
+				  sta      sfxC3ID			; adding shot noise flag
                     lda      shipYpos 
                     asla     
                     ldx      #alleye_t 
@@ -2746,4 +2748,10 @@ pos6
                     sta      alley6s 
 no_enemy6 
                     clr      smartbombcnt 
+                    endm     
+;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+CHECK_SFX           macro    
+                    jsr      Do_Sound_FX_C1 
+                    jsr      Do_Sound_FX_C2 
+                    jsr      Do_Sound_FX_C3 
                     endm     

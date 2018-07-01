@@ -59,8 +59,8 @@ introSplash
                     stu      ustacktempptr                ; only do this once 
                     jsr      setup                        ; remove when done testing 
                     jsr      fill_hs_tbl                  ; filling from ROM eventually pull from EPROM 
-					jsr      eeprom_load
-				    jsr      eeprom_save
+                    jsr      eeprom_load 
+                    jsr      eeprom_save 
                     jsr      titleScreen 
                     jsr      joystick_config              ; move else were? 
 restart 
@@ -68,7 +68,6 @@ restart
                     std      Vec_Rfrsh                    ; make sure we are at 50hz 
                     jsr      setup 
                     jsr      levelsplash 
-;start 
                     lda      #0 
                     sta      shipYpos 
                     sta      shipXpos 
@@ -86,11 +85,12 @@ restart
                     sta      hstempstr+2 
                     lda      #$80                         ; EOL 
                     sta      hstempstr+3 
-                    clr      demo_label_cnt 
+                    clr      demo_label_cnt
+                    jsr      SfxInit						; sound FS init 
 ;----------------------------------------------------------------------------
 main: 
                     jsr      Wait_Recal 
-                    jsr      Do_Sound 
+               ;     jsr      Do_Sound 
                     READ_JOYSTICK  
                     lda      #$3F 
                     INTENSITY_A  
@@ -133,13 +133,15 @@ noprizecntdown
                     jsr      newlevel                     ; and run routine 
 nolevel 
                     CHECK_DEMO                            ; routine to handle button press during demo mode 
+                    CHECK_SFX  
                     jmp      main                         ; and repeat forever, sorta 
 
 ; must go at bottom or fills up RAM instead of ROM 
                     include  "functions.i"
                     include  "data.i"
+                    include  "libsoundraw.i"
                     include  "rasterDraw.asm"
                     include  "ds2431LowLevel.i"
                     include  "ds2431HighLevel.i"
-                    include "eprom.i" 
+                    include  "eprom.i" 
 end 

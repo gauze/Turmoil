@@ -156,31 +156,42 @@ Is_Prize            ds       1                            ; alley contains "priz
 Level_Done          ds       1 
 Demo_Mode           ds       1                            ; arcade selfplay mode. 
 ; used during jsr levelsplash
-lvllabelstr         ds       6 							  ; "LEVEL "
-levelstr            ds       2 							  ; 1-2 digits (1-99) or infinity sign ∞
+lvllabelstr         ds       6                            ; "LEVEL " 
+levelstr            ds       2                            ; 1-2 digits (1-99) or infinity sign ∞ 
 ;lvlstrterm          ds       1 
 Line_Pat            ds       1                            ; this is for LINE_DRAW_D stuff , 00000000 is nothing 11111111 is line 10101010 is dotted line 
 ustacktempptr       ds       2                            ; for saving location of ustacktemp 
 ;calibrationValue    ds       1 
-demo_label_cnt      ds       1                            ; for rotating list of info during Demo_Mode
-bigger              ds       1 							  ; used in X collision math
-smaller             ds       1 							  ; used in X collision math
+demo_label_cnt      ds       1                            ; for rotating list of info during Demo_Mode 
+bigger              ds       1                            ; used in X collision math 
+smaller             ds       1                            ; used in X collision math 
+; SFX variables
+tempW1              ds       2                            ; W? some kind of "pitch" related values 
+tempW2              ds       2 
+tempB5              ds       1 
+sfxC1ID             ds       1                            ; ID is effects ID 
+sfxC2ID             ds       1 
+sfxC3ID             ds       1 
+sfxC1W1             ds       2                            ; W? 
+sfxC2W1             ds       2                            ; C = channel? 
+sfxC3W1             ds       2 
+sfx_FC              ds       2                            ; "LFO" table it's cycled 
 ; DS2431+ EEPROM stuff
-EEPROM_CHECKSUM equ     $69             ; any value other than $00 or $e0
-EEPROM_STORESIZE  equ     128
+EEPROM_CHECKSUM     equ      $69                          ; any value other than $00 or $e0 
+EEPROM_STORESIZE    equ      128 
 ; Variables 
-eeprom_buffer   ; everything
-eeprom_buffer0   ds      32 
-eeprom_buffer1   ds      32              
-eeprom_buffer2   ds      32            
-eeprom_buffer3   ds      32             
-eeprom_buffer4   ds      32   
+eeprom_buffer                                             ;        everything 
+eeprom_buffer0      ds       32 
+eeprom_buffer1      ds       32 
+eeprom_buffer2      ds       32 
+eeprom_buffer3      ds       32 
+eeprom_buffer4      ds       32 
 ;          
-eeprom_buffer5   ds      32             
-eeprom_buffer6   ds      32 
-eeprom_buffer7   ds      32 
-eeprom_buffer8   ds      32 
-eeprom_buffer9   ds      32 
+eeprom_buffer5      ds       32 
+eeprom_buffer6      ds       32 
+eeprom_buffer7      ds       32 
+eeprom_buffer8      ds       32 
+eeprom_buffer9      ds       32 
 
 ;
 ; CONSTANTS place after VARIABLES
@@ -188,7 +199,7 @@ eeprom_buffer9   ds      32
 LEFT                =        0 
 RIGHT               =        1 
 SCORE               =        10                           ; score 10 times speed/level something 
-MOVEAMOUNT          =        8                            ; how many 'pixels per frame'
+MOVEAMOUNT          =        8                            ; how many 'pixels per frame' 
 ;
 GHOST               =        8                            ; various values for quick testing. positions are 
 TANK                =        6                            ; from Enemy_t table 
