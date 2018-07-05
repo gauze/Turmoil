@@ -168,11 +168,11 @@ smaller             ds       1                            ; used in X collision 
 ; SFX variables
 tempW1              ds       2                            ; W? some kind of "pitch" related values 
 tempW2              ds       2 
-tempB5              ds       1 
+;tempB5              ds       1 
 sfxC1ID             ds       1                            ; ID is effects ID 
 sfxC2ID             ds       1 
 sfxC3ID             ds       1 
-sfxC1W1             ds       2                            ; W? 
+sfxC1W1             ds       2                            ; W length of time effect lasts.
 sfxC2W1             ds       2                            ; C = channel? 
 sfxC3W1             ds       2 
 sfx_FC              ds       2                            ; "LFO" table it's cycled 

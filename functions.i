@@ -183,6 +183,7 @@ _no_chk_hs
 ;                    bra      goloop 
 ;################################################################
 levelsplash 
+					jsr      Clear_Sound
                     clr      temp 
                     clr      stallcnt 
                     lda      Demo_Mode 

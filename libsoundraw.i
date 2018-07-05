@@ -1,5 +1,6 @@
 ; vim: ts=4
 ; vim: syntax=asm6809
+                    include  "sound-shot.i"
 ; Sound Registers 
 PSG_Ch1_Freq_Lo     =        0 
 PSG_Ch1_Freq_Hi     =        1 
@@ -12,24 +13,39 @@ PSG_OnOff           =        7
 PSG_Ch1_Vol         =        8 
 PSG_Ch2_Vol         =        9 
 PSG_Ch3_Vol         =        10 
+; bits start on LEFT -> 01234567 
 ;        0 - Voice 1 use Tone Generator 1 On/Off
 ;        1 - Voice 2 use Tone Generator 2 On/Off
 ;        2 - Voice 3 use Tone Generator 3 On/Off
 ;        3 - Voice 1 use Noise Generator On/Off
 ;        4 - Voice 2 use Noise Generator On/Off
 ;        5 - Voice 3 use Noise Generator On/Off
-; MASK aliases for PSG_OnOff register
-Ch1_Tone_On         =        %00000001 
-Ch2_Tone_On         =        %00000010 
-Ch3_Tone_On         =        %00000100 
-Ch1_Noise_On        =        %00001000 
-Ch2_Noise_On        =        %00010000 
-Ch3_Noise_On        =        %00100000 
-Ch_All_Tone_On      =        %00000111 
-Ch_All_Noise_On     =        %00111000 
-Ch_All_Tone_Off     =        %00000000 
-Ch_All_Noise_Off    =        %00000000 
-; for 2 channels OR | together
+;        6-7 - unused
+; MASK aliases for PSG_OnOff register only uses bits 0-5
+; use IMMEDIATE or with OR | operators,opcodes
+Ch1_Tone_On         =        %10000000 
+Ch2_Tone_On         =        %01000000 
+Ch3_Tone_On         =        %00100000 
+Ch1_Noise_On        =        %00010000 
+Ch2_Noise_On        =        %00001000 
+Ch3_Noise_On        =        %00000100 
+; use IMMEDIATE or with AND & operators,opcodes
+Ch1_Tone_Off        =        %01111100 
+Ch2_Tone_Off        =        %10111100 
+Ch3_Tone_Off        =        %11011000 
+Ch1_Noise_Off       =        %11101100 
+Ch2_Noise_Off       =        %11110100 
+Ch3_Noise_Off       =        %11111000 
+; use IMMEDIATE or with OR | operators,opcodes
+Ch_All_Tone_On      =        %11100000 
+Ch_All_Noise_On     =        %00011100 
+; use IMMEDIATE with AND & operators,opcodes 
+Ch_All_Tone_Off     =        %00011100 
+Ch_All_Noise_Off    =        %11100000 
+; use IMMEDIATE  
+Ch_All_Off          =        %00000000 
+; use IMMEDIATE
+Ch_All_On           =        %11111100 
 ; ex: lda   #Ch1_Tone_On | Ch3_Tone_On 
 ; Sound effects 
 ; ALL
@@ -75,13 +91,12 @@ SHOT                =        10
 ;===========
 SfxInit: 
                     ldd      #0 
- 
-                    sta      tempB5 
+;                    sta      tempB5 
                     sta      sfxC1ID 
                     sta      sfxC2ID 
                     sta      sfxC3ID 
                     std      tempW1 
-                    std      tempW2
+                    std      tempW2 
                     std      sfx_FC 
                     std      sfxC1W1 
                     std      sfxC2W1 
@@ -445,17 +460,30 @@ Do_Sound_FX_C3Shot:
                     beq      Do_Sound_FX_C3SoundOff 
                                                           ;set mixer byte 
                     lda      #PSG_OnOff 
-                    ldb      #Ch3_Tone_On | Ch1_Noise_On | Ch2_Noise_On 
+                    ldb      #Ch3_Tone_On                 ;| Ch1_Noise_On | Ch2_Noise_On 
+                                                          ; ldb #Ch_All_On 
                     jsr      Sound_Byte_raw 
-                                                          ;set noise pitch 
-                    lda      #PSG_Noise 
-                    ldb      #31 
+                    ldx      #Shot_Freq 
+                    lda      sfxC3W1 
+                    lsla                                  ; 2 bytes 
+                    ldd      a,x 
+                    std      tempW1 
+                                                          ; ldd #213 
+                    std      tempW1 
+                                                          ;set pitch ch3 
+                    lda      #PSG_Ch3_Freq_Lo 
+                    ldb      tempW1+1 
                     jsr      Sound_Byte_raw 
-                                                          ;set vol ch3 
+                    lda      #PSG_Ch3_Freq_Hi 
+                    ldb      tempW1 
+                    jsr      Sound_Byte_raw 
                     lda      #PSG_Ch3_Vol 
-                    ldb      sfxC3W1 
+                                                          ; ldx #Shot_ADSR 
+                                                          ; ldb sfxC3W1 
+                                                          ; ldb b,x 
+                                                          ; addb #20 
+                    ldb      #13 
                     jsr      Sound_Byte_raw 
-                                                          ;decay 
                     dec      sfxC3W1 
                     rts      
 
@@ -562,12 +590,11 @@ bzSFX_Explosion:
                     std      sfxC3W1 
                     rts      
 
-bzSFX_Shot: 
-                                                          ;shot 
+SFX_Shot: 
                     lda      #SHOT 
                     sta      sfxC3ID 
-                                                          ;set vol 
-                    lda      #15 
+                    ldx      #Shot_Freq                   ; table with Freq sweep data 
+                    lda      0,x                          ; length 
                     sta      sfxC3W1 
                     rts      
 

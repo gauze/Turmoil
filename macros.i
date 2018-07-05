@@ -1622,10 +1622,11 @@ no_warp
 no_smart_bomb 
 not_super 
 ; adding bullet to alley if no other bullet is already there 
+				    jsr      SFX_Shot					; adding SFX change later to macro I guess.
+; don't add shot noise if in demo mode!
 demo_mode_firing 		
 ; don't shoot at Prize or explosion
-				  lda      #10
-				  sta      sfxC3ID			; adding shot noise flag
+
                     lda      shipYpos 
                     asla     
                     ldx      #alleye_t 
@@ -2751,7 +2752,7 @@ no_enemy6
                     endm     
 ;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 CHECK_SFX           macro    
-                    jsr      Do_Sound_FX_C1 
-                    jsr      Do_Sound_FX_C2 
+               ;     jsr      Do_Sound_FX_C1 
+               ;     jsr      Do_Sound_FX_C2 
                     jsr      Do_Sound_FX_C3 
                     endm     
