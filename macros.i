@@ -414,6 +414,11 @@ dotank0                                                   ;        change type f
                     lda      #TANK 
                     sta      alley0e 
 bounce0 
+					lda      alley0e
+					cmpa     #CANNONBALL
+					bne      notcb0
+					jsr      SFX_CB_Bounce
+notcb0
                     lda      temp                         ; pull pre-overflow coords 
                     sta      alley0x                      ; and restore 
                     lda      alley0d 
@@ -486,7 +491,12 @@ alley1of                                                  ;        object hit th
 dotank1                                                   ;        change type from arrow to tank 
                     lda      #TANK 
                     sta      alley1e 
-bounce1 
+bounce1
+					lda      alley1e
+					cmpa     #CANNONBALL
+					bne      notcb1
+					jsr      SFX_CB_Bounce
+notcb1 
                     lda      temp                         ; pull pre-overflow coords 
                     sta      alley1x                      ; and restore 
                     lda      alley1d 
@@ -559,7 +569,12 @@ alley2of                                                  ;        object hit th
 dotank2                                                   ;        change type from arrow to tank 
                     lda      #TANK 
                     sta      alley2e 
-bounce2 
+bounce2
+					lda      alley2e
+					cmpa     #CANNONBALL
+					bne      notcb2
+					jsr      SFX_CB_Bounce
+notcb2 
                     lda      temp                         ; pull pre-overflow coords 
                     sta      alley2x                      ; and restore 
                     lda      alley2d 
@@ -633,6 +648,11 @@ dotank3                                                   ;        change type f
                     lda      #TANK 
                     sta      alley3e 
 bounce3 
+					lda      alley3e
+					cmpa     #CANNONBALL
+					bne      notcb3
+					jsr      SFX_CB_Bounce
+notcb3
                     lda      temp                         ; pull pre-overflow coords 
                     sta      alley3x                      ; and restore 
                     lda      alley3d 
@@ -706,6 +726,11 @@ dotank4                                                   ;        change type f
                     lda      #TANK 
                     sta      alley4e 
 bounce4 
+					lda      alley4e
+					cmpa     #CANNONBALL
+					bne      notcb4
+					jsr      SFX_CB_Bounce
+notcb4
                     lda      temp                         ; pull pre-overflow coords 
                     sta      alley4x                      ; and restore 
                     lda      alley4d 
@@ -779,6 +804,11 @@ dotank5                                                   ;        change type f
                     lda      #TANK 
                     sta      alley5e 
 bounce5 
+					lda      alley5e
+					cmpa     #CANNONBALL
+					bne      notcb5
+					jsr      SFX_CB_Bounce
+notcb5
                     lda      temp                         ; pull pre-overflow coords 
                     sta      alley5x                      ; and restore 
                     lda      alley5d 
@@ -852,6 +882,11 @@ dotank6                                                   ;        change type f
                     lda      #TANK 
                     sta      alley6e 
 bounce6 
+					lda      alley6e
+					cmpa     #CANNONBALL
+					bne      notcb6
+					jsr      SFX_CB_Bounce
+notcb6
                     lda      temp                         ; pull pre-overflow coords 
                     sta      alley6x                      ; and restore 
                     lda      alley6d 
@@ -947,6 +982,7 @@ ship_moving_right
                     lblt     no_prize_score 
 ; prize score is done like this:  800 == #2048 == 100 0000 0000 BCD value 
 wee_prize_score 
+					jsr      SFX_Ghost_Spawn
                     ldd      #$800 
                     ldx      #score 
                     jsr      Add_Score_d 
@@ -1622,11 +1658,10 @@ no_warp
 no_smart_bomb 
 not_super 
 ; adding bullet to alley if no other bullet is already there 
-				    jsr      SFX_Shot					; adding SFX change later to macro I guess.
+                    jsr      SFX_Shot                     ; adding SFX change later to macro I guess. 
 ; don't add shot noise if in demo mode!
-demo_mode_firing 		
+demo_mode_firing 
 ; don't shoot at Prize or explosion
-
                     lda      shipYpos 
                     asla     
                     ldx      #alleye_t 
@@ -2208,7 +2243,8 @@ STALL_CHECK         macro
                     lda      #250 
                     cmpa     stallcnt 
                     bne      no_ghost 
-;
+
+					jsr      SFX_Ghost_Spawn
                     jsr      Random 
                     anda     #%00000001 
                     sta      temp                         ; direction bit 
@@ -2223,6 +2259,7 @@ STALL_CHECK         macro
                     stb      ,x 
                     ldx      #alleyd_t 
                     ldx      a,x 
+
                     ldb      temp 
                     stb      ,x 
                     cmpb     #1 
@@ -2752,7 +2789,7 @@ no_enemy6
                     endm     
 ;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 CHECK_SFX           macro    
-               ;     jsr      Do_Sound_FX_C1 
-               ;     jsr      Do_Sound_FX_C2 
+                    jsr      Do_Sound_FX_C1 
+                                                          ; jsr Do_Sound_FX_C2 
                     jsr      Do_Sound_FX_C3 
                     endm     

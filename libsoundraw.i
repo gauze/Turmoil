@@ -1,6 +1,7 @@
 ; vim: ts=4
 ; vim: syntax=asm6809
                     include  "sound-shot.i"
+                    include  "sound-ghost-spawn.i"
 ; Sound Registers 
 PSG_Ch1_Freq_Lo     =        0 
 PSG_Ch1_Freq_Hi     =        1 
@@ -51,8 +52,8 @@ Ch_All_On           =        %11111100
 ; ALL
 MUTE                =        0 
 ; ch 1
-UFO                 =        1 
-UFOFAST             =        2 
+GHOST_SPAWN         =        1 
+CB_BOUNCE             =        2 
 MISSILE             =        3 
 ;ch 2
 BLIP                =        1 
@@ -122,39 +123,26 @@ SfxInit:
 Do_Sound_FX_C1: 
 ;sound effect? checks "ID" value to decide sound effect 
                     lda      sfxC1ID 
-                    cmpa     #3 
-                    lbeq     Do_Sound_FX_C1Missile 
+                  ;  cmpa     #3 
+                  ;  lbeq     Do_Sound_FX_C1Missile 
                     cmpa     #2 
-                    lbeq     Do_Sound_FX_C1UFO 
+                    lbeq     Do_Sound_FX_C1CB_Bounce 
                     cmpa     #1 
-                    lbeq     Do_Sound_FX_C1UFO 
+                    lbeq     Do_Sound_FX_C1Ghost_Spawn 
                     cmpa     #0 
-                    blt      Do_Sound_FX_C1Mute 
+                    blt      Do_Sound_FX_C1SoundOff 
 ; ??? does this drop through on
 ; something other than 0-3 ??? nope mask %011 in another section
-Do_Sound_FX_C1_0: 
-                                                          ;low rumble 
-                    ldd      #4095 
-                    std      tempW1 
-                                                          ;set pitch ch1 
-                    lda      #PSG_Ch1_Freq_Lo             ; fine pitch register ch1 #40 
-                    ldb      tempW1+1 
-                    jsr      Sound_Byte_raw 
-                    lda      #PSG_Ch1_Freq_Hi             ; coarse pitch register ch1 #95 
-                    ldb      tempW1 
-                    jsr      Sound_Byte_raw 
-                                                          ;set vol ch1 
-                    lda      #PSG_Ch1_Vol 
-                    ldb      #12 
-                    jsr      Sound_Byte_raw 
-                    rts      
+					rts  
 
 ;========
 Do_Sound_FX_C1Mute: 
+Do_Sound_FX_C1SoundOff:
                                                           ;set vol ch1 
                     lda      #PSG_Ch1_Vol                 ; ch1 
                     ldb      #0 
                     jsr      Sound_Byte_raw 
+					clr      sfxC1ID
                     rts      
 
 ;====================
@@ -176,6 +164,58 @@ Do_Sound_FX_C1Missile:
                     rts      
 
 ;===================
+Do_Sound_FX_C1Ghost_Spawn: 
+                    lda      sfxC1W1 
+                    cmpa     #0 
+                    beq      Do_Sound_FX_C1SoundOff 
+                                                          ;set mixer byte 
+                    lda      #PSG_OnOff 
+                    ldb      #Ch1_Tone_On             
+                    jsr      Sound_Byte_raw 
+
+                    ldx      #Ghost_Spawn_Freq 
+                    lda      sfxC1W1 
+                    lsla                                  ; 2 bytes 
+                    ldd      a,x 
+                    std      tempW1 
+                                                          ;set pitch ch1 
+                    lda      #PSG_Ch1_Freq_Lo 
+                    ldb      tempW1+1 
+                    jsr      Sound_Byte_raw 
+                    lda      #PSG_Ch1_Freq_Hi 
+                    ldb      tempW1 
+                    jsr      Sound_Byte_raw 
+                    lda      #PSG_Ch1_Vol 
+                    ldb      #13 
+                    jsr      Sound_Byte_raw 
+                    dec      sfxC1W1 
+                    rts 
+Do_Sound_FX_C1CB_Bounce:
+                    lda      sfxC1W1 
+                    cmpa     #0 
+                    beq      Do_Sound_FX_C1SoundOff 
+                                                          ;set mixer byte 
+                    lda      #PSG_OnOff 
+                    ldb      #Ch1_Tone_On             
+                    jsr      Sound_Byte_raw 
+
+                    ldx      #CB_Bounce_Freq 
+                    lda      sfxC1W1 
+                    lsla                                  ; 2 bytes 
+                    ldd      a,x 
+                    std      tempW1 
+                                                          ;set pitch ch1 
+                    lda      #PSG_Ch1_Freq_Lo 
+                    ldb      tempW1+1 
+                    jsr      Sound_Byte_raw 
+                    lda      #PSG_Ch1_Freq_Hi 
+                    ldb      tempW1 
+                    jsr      Sound_Byte_raw 
+                    lda      #PSG_Ch1_Vol 
+                    ldb      #14 
+                    jsr      Sound_Byte_raw 
+                    dec      sfxC1W1 
+					rts
 Do_Sound_FX_C1UFO: 
                                                           ;get lfo val 
                     ldx      #tblLFO                      ; low freq oscillation 
@@ -230,23 +270,23 @@ Do_Sound_FX_C2:
                     lda      sfxC1ID 
                     cmpa     #MISSILE 
                     lbeq     Do_Sound_FX_C2Missile 
-                    cmpa     #UFOFAST 
+               ;     cmpa     #UFOFAST 
                     lbeq     Do_Sound_FX_C2UFO 
-                    cmpa     #UFO 
+                   ; cmpa     #UFO 
                     lbeq     Do_Sound_FX_C2UFO 
                     cmpa     #MUTE 
                     blt      Do_Sound_FX_C2Mute 
                     ldd      #0 
                     std      tempW2 
                                                           ;joystick val above 0? 
-                    lda      Vec_Joy_1_Y 
-                    cmpa     #0 
-                    ble      Do_Sound_FX_C2_0 
+               ;     lda      Vec_Joy_1_Y 
+               ;     cmpa     #0 
+               ;     ble      Do_Sound_FX_C2_0 
                                                           ;get joystick val 
-                    lda      Vec_Joy_1_Y 
-                    ldb      #8 
-                    mul      
-                    std      tempW2 
+               ;     lda      Vec_Joy_1_Y 
+               ;     ldb      #8 
+               ;     mul      
+               ;     std      tempW2 
 Do_Sound_FX_C2_0: 
                                                           ;detune ch2 
                     ldd      #3583 
@@ -316,7 +356,7 @@ Do_Sound_FX_C2Enemy:
                     cmpa     #ENEMY 
                     bne      Do_Sound_FX_C2Enemy0 
                                                           ;off 
-                    lda      #0 
+                    lda      #MUTE 
                     sta      sfxC2ID 
                     rts      
 
@@ -373,7 +413,7 @@ Do_Sound_FX_C2Missile:
 ;=====================
 Do_Sound_FX_C2UFO: 
                     lda      sfxC1ID 
-                    cmpa     #UFOFAST 
+                ;    cmpa     #UFOFAST 
                     beq      Do_Sound_FX_C2UFOFast 
 Do_Sound_FX_C2UFOSlow: 
                                                           ;pitch 
@@ -446,13 +486,21 @@ Do_Sound_FX_C3Boing:
                     dec      sfxC3W1 
                     rts      
 
-;==================
+;==================    
+Do_Sound_FX_C1SoundOff: 
+                                                          ;nothing playing 
+                    lda      #PSG_Ch1_Vol 
+                    ldb      #0 
+                    jsr      Sound_Byte_raw 
+                    lda      #0 
+                    sta      sfxC1ID
+					jsr      Clear_Sound 
+                    rts    
 Do_Sound_FX_C3SoundOff: 
                                                           ;nothing playing 
                     lda      #0 
                     sta      sfxC3ID 
-                    rts      
-
+                    rts 
 ;=================
 Do_Sound_FX_C3Shot: 
                     lda      sfxC3W1 
@@ -527,7 +575,7 @@ bzSFX_UFO:
                                                           ;reset lfo counter 
                     lda      #0 
                     sta      sfx_FC 
-                    lda      #UFO 
+                 ;   lda      #UFO 
                     sta      sfxC1ID 
                     rts      
 
@@ -535,7 +583,7 @@ bzSFX_UFODead:
                                                           ;reset lfo counter 
                     lda      #0 
                     sta      sfx_FC 
-                    lda      #UFOFAST 
+                  ;  lda      #UFOFAST 
                     sta      sfxC1ID 
                     rts      
 
@@ -584,7 +632,6 @@ bzSFX_Explosion:
                                                           ;explosion 
                     lda      #EXPLOSION 
                     sta      sfxC3ID 
-                                                          ;set vol 
                     lda      #15 
                     ldb      #0 
                     std      sfxC3W1 
@@ -598,6 +645,18 @@ SFX_Shot:
                     sta      sfxC3W1 
                     rts      
 
+SFX_Ghost_Spawn: 
+                    lda      #GHOST_SPAWN 
+                    sta      sfxC1ID 
+                    lda      #33 
+                    sta      sfxC1W1 
+                    rts      
+SFX_CB_Bounce:
+					lda     #CB_BOUNCE
+					sta     sfxC1ID
+					lda     #3
+					sta     sfxC1W1
+					rts
 main_end: 
 ;*******************************
 ;* DATA SECTION ***************
