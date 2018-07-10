@@ -1,7 +1,5 @@
 ; vim: ts=4
 ; vim: syntax=asm6809
-                    include  "sound-shot.i"
-                    include  "sound-ghost-spawn.i"
 ; Sound Registers 
 PSG_Ch1_Freq_Lo     =        0 
 PSG_Ch1_Freq_Hi     =        1 
@@ -19,8 +17,8 @@ PSG_Env_Period_Fine  =       11
 PSG_Env_Period_Coarse  =     12 
 PSG_Env_Shape       =        13 			; only used when register 8-10 == %1xxxx 
 PSG_Data_A          =        14				
-
-Use_Env             =        %10000                       ; set bit 5 of Vol regs to use env 
+; flag to use simpler ADSR method
+Use_Env             =        %10000         ; set bit 5 of Vol regs to use env 
 ; bits start on LEFT -> 01234567 
 ;        0 - Voice 1 use Tone Generator 1 On/Off
 ;        1 - Voice 2 use Tone Generator 2 On/Off
@@ -95,14 +93,14 @@ SHOT                =        10
 ; 8 = volume ch1 (LOWER 4 bits, 0-15)
 ; 9 = volume ch2 "
 ; 10 = volume ch3    
-; 11 = envelope coarse ??
-; 12 = envelope rough ?
+; 11 = envelope fine 
+; 12 = envelope coarse 
 ; 13 = Envelope shape (lower 4 bits)
 ;          0 - continue
 ;          1 - attack
 ;          2  - Alternate
 ;          3  - hold 
-; 14,15 latches ??
+; 14 = Data port (A) (there is no B on 8912)
 ;                                                        
 ;===========
 SfxInit: 

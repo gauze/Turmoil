@@ -109,18 +109,17 @@ setuplevel:
                     sta      Tank_f 
                     sta      enemycnt 
                     std      prizecnt 
-                    sta      Is_Prize                                                       
+                    sta      Is_Prize 
                     sta      shipYdir 
                     sta      Ship_Dead 
                     sta      Level_Done 
                     sta      Line_Pat 
-                    inc      Line_Pat                     ; never want this 0 based on how it works on ROL
-					lda      Super_Game
-					beq      not_superg
-					lda      #1
-					sta      smartbombcnt
+                    inc      Line_Pat                     ; never want this 0 based on how it works on ROL 
+                    lda      Super_Game 
+                    beq      not_superg 
+                    lda      #1 
+                    sta      smartbombcnt 
 not_superg 
-                                                          
                     rts      
 
 newlevel: 
@@ -183,7 +182,7 @@ _no_chk_hs
 ;                    bra      goloop 
 ;################################################################
 levelsplash 
-					jsr      Clear_Sound
+                    jsr      Clear_Sound 
                     clr      temp 
                     clr      stallcnt 
                     lda      Demo_Mode 
@@ -241,8 +240,8 @@ score_format_done
                     DRAW_VLC  
                     lda      #10 
                     ldb      #-5 
-                    MOVETO_D;_BEFORE
-				;	MOVETO_D_AFTER  
+                    MOVETO_D                              ;_BEFORE  
+                                                          ; MOVETO_D_AFTER 
                     ldx      #Level_Box2_nomode 
                     DRAW_VLC  
                     inc      stallcnt 
@@ -305,11 +304,11 @@ no_ships
 donedeathloop 
                     rts      
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 titleScreen: 
                     LDA      #-1                          ; high bit set by any negative number 
                     STA      Vec_Expl_Flag                ; set high bit for Explosion flag 
-                    LDA      #-40                         ; init values above tsmain 
+                    LDA      #-45                        ; init values above tsmain 
                     STA      shipXpos 
                     LDA      #10 
                     STA      shipYpos 
@@ -466,10 +465,11 @@ conf_done
                     lda      conf_box_index 
                     inca     
                     sta      shipspeed                    ; ship verical speed 
-					jsr      game_select
+                    jsr      game_select 
                     rts      
+
 ;********************************************************************************************
-game_select
+game_select 
                     lda      #10 
                     sta      temp1 
                     lda      #$FF 
@@ -492,7 +492,7 @@ gs_loop
                     dec      conf_box_index 
                     bra      gsdoneYcal 
 
-going_down_gs
+going_down_gs 
                     lda      conf_box_index 
                     cmpa     #1                           ; 3 is lowest slot on screen !move 
                     beq      gsdoneYcal 
@@ -517,14 +517,14 @@ no_pressgs
                     ldb      #-58 
                     ldu      #supergame_text 
                     jsr      Print_Str_d 
-                ;    lda      #66 
-               ;     ldb      #-33 
-               ;     ldu      #slow_text 
-               ;     jsr      Print_Str_d 
-               ;     lda      #54 
-               ;     ldb      #-60 
-               ;     ldu      #vslow_text 
-               ;     jsr      Print_Str_d 
+                                                          ; lda #66 
+                                                          ; ldb #-33 
+                                                          ; ldu #slow_text 
+                                                          ; jsr Print_Str_d 
+                                                          ; lda #54 
+                                                          ; ldb #-60 
+                                                          ; ldu #vslow_text 
+                                                          ; jsr Print_Str_d 
                     RESET0REF  
                     lda      conf_box_index 
                     ldx      #cboxYpos_t 
@@ -554,15 +554,16 @@ no10cntresetD
 gskeepgoing 
                     bra      gs_loop 
 
-do_demogs             lda      #1 
+do_demogs           lda      #1 
                     sta      Demo_Mode 
                     jmp      restart 
 
 gs_done 
                     lda      conf_box_index 
-                  ;  inca     
-                    sta      Super_Game                    ; ship verical speed 
-					rts
+                                                          ; inca 
+                    sta      Super_Game                   ; ship verical speed 
+                    rts      
+
 ;***************    ********************************************************************** 
 check_highscore_entry: 
                     ldd      #$9411                       ; change refresh rate 
@@ -961,7 +962,7 @@ keepgoinghs
                     bra      _keepshow 
 
 do_demohs 
-          ;          jsr      credits_thanks   ; remove after testing
+                                                          ; jsr credits_thanks ; remove after testing 
                     jsr      Random_3 
                     cmpa     #64 
                     blt      no_thanks 
@@ -978,19 +979,18 @@ leave_demo_mode_hs
 
 ;((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((
 credits_thanks: 
-				  lda      #127
-				  sta       VIA_t1_cnt_lo
+                    lda      #127 
+                    sta      VIA_t1_cnt_lo 
                     ldd      Vec_Text_HW 
                     std      temp                         ; save TText_HW on entry and restore at end 
                     ldd      #$F850 
                     std      Vec_Text_HW 
-                    
                     lda      #128 
                     sta      temp2                        ; temp2 is text Height, start high and dec till normal 
                     lda      #255 
                     sta      temp3                        ; temp3 is timer on how long text is displayed 
                     clr      temp4                        ; temp4 is counter for which text string to displayed 
- 				  clr      temp1                        ; temp1 direction of text height 0 dec & 1 inc
+                    clr      temp1                        ; temp1 direction of text height 0 dec & 1 inc 
 _ct_loop 
                     lda      temp2 
                     sta      Vec_Text_Height 
@@ -1035,23 +1035,25 @@ _ct_loop
                     dec      temp2 
                     dec      temp2 
                     dec      temp2 
-				  bra      donedec2
+                    bra      donedec2 
+
 HeightDec 
                     inc      temp2 
                     inc      temp2 
                     inc      temp2 
-donedec2
+donedec2 
 dontdec2 
                     dec      temp3 
                     lda      temp3 
-                    bne      dontinctemp4
-				  lda 	  temp1
-				  bne      noinctemp1
-				  inc      temp1 						; set up next round of text lines
-				  bra      donetemp1
-noinctemp1
-				  clr      temp1
-donetemp1
+                    bne      dontinctemp4 
+                    lda      temp1 
+                    bne      noinctemp1 
+                    inc      temp1                        ; set up next round of text lines 
+                    bra      donetemp1 
+
+noinctemp1 
+                    clr      temp1 
+donetemp1 
                     lda      #126 
                     sta      temp2 
                     lda      #255 
