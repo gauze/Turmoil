@@ -909,7 +909,11 @@ _fill_sloop
 ;))))))))))))))))))))))))))))))))))))))))))))))))))))))))))
 print_hs_tbl 
                     lda      #2 
-                    sta      temp1 
+                    sta      temp1
+ym_restart 
+					ldu      #SONG_DATA 
+                    jsr      init_ym_sound
+
 _keepshow 
                     jsr      Wait_Recal 
                     jsr      Intensity_5F 
@@ -959,6 +963,9 @@ noconfpress
                     lda      #$FF 
                     sta      Vec_Counter_1 
 keepgoinghs 
+                    jsr      do_ym_sound
+                    ldd      ym_data_current
+                    beq      ym_restart                     ; loop default 
                     bra      _keepshow 
 
 do_demohs 
@@ -979,6 +986,20 @@ leave_demo_mode_hs
 
 ;((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((
 credits_thanks: 
+					lda     PSG_Ch1_Vol 
+					ldb     #0
+					jsr     Sound_Byte_raw
+					lda     PSG_Ch2_Vol 
+					ldb     #0
+					jsr     Sound_Byte_raw
+					lda     PSG_Ch3_Vol 
+					ldb     #0
+					jsr     Sound_Byte_raw
+					lda     PSG_OnOff 
+					ldb     #Ch_All_Off
+					jsr     Sound_Byte_raw
+					jsr     Clear_Sound
+					
                     lda      #127 
                     sta      VIA_t1_cnt_lo 
                     ldd      Vec_Text_HW 

@@ -192,6 +192,7 @@ eeprom_buffer6      ds       32
 eeprom_buffer7      ds       32 
 eeprom_buffer8      ds       32 
 eeprom_buffer9      ds       32 
+ym_ram              equ      *
 
 ;
 ; CONSTANTS place after VARIABLES

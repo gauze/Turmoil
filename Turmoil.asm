@@ -143,6 +143,9 @@ nolevel
 					include  "rawsounddata.i"
 					include  "rawsoundroutines.i"
                     include  "rasterDraw.asm"
+USE_ENVELOPES=1
+					include  "ymPlayer.i"
+					include  "turmoil_ym.asm"
                     include  "ds2431LowLevel.i"
                     include  "ds2431HighLevel.i"
                     include  "eprom.i" 
