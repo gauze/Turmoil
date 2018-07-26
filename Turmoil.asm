@@ -52,7 +52,6 @@
 ;***************************************************************************
 ; here the cartridge program starts off   
 introSplash 
-                                                          ; jsr credits_thanks 
                     lda      #1 
                     sta      Demo_Mode                    ; in Demo_Mode on boot 
                     ldu      #ustacktemp 
@@ -86,7 +85,7 @@ restart
                     lda      #$80                         ; EOL 
                     sta      hstempstr+3 
                     clr      demo_label_cnt
-                    jsr      SfxInit						; sound FS init 
+                   jsr      SfxInit						; sound FS init 
 ;----------------------------------------------------------------------------
 main: 
                     jsr      Wait_Recal 

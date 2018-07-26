@@ -972,7 +972,7 @@ do_demohs
                                                           ; jsr credits_thanks ; remove after testing 
                     jsr      Random_3 
                     cmpa     #64 
-                    blt      no_thanks 
+                ;    blt      no_thanks 
                     jsr      credits_thanks 
 no_thanks 
                     jsr      titleScreen 
@@ -996,14 +996,14 @@ credits_thanks:
 					ldb     #0
 					jsr     Sound_Byte_raw
 					lda     PSG_OnOff 
-					ldb     #Ch_All_Off
+					ldb     #%00000000
 					jsr     Sound_Byte_raw
 					jsr     Clear_Sound
 					
                     lda      #127 
                     sta      VIA_t1_cnt_lo 
                     ldd      Vec_Text_HW 
-                    std      temp                         ; save TText_HW on entry and restore at end 
+                    std      temp                         ; save Text_HW on entry and restore at end 
                     ldd      #$F850 
                     std      Vec_Text_HW 
                     lda      #128 
@@ -1012,10 +1012,12 @@ credits_thanks:
                     sta      temp3                        ; temp3 is timer on how long text is displayed 
                     clr      temp4                        ; temp4 is counter for which text string to displayed 
                     clr      temp1                        ; temp1 direction of text height 0 dec & 1 inc 
+					jsr      SFX_Down_Burst
 _ct_loop 
                     lda      temp2 
                     sta      Vec_Text_Height 
                     jsr      Wait_Recal 
+  					jsr      Do_Sound_FX_C2 
                     jsr      Intensity_5F 
                     ldx      #thanks_t 
                     lda      temp4 
@@ -1070,10 +1072,12 @@ dontdec2
                     lda      temp1 
                     bne      noinctemp1 
                     inc      temp1                        ; set up next round of text lines 
+					jsr      SFX_Up_Burst
                     bra      donetemp1 
 
 noinctemp1 
                     clr      temp1 
+					jsr      SFX_Up_Burst
 donetemp1 
                     lda      #126 
                     sta      temp2 

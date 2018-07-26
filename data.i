@@ -691,7 +691,7 @@ slow_text           fcc      "SLOW",$80
 med_text            fcc      "MEDIUM",$80
 fast_text           fcc      "FAST",$80
 gamesel_label       fcc      "  GAME SELECT",$80
-reggame_text		fcc      "NORMAL GAME",$80
+reggame_text		fcc      "CLASSICGAME",$80
 supergame_text      fcc      "SUPER GAME",$80
 gameoverstr         fcc      "GAME OVER",$80
 highscorelabel      fcc      "HIGH SCORE",$80

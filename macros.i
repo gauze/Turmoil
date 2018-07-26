@@ -1643,7 +1643,8 @@ warp
                     anda     #%00000111 
                     cmpa     #7 
                     beq      warp 
-                    sta      shipYpos 
+                    sta      shipYpos
+				;	jsr      SFX_Warp 
                     jmp      no_press 
 
 cant_warp_in_alley 
