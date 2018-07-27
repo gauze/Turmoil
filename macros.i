@@ -1625,6 +1625,10 @@ bullet6_miss
                     endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 READ_BUTTONS        macro    
+                    lda      warpdelay 
+                    beq      no_warp_delay 
+                    dec      warpdelay 
+no_warp_delay 
                     lda      Ship_Dead 
                     lbne     cant_shoot_while_dead 
                     lda      Demo_Mode 
@@ -1634,27 +1638,33 @@ READ_BUTTONS        macro
                     lbeq     no_press 
                     lda      Super_Game 
                     lbeq     not_super 
-                    lda      Vec_Button_1_1 
-                    lbeq     no_warp 
+                    lda      Vec_Btn_State 
+                    cmpa     #1 
+                    lbne     no_warp 
 warp 
                     lda      In_Alley 
                     lbne     cant_warp_in_alley 
+                    lda      warpdelay 
+                    lbne     no_press                     ; too soon to warp again software debounce 
                     jsr      Random 
                     anda     #%00000111 
                     cmpa     #7 
                     beq      warp 
-                    sta      shipYpos
-				;	jsr      SFX_Warp 
+                    sta      shipYpos 
+                    jsr      SFX_Up_Burst 
+                    lda      #25 
+                    sta      warpdelay 
                     jmp      no_press 
 
 cant_warp_in_alley 
 no_warp 
+                    lda      Vec_Btn_State 
+                    cmpa     #2 
+                    lbne     no_smart_bomb                ; not pressing button2 continue 
                     lda      smartbombcnt 
-                    lbeq     no_smart_bomb 
-                    lda      Vec_Button_1_2 
-                    lbeq     no_smart_bomb 
+                    lbeq     no_press                     ; pressing 2 but used bomb already, so exit 
                     SMART_BOMB  
-                    jmp      no_press 
+                    jmp      no_press                     ; did smart bomb just now, so exit 
 
 no_smart_bomb 
 not_super 
@@ -1677,7 +1687,7 @@ demo_mode_firing
                     ldx      a,x 
                     lda      ,x 
                     bne      already_exists 
- 					jsr      SFX_Shot                     ; adding SFX here so there is actual shot added. 
+                    jsr      SFX_Shot                     ; adding SFX here so there is actual shot added. 
                     ldb      #1 
                     stb      ,x                           ; set EXIST (int) 
 ; left(0) or right(1)?

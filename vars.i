@@ -95,6 +95,7 @@ alley3to            ds       1
 alley4to            ds       1 
 alley5to            ds       1 
 alley6to            ds       1 
+warpdelay           ds       1
 ; variables to hold which frame for each shape enemy some might not have an animation...
 Arrow_f             ds       1 
 Bow_f               ds       1 
