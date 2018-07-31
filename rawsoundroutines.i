@@ -8,11 +8,14 @@ GHOST_SPAWN         =        1
 CB_BOUNCE           =        2 
 CB_SPAWN            =        3 
 GET_PRIZE           =        4 
+BLOOP               =        5 
+BLOOP2              =        6 
 ; ch 2
 ARROW_SPAWN         =        1 
 TANK_SPAWN          =        2 
 UPBURST             =        3 
 DOWNBURST           =        4 
+VERTMOVE            =        5 
 ; ch 3
 SHOT                =        1 
 ALLEY_MOVE          =        2 
@@ -82,11 +85,15 @@ SfxInit:
 Do_Sound_FX_C1: 
 ;sound effect? checks "ID" value to decide sound effect 
                     lda      sfxC1ID 
-                    cmpa     #2 
+                    cmpa     #CB_BOUNCE 
                     lbeq     Do_Sound_FX_C1CB_Bounce 
-                    cmpa     #1 
+                    cmpa     #GHOST_SPAWN 
                     lbeq     Do_Sound_FX_C1Ghost_Spawn 
-                    cmpa     #0 
+                    cmpa     #BLOOP 
+                    lbeq     Do_Sound_FX_C1Bloop 
+                    cmpa     #BLOOP2 
+                    lbeq     Do_Sound_FX_C1Pip 
+                    cmpa     #MUTE 
                     blt      Do_Sound_FX_C1SoundOff 
 ; ??? does this drop through on
 ; something other than 0-3 ??? nope mask %011 in another section
@@ -95,7 +102,12 @@ Do_Sound_FX_C1:
 ;========
 Do_Sound_FX_C1Mute: 
 Do_Sound_FX_C1SoundOff: 
-                                                          ;set vol ch1 
+                    lda      #PSG_Ch2_Freq_Lo 
+                    ldb      #0 
+                    jsr      Sound_Byte_raw 
+                    lda      #PSG_Ch2_Freq_Hi 
+                    ldb      #0 
+                    jsr      Sound_Byte_raw               ;set vol ch1 
                     lda      #PSG_Ch1_Vol                 ; ch1 
                     ldb      #0 
                     jsr      Sound_Byte_raw 
@@ -165,101 +177,178 @@ Do_Sound_FX_C1CB_Bounce:
                     dec      sfxC1W1 
                     rts      
 
+Do_Sound_FX_C1Bloop: 
+                    lda      sfxC1W1 
+                    cmpa     #0 
+                    beq      Do_Sound_FX_C1SoundOff 
+                    lda      #PSG_OnOff 
+                    ldb      #Ch1_Tone_On                 ;| #Ch1_Noise_Off 
+                    jsr      Sound_Byte_raw 
+                    ldx      #Bloop_Vol 
+                    lda      sfxC1W1 
+                    ldb      a,x 
+                    lda      #PSG_Ch1_Vol 
+                    jsr      Sound_Byte_raw 
+                    ldd      #3650 
+                    std      tempW1 
+                    lda      #PSG_Ch1_Freq_Lo 
+                    ldb      tempW1+1 
+                    jsr      Sound_Byte_raw 
+                    lda      #PSG_Ch1_Freq_Hi 
+                    ldd      tempW1 
+                    jsr      Sound_Byte_raw 
+                    dec      sfxC1W1                      ; or it'll never end! 
+                    rts      
+
+Do_Sound_FX_C1Pip: 
+                    lda      #PSG_Ch1_Freq_Lo 
+                    ldb      #0 
+                    jsr      Sound_Byte_raw 
+                    lda      #PSG_Ch1_Freq_Hi 
+                    ldb      #0 
+                    jsr      Sound_Byte_raw 
+                    lda      sfxC1W1 
+                    cmpa     #0 
+                    beq      Do_Sound_FX_C1SoundOff 
+                    lda      #PSG_OnOff 
+                    ldb      #Ch1_Tone_On                 ;| #Ch1_Noise_Off 
+                    jsr      Sound_Byte_raw 
+                    ldx      #Bloop_Vol 
+                    lda      sfxC1W1 
+                    ldb      a,x 
+                    lda      #PSG_Ch1_Vol 
+                    jsr      Sound_Byte_raw 
+                    ldd      #34                          ; high "pip" 
+                    std      tempW1 
+                    lda      #PSG_Ch1_Freq_Lo 
+                    ldb      tempW1+1 
+                    jsr      Sound_Byte_raw 
+                    lda      #PSG_Ch1_Freq_Hi 
+                    ldd      tempW1 
+                    jsr      Sound_Byte_raw 
+                    dec      sfxC1W1                      ; or it'll never end! 
+                    rts      
+
 ;=Channel 2 effects check =======
 Do_Sound_FX_C2: 
                                                           ;ch2 sfx? 
                     lda      sfxC2ID 
                     cmpa     #UPBURST 
-                    beq      Do_Sound_FX_C2UpBurst 
+                    lbeq     Do_Sound_FX_C2UpBurst 
                     cmpa     #DOWNBURST 
-                    beq      Do_Sound_FX_C2DownBurst 
+                    lbeq     Do_Sound_FX_C2DownBurst 
+                    cmpa     #VERTMOVE 
+                    lbeq     Do_Sound_FX_C2VertMove 
                     cmpa     #MUTE 
-                    lbeq      Do_Sound_FX_C2SoundOff 
+                    lbeq     Do_Sound_FX_C2SoundOff 
                     ldd      #0 
                     std      tempW2 
-; ============================
-Do_Sound_FX_C2UpBurst:
+;===============================
+Do_Sound_FX_C2VertMove: 
                     lda      sfxC2W1 
                     cmpa     #0 
-                    lbeq      Do_Sound_FX_C2SoundOff 
-                                                          ;set mixer byte 
-
-					lda      #PSG_OnOff 
-                    ldb      #Ch2_Tone_Off                 
-                    jsr      Sound_Byte_raw
-
+                    lbeq     Do_Sound_FX_C2SoundOff 
                     lda      #PSG_OnOff 
-                    ldb      #Ch2_Noise_On                 
+                    ldb      #Ch2_Tone_On                 ;| #Ch1_Noise_Off 
+                    jsr      Sound_Byte_raw 
+;new code v
+                    lda      #PSG_Env_Period_Fine 
+                    ldb      tempB3 
                     jsr      Sound_Byte_raw 
 
+                    lda      #PSG_Env_Period_Coarse 
+                    ldb      #0 
+                    jsr      Sound_Byte_raw
+ 
+                    lda      #PSG_Ch2_Vol 
+                    ldb      #Use_Env 
+                    jsr      Sound_Byte_raw  
+; new code ^
+                    ldx      #VertMove_Freq 
+                    lda      sfxC2W1 
+                    ldd      a,x                       
+                    std      tempW1 
+                    lda      #PSG_Ch2_Freq_Lo 
+                    ldb      tempW1+1 
+                    jsr      Sound_Byte_raw 
+                    lda      #PSG_Ch2_Freq_Hi 
+                    ldd      tempW1 
+                    jsr      Sound_Byte_raw 
+                    dec      sfxC2W1                      ; or it'll never end!
+					dec      tempB3 
+                    rts      
+
+; ============================
+Do_Sound_FX_C2UpBurst: 
+                    lda      sfxC2W1 
+                    cmpa     #0 
+                    lbeq     Do_Sound_FX_C2SoundOff 
+                                                          ;set mixer byte 
+                    lda      #PSG_OnOff 
+                    ldb      #Ch2_Tone_Off 
+                    jsr      Sound_Byte_raw 
+                    lda      #PSG_OnOff 
+                    ldb      #Ch2_Noise_On 
+                    jsr      Sound_Byte_raw 
                     ldx      #Up_Burst_Noise 
                     lda      sfxC2W1 
                     lda      a,x 
                     sta      tempW1 
                                                           ;set pitch ch3 
                     lda      #PSG_Noise 
-                    ldb      tempW1
+                    ldb      tempW1 
                     jsr      Sound_Byte_raw 
-
-
                     lda      #PSG_Ch1_Vol 
                     ldb      #0 
                     jsr      Sound_Byte_raw 
                     lda      #PSG_Ch3_Vol 
                     ldb      #0 
                     jsr      Sound_Byte_raw 
-
                     lda      #PSG_Ch2_Vol 
                     ldb      #15 
                     jsr      Sound_Byte_raw 
-
                     dec      sfxC2W1 
-                    rts 
-Do_Sound_FX_C2DownBurst:
+                    rts      
+
+Do_Sound_FX_C2DownBurst: 
 ; extra bit to clean registers BS.
                     lda      #PSG_Ch2_Freq_Lo 
-                    ldb      #0
+                    ldb      #0 
                     jsr      Sound_Byte_raw 
                     lda      #PSG_Ch2_Freq_Hi 
                     ldb      #0 
-                    jsr      Sound_Byte_raw
+                    jsr      Sound_Byte_raw 
 ; extra bit to clear registers above
                     lda      sfxC2W1 
                     cmpa     #0 
                     beq      Do_Sound_FX_C2SoundOff 
                                                           ;set mixer byte 
-					lda      #PSG_OnOff 
-                    ldb      #Ch2_Tone_Off                 
-                    jsr      Sound_Byte_raw 
-
                     lda      #PSG_OnOff 
-                    ldb      #Ch2_Noise_On                 
+                    ldb      #Ch2_Tone_Off 
                     jsr      Sound_Byte_raw 
-
+                    lda      #PSG_OnOff 
+                    ldb      #Ch2_Noise_On 
+                    jsr      Sound_Byte_raw 
                     ldx      #Down_Burst_Noise 
                     lda      sfxC2W1 
                     lda      a,x 
                     sta      tempW1 
-                                                          
                     lda      #PSG_Noise 
-                    ldb      tempW1
+                    ldb      tempW1 
                     jsr      Sound_Byte_raw 
-
                     lda      #PSG_Ch1_Vol 
                     ldb      #0 
                     jsr      Sound_Byte_raw 
                     lda      #PSG_Ch3_Vol 
                     ldb      #0 
                     jsr      Sound_Byte_raw 
-
                     lda      #PSG_Ch2_Vol 
                     ldb      #15 
                     jsr      Sound_Byte_raw 
-
                     dec      sfxC2W1 
-                    rts 
-;=========================
+                    rts      
 
+;=========================
 ;=Channel 3 FX ======
 Do_Sound_FX_C3: 
                                                           ;channel 3 sfx 
@@ -294,20 +383,16 @@ Do_Sound_FX_C2SoundOff:
                     jsr      Sound_Byte_raw 
                     lda      #0 
                     sta      sfxC2ID 
-
                     lda      #PSG_OnOff 
-                    ldb      #Ch2_Noise_Off | #Ch2_Tone_Off              
+                    ldb      #Ch2_Noise_Off | #Ch2_Tone_Off 
                     jsr      Sound_Byte_raw 
-
                     lda      #PSG_Ch2_Freq_Lo 
-                    ldb      #0
+                    ldb      #0 
                     jsr      Sound_Byte_raw 
                     lda      #PSG_Ch2_Freq_Hi 
                     ldb      #0 
                     jsr      Sound_Byte_raw 
-
-                  ;  jsr      Clear_Sound 
-
+                                                          ; jsr Clear_Sound 
                     rts      
 
 Do_Sound_FX_C3SoundOff: 
@@ -396,4 +481,32 @@ SFX_Down_Burst:
                     sta      sfxC2ID 
                     lda      #31 
                     sta      sfxC2W1 
+                    rts      
+
+SFX_Bloop: 
+                    lda      #BLOOP 
+                    sta      sfxC1ID 
+                    lda      #3 
+                    sta      sfxC1W1 
+                    rts      
+
+SFX_Pip: 
+                    lda      #BLOOP2 
+                    sta      sfxC1ID 
+                    lda      #3 
+                    sta      sfxC1W1 
+                    rts      
+
+SFX_VertMove: 
+                    lda      #VERTMOVE 
+                    sta      sfxC2ID 
+                    lda      #15 
+                    sta      sfxC2W1 
+                                                          ;initial env 
+                    lda      #16 
+                    sta      tempB3 
+                                                          ;set env shape (triggers envelope start) 
+                    lda      #PSG_Env_Shape 
+                    ldb      #%00001110 
+                    jsr      Sound_Byte_raw 
                     rts      

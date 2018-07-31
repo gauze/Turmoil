@@ -1629,23 +1629,38 @@ READ_BUTTONS        macro
                     beq      no_warp_delay 
                     dec      warpdelay 
 no_warp_delay 
+                    jsr      Read_Btns                   ; maybe only do one of these per loop?
+                    lda      Demo_Mode 
+                    beq      no_check_needed 
+                    lda      Vec_Button_1_2 
+                    beq      no_conf_press 
+                    jsr      joystick_config 
+no_conf_press 
+                    lda      Vec_Button_1_3 
+                    beq      no_check_needed 
+                    clr      Demo_Mode 
+                    jmp      restart 
+
+no_check_needed 
                     lda      Ship_Dead 
                     lbne     cant_shoot_while_dead 
                     lda      Demo_Mode 
-                    lbne     demo_mode_firing 
-                    jsr      Read_Btns 
+                    lbne     demo_mode_firing
+					jsr      DP_to_D0 
+                  ;  jsr      Read_Btns 
                     lda      Vec_Btn_State 
                     lbeq     no_press 
-                    lda      Super_Game 
+                    ldb      Super_Game 
                     lbeq     not_super 
-                    lda      Vec_Btn_State 
+                    ;lda      Vec_Btn_State 
                     cmpa     #1 
                     lbne     no_warp 
 warp 
-                    lda      In_Alley 
+                    ldb      In_Alley 
                     lbne     cant_warp_in_alley 
-                    lda      warpdelay 
+                    ldb      warpdelay 
                     lbne     no_press                     ; too soon to warp again software debounce 
+					pshs     a
                     jsr      Random 
                     anda     #%00000111 
                     cmpa     #7 
@@ -1658,12 +1673,13 @@ warp
 
 cant_warp_in_alley 
 no_warp 
-                    lda      Vec_Btn_State 
+                    ; a should still have original lda ; lda      Vec_Btn_State 
                     cmpa     #2 
                     lbne     no_smart_bomb                ; not pressing button2 continue 
                     lda      smartbombcnt 
                     lbeq     no_press                     ; pressing 2 but used bomb already, so exit 
                     SMART_BOMB  
+					jsr      SFX_Bloop
                     jmp      no_press                     ; did smart bomb just now, so exit 
 
 no_smart_bomb 
@@ -1974,7 +1990,7 @@ READ_JOYSTICK       macro
 
 rev_shipdir_down 
                     inc      shipYdir 
-                    dec      shipYpos 
+                    dec      shipYpos
                     jmp      jsdone 
 
 do_demo_dec 
@@ -2003,6 +2019,7 @@ not_demo_rjs
                     lda      shipYpos 
                     cmpa     #6                           ; slot 6 as far up as u can go don't move 
                     beq      jsdoneY 
+					jsr      SFX_VertMove 
                     inc      shipYpos 
                     clr      stallcnt 
                     bra      jsdoneY 
@@ -2010,6 +2027,7 @@ not_demo_rjs
 going_down 
                     lda      shipYpos 
                     beq      jsdoneY                      ; in slot 0 as far down as u can go 
+					jsr      SFX_VertMove 
                     dec      shipYpos 
                     clr      stallcnt                     ; reset stall counter 
 jsdoneY 
@@ -2642,7 +2660,7 @@ _no_print_ships
 CHECK_DEMO          macro    
                     lda      Demo_Mode 
                     beq      no_check_needed 
-                    jsr      Read_Btns 
+                    jsr      Read_Btns                   ; maybe only do one of these per loop?
                     lda      Vec_Button_1_2 
                     beq      no_conf_press 
                     jsr      joystick_config 

@@ -61,6 +61,7 @@ introSplash
                     jsr      eeprom_load 
                     jsr      eeprom_save 
                     jsr      titleScreen 
+                    jsr      SfxInit                      ; sound FS init 
                     jsr      joystick_config              ; move else were? 
 restart 
                     ldd      #$3075 
@@ -84,12 +85,12 @@ restart
                     sta      hstempstr+2 
                     lda      #$80                         ; EOL 
                     sta      hstempstr+3 
-                    clr      demo_label_cnt
-                   jsr      SfxInit						; sound FS init 
+                    clr      demo_label_cnt 
+                    jsr      SfxInit                      ; sound FS init 
 ;----------------------------------------------------------------------------
 main: 
                     jsr      Wait_Recal 
-               ;     jsr      Do_Sound 
+                                                          ; jsr Do_Sound 
                     READ_JOYSTICK  
                     lda      #$3F 
                     INTENSITY_A  
@@ -131,20 +132,21 @@ noprizecntdown
                     lbeq     nolevel 
                     jsr      newlevel                     ; and run routine 
 nolevel 
-                    CHECK_DEMO                            ; routine to handle button press during demo mode 
                     CHECK_SFX  
+                                                          ; CHECK_DEMO ; routine to handle button press during demo mode 
+                                                          ; rolled into button handling macro 
                     jmp      main                         ; and repeat forever, sorta 
 
 ; must go at bottom or fills up RAM instead of ROM 
                     include  "functions.i"
                     include  "data.i"
                     include  "libsoundraw.i"
-					include  "rawsounddata.i"
-					include  "rawsoundroutines.i"
+                    include  "rawsounddata.i"
+                    include  "rawsoundroutines.i"
                     include  "rasterDraw.asm"
-USE_ENVELOPES=1
-					include  "ymPlayer.i"
-					include  "turmoil_ym.asm"
+USE_ENVELOPES=1 
+                    include  "ymPlayer.i"
+                    include  "turmoil_ym.asm"
                     include  "ds2431LowLevel.i"
                     include  "ds2431HighLevel.i"
                     include  "eprom.i" 

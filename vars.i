@@ -169,7 +169,7 @@ smaller             ds       1                            ; used in X collision 
 ; SFX variables
 tempW1              ds       2                            ; W? some kind of "pitch" related values 
 tempW2              ds       2 
-;tempB5              ds       1 
+tempB3              ds       1 
 sfxC1ID             ds       1                            ; ID is effects ID 
 sfxC2ID             ds       1 
 sfxC3ID             ds       1 

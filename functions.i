@@ -111,12 +111,12 @@ setuplevel:
                     std      prizecnt 
                     sta      Is_Prize 
                     sta      shipYdir 
-					sta      warpdelay
+                    sta      warpdelay 
                     sta      Ship_Dead 
                     sta      Level_Done 
                     sta      Line_Pat 
                     inc      Line_Pat                     ; never want this 0 based on how it works on ROL 
-                    lda      Super_Game
+                    lda      Super_Game 
                     beq      not_superg 
                     lda      #1 
                     sta      smartbombcnt 
@@ -241,7 +241,7 @@ score_format_done
                     DRAW_VLC  
                     lda      #10 
                     ldb      #-5 
-                    MOVETO_D                              ;_BEFORE  
+                    MOVETO_D                              ;_BEFORE 
                                                           ; MOVETO_D_AFTER 
                     ldx      #Level_Box2_nomode 
                     DRAW_VLC  
@@ -309,7 +309,7 @@ donedeathloop
 titleScreen: 
                     LDA      #-1                          ; high bit set by any negative number 
                     STA      Vec_Expl_Flag                ; set high bit for Explosion flag 
-                    LDA      #-45                        ; init values above tsmain 
+                    LDA      #-45                         ; init values above tsmain 
                     STA      shipXpos 
                     LDA      #10 
                     STA      shipYpos 
@@ -481,6 +481,7 @@ game_select
 gs_loop 
                     jsr      Wait_Recal 
                     jsr      Intensity_5F 
+                    jsr      Do_Sound_FX_C1 
                     lda      frm10cnt 
                     bne      gsdoneYcal 
                     jsr      Joy_Digital 
@@ -491,17 +492,20 @@ gs_loop
                     lda      conf_box_index 
                     beq      gsdoneYcal                   ; 0 is highest slot on screen !move 
                     dec      conf_box_index 
+                    jsr      SFX_Bloop 
                     bra      gsdoneYcal 
 
 going_down_gs 
                     lda      conf_box_index 
                     cmpa     #1                           ; 3 is lowest slot on screen !move 
                     beq      gsdoneYcal 
+                    jsr      SFX_Bloop 
                     inc      conf_box_index 
 gsdoneYcal 
                     jsr      Read_Btns 
                     lda      Vec_Button_1_4 
                     beq      no_pressgs 
+                    jsr      SFX_Pip 
                     jmp      gs_done 
 
 no_pressgs 
@@ -518,14 +522,6 @@ no_pressgs
                     ldb      #-58 
                     ldu      #supergame_text 
                     jsr      Print_Str_d 
-                                                          ; lda #66 
-                                                          ; ldb #-33 
-                                                          ; ldu #slow_text 
-                                                          ; jsr Print_Str_d 
-                                                          ; lda #54 
-                                                          ; ldb #-60 
-                                                          ; ldu #vslow_text 
-                                                          ; jsr Print_Str_d 
                     RESET0REF  
                     lda      conf_box_index 
                     ldx      #cboxYpos_t 
@@ -585,6 +581,7 @@ check_highscore_entry:
 hs_loop 
                     jsr      Wait_Recal 
                     jsr      Intensity_5F 
+                    jsr      Do_Sound_FX_C1 
                     lda      frm5cnt 
                     lbne     hsbtn3_done                  ; joystick movement delay 
                     jsr      Joy_Digital 
@@ -597,6 +594,7 @@ hs_loop
                     lda      hs_box_Yindex 
                     beq      jsdoneYhs                    ; 0 is highest slot on screen !move 
                     dec      hs_box_Yindex 
+                    jsr      SFX_Bloop 
                     bra      jsdoneYhs 
 
 going_down_hs 
@@ -606,6 +604,7 @@ going_down_hs
                     cmpa     #6                           ; 5 is lowest row on screen !move 
                     beq      jsdoneYhs 
                     inc      hs_box_Yindex 
+                    jsr      SFX_Bloop 
 jsdoneYhs 
 ; X stick poll    
                     lda      Vec_Joy_1_X 
@@ -617,6 +616,7 @@ jsdoneYhs
                     cmpa     #5 
                     beq      _wrapX                       ; 5 is highest slot on screen wrap ... 
                     inc      hs_box_Xindex 
+                    jsr      SFX_Bloop 
                     bra      jsdoneXhs 
 
 _wrapX 
@@ -625,6 +625,7 @@ _wrapX
                     beq      jsdoneXhs 
                     clr      hs_box_Xindex 
                     inc      hs_box_Yindex 
+                    jsr      SFX_Bloop 
                     bra      jsdoneXhs 
 
 going_left_hs 
@@ -633,6 +634,7 @@ going_left_hs
                     lda      hs_box_Xindex 
                     beq      _unwrapX                     ; if zero move one line up, & end of line 
                     dec      hs_box_Xindex 
+                    jsr      SFX_Bloop 
                     bra      jsdoneXhs 
 
 _unwrapX 
@@ -641,6 +643,7 @@ _unwrapX
                     lda      #5 
                     sta      hs_box_Xindex 
                     dec      hs_box_Yindex 
+                    jsr      SFX_Bloop 
                                                           ; bra jsdoneXhs 
 jsdoneXhs 
 ; Buttons!!!
@@ -660,6 +663,7 @@ jsdoneXhs
                     ldb      hsentry_index 
                     sta      b,x 
                     inc      hsentry_index 
+                    jsr      SFX_Pip 
                     lda      #50 
                     sta      temp1 
 hsbtn4_done 
@@ -910,11 +914,10 @@ _fill_sloop
 ;))))))))))))))))))))))))))))))))))))))))))))))))))))))))))
 print_hs_tbl 
                     lda      #2 
-                    sta      temp1
+                    sta      temp1 
 ym_restart 
-					ldu      #SONG_DATA 
-                    jsr      init_ym_sound
-
+                    ldu      #SONG_DATA 
+                    jsr      init_ym_sound 
 _keepshow 
                     jsr      Wait_Recal 
                     jsr      Intensity_5F 
@@ -964,16 +967,16 @@ noconfpress
                     lda      #$FF 
                     sta      Vec_Counter_1 
 keepgoinghs 
-                    jsr      do_ym_sound
-                    ldd      ym_data_current
-                    beq      ym_restart                     ; loop default 
+                    jsr      do_ym_sound 
+                    ldd      ym_data_current 
+                    beq      ym_restart                   ; loop default 
                     bra      _keepshow 
 
 do_demohs 
                                                           ; jsr credits_thanks ; remove after testing 
                     jsr      Random_3 
                     cmpa     #64 
-                ;    blt      no_thanks 
+                    blt      no_thanks 
                     jsr      credits_thanks 
 no_thanks 
                     jsr      titleScreen 
@@ -987,20 +990,19 @@ leave_demo_mode_hs
 
 ;((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((
 credits_thanks: 
-					lda     PSG_Ch1_Vol 
-					ldb     #0
-					jsr     Sound_Byte_raw
-					lda     PSG_Ch2_Vol 
-					ldb     #0
-					jsr     Sound_Byte_raw
-					lda     PSG_Ch3_Vol 
-					ldb     #0
-					jsr     Sound_Byte_raw
-					lda     PSG_OnOff 
-					ldb     #%00000000
-					jsr     Sound_Byte_raw
-					jsr     Clear_Sound
-					
+                    lda      PSG_Ch1_Vol 
+                    ldb      #0 
+                    jsr      Sound_Byte_raw 
+                    lda      PSG_Ch2_Vol 
+                    ldb      #0 
+                    jsr      Sound_Byte_raw 
+                    lda      PSG_Ch3_Vol 
+                    ldb      #0 
+                    jsr      Sound_Byte_raw 
+                    lda      PSG_OnOff 
+                    ldb      #%00000000 
+                    jsr      Sound_Byte_raw 
+                    jsr      Clear_Sound 
                     lda      #127 
                     sta      VIA_t1_cnt_lo 
                     ldd      Vec_Text_HW 
@@ -1013,12 +1015,12 @@ credits_thanks:
                     sta      temp3                        ; temp3 is timer on how long text is displayed 
                     clr      temp4                        ; temp4 is counter for which text string to displayed 
                     clr      temp1                        ; temp1 direction of text height 0 dec & 1 inc 
-					jsr      SFX_Down_Burst
+                    jsr      SFX_Down_Burst 
 _ct_loop 
                     lda      temp2 
                     sta      Vec_Text_Height 
                     jsr      Wait_Recal 
-  					jsr      Do_Sound_FX_C2 
+                    jsr      Do_Sound_FX_C2 
                     jsr      Intensity_5F 
                     ldx      #thanks_t 
                     lda      temp4 
@@ -1073,12 +1075,12 @@ dontdec2
                     lda      temp1 
                     bne      noinctemp1 
                     inc      temp1                        ; set up next round of text lines 
-					jsr      SFX_Up_Burst
+                    jsr      SFX_Up_Burst 
                     bra      donetemp1 
 
 noinctemp1 
                     clr      temp1 
-					jsr      SFX_Up_Burst
+                    jsr      SFX_Up_Burst 
 donetemp1 
                     lda      #126 
                     sta      temp2 

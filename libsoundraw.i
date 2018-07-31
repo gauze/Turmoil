@@ -18,7 +18,7 @@ PSG_Env_Period_Coarse  =     12
 PSG_Env_Shape       =        13 			; only used when register 8-10 == %1xxxx 
 PSG_Data_A          =        14				
 ; flag to use simpler ADSR method
-Use_Env             =        %10000         ; set bit 5 of Vol regs to use env 
+Use_Env             =        %10000         ; set bit 5 of a Vol reg to use env 
 ; bits start on LEFT -> 01234567 
 ;        0 - Voice 1 use Tone Generator 1 On/Off
 ;        1 - Voice 2 use Tone Generator 2 On/Off
@@ -29,7 +29,7 @@ Use_Env             =        %10000         ; set bit 5 of Vol regs to use env
 ;        6-7 - unused
 ; MASK aliases for PSG_OnOff register only uses bits 0-5
 ; use IMMEDIATE or with OR | operators,opcodes
-Ch1_Tone_On         =        %10000000 
+Ch1_Tone_On         =        %00000001 
 Ch2_Tone_On         =        %01000000 
 Ch3_Tone_On         =        %00100000 
 Ch1_Noise_On        =        %00010000 
