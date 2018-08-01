@@ -49,75 +49,20 @@
 ;v4ecartflags        fdb      $4000 
 ;***************************************************************************
 ; CODE SECTION
-;***************************************************************************
-; here the cartridge program starts off   
-introSplash 
-                    lda      #1 
-                    sta      Demo_Mode                    ; in Demo_Mode on boot 
-                    ldu      #ustacktemp 
-                    stu      ustacktempptr                ; only do this once 
-                    jsr      setup                        ; remove when done testing 
-                    jsr      fill_hs_tbl                  ; filling from ROM eventually pull from EPROM 
-                    jsr      eeprom_load 
-                    jsr      eeprom_save 
-                    jsr      titleScreen 
-                    jsr      SfxInit                      ; sound FS init 
-                    jsr      joystick_config              ; move else were? 
-restart 
-                    ldd      #$3075 
-                    std      Vec_Rfrsh                    ; make sure we are at 50hz 
-                    jsr      setup 
-                    jsr      levelsplash 
-                    lda      #0 
-                    sta      shipYpos 
-                    sta      shipXpos 
-                    sta      In_Alley 
-                    sta      Ship_Dead 
-                    ldb      #LEFT 
-                    stb      shipdir 
-                    ldx      #score 
-                    jsr      Clear_Score 
-                    lda      #3                           ; normally 5 FIX 
-                    sta      shipcnt 
-                    lda      #$5F                         ; for high score input _ under scores _ 
-                    sta      hstempstr 
-                    sta      hstempstr+1 
-                    sta      hstempstr+2 
-                    lda      #$80                         ; EOL 
-                    sta      hstempstr+3 
-                    clr      demo_label_cnt 
-                    jsr      SfxInit                      ; sound FS init 
-;----------------------------------------------------------------------------
+;***************************************************************************  
+					INTRO_BOOT 							; runs ONCE per boot
+					RESTART								; jump here on game restart
 main: 
-                    jsr      Wait_Recal 
+                    WAIT_RECAL
                                                           ; jsr Do_Sound 
                     READ_JOYSTICK  
-                    lda      #$3F 
-                    INTENSITY_A  
                     DRAW_LINE_WALLS  
                     DRAW_SHIP  
                     READ_BUTTONS  
                     MOVE_BULLETS  
-                    lda      #$7F 
-                    INTENSITY_A  
-                    DRAW_BULLETS  
-                    lda      #$5F 
-                    INTENSITY_A  
-                                                          ; display score and ships left 
+                    DRAW_BULLETS   
                     DRAW_VECTOR_SCORE  
-                    lda      #127                         ; restore scale 
-                    sta      VIA_t1_cnt_lo 
                     PRINT_SHIPS  
-; decrement counters on alley respawn timeouts                                    ; jmp no_score 
-;no_score: 
-                    ldd      prizecnt                     ; minumum counter for time between prize spawns 
-                    addd     #1 
-                    std      prizecnt 
-                    lda      Is_Prize 
-                    beq      noprizecntdown 
-                    dec      prizecntdown 
-noprizecntdown 
-; end score+ship count
                     NEW_ENEMY  
                     FRAME_CNTS  
                     MOVE_ENEMYS  
@@ -127,15 +72,10 @@ noprizecntdown
                     SHIP_X_COLLISION_DETECT  
                     STALL_CHECK                           ; can't just sit in an open alley forever... 
                     ALLEY_TIMEOUT  
-;
-                    lda      Level_Done                   ; check level_done flag 
-                    lbeq     nolevel 
-                    jsr      newlevel                     ; and run routine 
-nolevel 
+					CHECK_LEVEL_DONE
                     CHECK_SFX  
-                                                          ; CHECK_DEMO ; routine to handle button press during demo mode 
-                                                          ; rolled into button handling macro 
                     jmp      main                         ; and repeat forever, sorta 
+;-----------------------------------------------------------------------------------
 
 ; must go at bottom or fills up RAM instead of ROM 
                     include  "functions.i"
@@ -144,7 +84,6 @@ nolevel
                     include  "rawsounddata.i"
                     include  "rawsoundroutines.i"
                     include  "rasterDraw.asm"
-USE_ENVELOPES=1 
                     include  "ymPlayer.i"
                     include  "turmoil_ym.asm"
                     include  "ds2431LowLevel.i"

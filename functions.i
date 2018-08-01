@@ -672,6 +672,7 @@ hsbtn4_done
                     lda      hsentry_index 
                     beq      hsbtn3_done                  ; already at start can't go back more 
                     dec      hsentry_index                ; go back one space left 
+					jsr      SFX_RevBloop
                     lda      #$5F                         ; load underscore char 
                     ldx      #hstempstr 
                     ldb      hsentry_index 

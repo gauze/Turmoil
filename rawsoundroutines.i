@@ -9,7 +9,8 @@ CB_BOUNCE           =        2
 CB_SPAWN            =        3 
 GET_PRIZE           =        4 
 BLOOP               =        5 
-BLOOP2              =        6 
+PIP                 =        6 
+REVBLOOP            =        7 
 ; ch 2
 ARROW_SPAWN         =        1 
 TANK_SPAWN          =        2 
@@ -62,7 +63,8 @@ SfxInit:
                     sta      sfxC3ID 
                     std      tempW1 
                     std      tempW2 
-                    std      sfx_FC 
+                    sta      tempB3 
+                                                          ; std sfx_FC 
                     std      sfxC1W1 
                     std      sfxC2W1 
                     std      sfxC3W1 
@@ -91,7 +93,9 @@ Do_Sound_FX_C1:
                     lbeq     Do_Sound_FX_C1Ghost_Spawn 
                     cmpa     #BLOOP 
                     lbeq     Do_Sound_FX_C1Bloop 
-                    cmpa     #BLOOP2 
+                    cmpa     #REVBLOOP 
+                    lbeq     Do_Sound_FX_C1RevBloop 
+                    cmpa     #PIP 
                     lbeq     Do_Sound_FX_C1Pip 
                     cmpa     #MUTE 
                     blt      Do_Sound_FX_C1SoundOff 
@@ -153,7 +157,7 @@ Do_Sound_FX_C1CB_Bounce:
                     beq      Do_Sound_FX_C1SoundOff 
                                                           ;set mixer byte 
                     lda      #PSG_OnOff 
-                    ldb      #Ch1_Tone_On | #Ch1_Noise_On ; #$90 
+                    ldb      #Ch1_Tone_On                 ;| #Ch1_Noise_On ; #$90 
                     jsr      Sound_Byte_raw 
                     ldx      #CB_Bounce_Freq 
                     lda      sfxC1W1 
@@ -201,12 +205,12 @@ Do_Sound_FX_C1Bloop:
                     rts      
 
 Do_Sound_FX_C1Pip: 
-                    lda      #PSG_Ch1_Freq_Lo 
-                    ldb      #0 
-                    jsr      Sound_Byte_raw 
-                    lda      #PSG_Ch1_Freq_Hi 
-                    ldb      #0 
-                    jsr      Sound_Byte_raw 
+                                                          ; lda #PSG_Ch1_Freq_Lo 
+                                                          ; ldb #0 
+                                                          ; jsr Sound_Byte_raw 
+                                                          ; lda #PSG_Ch1_Freq_Hi 
+                                                          ; ldb #0 
+                                                          ; jsr Sound_Byte_raw 
                     lda      sfxC1W1 
                     cmpa     #0 
                     beq      Do_Sound_FX_C1SoundOff 
@@ -227,11 +231,32 @@ Do_Sound_FX_C1Pip:
                     ldd      tempW1 
                     jsr      Sound_Byte_raw 
                     dec      sfxC1W1                      ; or it'll never end! 
-                    rts      
+                    rts    
+Do_Sound_FX_C1RevBloop: 
+                    lda      sfxC1W1 
+                    cmpa     #0 
+                    beq      Do_Sound_FX_C1SoundOff 
+                    lda      #PSG_OnOff 
+                    ldb      #Ch1_Tone_On                 ;| #Ch1_Noise_Off 
+                    jsr      Sound_Byte_raw 
+                    ldx      #RevBloop_Vol 
+                    lda      sfxC1W1 
+                    ldb      a,x 
+                    lda      #PSG_Ch1_Vol 
+                    jsr      Sound_Byte_raw 
+                    ldd      #34                          ; high "pip" 
+                    std      tempW1 
+                    lda      #PSG_Ch1_Freq_Lo 
+                    ldb      tempW1+1 
+                    jsr      Sound_Byte_raw 
+                    lda      #PSG_Ch1_Freq_Hi 
+                    ldd      tempW1 
+                    jsr      Sound_Byte_raw 
+                    dec      sfxC1W1                      ; or it'll never end! 
+                    rts     
 
 ;=Channel 2 effects check =======
 Do_Sound_FX_C2: 
-                                                          ;ch2 sfx? 
                     lda      sfxC2ID 
                     cmpa     #UPBURST 
                     lbeq     Do_Sound_FX_C2UpBurst 
@@ -241,8 +266,10 @@ Do_Sound_FX_C2:
                     lbeq     Do_Sound_FX_C2VertMove 
                     cmpa     #MUTE 
                     lbeq     Do_Sound_FX_C2SoundOff 
-                    ldd      #0 
-                    std      tempW2 
+;                    ldd      #0 
+;                    std      tempW2 
+                    rts      
+
 ;===============================
 Do_Sound_FX_C2VertMove: 
                     lda      sfxC2W1 
@@ -255,18 +282,18 @@ Do_Sound_FX_C2VertMove:
                     lda      #PSG_Env_Period_Fine 
                     ldb      tempB3 
                     jsr      Sound_Byte_raw 
-
+;
                     lda      #PSG_Env_Period_Coarse 
                     ldb      #0 
-                    jsr      Sound_Byte_raw
- 
+                    jsr      Sound_Byte_raw 
+; 
                     lda      #PSG_Ch2_Vol 
-                    ldb      #Use_Env 
-                    jsr      Sound_Byte_raw  
+                    ldb      #16 
+                    jsr      Sound_Byte_raw 
 ; new code ^
                     ldx      #VertMove_Freq 
                     lda      sfxC2W1 
-                    ldd      a,x                       
+                    ldd      a,x 
                     std      tempW1 
                     lda      #PSG_Ch2_Freq_Lo 
                     ldb      tempW1+1 
@@ -274,8 +301,9 @@ Do_Sound_FX_C2VertMove:
                     lda      #PSG_Ch2_Freq_Hi 
                     ldd      tempW1 
                     jsr      Sound_Byte_raw 
-                    dec      sfxC2W1                      ; or it'll never end!
-					dec      tempB3 
+;
+                    dec      sfxC2W1                      ; or it'll never end! 
+                    dec      tempB3                       ; envelope counter 
                     rts      
 
 ; ============================
@@ -353,8 +381,6 @@ Do_Sound_FX_C2DownBurst:
 Do_Sound_FX_C3: 
                                                           ;channel 3 sfx 
                     lda      sfxC3ID 
-                    cmpa     #2 
-                                                          ; lbeq Do_Sound_FX_C3Explosion 
                     cmpa     #SHOT 
                     beq      Do_Sound_FX_C3Shot 
 ; silence functions                                        
@@ -377,21 +403,28 @@ Do_Sound_FX_C1SoundOff:
 
 Do_Sound_FX_C2Mute: 
 Do_Sound_FX_C2SoundOff: 
+                                                          ; rts 
                                                           ;nothing playing 
+                    lda      #PSG_Env_Shape 
+                    ldb      #0 
+                    jsr      Sound_Byte_raw 
+;
                     lda      #PSG_Ch2_Vol 
                     ldb      #0 
                     jsr      Sound_Byte_raw 
-                    lda      #0 
-                    sta      sfxC2ID 
-                    lda      #PSG_OnOff 
-                    ldb      #Ch2_Noise_Off | #Ch2_Tone_Off 
-                    jsr      Sound_Byte_raw 
-                    lda      #PSG_Ch2_Freq_Lo 
-                    ldb      #0 
-                    jsr      Sound_Byte_raw 
-                    lda      #PSG_Ch2_Freq_Hi 
-                    ldb      #0 
-                    jsr      Sound_Byte_raw 
+;
+;
+;                    lda      #PSG_OnOff 
+;                    ldb      #Ch2_Noise_Off | #Ch2_Tone_Off 
+;                    jsr      Sound_Byte_raw 
+;
+;                    lda      #PSG_Ch2_Freq_Lo 
+;                    ldb      #0 
+;                    jsr      Sound_Byte_raw 
+;
+;                    lda      #PSG_Ch2_Freq_Hi 
+;                    ldb      #0 
+;                    jsr      Sound_Byte_raw 
                                                           ; jsr Clear_Sound 
                     rts      
 
@@ -491,16 +524,22 @@ SFX_Bloop:
                     rts      
 
 SFX_Pip: 
-                    lda      #BLOOP2 
+                    lda      #PIP 
                     sta      sfxC1ID 
                     lda      #3 
                     sta      sfxC1W1 
                     rts      
+SFX_RevBloop: 
+                    lda      #REVBLOOP 
+                    sta      sfxC1ID 
+                    lda      #3 
+                    sta      sfxC1W1 
+                    rts    
 
 SFX_VertMove: 
                     lda      #VERTMOVE 
                     sta      sfxC2ID 
-                    lda      #15 
+                    lda      #15                          ; length 15 frames 
                     sta      sfxC2W1 
                                                           ;initial env 
                     lda      #16 

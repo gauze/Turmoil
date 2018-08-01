@@ -176,7 +176,7 @@ sfxC3ID             ds       1
 sfxC1W1             ds       2                            ; W length of time effect lasts.
 sfxC2W1             ds       2                            ; C = channel? 
 sfxC3W1             ds       2 
-sfx_FC              ds       2                            ; "LFO" table it's cycled 
+;sfx_FC              ds       2                            ; "LFO" table it's cycled 
 ; DS2431+ EEPROM stuff
 EEPROM_CHECKSUM     equ      $69                          ; any value other than $00 or $e0 
 EEPROM_STORESIZE    equ      128 
@@ -193,8 +193,9 @@ eeprom_buffer6      ds       32
 eeprom_buffer7      ds       32 
 eeprom_buffer8      ds       32 
 eeprom_buffer9      ds       32 
+; ymplayer ram and USE_ENVELOPES flag
 ym_ram              equ      *
-
+USE_ENVELOPES=1 				
 ;
 ; CONSTANTS place after VARIABLES
 ;ALLEYWIDTH          =        17                           ; moved to macros.i near where it's used for quick access

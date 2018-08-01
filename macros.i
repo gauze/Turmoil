@@ -2,6 +2,51 @@
 ; vim: ts=4
 ; vim: syntax=asm6809
 ; MACROS
+INTRO_BOOT          macro                                 ; run once on cold or warm boot 
+introSplash 
+                    lda      #1 
+                    sta      Demo_Mode                    ; in Demo_Mode on boot 
+                    ldu      #ustacktemp 
+                    stu      ustacktempptr                ; only do this once 
+                    jsr      setup                        ; remove when done testing 
+                    jsr      fill_hs_tbl                  ; filling from ROM eventually pull from EPROM 
+               ;     jsr      eeprom_load 
+               ;     jsr      eeprom_save 
+                    jsr      titleScreen 
+                    jsr      SfxInit                    
+                    jsr      joystick_config             
+                    endm     
+;
+RESTART             macro
+restart 
+                    ldd      #$3075 
+                    std      Vec_Rfrsh                    ; make sure we are at 50hz 
+                    jsr      setup 
+                    jsr      levelsplash 
+                    lda      #0 
+                    sta      shipYpos 
+                    sta      shipXpos 
+                    sta      In_Alley 
+                    sta      Ship_Dead 
+                    ldb      #LEFT 
+                    stb      shipdir 
+                    ldx      #score 
+                    jsr      Clear_Score 
+                    lda      #3                           ; normally 5 FIX 
+                    sta      shipcnt 
+                    lda      #$5F                         ; for high score input _ under scores _ 
+                    sta      hstempstr 
+                    sta      hstempstr+1 
+                    sta      hstempstr+2 
+                    lda      #$80                         ; EOL 
+                    sta      hstempstr+3 
+                    clr      demo_label_cnt
+                    jsr      SfxInit  
+					endm
+;
+WAIT_RECAL			macro
+					jsr      Wait_Recal
+					endm
 DRAW_SHIP           macro    
 ; draw ship 
                     RESET0REF  
@@ -67,6 +112,8 @@ _donuthin1
 ALLEYWALL_Y         =        60 
 ALLEYHEIGHT         =        17 
 DRAW_LINE_WALLS     macro    
+                    lda      #$3F 
+                    INTENSITY_A 
                     clr      Vec_Misc_Count 
                     rol      Line_Pat                     ; 1->2->4->8->16-> etc 
                     bne      _topline                     ; check for 0 
@@ -1629,7 +1676,7 @@ READ_BUTTONS        macro
                     beq      no_warp_delay 
                     dec      warpdelay 
 no_warp_delay 
-                    jsr      Read_Btns                   ; maybe only do one of these per loop?
+                    jsr      Read_Btns                    ; maybe only do one of these per loop? 
                     lda      Demo_Mode 
                     beq      no_check_needed 
                     lda      Vec_Button_1_2 
@@ -1645,14 +1692,14 @@ no_check_needed
                     lda      Ship_Dead 
                     lbne     cant_shoot_while_dead 
                     lda      Demo_Mode 
-                    lbne     demo_mode_firing
-					jsr      DP_to_D0 
-                  ;  jsr      Read_Btns 
+                    lbne     demo_mode_firing 
+                    jsr      DP_to_D0 
+                                                          ; jsr Read_Btns 
                     lda      Vec_Btn_State 
                     lbeq     no_press 
                     ldb      Super_Game 
                     lbeq     not_super 
-                    ;lda      Vec_Btn_State 
+                                                          ;lda Vec_Btn_State 
                     cmpa     #1 
                     lbne     no_warp 
 warp 
@@ -1660,7 +1707,7 @@ warp
                     lbne     cant_warp_in_alley 
                     ldb      warpdelay 
                     lbne     no_press                     ; too soon to warp again software debounce 
-					pshs     a
+                    pshs     a 
                     jsr      Random 
                     anda     #%00000111 
                     cmpa     #7 
@@ -1673,13 +1720,13 @@ warp
 
 cant_warp_in_alley 
 no_warp 
-                    ; a should still have original lda ; lda      Vec_Btn_State 
+                                                          ; a should still have original lda ; lda Vec_Btn_State 
                     cmpa     #2 
                     lbne     no_smart_bomb                ; not pressing button2 continue 
                     lda      smartbombcnt 
                     lbeq     no_press                     ; pressing 2 but used bomb already, so exit 
                     SMART_BOMB  
-					jsr      SFX_Bloop
+                    jsr      SFX_Bloop 
                     jmp      no_press                     ; did smart bomb just now, so exit 
 
 no_smart_bomb 
@@ -1990,7 +2037,7 @@ READ_JOYSTICK       macro
 
 rev_shipdir_down 
                     inc      shipYdir 
-                    dec      shipYpos
+                    dec      shipYpos 
                     jmp      jsdone 
 
 do_demo_dec 
@@ -2019,7 +2066,7 @@ not_demo_rjs
                     lda      shipYpos 
                     cmpa     #6                           ; slot 6 as far up as u can go don't move 
                     beq      jsdoneY 
-					jsr      SFX_VertMove 
+                    jsr      SFX_VertMove 
                     inc      shipYpos 
                     clr      stallcnt 
                     bra      jsdoneY 
@@ -2027,7 +2074,7 @@ not_demo_rjs
 going_down 
                     lda      shipYpos 
                     beq      jsdoneY                      ; in slot 0 as far down as u can go 
-					jsr      SFX_VertMove 
+                    jsr      SFX_VertMove 
                     dec      shipYpos 
                     clr      stallcnt                     ; reset stall counter 
 jsdoneY 
@@ -2190,6 +2237,8 @@ bullets_done2
                     endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 DRAW_BULLETS        macro    
+                    lda      #$7F 
+                    INTENSITY_A  
                     lda      #$0F 
                     sta      Vec_Dot_Dwell                ; trying to make bullet brighter 
                     lda      #0 
@@ -2462,6 +2511,15 @@ prize_exist
                     endm     
 ;::::::::::::::::::::::::::::::::
 ALLEY_TIMEOUT       macro    
+; decrement counters on alley respawn timeouts                                     
+                    ldd      prizecnt                     ; minumum counter for time between prize spawns 
+                    addd     #1 
+                    std      prizecnt 
+                    lda      Is_Prize 
+                    beq      noprizecntdown 
+                    dec      prizecntdown 
+noprizecntdown 
+;
                     ldx      #alleyto_t 
                     lda      #6 
                     lsla     
@@ -2570,6 +2628,8 @@ _timeout_pat        STA      <VIA_shift_reg               ;Put pattern in shift 
 ;;;;;;;;;;;; from BIOS optimized slightly ;;;;;;;;;;;;;;;;;;;;;;;;    
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 DRAW_VECTOR_SCORE   macro    
+                    lda      #$5F 
+                    INTENSITY_A 
                     lda      frm2cnt 
                     lbeq     _no_print_vscore 
                     lda      Demo_Mode 
@@ -2642,7 +2702,9 @@ _ships_left_loop
                     bne      _ships_left_loop 
                     endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-PRINT_SHIPS         macro    
+PRINT_SHIPS         macro   
+                    lda      #127                         ; restore scale 
+                    sta      VIA_t1_cnt_lo  
                     lda      Demo_Mode 
                     bne      _no_print_ships 
                     lda      frm2cnt 
@@ -2660,7 +2722,7 @@ _no_print_ships
 CHECK_DEMO          macro    
                     lda      Demo_Mode 
                     beq      no_check_needed 
-                    jsr      Read_Btns                   ; maybe only do one of these per loop?
+                    jsr      Read_Btns                    ; maybe only do one of these per loop? 
                     lda      Vec_Button_1_2 
                     beq      no_conf_press 
                     jsr      joystick_config 
@@ -2812,6 +2874,13 @@ pos6
                     sta      alley6s 
 no_enemy6 
                     clr      smartbombcnt 
+                    endm     
+;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+CHECK_LEVEL_DONE    macro    
+                    lda      Level_Done                   ; check level_done flag 
+                    lbeq     nolevel 
+                    jsr      newlevel                     ; and run routine 
+nolevel 
                     endm     
 ;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 CHECK_SFX           macro    
