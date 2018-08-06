@@ -31,7 +31,7 @@ Use_Env             =        %10000         ; set bit 5 of a Vol reg to use env
 ; use IMMEDIATE or with OR | operators,opcodes
 ;
 Ch1_Tone_On         =        %00100000  
-Ch2_Tone_On         =        %000100000 
+Ch2_Tone_On         =        %00010000 
 Ch3_Tone_On         =        %00001000 
 Ch1_Noise_On        =        %00000100 
 Ch2_Noise_On        =        %00000010 
@@ -46,7 +46,7 @@ Ch3_Noise_Off       =        %00111110
 ; use IMMEDIATE or with OR | operators,opcodes
 Ch_All_Tone_On      =        %00111000 
 Ch_All_Noise_On     =        %00000111 
-; use IMMEDIATE with AND & operators,opcodes 
+; use IMMEDIATE or with AND & operators,opcodes 
 Ch_All_Tone_Off     =        %00000111 
 Ch_All_Noise_Off    =        %00111000 
 ; use IMMEDIATE  

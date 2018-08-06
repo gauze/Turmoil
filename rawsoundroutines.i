@@ -41,7 +41,7 @@ ALLEY_MOVE          =        2
 ;        3 - Voice 1 use Noise Generator On/Off
 ;        4 - Voice 2 use Noise Generator On/Off
 ;        5 - Voice 3 use Noise Generator On/Off
-;       6-7 Unused
+;       6-7 Unused (accidental use of these will break button handling)
 ; 8 = volume ch1 (LOWER 4 bits, 0-15)
 ; 9 = volume ch2 "
 ; 10 = volume ch3    
@@ -80,7 +80,28 @@ SfxInit:
                     jsr      Sound_Byte_raw 
                     lda      #PSG_Ch3_Vol 
                     ldb      #0 
-                    jsr      Sound_Byte_raw 
+                    jsr      Sound_Byte_raw
+					lda      #PSG_Ch1_Freq_Lo
+					ldb      #0
+					jsr      Sound_Byte_raw
+					lda      #PSG_Ch1_Freq_Hi
+					ldb      #0
+					jsr      Sound_Byte_raw
+					lda      #PSG_Ch2_Freq_Lo
+					ldb      #0
+					jsr      Sound_Byte_raw
+					lda      #PSG_Ch2_Freq_Hi
+					ldb      #0
+					jsr      Sound_Byte_raw
+					lda      #PSG_Ch3_Freq_Lo
+					ldb      #0
+					jsr      Sound_Byte_raw
+					lda      #PSG_Ch3_Freq_Hi
+					ldb      #0
+					jsr      Sound_Byte_raw
+					lda      #PSG_Noise
+					ldb      #0
+					jsr      Sound_Byte_raw
                     rts      
 
 ;=========
@@ -112,13 +133,16 @@ Do_Sound_FX_C1SoundOff:
                     lda      #PSG_Ch2_Freq_Hi 
                     ldb      #0 
                     jsr      Sound_Byte_raw               ;set vol ch1 
+;
                     lda      #PSG_Ch1_Vol                 ; ch1 
                     ldb      #0 
                     jsr      Sound_Byte_raw 
+;
                     lda      #PSG_OnOff 
                     lda      #Ch1_Noise_Off               ; #Ch1_Tone_Off 
                     jsr      Sound_Byte_raw 
-                    lda      #13                          ;; env ?? 
+;
+                    lda      #PSG_Env_Shape                  
                     ldb      #0 
                     jsr      Sound_Byte_raw 
                     clr      sfxC1ID 
@@ -133,6 +157,7 @@ Do_Sound_FX_C1Ghost_Spawn:
                     lda      #PSG_OnOff 
                     ldb      #Ch1_Tone_On 
                     jsr      Sound_Byte_raw 
+;
                     ldx      #Ghost_Spawn_Freq 
                     lda      sfxC1W1 
                     lsla                                  ; 2 bytes 
@@ -275,8 +300,14 @@ Do_Sound_FX_C2VertMove:
                     lda      sfxC2W1 
                     cmpa     #0 
                     lbeq     Do_Sound_FX_C2SoundOff 
+					lda      #0
+					ldb      #53
+					jsr      Sound_Byte_raw
                     lda      #PSG_OnOff 
                     ldb      #Ch2_Tone_On                 ;| #Ch1_Noise_Off 
+                    jsr      Sound_Byte_raw 
+                    lda      #PSG_OnOff 
+                    ldb      #Ch2_Noise_Off 
                     jsr      Sound_Byte_raw 
 ;new code v
                     lda      #PSG_Env_Period_Fine 
