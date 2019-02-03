@@ -10,14 +10,14 @@ introSplash
                     stu      ustacktempptr                ; only do this once 
                     jsr      setup                        ; remove when done testing 
                     jsr      fill_hs_tbl                  ; filling from ROM eventually pull from EPROM 
-               ;     jsr      eeprom_load 
-               ;     jsr      eeprom_save 
+                                                          ; jsr eeprom_load 
+                                                          ; jsr eeprom_save 
                     jsr      titleScreen 
-                    jsr      SfxInit                    
-                    jsr      joystick_config             
+                    jsr      SfxInit 
+                    jsr      joystick_config 
                     endm     
 ;
-RESTART             macro
+RESTART             macro    
 restart 
                     ldd      #$3075 
                     std      Vec_Rfrsh                    ; make sure we are at 50hz 
@@ -40,13 +40,13 @@ restart
                     sta      hstempstr+2 
                     lda      #$80                         ; EOL 
                     sta      hstempstr+3 
-                    clr      demo_label_cnt
-                    jsr      SfxInit  
-					endm
+                    clr      demo_label_cnt 
+                    jsr      SfxInit 
+                    endm     
 ;
-WAIT_RECAL			macro
-					jsr      Wait_Recal
-					endm
+WAIT_RECAL          macro    
+                    jsr      Wait_Recal 
+                    endm     
 DRAW_SHIP           macro    
 ; draw ship 
                     RESET0REF  
@@ -113,7 +113,7 @@ ALLEYWALL_Y         =        60
 ALLEYHEIGHT         =        17 
 DRAW_LINE_WALLS     macro    
                     lda      #$3F 
-                    INTENSITY_A 
+                    INTENSITY_A  
                     clr      Vec_Misc_Count 
                     rol      Line_Pat                     ; 1->2->4->8->16-> etc 
                     bne      _topline                     ; check for 0 
@@ -2629,7 +2629,7 @@ _timeout_pat        STA      <VIA_shift_reg               ;Put pattern in shift 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 DRAW_VECTOR_SCORE   macro    
                     lda      #$5F 
-                    INTENSITY_A 
+                    INTENSITY_A  
                     lda      frm2cnt 
                     lbeq     _no_print_vscore 
                     lda      Demo_Mode 
@@ -2702,9 +2702,9 @@ _ships_left_loop
                     bne      _ships_left_loop 
                     endm     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-PRINT_SHIPS         macro   
+PRINT_SHIPS         macro    
                     lda      #127                         ; restore scale 
-                    sta      VIA_t1_cnt_lo  
+                    sta      VIA_t1_cnt_lo 
                     lda      Demo_Mode 
                     bne      _no_print_ships 
                     lda      frm2cnt 
@@ -2890,4 +2890,71 @@ CHECK_SFX           macro
                     jsr      Do_Sound_FX_C2 
                     jsr      Do_Sound_FX_C3 
 no_sfx_demo 
+                    endm     
+;#############################################################
+PRINT_STR_D         macro    
+                    local    psdelayloop, psddone 
+                    JSR      >Moveto_d_7F 
+                    NOP      10                           ; pause 20 cycles more readable? 
+                                                          ; JSR Delay_1 ; pauze 20 cycles 
+                                                          ; JMP Print_Str 
+                    STU      Vec_Str_Ptr                  ;Save string pointer 
+                    LDX      #Char_Table-$20              ;Point to start of chargen bitmaps 
+                    LDD      #$1883                       ;$8x = enable RAMP? 
+                    CLR      <VIA_port_a                  ;Clear D/A output 
+                    STA      <VIA_aux_cntl                ;Shift reg mode = 110, T1 PB7 enabled 
+;                    LDX      #Char_Table-$20              ;Point to start of chargen bitmaps 
+linestart:          STB      <VIA_port_b                  ;Update RAMP, set mux to channel 1 
+                    DEC      <VIA_port_b                  ;Enable mux 
+                    LDD      #$8081 
+                    NOP                                   ;Wait a moment 
+                    INC      <VIA_port_b                  ;Disable mux 
+                    STB      <VIA_port_b                  ;Enable RAMP, set mux to channel 0 
+                    STA      <VIA_port_b                  ;Enable mux 
+                    TST      $C800                        ;I think this is a delay only 
+                    INC      <VIA_port_b                  ;Enable RAMP, disable mux 
+                    LDA      Vec_Text_Width               ;Get text width 
+                    STA      <VIA_port_a                  ;Send it to the D/A 
+                    LDD      #$0100 
+                    LDU      Vec_Str_Ptr                  ;Point to start of text string 
+                    STA      <VIA_port_b                  ;Disable RAMP, disable mux 
+                    BRA      _LF4CB 
+
+_LF4C7:             LDA      a,x                          ;Get bitmap from chargen table 
+                    STA      <VIA_shift_reg               ;Save in shift register 
+_LF4CB:             LDA      ,u+                          ;Get next character 
+                    BPL      _LF4C7                       ;Go back if not terminator 
+                    LDA      #$81 
+                    STA      <VIA_port_b                  ;Enable RAMP, disable mux 
+                    NEG      <VIA_port_a                  ;Negate text width to D/A 
+                    LDA      #$01 
+                    STA      <VIA_port_b                  ;Disable RAMP, disable mux 
+                    CMPX     #Char_Table_End-$20          ; Check for last row 
+                    BEQ      psddone                      ;Branch if last row 
+                    LEAX     $50,x                        ;Point to next chargen row 
+                    TFR      u,d                          ;Get string length 
+                    SUBD     Vec_Str_Ptr 
+                    SUBB     #$02                         ; - 2 
+                    ASLB                                  ; * 2 
+                    BRN      psdelayloop                  ;3 cycles Delay a moment BRN=branch never 
+psdelayloop         LDA      #$81 
+                    NOP      
+                    DECB     
+                    BNE      psdelayloop                  ;Delay some more in a loop 
+                    STA      <VIA_port_b                  ;Enable RAMP, disable mux 
+                    LDB      Vec_Text_Height              ;Get text height 
+                    STB      <VIA_port_a                  ;Store text height in D/A 
+                    DEC      <VIA_port_b                  ;Enable mux 
+                    LDD      #$8101 
+                    NOP                                   ;Wait a moment 
+                    STA      <VIA_port_b                  ;Enable RAMP, disable mux 
+                    CLR      <VIA_port_a                  ;Clear D/A 
+                    STB      <VIA_port_b                  ;Disable RAMP, disable mux 
+                    STA      <VIA_port_b                  ;Enable RAMP, disable mux 
+                    LDB      #$03                         ;$0x = disable RAMP? 
+                    BRA      linestart                    ;Go back for next scan line 
+
+psddone             LDA      #$98 
+                    STA      <VIA_aux_cntl                ;T1->PB7 enabled 
+                                                          ; JMP Reset0Ref ;Reset the zero reference 
                     endm     

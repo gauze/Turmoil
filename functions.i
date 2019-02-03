@@ -182,10 +182,17 @@ _no_chk_hs
 ;                    lbne     restart 
 ;                    bra      goloop 
 ;################################################################
-levelsplash 
+levelsplash: 
                     jsr      Clear_Sound 
                     clr      temp 
-                    clr      stallcnt 
+                    clr      stallcnt
+				  lda      #0
+				  sta      top0
+				  lda      #33
+				  sta      top1
+				  lda      #66
+				  sta      top2
+; don't check this when TESTING!! 
                     lda      Demo_Mode 
                     lbne     dundo_demo 
 splashloop 
@@ -209,13 +216,13 @@ splashloop
                     sta      levelstr+1 
                     lda      #$80 
                     sta      levelstr+2 
-                    bra      score_format_done 
+                    bra      _score_format_done 
 
 do_level 
 ; parse level into chars  $30-$39 0-9
                     lda      level 
                     cmpa     #9 
-                    ble      one_digit 
+                    ble      ones_digit 
                     ldb      #$30 
                     stb      levelstr 
 tens_digit 
@@ -223,28 +230,176 @@ tens_digit
                     inc      levelstr 
                     cmpa     #9 
                     bgt      tens_digit 
-one_digit 
+ones_digit 
                     adda     #$30 
                     sta      levelstr+1 
                     lda      #$80 
                     sta      levelstr+2 
-score_format_done 
+_score_format_done 
                     ldu      #lvllabelstr 
                     lda      #-0 
-                    ldb      #-39 
+                    ldb      #-49 
                     jsr      Print_Str_d 
+; START "3D moving Hallway" thing
+; Lines from center to edge
+;                    jsr      Intensity_5F 
+; first box
+                    lda      top0 
+                    jsr      Intensity_a 
+                    RESET0REF  
+                    lda      top0 
+                    ldb      top0 
+                    negb     
+                    jsr      Moveto_d 
+;
+                    clra                                  ; Y movement 
+                    ldb      top0                         ; X movement 
+                    jsr      Draw_Line_d 
+                    clra                                  ; Y movement 
+                    ldb      top0                         ; X movement 
+                    jsr      Draw_Line_d 
+;
+                    clrb                                  ; Y movement 
+                    lda      top0                         ; X movement 
+                    nega     
+                    jsr      Draw_Line_d 
+                    clrb                                  ; Y movement 
+                    lda      top0                         ; X movement 
+                    nega     
+                    jsr      Draw_Line_d 
+;
+                    clra                                  ; Y movement 
+                    ldb      top0                         ; X movement 
+                    negb     
+                    jsr      Draw_Line_d 
+                    clra                                  ; Y movement 
+                    ldb      top0 
+                    negb                                  ; X movement 
+                    jsr      Draw_Line_d 
+;
+                    clrb                                  ; Y movement 
+                    lda      top0                         ; X movement 
+                    jsr      Draw_Line_d 
+                    clrb                                  ; Y movement 
+                    lda      top0                         ; X movement 
+                    jsr      Draw_Line_d 
+; 2nd box
+                    RESET0REF  
+                    lda      top1 
+                    jsr      Intensity_a 
+                    lda      top1 
+                    ldb      top1 
+                    negb     
+                    jsr      Moveto_d 
+;
+                    clra                                  ; Y movement 
+                    ldb      top1                         ; X movement 
+                    jsr      Draw_Line_d 
+                    clra                                  ; Y movement 
+                    ldb      top1                         ; X movement 
+                    jsr      Draw_Line_d 
+;
+                    clrb                                  ; Y movement 
+                    lda      top1                         ; X movement 
+                    nega     
+                    jsr      Draw_Line_d 
+                    clrb                                  ; Y movement 
+                    lda      top1                         ; X movement 
+                    nega     
+                    jsr      Draw_Line_d 
+;
+                    clra                                  ; Y movement 
+                    ldb      top1                         ; X movement 
+                    negb     
+                    jsr      Draw_Line_d 
+                    clra                                  ; Y movement 
+                    ldb      top1 
+                    negb                                  ; X movement 
+                    jsr      Draw_Line_d 
+;
+                    clrb                                  ; Y movement 
+                    lda      top1                         ; X movement 
+                    jsr      Draw_Line_d 
+                    clrb                                  ; Y movement 
+                    lda      top1                         ; X movement 
+                    jsr      Draw_Line_d 
+; 3rd box
+                    RESET0REF  
+                    lda      top2 
+                    jsr      Intensity_a 
+                    lda      top2 
+                    ldb      top2 
+                    negb     
+                    jsr      Moveto_d 
+;
+                    clra                                  ; Y movement 
+                    ldb      top2                         ; X movement 
+                    jsr      Draw_Line_d 
+                    clra                                  ; Y movement 
+                    ldb      top2                         ; X movement 
+                    jsr      Draw_Line_d 
+;
+                    clrb                                  ; Y movement 
+                    lda      top2                         ; X movement 
+                    nega     
+                    jsr      Draw_Line_d 
+                    clrb                                  ; Y movement 
+                    lda      top2                         ; X movement 
+                    nega     
+                    jsr      Draw_Line_d 
+;
+                    clra                                  ; Y movement 
+                    ldb      top2                         ; X movement 
+                    negb     
+                    jsr      Draw_Line_d 
+                    clra                                  ; Y movement 
+                    ldb      top2 
+                    negb                                  ; X movement 
+                    jsr      Draw_Line_d 
+;
+                    clrb                                  ; Y movement 
+                    lda      top2                         ; X movement 
+                    jsr      Draw_Line_d 
+                    clrb                                  ; Y movement 
+                    lda      top2                         ; X movement 
+                    jsr      Draw_Line_d 
+; check loops below till end
+                    inc      top0 
+                    lda      #127 
+                    cmpa     top0 
+                    bne      top0ok 
+                    clra     
+                    sta      top0 
+top0ok 
+                    inc      top1 
+                    lda      #127 
+                    cmpa     top1 
+                    bne      top1ok 
+                    clra     
+                    sta      top1 
+top1ok 
+                    inc      top2 
+                    lda      #127 
+                    cmpa     top2 
+                    bne      top2ok                       ; OOPS where do we go?? 
+                    clra     
+                    sta      top2 
+top2ok 
+; END of "Moving 3D Hallway" thing 
 ; zoom code stuff
-                    lda      #2 
-                    ldb      #-39 
-                    MOVETO_D  
-                    ldx      #Level_Box1_nomode 
-                    DRAW_VLC  
-                    lda      #10 
-                    ldb      #-5 
-                    MOVETO_D                              ;_BEFORE 
+              ;      RESET0REF  
+              ;      lda      #2 
+              ;      ldb      #-39 
+              ;      MOVETO_D  
+              ;      ldx      #Level_Box1_nomode 
+              ;      DRAW_VLC  
+              ;      lda      #10 
+              ;      ldb      #-5 
+              ;      MOVETO_D                              ;_BEFORE 
                                                           ; MOVETO_D_AFTER 
-                    ldx      #Level_Box2_nomode 
-                    DRAW_VLC  
+              ;      ldx      #Level_Box2_nomode 
+             ;       DRAW_VLC  
+; use stallcnt to time loop
                     inc      stallcnt 
                     lda      stallcnt 
                     cmpa     #100 
@@ -252,6 +407,7 @@ score_format_done
                     bra      splashloop 
 
 donesplash 
+				; BRA       splashloop                       ; REMOVE TO BREAK OUT OF ENDLESS LOOP
                     lda      level 
                     cmpa     #30 
                     blt      do_cnt_tbl 
@@ -270,7 +426,7 @@ dundo_demo
                     rts      
 
 ;**********************************************************************
-deathsplash 
+deathsplash: 
                     clr      stallcnt 
 deathloop 
                     jsr      Wait_Recal 
@@ -470,7 +626,7 @@ conf_done
                     rts      
 
 ;********************************************************************************************
-game_select 
+game_select: 
                     lda      #10 
                     sta      temp1 
                     lda      #$FF 
@@ -672,7 +828,7 @@ hsbtn4_done
                     lda      hsentry_index 
                     beq      hsbtn3_done                  ; already at start can't go back more 
                     dec      hsentry_index                ; go back one space left 
-					jsr      SFX_RevBloop
+                    jsr      SFX_RevBloop 
                     lda      #$5F                         ; load underscore char 
                     ldx      #hstempstr 
                     ldb      hsentry_index 
@@ -1053,7 +1209,8 @@ _ct_loop
                     ldu      #thankstolabel 
                     lda      #70 
                     ldb      #-110 
-                    jsr      Print_Str_d 
+                   ; jsr      Print_Str_d 
+				  PRINT_STR_D
                     lda      temp2 
                     cmpa     temp                         ; should be $F8 
                     beq      dontdec2 

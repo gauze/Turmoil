@@ -4,7 +4,7 @@
 ; DESCRIPTION
 ; Port of 20th Century Fox Atari 2600 game Turmoil
 ;
-;#TOOLS USED
+; TOOLS USED
 ; Editing, graphic drawing, assembly: VIDE  http://vide.malban.de
 ; more sophisticated editing: VIM http://www.vim.org
 ; Testing on real hardware: MVBD + VecFever
@@ -33,9 +33,10 @@
                     fcc      $6E,$6E,$6F, $80             ; 3 solid blocks ending with $80 
                     fdb      $F850 
                     fcb      -$40, $23                    ; hight, width, rel y, rel x (from 0,0) 
-                    fcc      "-2018", $80                 ; 3 solid blocks ending with $80 
+                    fcc      "-2019", $80                 ; more date
                     db       0                            ; end of game header 
 ;                   bra restart ; TESTING skip intro to get right to it.  
+;                  jsr      levelsplash  ; REMOVE to return to normal flow
                     bra      introSplash 
 
 ;***************************************************************************
@@ -50,33 +51,32 @@
 ;***************************************************************************
 ; CODE SECTION
 ;***************************************************************************  
-					INTRO_BOOT 							; runs ONCE per boot
-					RESTART								; jump here on game restart
-main: 
-                    WAIT_RECAL
-                                                          ; jsr Do_Sound 
+                    INTRO_BOOT                            ; runs ONCE per boot 
+                    RESTART                               ; jump here on game restart 
+main: 												; top game loop
+                    WAIT_RECAL  
                     READ_JOYSTICK  
                     DRAW_LINE_WALLS  
                     DRAW_SHIP  
                     READ_BUTTONS  
                     MOVE_BULLETS  
-                    DRAW_BULLETS   
+                    DRAW_BULLETS  
                     DRAW_VECTOR_SCORE  
                     PRINT_SHIPS  
-                    NEW_ENEMY  
-                    FRAME_CNTS  
-                    MOVE_ENEMYS  
-                    DRAW_ENEMYS  
+                    NEW_ENEMY  							; see if new enemy generation required
+                    FRAME_CNTS  						; advance/reset frame counters/timers
+                    MOVE_ENEMYS  						; math to move enemies
+                    DRAW_ENEMYS  						; ...
                     SHOT_COLLISION_DETECT  
                     SHIP_Y_COLLISION_DETECT  
                     SHIP_X_COLLISION_DETECT  
                     STALL_CHECK                           ; can't just sit in an open alley forever... 
-                    ALLEY_TIMEOUT  
-					CHECK_LEVEL_DONE
+                    ALLEY_TIMEOUT  						; prevent alleys from respawning instantly
+                    CHECK_LEVEL_DONE  
                     CHECK_SFX  
                     jmp      main                         ; and repeat forever, sorta 
-;-----------------------------------------------------------------------------------
 
+;-----------------------------------------------------------------------------------
 ; must go at bottom or fills up RAM instead of ROM 
                     include  "functions.i"
                     include  "data.i"

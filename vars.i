@@ -176,7 +176,11 @@ sfxC3ID             ds       1
 sfxC1W1             ds       2                            ; W length of time effect lasts.
 sfxC2W1             ds       2                            ; C = channel? 
 sfxC3W1             ds       2 
-;sfx_FC              ds       2                            ; "LFO" table it's cycled 
+;sfx_FC              ds       2                            ; "LFO" table it's cycled
+; Stuff for zooming hallway thing between levels
+top0                ds       1
+top1                ds       1
+top2                ds       1 
 ; DS2431+ EEPROM stuff
 EEPROM_CHECKSUM     equ      $69                          ; any value other than $00 or $e0 
 EEPROM_STORESIZE    equ      128 
