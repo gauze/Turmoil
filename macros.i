@@ -2668,8 +2668,8 @@ demo_score
                     ldu      a,u 
                     lda      #-127 
                     ldb      #-100 
-                                                          ; ldu #demolabel 
-                    jsr      Print_Str_d 
+                    PRINT_STR_D  
+                                                          ;jsr Print_Str_d 
 score_done 
 _no_print_vscore 
                     endm     
@@ -2764,34 +2764,34 @@ MOVETO_D_AFTER      macro
 AMLF33B:            lda      #$04                         ;Wait for timer 1 
 ; could insert some routines in here before checking countdown?
 AMLF33D:            bitb     <VIA_int_flags 
-                    beq      MLF33D 
+                    beq      AMLF33D 
 AMLF341:            deca                                  ;Delay a moment 
-                    bne      MLF341 
+                    bne      AMLF341 
                     bra      moveto_d_done 
 
-AMLF345:            bitb     <VIA_int_flags               ;Wait for timer 1 
-                    beq      MLF345 
+AMLF345            bitb     <VIA_int_flags               ;Wait for timer 1 
+                    beq      AMLF345 
 moveto_d_a_done 
                     endm     
 ;###################################################################################
 SMART_BOMB          macro    
-                    lda      #EXPLOSION 
-                    ldb      alley0e 
-                    beq      no_enemy0 
-                    sta      alley0e 
+                    ldb      alley0e 			; ENEMY FLAG
+                    beq      no_enemy0           ; NO ENEMY BRANCH
+                    lda      #EXPLOSION          
+                    sta      alley0e             ; SET ENEMY TYPE TO #EXPLOSION
                     lda      #1 
-                    sta      alley0sd 
-                    tst      alley0x 
+                    sta      alley0sd 			; SET SPEED denominator TO 1
+                    tst      alley0x              ; CHECK x POS TO MAKE SURE STAR FLIES IN RIGHT DIRECTION
                     bpl      pos0 
                     clra     
 pos0 
                     sta      alley0d 
                     lda      #2 
-                    sta      alley0s 
+                    sta      alley0s              ; SPEED TO 2
 no_enemy0 
-                    lda      #EXPLOSION 
                     ldb      alley1e 
-                    beq      no_enemy1 
+                    beq      no_enemy1
+                    lda      #EXPLOSION  
                     sta      alley1e 
                     lda      #1 
                     sta      alley1sd 
@@ -2803,9 +2803,9 @@ pos1
                     lda      #2 
                     sta      alley1s 
 no_enemy1 
-                    lda      #EXPLOSION 
                     ldb      alley2e 
-                    beq      no_enemy2 
+                    beq      no_enemy2
+                    lda      #EXPLOSION  
                     sta      alley2e 
                     lda      #1 
                     sta      alley2sd 
@@ -2817,9 +2817,9 @@ pos2
                     lda      #2 
                     sta      alley2s 
 no_enemy2 
-                    lda      #EXPLOSION 
                     ldb      alley3e 
                     beq      no_enemy3 
+                    lda      #EXPLOSION 
                     sta      alley3e 
                     lda      #1 
                     sta      alley3sd 
@@ -2830,10 +2830,10 @@ pos3
                     sta      alley3d 
                     lda      #2 
                     sta      alley3s 
-no_enemy3 
-                    lda      #EXPLOSION 
+no_enemy3  
                     ldb      alley4e 
                     beq      no_enemy4 
+                    lda      #EXPLOSION 
                     sta      alley4e 
                     lda      #1 
                     sta      alley4sd 
@@ -2844,10 +2844,10 @@ pos4
                     sta      alley4d 
                     lda      #2 
                     sta      alley4s 
-no_enemy4 
-                    lda      #EXPLOSION 
+no_enemy4  
                     ldb      alley5e 
                     beq      no_enemy5 
+                    lda      #EXPLOSION
                     sta      alley5e 
                     lda      #1 
                     sta      alley5sd 
@@ -2858,16 +2858,16 @@ pos5
                     sta      alley5d 
                     lda      #2 
                     sta      alley5s 
-no_enemy5 
-                    lda      #EXPLOSION 
+no_enemy5  
                     ldb      alley6e 
                     beq      no_enemy6 
+                    lda      #EXPLOSION
                     sta      alley6e 
                     lda      #1 
                     sta      alley6sd 
                     tst      alley6x 
-                    bpl      pos6                         ; a is 1 just store it 
-                    clra                                  ; X is less than 0 so A = 0 (right) 
+                    bpl      pos6                         
+                    clra                                 
 pos6 
                     sta      alley6d 
                     lda      #2 
@@ -2891,20 +2891,80 @@ CHECK_SFX           macro
                     jsr      Do_Sound_FX_C3 
 no_sfx_demo 
                     endm     
+;^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ABS_A_B             macro    
+                    local    abs_end, _Abs_b 
+                    TSTA     
+                    BPL      _Abs_b 
+                    NEGA     
+                    BVC      _Abs_b 
+                    DECA     
+_Abs_b              TSTB     
+                    BPL      abs_end 
+                    NEGB     
+                    BVC      abs_end 
+                    DECB     
+abs_end 
+                    endm     
 ;#############################################################
 PRINT_STR_D         macro    
-                    local    psdelayloop, psddone 
-                    JSR      >Moveto_d_7F 
+                    local    psdelayloop, psddone,linestart, moveflagset 
+                    local    movedelay, movetimer1, movetimer2, movedone 
+                    local    charlineread,charlinenext 
+;                    JSR      >Moveto_d_7F 
+;Moveto_d_7F:   
+                    STA      <VIA_port_a                  ;Store Y in D/A register 
+                    PSHS     d                            ;Save D-register on stack 
+                                                          ;clr temp1 
+                    LDA      #$7F                         ;Set scale factor to $7F 
+                    STA      <VIA_t1_cnt_lo 
+                    CLR      <VIA_port_b                  ;Enable mux 
+;                    BRA      LF318 
+;LF318:
+                    LDA      #$CE                         ;Blank low, zero high?
+;                            %1100 1110  
+                    STA      <VIA_cntl 
+                    CLR      <VIA_shift_reg               ;Clear shift regigster 
+                    INC      <VIA_port_b                  ;Disable mux 
+                    STB      <VIA_port_a                  ;Store X in D/A register 
+                    CLR      <VIA_t1_cnt_hi               ;timer 1 count high 
+                    PULS     d                            ;Get back D-reg 
+                                                          ;JSR Abs_a_b 
+                    ABS_A_B  
+                    STB      -1,s 
+                    ORA      -1,s 
+                    LDB      #$40                         ; used in tests below of VIA_int_flags 
+                    CMPA     #$40 						; %01000000
+                    BLS      movetimer2                   ; 'a' <= 0x40, skip first set of delays while moving 
+													; 0x64 %0110 0100
+                    CMPA     #$64                         ; 'a' <= 0x64, set flag to '4' 
+                    BLS      moveflagset 
+                    LDA      #$08                         ; delay used in movedelay set flag to '8' 
+                    BRA      movetimer1 
+
+moveflagset         LDA      #$04                         ; delay used in movedelay 
+movetimer1          BITB     <VIA_int_flags               ;Wait for timer 1 , BIT vs $40==0100 0000 
+                    BEQ      movetimer1 
+movedelay           DECA                                  ;Delay a moment 4 or 8 depending on scale 
+                    BNE      movedelay 
+                    bra      movedone 
+
+movetimer2          BITB     <VIA_int_flags               ;Wait for timer 1 
+                    BEQ      movetimer2                   ; 
+movedone 
+;                    RTS      
+; End Moveto_d_7F
                     NOP      10                           ; pause 20 cycles more readable? 
                                                           ; JSR Delay_1 ; pauze 20 cycles 
                                                           ; JMP Print_Str 
                     STU      Vec_Str_Ptr                  ;Save string pointer 
-                    LDX      #Char_Table-$20              ;Point to start of chargen bitmaps 
+                                                          ; LDX #Char_Table-$20 ;Point to start of chargen bitmaps 
                     LDD      #$1883                       ;$8x = enable RAMP? 
+;                            a=  %0001 1000 | b= %1000 0011
                     CLR      <VIA_port_a                  ;Clear D/A output 
                     STA      <VIA_aux_cntl                ;Shift reg mode = 110, T1 PB7 enabled 
-;                    LDX      #Char_Table-$20              ;Point to start of chargen bitmaps 
-linestart:          STB      <VIA_port_b                  ;Update RAMP, set mux to channel 1 
+                    LDX      #Char_Table-$20              ;Point to start of chargen bitmaps 
+linestart           STB      <VIA_port_b                  ;Update RAMP, set mux to channel 1 
                     DEC      <VIA_port_b                  ;Enable mux 
                     LDD      #$8081 
                     NOP                                   ;Wait a moment 
@@ -2918,12 +2978,21 @@ linestart:          STB      <VIA_port_b                  ;Update RAMP, set mux 
                     LDD      #$0100 
                     LDU      Vec_Str_Ptr                  ;Point to start of text string 
                     STA      <VIA_port_b                  ;Disable RAMP, disable mux 
-                    BRA      _LF4CB 
+                    BRA      charlinenext 
 
-_LF4C7:             LDA      a,x                          ;Get bitmap from chargen table 
+; reading each line from chargen (character generator) table to form letters
+charlineread        LDA      a,x                          ;Get bitmap from chargen table 
                     STA      <VIA_shift_reg               ;Save in shift register 
-_LF4CB:             LDA      ,u+                          ;Get next character 
-                    BPL      _LF4C7                       ;Go back if not terminator 
+charlinenext 
+                    LDA      ,u+                          ;Get next char 
+;                    cmpa     #$4F                         ; 'O' 
+;                    BNE      charlinenext 
+;                  pshs     a
+;                    lda      #127 
+;                    sta      <VIA_port_a
+;                  puls     a 
+                    BPL      charlineread                 ;Go back if not terminator 
+; continue next line
                     LDA      #$81 
                     STA      <VIA_port_b                  ;Enable RAMP, disable mux 
                     NEG      <VIA_port_a                  ;Negate text width to D/A 
@@ -2951,6 +3020,9 @@ psdelayloop         LDA      #$81
                     CLR      <VIA_port_a                  ;Clear D/A 
                     STB      <VIA_port_b                  ;Disable RAMP, disable mux 
                     STA      <VIA_port_b                  ;Enable RAMP, disable mux 
+; maybe change brightness here?
+                                                          ; LDA #127 
+                                                          ; INTENSITY_A 
                     LDB      #$03                         ;$0x = disable RAMP? 
                     BRA      linestart                    ;Go back for next scan line 
 

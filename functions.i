@@ -185,13 +185,13 @@ _no_chk_hs
 levelsplash: 
                     jsr      Clear_Sound 
                     clr      temp 
-                    clr      stallcnt
-				  lda      #0
-				  sta      top0
-				  lda      #33
-				  sta      top1
-				  lda      #66
-				  sta      top2
+                    clr      stallcnt 
+                    lda      #0 
+                    sta      top0 
+                    lda      #33 
+                    sta      top1 
+                    lda      #66 
+                    sta      top2 
 ; don't check this when TESTING!! 
                     lda      Demo_Mode 
                     lbne     dundo_demo 
@@ -239,7 +239,8 @@ _score_format_done
                     ldu      #lvllabelstr 
                     lda      #-0 
                     ldb      #-49 
-                    jsr      Print_Str_d 
+                                                          ;jsr Print_Str_d 
+                    PRINT_STR_D  
 ; START "3D moving Hallway" thing
 ; Lines from center to edge
 ;                    jsr      Intensity_5F 
@@ -386,20 +387,13 @@ top1ok
                     sta      top2 
 top2ok 
 ; END of "Moving 3D Hallway" thing 
-; zoom code stuff
-              ;      RESET0REF  
-              ;      lda      #2 
-              ;      ldb      #-39 
-              ;      MOVETO_D  
-              ;      ldx      #Level_Box1_nomode 
-              ;      DRAW_VLC  
-              ;      lda      #10 
-              ;      ldb      #-5 
-              ;      MOVETO_D                              ;_BEFORE 
-                                                          ; MOVETO_D_AFTER 
-              ;      ldx      #Level_Box2_nomode 
-             ;       DRAW_VLC  
-; use stallcnt to time loop
+; star field
+				  RESET0REF
+                    lda      #4 
+                    sta      Vec_Misc_Count 
+                    ldx      #starfield 
+                    jsr      Dot_List 
+;
                     inc      stallcnt 
                     lda      stallcnt 
                     cmpa     #100 
@@ -407,7 +401,6 @@ top2ok
                     bra      splashloop 
 
 donesplash 
-				; BRA       splashloop                       ; REMOVE TO BREAK OUT OF ENDLESS LOOP
                     lda      level 
                     cmpa     #30 
                     blt      do_cnt_tbl 
@@ -1209,8 +1202,8 @@ _ct_loop
                     ldu      #thankstolabel 
                     lda      #70 
                     ldb      #-110 
-                   ; jsr      Print_Str_d 
-				  PRINT_STR_D
+                                                          ; jsr Print_Str_d 
+                    PRINT_STR_D  
                     lda      temp2 
                     cmpa     temp                         ; should be $F8 
                     beq      dontdec2 

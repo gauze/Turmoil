@@ -3,6 +3,7 @@
 ;***************************************************************************
 ; VECTOR GRAPHICS DATA
 ;***************************************************************************
+; BOXES AROUND MENU SELECTIONS []
 Letter_Select_nomode: 
                     fcb      3 
                     fcb      0, +12 
@@ -14,11 +15,12 @@ Conf_Box_nomode:    fcb      3
                     fcb      -12, 0 
                     fcb      0, -110 
                     fcb      12, 0 
-Game_Sel_Box_nomode fcb      3 
+Game_Sel_Box_nomode  fcb     3 
                     fcb      0, 127 
                     fcb      -12, 0 
                     fcb      0, -127 
                     fcb      12, 0 
+; WALLS AROUND ALLEYS 
 Full_Wall_nomode:   fcb      5                            ; lda #5 ; sta $C823 ; vector count 
                     fcb      0,127 
                     fcb      0,127 
@@ -31,7 +33,7 @@ Half_Wall:          fcb      3                            ; lda #3 ; sta $C823
                     fcb      3,0 
                     fcb      0,-115 
                     fcb      -3,0 
-; Level graphic
+; Level graphic probably losing these ...
 Level_Box1_nomode: 
                     fcb      3 
                     fcb      0, 100 
@@ -69,30 +71,30 @@ SHIP_SCALE=1
 ;                    fcb      +0*SHIP_SCALE, +12*SHIP_SCALE 
 ;                    fcb      -17*SHIP_SCALE, +0*SHIP_SCALE 
 ShipR_nomode:       fcb      9 
-				  fcb      +0, +10*SHIP_SCALE
-                  ;  fcb      +1*SHIP_SCALE, 0*SHIP_SCALE  ; center Move this to end ?
+                    fcb      +0, +10*SHIP_SCALE 
+                                                          ; fcb +1*SHIP_SCALE, 0*SHIP_SCALE ; center Move this to end ? 
                     fcb      +6*SHIP_SCALE, -18*SHIP_SCALE 
                     fcb      +0*SHIP_SCALE, +9*SHIP_SCALE 
                     fcb      +2*SHIP_SCALE, +0*SHIP_SCALE 
                     fcb      +0*SHIP_SCALE, -12*SHIP_SCALE 
                     fcb      -17*SHIP_SCALE, +0*SHIP_SCALE 
-                    fcb      +0*SHIP_SCALE, +12*SHIP_SCALE  ; upper left corner
+                    fcb      +0*SHIP_SCALE, +12*SHIP_SCALE ; upper left corner 
                     fcb      +2*SHIP_SCALE, +0*SHIP_SCALE 
                     fcb      +0*SHIP_SCALE, -9*SHIP_SCALE 
                     fcb      +6*SHIP_SCALE, +18*SHIP_SCALE 
 ShipL_nomode:       fcb      9 
-				  fcb      +0, -10*SHIP_SCALE
-                ;    fcb      +1*SHIP_SCALE, 0*SHIP_SCALE  ; center 
+                    fcb      +0, -10*SHIP_SCALE 
+                                                          ; fcb +1*SHIP_SCALE, 0*SHIP_SCALE ; center 
                     fcb      +6*SHIP_SCALE, +18*SHIP_SCALE 
                     fcb      +0*SHIP_SCALE, -9*SHIP_SCALE 
                     fcb      +2*SHIP_SCALE, +0*SHIP_SCALE 
                     fcb      +0*SHIP_SCALE, +12*SHIP_SCALE 
                     fcb      -17*SHIP_SCALE, +0*SHIP_SCALE 
-                    fcb      +0*SHIP_SCALE, -12*SHIP_SCALE  ; upper right corner
+                    fcb      +0*SHIP_SCALE, -12*SHIP_SCALE ; upper right corner 
                     fcb      +2*SHIP_SCALE, +0*SHIP_SCALE 
                     fcb      +0*SHIP_SCALE, +9*SHIP_SCALE 
                     fcb      +6*SHIP_SCALE, -18*SHIP_SCALE 
-; UNUSED 
+; UNUSED rectangular bullet using DOT instead
 ;Shot:               fcb      2,0,10                      
 ;                    fcb      2,1,0 
 ;                    fcb      2,0,-10 
@@ -100,7 +102,7 @@ ShipL_nomode:       fcb      9
 ;                    fcb      2,0,10 
 ;                    fcb      1 
 ; number of guys left 
-Ship_Marker:                                              ;        UNUSED but makes assembly fail LEAVE IT
+Ship_Marker:                                              ;        UNUSED but makes assembly fail LEAVE IT 
                     fcb      3 
                     fcb      -7, +0 
                     fcb      +9, +3 
@@ -440,15 +442,6 @@ four:               fcb      0, -10*VNUM_SCALE, 0
                     fcb      0, +6*VNUM_SCALE, +0+NUM_GAP 
                                                           ; fcb 0, +0, +0+NUM_GAP 
                     fcb      1 
-;five:                                                     ;fcb     0, +0, +8 
-;                    fcb      2, +0, -8 
-;                    fcb      2, -6, +0 
-;                    fcb      2, +0, +8 
-;                    fcb      2, -2, +0 
-;                    fcb      2, +0, -8 
-;                    fcb      0, +10, +0 
-;                    fcb      0, +0, +0+NUM_GAP 
-;                    fcb      1
 five:               fcb      2, +0, -8*VNUM_SCALE 
                     fcb      2, -10*VNUM_SCALE, +8*VNUM_SCALE 
                     fcb      2, +0, -8*VNUM_SCALE 
@@ -480,6 +473,15 @@ nine:               fcb      0, -10*VNUM_SCALE, +0
                     fcb      2, +0, +8*VNUM_SCALE 
                     fcb      0, +6*VNUM_SCALE, +0+NUM_GAP 
                     fcb      1 
+; LETTERS
+; TODO
+; STAR FIELD
+; Format: brightness mode, y, x ???
+starfield:          fcb      -100,100 
+                    fcb      87,-2 
+                    fcb      -34, -2 
+				  fcb	  -3 ,   -76
+                    fcb      -1,    45 
 ;****************************************************************************************
 ; TABLES TABLES TABLES TABLES TABLES TABLES TABLES TABLES TABLES TABLES TABLES TABLES 
 ;****************************************************************************************
@@ -487,7 +489,7 @@ nine:               fcb      0, -10*VNUM_SCALE, +0
 ;shippos_t          fcb      -3*ALLEYWIDTH,-2*ALLEYWIDTH,-1*ALLEYWIDTH,0,1*ALLEYWIDTH,2*ALLEYWIDTH,3*ALLEYWIDTH ; Y pos of ship 
 ; position of cursor
 cboxYpos_t          db       93,81,69,57                  ; position of select box for Joystick conf 
-hsentrynYpos_t                                            ; position of hs table 
+hsentrynYpos_t                                            ;        position of hs table 
 hsboxYpos_t         db       103,91,79,67,55,43,31        ; Y,X pos of hs initials entry cusor 
 hsboxXpos_t         db       -54,-31,-9,13,35,58 
 ; high score entry grid tables
@@ -502,10 +504,9 @@ hsgr6               db       " ", ".", "!", "?", "_", "$"
 hsentryn_t          dw       hsentry1n, hsentry2n, hsentry3n, hsentry4n, hsentry5n 
 hsentrys_t          dw       hsentry1s, hsentry2s, hsentry3s, hsentry4s, hsentry5s 
 ; game positions
-BULLETYPOS          =        103                          ;; trail and error for top alley
+BULLETYPOS          =        103                          ;; trail and error for top alley 
 shippos_t 
 bulletYpos_t        fcb      BULLETYPOS-(ALLEYHEIGHT*6*2), BULLETYPOS-(ALLEYHEIGHT*5*2), BULLETYPOS-(ALLEYHEIGHT*4*2), BULLETYPOS-(ALLEYHEIGHT*3*2), BULLETYPOS-(ALLEYHEIGHT*2*2),BULLETYPOS-(ALLEYHEIGHT*1*2), BULLETYPOS-(ALLEYHEIGHT*0*2) 
-
 bullete_t           fdb      bullet0e,bullet1e,bullet2e,bullet3e,bullet4e,bullet5e,bullet6e ; exists 0=false, !0= true 
 bulletd_t           fdb      bullet0d,bullet1d,bullet2d,bullet3d,bullet4d,bullet5d,bullet6d ; direction left/right 
 bulletx_t           fdb      bullet0x,bullet1x,bullet2x,bullet3x,bullet4x,bullet5x,bullet6x ; X position 
@@ -517,7 +518,7 @@ alleysd_t           fdb      alley0sd,alley1sd,alley2sd,alley3sd,alley4sd,alley5
 alleyto_t           fdb      alley0to,alley1to,alley2to,alley3to,alley4to,alley5to,alley6to ; timeout before next spawn 
 max_enemys_t        fcb      -1,3,4,5,5,6,6,7,7,7,7,7     ; maximum number of occupied alleys per level, repeat after 6 
 bitmasks            db       0, %00000001, %00000011, %00000111, %00001111, %00011111, %00111111, %01111111, 255 
-difficulty_t        db       0
+difficulty_t        db       0                            ; maybe unused if I don't add difficult setting?? 
 ; speed table divisor  (not used)0, 1(default), 2 , 3, 4, 5
 speed_t             dw       fmt0cnt, fmt1cnt, frm2cnt, frm3cnt, frm4cnt, frm5cnt,0,0,0,0,frm10cnt ; which frame to do enemy moves on 
 ;speed tables 21 divisions .2, .25, .33, .5. 1, 1.5, 2, 2.5, 3, 3.5, ... , 9
@@ -691,7 +692,7 @@ slow_text           fcc      "SLOW",$80
 med_text            fcc      "MEDIUM",$80
 fast_text           fcc      "FAST",$80
 gamesel_label       fcc      "  GAME SELECT",$80
-reggame_text		fcc      "CLASSICGAME",$80
+reggame_text        fcc      "CLASSICGAME",$80
 supergame_text      fcc      "SUPER GAME",$80
 gameoverstr         fcc      "GAME OVER",$80
 highscorelabel      fcc      "HIGH SCORE",$80

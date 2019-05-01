@@ -197,7 +197,7 @@ eeprom_buffer6      ds       32
 eeprom_buffer7      ds       32 
 eeprom_buffer8      ds       32 
 eeprom_buffer9      ds       32 
-; ymplayer ram and USE_ENVELOPES flag
+; ymplayer ram and USE_ENVELOPES flag, * ok for top of RAM
 ym_ram              equ      *
 USE_ENVELOPES=1 				
 ;

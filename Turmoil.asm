@@ -53,7 +53,7 @@
 ;***************************************************************************  
                     INTRO_BOOT                            ; runs ONCE per boot 
                     RESTART                               ; jump here on game restart 
-main: 												; top game loop
+main                                                      ; top of game loop 
                     WAIT_RECAL  
                     READ_JOYSTICK  
                     DRAW_LINE_WALLS  
@@ -63,15 +63,15 @@ main: 												; top game loop
                     DRAW_BULLETS  
                     DRAW_VECTOR_SCORE  
                     PRINT_SHIPS  
-                    NEW_ENEMY  							; see if new enemy generation required
-                    FRAME_CNTS  						; advance/reset frame counters/timers
-                    MOVE_ENEMYS  						; math to move enemies
-                    DRAW_ENEMYS  						; ...
+                    NEW_ENEMY                             ; see if new enemy generation required 
+                    FRAME_CNTS                            ; advance/reset frame counters/timers 
+                    MOVE_ENEMYS                           ; math to move enemies 
+                    DRAW_ENEMYS                           ; ... 
                     SHOT_COLLISION_DETECT  
                     SHIP_Y_COLLISION_DETECT  
                     SHIP_X_COLLISION_DETECT  
                     STALL_CHECK                           ; can't just sit in an open alley forever... 
-                    ALLEY_TIMEOUT  						; prevent alleys from respawning instantly
+                    ALLEY_TIMEOUT                         ; prevent alleys from respawning instantly 
                     CHECK_LEVEL_DONE  
                     CHECK_SFX  
                     jmp      main                         ; and repeat forever, sorta 
