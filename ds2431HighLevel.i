@@ -1,4 +1,4 @@
-
+; vim: syntax=asm6809
 ;
 ;   2016 Thomas G. Sontowski:
 ;   based on Alex Herbert's ds2430 driver

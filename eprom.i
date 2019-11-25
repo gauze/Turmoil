@@ -3,13 +3,13 @@
 ;                    inc      eeprom_buffer                 ; increment what was read
 ;                    JSR      eeprom_save                   ; save back to EEPROM
 ; Data
-eeprom_defaults 
+eeprom_defaults  ;
 ; Put 31 bytes of default data here! 
-    db  "DOUCH", $80 ; Strings must be AT LEAST 3 signs, otherwise Print_Str is bugged!
-    ds  29
+;    db  "DOUCH", $80 ; Strings must be AT LEAST 3 signs, otherwise Print_Str is bugged!
+;    ds  29
 
-;                    db       "SLAYER", $80                ; Strings must be AT LEAST 3 signs, otherwise Print_Str is bugged!
-;                    ds       24 
+                    db       "SLAYER", $80                ; Strings must be AT LEAST 3 signs, otherwise Print_Str is bugged!
+                    ds       26 
 ; defined in data.i
 ; accessed with default_name_t and default_high_t tables
 ;default_high0       fcc      "  5000",$80
@@ -24,23 +24,23 @@ eeprom_defaults
 ;default_name3       fcc      "GCE",$80
 ;default_name4       fcc      "GZE",$80
 eeprom_load 
-                    ldx      #eeprom_buffer1              ; 
+                    ldx      #eeprom_buffer1              ; point to RAM
                     jsr      ds2431_load                  ; load 32 byte eeprom to ram 
-                    ldd      #$0020                       ; $20 = 32 dec should change. 
-;                    ldd      #$0008 
+;
+                    ldd      #$0020                       ; setting counter for 32 bytes  
 eeload_loop                                               ;        
                     adda     ,x+                          ; sum the bytes 
                     decb                                  ; 
                     bne      eeload_loop                  ; 
-                    cmpa     #EEPROM_CHECKSUM             ; equal to checksum? 
+                    cmpa     #EEPROM_CHECKSUM             ; equal to checksum? whered oes checksum come from?
                     bne      eeprom_format                ; if not, then format the eeprom 
                     rts                                   ; otherwise, return 
 
 eeprom_format 
                     ldu      #eeprom_defaults             ; 
+;				  ldu      #default_high0				; check data.i for define
                     ldx      #eeprom_buffer1              ; 
                     ldb      #$1f                         ; 31 amount of data in each 
-                  ;  ldb      #7 
 eeformat_loop                                             ;        copy default data (rom) to ram 
                     pulu     a                            ; 
                     sta      ,x+                          ; 

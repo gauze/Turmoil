@@ -10,8 +10,8 @@ introSplash
                     stu      ustacktempptr                ; only do this once 
                     jsr      setup                        ; remove when done testing 
                     jsr      fill_hs_tbl                  ; filling from ROM eventually pull from EPROM 
-                                                          ; jsr eeprom_load 
-                                                          ; jsr eeprom_save 
+                                                           jsr eeprom_load 
+                                                          ;jsr eeprom_save 
                     jsr      titleScreen 
                     jsr      SfxInit 
                     jsr      joystick_config 
@@ -57,11 +57,6 @@ DRAW_SHIP           macro
                     lda      a,x                          ; get pos from shippos_t table 
                                                           ; suba #8 ; small offset to center in lane horizontally 
                     ldb      shipXpos 
-                                                          ;TEST addb #+12 
-;                    tst      shipdir                      ; testing for 0|LEFT 1|RIGHT 
-;                    beq      _donuthin 
-                                                          ;TEST subb #+24 
-                                                          ; bra _donuthin 
 ;_donuthin 
                     MOVETO_D  
 ; test if we are dead.
@@ -104,7 +99,6 @@ shitballs
                     ldb      shipdir                      ; testing for 0|LEFT 1|RIGHT 
                     beq      _donuthin1 
                     ldx      #ShipR_nomode 
-                                                          ; bra _donuthin1 
 _donuthin1 
                     DRAW_VLC                              ; jsr Draw_VLc ;_mode 
                     endm     
@@ -2188,7 +2182,7 @@ MOVE_BULLETS        macro
                     lda      #127 
                     sta      VIA_t1_cnt_lo 
                     clra     
-                    sta      bulletcnt 
+                    sta      bulletcnt					; bulletcnt=0 
 move_start 
                     lda      bulletcnt 
                     asla     
@@ -2214,8 +2208,8 @@ destroy_bullet
                     ldx      a,x 
                     ldb      #0 
                     stb      ,x 
-                    lda      bulletcnt 
-                    asla     
+;                    lda      bulletcnt       A dfoesn't change since last lda
+;                    asla     
                     ldx      #bulletx_t 
                     ldx      a,x 
                     ldb      #0 
@@ -2769,29 +2763,29 @@ AMLF341:            deca                                  ;Delay a moment
                     bne      AMLF341 
                     bra      moveto_d_done 
 
-AMLF345            bitb     <VIA_int_flags               ;Wait for timer 1 
+AMLF345             bitb     <VIA_int_flags               ;Wait for timer 1 
                     beq      AMLF345 
 moveto_d_a_done 
                     endm     
 ;###################################################################################
 SMART_BOMB          macro    
-                    ldb      alley0e 			; ENEMY FLAG
-                    beq      no_enemy0           ; NO ENEMY BRANCH
-                    lda      #EXPLOSION          
-                    sta      alley0e             ; SET ENEMY TYPE TO #EXPLOSION
+                    ldb      alley0e                      ; ENEMY FLAG 
+                    beq      no_enemy0                    ; NO ENEMY BRANCH 
+                    lda      #EXPLOSION 
+                    sta      alley0e                      ; SET ENEMY TYPE TO #EXPLOSION 
                     lda      #1 
-                    sta      alley0sd 			; SET SPEED denominator TO 1
-                    tst      alley0x              ; CHECK x POS TO MAKE SURE STAR FLIES IN RIGHT DIRECTION
+                    sta      alley0sd                     ; SET SPEED denominator TO 1 
+                    tst      alley0x                      ; CHECK x POS TO MAKE SURE STAR FLIES IN RIGHT DIRECTION 
                     bpl      pos0 
                     clra     
 pos0 
                     sta      alley0d 
                     lda      #2 
-                    sta      alley0s              ; SPEED TO 2
+                    sta      alley0s                      ; SPEED TO 2 
 no_enemy0 
                     ldb      alley1e 
-                    beq      no_enemy1
-                    lda      #EXPLOSION  
+                    beq      no_enemy1 
+                    lda      #EXPLOSION 
                     sta      alley1e 
                     lda      #1 
                     sta      alley1sd 
@@ -2804,8 +2798,8 @@ pos1
                     sta      alley1s 
 no_enemy1 
                     ldb      alley2e 
-                    beq      no_enemy2
-                    lda      #EXPLOSION  
+                    beq      no_enemy2 
+                    lda      #EXPLOSION 
                     sta      alley2e 
                     lda      #1 
                     sta      alley2sd 
@@ -2830,7 +2824,7 @@ pos3
                     sta      alley3d 
                     lda      #2 
                     sta      alley3s 
-no_enemy3  
+no_enemy3 
                     ldb      alley4e 
                     beq      no_enemy4 
                     lda      #EXPLOSION 
@@ -2844,10 +2838,10 @@ pos4
                     sta      alley4d 
                     lda      #2 
                     sta      alley4s 
-no_enemy4  
+no_enemy4 
                     ldb      alley5e 
                     beq      no_enemy5 
-                    lda      #EXPLOSION
+                    lda      #EXPLOSION 
                     sta      alley5e 
                     lda      #1 
                     sta      alley5sd 
@@ -2858,16 +2852,16 @@ pos5
                     sta      alley5d 
                     lda      #2 
                     sta      alley5s 
-no_enemy5  
+no_enemy5 
                     ldb      alley6e 
                     beq      no_enemy6 
-                    lda      #EXPLOSION
+                    lda      #EXPLOSION 
                     sta      alley6e 
                     lda      #1 
                     sta      alley6sd 
                     tst      alley6x 
-                    bpl      pos6                         
-                    clra                                 
+                    bpl      pos6 
+                    clra     
 pos6 
                     sta      alley6d 
                     lda      #2 
@@ -2921,7 +2915,7 @@ PRINT_STR_D         macro
                     CLR      <VIA_port_b                  ;Enable mux 
 ;                    BRA      LF318 
 ;LF318:
-                    LDA      #$CE                         ;Blank low, zero high?
+                    LDA      #$CE                         ;Blank low, zero high? 
 ;                            %1100 1110  
                     STA      <VIA_cntl 
                     CLR      <VIA_shift_reg               ;Clear shift regigster 
@@ -2934,9 +2928,9 @@ PRINT_STR_D         macro
                     STB      -1,s 
                     ORA      -1,s 
                     LDB      #$40                         ; used in tests below of VIA_int_flags 
-                    CMPA     #$40 						; %01000000
+                    CMPA     #$40                         ; %01000000 
                     BLS      movetimer2                   ; 'a' <= 0x40, skip first set of delays while moving 
-													; 0x64 %0110 0100
+                                                          ; 0x64 %0110 0100 
                     CMPA     #$64                         ; 'a' <= 0x64, set flag to '4' 
                     BLS      moveflagset 
                     LDA      #$08                         ; delay used in movedelay set flag to '8' 

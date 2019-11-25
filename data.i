@@ -33,7 +33,7 @@ Half_Wall:          fcb      3                            ; lda #3 ; sta $C823
                     fcb      3,0 
                     fcb      0,-115 
                     fcb      -3,0 
-; Level graphic probably losing these ...
+; Level graphic between levels, probably losing these ...
 Level_Box1_nomode: 
                     fcb      3 
                     fcb      0, 100 
@@ -71,9 +71,9 @@ SHIP_SCALE=1
 ;                    fcb      +0*SHIP_SCALE, +12*SHIP_SCALE 
 ;                    fcb      -17*SHIP_SCALE, +0*SHIP_SCALE 
 ShipR_nomode:       fcb      9 
-                    fcb      +0, +10*SHIP_SCALE 
+                    fcb      +0, +21*SHIP_SCALE           ; was 10 
                                                           ; fcb +1*SHIP_SCALE, 0*SHIP_SCALE ; center Move this to end ? 
-                    fcb      +6*SHIP_SCALE, -18*SHIP_SCALE 
+                    fcb      +6*SHIP_SCALE, -18*SHIP_SCALE ; tip 
                     fcb      +0*SHIP_SCALE, +9*SHIP_SCALE 
                     fcb      +2*SHIP_SCALE, +0*SHIP_SCALE 
                     fcb      +0*SHIP_SCALE, -12*SHIP_SCALE 
@@ -83,9 +83,19 @@ ShipR_nomode:       fcb      9
                     fcb      +0*SHIP_SCALE, -9*SHIP_SCALE 
                     fcb      +6*SHIP_SCALE, +18*SHIP_SCALE 
 ShipL_nomode:       fcb      9 
-                    fcb      +0, -10*SHIP_SCALE 
-                                                          ; fcb +1*SHIP_SCALE, 0*SHIP_SCALE ; center 
-                    fcb      +6*SHIP_SCALE, +18*SHIP_SCALE 
+                    fcb      +0, -21*SHIP_SCALE 
+                    fcb      +6*SHIP_SCALE, +18*SHIP_SCALE ; tip 
+                    fcb      +0*SHIP_SCALE, -9*SHIP_SCALE 
+                    fcb      +2*SHIP_SCALE, +0*SHIP_SCALE 
+                    fcb      +0*SHIP_SCALE, +12*SHIP_SCALE 
+                    fcb      -17*SHIP_SCALE, +0*SHIP_SCALE 
+                    fcb      +0*SHIP_SCALE, -12*SHIP_SCALE ; upper right corner 
+                    fcb      +2*SHIP_SCALE, +0*SHIP_SCALE 
+                    fcb      +0*SHIP_SCALE, +9*SHIP_SCALE 
+                    fcb      +6*SHIP_SCALE, -18*SHIP_SCALE 
+Ship3D_nomode:      fcb      11 
+                    fcb      +0, -21*SHIP_SCALE 
+                    fcb      +6*SHIP_SCALE, +18*SHIP_SCALE ; tip 
                     fcb      +0*SHIP_SCALE, -9*SHIP_SCALE 
                     fcb      +2*SHIP_SCALE, +0*SHIP_SCALE 
                     fcb      +0*SHIP_SCALE, +12*SHIP_SCALE 
@@ -480,8 +490,8 @@ nine:               fcb      0, -10*VNUM_SCALE, +0
 starfield:          fcb      -100,100 
                     fcb      87,-2 
                     fcb      -34, -2 
-				  fcb	  -3 ,   -76
-                    fcb      -1,    45 
+                    fcb      -3 , -76 
+                    fcb      -1, 45 
 ;****************************************************************************************
 ; TABLES TABLES TABLES TABLES TABLES TABLES TABLES TABLES TABLES TABLES TABLES TABLES 
 ;****************************************************************************************
@@ -728,13 +738,13 @@ default_name3       fcc      "GCE",$80
 default_name4       fcc      "GZE",$80
 ; misc
 thanks0             fcc      "   MALBAN, VECTREXER   ",$80
-thanks1             fcc      "    VECTORX, TODD W    ",$80
+thanks1             fcc      " VECTORX, TODD W, EFNET",$80
 thanks2             fcc      "   CHRIS BINARYSTAR    ",$80
 thanks3             fcc      "THOMAS S, CHRIS PARSONS",$80 
 thanks4             fcc      " ARCADE WEDNESDAY CREW ",$80
 thanks5             fcc      "   DER LUCHS, V.ROLI   ",$80
                     fcc      "SECRET GAME",$80
-credits             fcc      "PROGRAMMED BY GAUZE 2016-2018",$80 
+credits             fcc      "PROGRAMMED BY GAUZE 2016-2020",$80 
                     FCC      "DISASSEMBLED BY MALBAN",$6B
                     fcc      "KARRSOFT82LDMCBCJT82LDMCBCJ"
 ; table negative indexes start here 128-255 leave as reminder 

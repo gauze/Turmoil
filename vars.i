@@ -7,29 +7,31 @@
 ; user RAM starts at $c880 
                     bss      
                     org      $C880                        ; start of our ram space 
-; 
+; game basics
 score               ds       7                            ; 7 bytes 
 ;highscore           ds       7                            ; 7 bytes ;use built in instead.
-level               ds       1 
-shipspeed           ds       1                            ; vertical speed 
-conf_box_index      ds       1 
-hs_box_Yindex       ds       1 
+level               ds       1                            ; only does levels 1-99 then shows Infinity sign after tgat 
+shipcnt             ds       1                            ; ships in reserve before GameOver 
+smartbombcnt        ds       1                            ; only in Super_Game 
+; game option selector vars
+conf_box_index      ds       1                            ; configuration selector 
+hs_box_Yindex       ds       1                            ; highscore input character selector 
 hs_box_Xindex       ds       1 
 ;
 ; your ship related variables, X,Y position and direction facing L/R, and number left
+shipspeed           ds       1                            ; vertical speed, selected by user 
+; 
 shipdir             ds       1                            ; left or right 
-shipYdir            ds       1                            ; up or down for Demo_Mode only 
 shipYpos            ds       2 
 shipXpos            ds       2 
-shipcnt             ds       1                            ; 
-smartbombcnt        ds       1                            ; only in Super_Game 
+shipYdir            ds       1                            ; up or down for Demo_Mode only 
 ; limits 
 enemycnt            ds       1 
-bulletcnt           ds       1                            ; 
+bulletcnt           ds       1                            ; is this used? 
 ; counters for events
-stallcnt            ds       1 
+stallcnt            ds       1                            ; generic slow down 
 prizecnt            ds       2                            ; 16 bit counter 
-prizecntdown        ds       1 
+prizecntdown        ds       1                            ; before prize turns to cannonball 
 ; states and positions of all bullets and enemies
 bullet0e            ds       1 
 bullet1e            ds       1                            ; shit Exists in alley 
@@ -95,7 +97,7 @@ alley3to            ds       1
 alley4to            ds       1 
 alley5to            ds       1 
 alley6to            ds       1 
-warpdelay           ds       1
+warpdelay           ds       1 
 ; variables to hold which frame for each shape enemy some might not have an animation...
 Arrow_f             ds       1 
 Bow_f               ds       1 
@@ -134,7 +136,7 @@ bulletYtemp         ds       1
 enemytemp           ds       1 
 ; high score entry screen stuff see also top of list for a couple more
 hsentry_index       ds       1 
-hsentry1n           ds       4 
+hsentry1n           ds       4                            ; name and score n/s 
 hsentry1s           ds       7 
 hsentry2n           ds       4 
 hsentry2s           ds       7 
@@ -144,7 +146,7 @@ hsentry4n           ds       4
 hsentry4s           ds       7 
 hsentry5n           ds       4 
 hsentry5s           ds       7 
-hstempstr           ds       4 
+hstempstr           ds       4                            ; hold temp name while sorting 
 ;
 enemylvlcnt         ds       1                            ; how many enemies left in this level? 
 ; STATE FLAGS
@@ -173,33 +175,28 @@ tempB3              ds       1
 sfxC1ID             ds       1                            ; ID is effects ID 
 sfxC2ID             ds       1 
 sfxC3ID             ds       1 
-sfxC1W1             ds       2                            ; W length of time effect lasts.
+sfxC1W1             ds       2                            ; W length of time effect lasts. 
 sfxC2W1             ds       2                            ; C = channel? 
 sfxC3W1             ds       2 
 ;sfx_FC              ds       2                            ; "LFO" table it's cycled
 ; Stuff for zooming hallway thing between levels
-top0                ds       1
-top1                ds       1
+top0                ds       1 
+top1                ds       1 
 top2                ds       1 
 ; DS2431+ EEPROM stuff
 EEPROM_CHECKSUM     equ      $69                          ; any value other than $00 or $e0 
-EEPROM_STORESIZE    equ      128 
+EEPROM_STORESIZE    equ      128                          ; 1024 bits/8= 128 bytes 
 ; Variables 
-eeprom_buffer                                             ;        everything 
+eeprom_buffer                                             ; everything 
 eeprom_buffer0      ds       32 
-eeprom_buffer1      ds       32 
+eeprom_buffer1      ds       32                           ; 32*4=128 
 eeprom_buffer2      ds       32 
 eeprom_buffer3      ds       32 
-eeprom_buffer4      ds       32 
+
 ;          
-eeprom_buffer5      ds       32 
-eeprom_buffer6      ds       32 
-eeprom_buffer7      ds       32 
-eeprom_buffer8      ds       32 
-eeprom_buffer9      ds       32 
 ; ymplayer ram and USE_ENVELOPES flag, * ok for top of RAM
-ym_ram              equ      *
-USE_ENVELOPES=1 				
+ym_ram              equ      * 
+USE_ENVELOPES=1 
 ;
 ; CONSTANTS place after VARIABLES
 ;ALLEYWIDTH          =        17                           ; moved to macros.i near where it's used for quick access

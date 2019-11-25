@@ -53,7 +53,7 @@
 ;***************************************************************************  
                     INTRO_BOOT                            ; runs ONCE per boot 
                     RESTART                               ; jump here on game restart 
-main                                                      ; top of game loop 
+main                                                      ;        top of game loop 
                     WAIT_RECAL  
                     READ_JOYSTICK  
                     DRAW_LINE_WALLS  
