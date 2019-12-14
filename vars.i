@@ -184,15 +184,15 @@ top0                ds       1
 top1                ds       1 
 top2                ds       1 
 ; DS2431+ EEPROM stuff
-EEPROM_CHECKSUM     equ      $69                          ; any value other than $00 or $e0 
-EEPROM_STORESIZE    equ      128                          ; 1024 bits/8= 128 bytes 
+
+current_eprom_blocksize  ds  1 
+current_eprom_blockadr  ds   1 
 ; Variables 
-eeprom_buffer                                             ; everything 
+eeprom_buffer                                             ;        everything 
 eeprom_buffer0      ds       32 
 eeprom_buffer1      ds       32                           ; 32*4=128 
 eeprom_buffer2      ds       32 
 eeprom_buffer3      ds       32 
-
 ;          
 ; ymplayer ram and USE_ENVELOPES flag, * ok for top of RAM
 ym_ram              equ      * 

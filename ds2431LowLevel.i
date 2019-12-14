@@ -1,4 +1,3 @@
-; vim: syntax=asm6809
 ;
 ;
 ; DS1W - Dallas Semiconductor 1-Wire Driver

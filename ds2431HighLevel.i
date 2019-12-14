@@ -1,4 +1,4 @@
-; vim: syntax=asm6809
+
 ;
 ;   2016 Thomas G. Sontowski:
 ;   based on Alex Herbert's ds2430 driver
@@ -20,6 +20,7 @@ DS2431_READMEM  equ     $f0     ; As READSP, but copies EEPROM to SP first
 ;DS2430_READAR   equ     $c3     ; Read bytes from Application Register
 
 ;DS2430_VALKEY   equ     $a5     ; Validation byte for COPYSP and LOCKAR
+
 
 
 ; DS2431 Timings
@@ -63,11 +64,12 @@ ds2431_load
 
         lda     #DS2431_READMEM ; read memory
         jsr     ds1w_txbyte     ; send command
-
+; wtf addressing
         clra                    ; address of first byte to load
         jsr     ds1w_txbyte     ; send address
         clra                    ; address of first byte to load
         jsr     ds1w_txbyte     ; send address
+; END wtf addressing
 
 ds2431load_loop
         jsr     ds1w_rxbyte     ; read byte from scratch pad
@@ -84,7 +86,7 @@ ds2431load_exit
 ; ds2430_save
 ;
 ; function:
-;       save RAM to DS2431 EEPROM
+;       save RAM to DS2430 EEPROM
 ;
 ; on entry:
 ;       x = address of data to save
@@ -109,7 +111,7 @@ ds2431_scratchpadloop
         lda     #DS2431_WRITESP ; write bytes to scratch pad
         jsr     ds1w_txbyte     ; send command
 
-        lda     1,s             ; address
+        lda     1,s             ; address ; hm
         jsr     ds1w_txbyte     ; send address
         clra
         jsr     ds1w_txbyte
@@ -164,7 +166,7 @@ dssave_loop2
         beq     dssave_exit
         lda     1,s
         adda    #8
-        sta     1,s
+        sta     1,s			; adding 8, you can only store things on 8 bute boundries inside the 4 pages.
         bra     ds2431_scratchpadloop
 
 dssave_exit

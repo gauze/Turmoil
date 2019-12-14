@@ -10,8 +10,10 @@ introSplash
                     stu      ustacktempptr                ; only do this once 
                     jsr      setup                        ; remove when done testing 
                     jsr      fill_hs_tbl                  ; filling from ROM eventually pull from EPROM 
-                                                           jsr eeprom_load 
+; TESTING 
+                    jsr      eeprom_load 
                                                           ;jsr eeprom_save 
+; TESTING
                     jsr      titleScreen 
                     jsr      SfxInit 
                     jsr      joystick_config 
@@ -2182,7 +2184,7 @@ MOVE_BULLETS        macro
                     lda      #127 
                     sta      VIA_t1_cnt_lo 
                     clra     
-                    sta      bulletcnt					; bulletcnt=0 
+                    sta      bulletcnt                    ; bulletcnt=0 
 move_start 
                     lda      bulletcnt 
                     asla     
@@ -2208,7 +2210,7 @@ destroy_bullet
                     ldx      a,x 
                     ldb      #0 
                     stb      ,x 
-;                    lda      bulletcnt       A dfoesn't change since last lda
+;                    lda      bulletcnt       A doesn't change since last lda
 ;                    asla     
                     ldx      #bulletx_t 
                     ldx      a,x 

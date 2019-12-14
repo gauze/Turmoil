@@ -725,6 +725,7 @@ hs_abc_4            fcc      "S T U V W X",$80
 hs_abc_5            fcc      "Y Z 0 1 2 3",$80
 hs_abc_6            fcc      "4 5 6 7 8 9",$80
 hs_abc_7            fcc      "  . ! ? _ $",$80
+; default highs if ds2431 is corrupted or not found
 default_high0       fcc      "  5000",$80
 default_high1       fcc      "  4000",$80
 default_high2       fcc      "  3000",$80
