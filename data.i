@@ -511,8 +511,12 @@ hsgr3               db       "S", "T", "U", "V", "W", "X"
 hsgr4               db       "Y", "Z", "0", "1", "2", "3"
 hsgr5               db       "4", "5", "6", "7", "8", "9"
 hsgr6               db       " ", ".", "!", "?", "_", "$"
+; high scores + initials in RAM
 hsentryn_t          dw       hsentry1n, hsentry2n, hsentry3n, hsentry4n, hsentry5n 
 hsentrys_t          dw       hsentry1s, hsentry2s, hsentry3s, hsentry4s, hsentry5s 
+; high scores + initials in EEPROM
+ee_hs_t             dw       ee_hs1 , ee_hs2, ee_hs3, ee_hs4, ee_hs5 
+ee_hsn_t            dw       ee_hsn1 , ee_hsn2, ee_hsn3, ee_hsn4, ee_hsn5 
 ; game positions
 BULLETYPOS          =        103                          ;; trail and error for top alley 
 shippos_t 
@@ -737,6 +741,7 @@ default_name1       fcc      "JAW",$80
 default_name2       fcc      "GGG",$80
 default_name3       fcc      "GCE",$80
 default_name4       fcc      "GZE",$80
+eeprom_filler       db       0,0,0,0,0,0,0                ; padding to 63 bytes 
 ; misc
 thanks0             fcc      "   MALBAN, VECTREXER   ",$80
 thanks1             fcc      " VECTORX, TODD W, EFNET",$80

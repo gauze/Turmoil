@@ -13,8 +13,10 @@
 ;***************************************************************************
 ; load vectrex bios routine definitions
                     include  "VECTREX.I"                  ; vectrex bios function include
+; stuff that goes into RAM
                     include  "vars.i"                     ; RAM allocation starting at $C880
-                    include  "macros.i"                   ; inlined code to save jsr/rts
+; x
+                    include  "macros.i"                   ; inlined code to save jsr/rts cycles
 ;***************************************************************************
 ; HEADER SECTION
 ;***************************************************************************
@@ -78,15 +80,15 @@ main                                                      ;        top of game l
 
 ;-----------------------------------------------------------------------------------
 ; must go at bottom or fills up RAM instead of ROM 
-                    include  "functions.i"
-                    include  "data.i"
-                    include  "libsoundraw.i"
+                    include  "functions.i"                ; 
+                    include  "data.i"                     ; static data, shapes, tables, text
+                    include  "libsoundraw.i"              ; quick sound effects routines
                     include  "rawsounddata.i"
-                    include  "rawsoundroutines.i"
-                    include  "rasterDraw.asm"
-;                    include  "ymPlayer.i"
-;                    include  "turmoil_ym.asm"
-                    include  "ds2431LowLevel.i"
-                    include  "ds2431HighLevel.i"
-                    include  "eprom.i" 
+                    include  "rawsoundroutines.i"         ; 
+                    include  "rasterDraw.asm"             ; title screen
+                    include  "ymPlayer.i"				; for song under high score
+                    include  "turmoil_ym.asm"			; our data
+                    include  "ds2431LowLevel.i"           ; high score save stuff
+                    include  "ds2431HighLevel.i"          ; using DS2431+ 1 wire eeprom
+                    include  "eprom.i"                    ; should be named eeprom.i oh well
 end 

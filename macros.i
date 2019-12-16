@@ -9,11 +9,9 @@ introSplash
                     ldu      #ustacktemp 
                     stu      ustacktempptr                ; only do this once 
                     jsr      setup                        ; remove when done testing 
-                    jsr      fill_hs_tbl                  ; filling from ROM eventually pull from EPROM 
-; TESTING 
+;                    jsr      fill_hs_tbl                  ; filling from ROM eventually pull from EPROM 
                     jsr      eeprom_load 
-                                                          ;jsr eeprom_save 
-; TESTING
+                    jsr      fill_hs_tbl_eeprom 
                     jsr      titleScreen 
                     jsr      SfxInit 
                     jsr      joystick_config 

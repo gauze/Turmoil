@@ -388,7 +388,7 @@ top1ok
 top2ok 
 ; END of "Moving 3D Hallway" thing 
 ; star field
-				  RESET0REF
+                    RESET0REF  
                     lda      #4 
                     sta      Vec_Misc_Count 
                     ldx      #starfield 
@@ -953,7 +953,7 @@ no_ent_inst
                     std      Vec_Text_HW 
                     jmp      hs_loop 
 
-doHSsave                                                  ;        finished HS entry 
+doHSsave:                                                 ;        finished HS entry 
 ;   hsentryXn = initials  hsentryXs = score
 ; tables  hsentryn_t      hsentrys_t   
 ; table has 5 slots for scores
@@ -1025,15 +1025,52 @@ hsn_copy_loop
                     jmp      hs_test_loop 
 
 hs_check_done 
+; TO DO add section to write to EEPROM
+; copy hsentrys_t and hsentryn_t to ee_hs_t & ee_hsn_t
+; taken from fill_hs_tbl
+; names
+                    ldb      #4                           ; 5 entries, 0 index 
+                    lslb                                  ; 2 byte table 
+get_nentry1 
+                    ldx      #hsentryn_t                  ; names, 4 bytes RAM 
+                    ldx      b,x 
+                    ldy      #ee_hsn_t                    ; table of scores from EEPROM 
+                    ldy      b,y 
+_fill_nloop1 
+                    lda      ,x+                          ; memcpy loop 
+                    sta      ,y+ 
+                    cmpa     #$80 
+                    bne      _fill_nloop1                  ; $80 is string terminator use instead of bpl incase any chars are above $80 
+                    decb     
+                    decb     
+                    bpl      get_nentry1 
+; scores    
+                    ldb      #4                           ; 5 entries, 0 index 
+                    lslb     
+get_sentry1 
+                    ldx      #hsentrys_t 
+                    ldx      b,x 
+                    ldy      #ee_hs_t 
+                    ldy      b,y 
+_fill_sloop1 
+                    lda      ,x+ 
+                    sta      ,y+ 
+                    bpl      _fill_sloop1 
+                    decb     
+                    decb     
+                    bpl      get_sentry1 
+; above, copied from fill_hs_tbl to reverse copy order.        
+                    jsr      eeprom_save 
+;
                     rts      
 
 ;; populate hs table ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-fill_hs_tbl: 
+fill_hs_tbl:                                              ;        only used if eeprom not found. 
 ;name
                     ldb      #4                           ; 5 entries, 0 index 
                     lslb                                  ; 2 byte table 
 get_nentry 
-                    ldx      #hsentryn_t 
+                    ldx      #hsentryn_t                  ; 
                     ldx      b,x 
                     ldy      #default_name_t 
                     ldy      b,y 
@@ -1059,6 +1096,40 @@ _fill_sloop
                     decb     
                     decb     
                     bpl      get_sentry 
+                    rts      
+
+fill_hs_tbl_eeprom: 
+; names
+                    ldb      #4                           ; 5 entries, 0 index 
+                    lslb                                  ; 2 byte table 
+get_nentryee 
+                    ldx      #hsentryn_t                  ; names, 4 bytes RAM 
+                    ldx      b,x 
+                    ldy      #ee_hsn_t                    ; table of scores from EEPROM 
+                    ldy      b,y 
+_fill_nloopee 
+                    lda      ,y+                          ; memcpy loop 
+                    sta      ,x+ 
+                    cmpa     #$80 
+                    bne      _fill_nloopee                  ; $80 is string terminator use instead of bpl incase any chars are above $80 
+                    decb     
+                    decb     
+                    bpl      get_nentryee 
+; scores    
+                    ldb      #4                           ; 5 entries, 0 index 
+                    lslb     
+get_sentryee 
+                    ldx      #hsentrys_t 
+                    ldx      b,x 
+                    ldy      #ee_hs_t 
+                    ldy      b,y 
+_fill_sloopee 
+                    lda      ,y+ 
+                    sta      ,x+ 
+                    bpl      _fill_sloopee 
+                    decb     
+                    decb     
+                    bpl      get_sentryee 
                     rts      
 
 ;))))))))))))))))))))))))))))))))))))))))))))))))))))))))))
