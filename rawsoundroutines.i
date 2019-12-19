@@ -209,7 +209,7 @@ Do_Sound_FX_C1CB_Bounce:
 Do_Sound_FX_C1Bloop: 
                     lda      sfxC1W1 
                     cmpa     #0 
-                    beq      Do_Sound_FX_C1SoundOff 
+                    lbeq      Do_Sound_FX_C1SoundOff 
                     lda      #PSG_OnOff 
                     ldb      #Ch1_Tone_On                 ;| #Ch1_Noise_Off 
                     jsr      Sound_Byte_raw 
@@ -238,7 +238,7 @@ Do_Sound_FX_C1Pip:
                                                           ; jsr Sound_Byte_raw 
                     lda      sfxC1W1 
                     cmpa     #0 
-                    beq      Do_Sound_FX_C1SoundOff 
+                    lbeq      Do_Sound_FX_C1SoundOff 
                     lda      #PSG_OnOff 
                     ldb      #Ch1_Tone_On                 ;| #Ch1_Noise_Off 
                     jsr      Sound_Byte_raw 
@@ -260,7 +260,7 @@ Do_Sound_FX_C1Pip:
 Do_Sound_FX_C1RevBloop: 
                     lda      sfxC1W1 
                     cmpa     #0 
-                    beq      Do_Sound_FX_C1SoundOff 
+                    lbeq      Do_Sound_FX_C1SoundOff 
                     lda      #PSG_OnOff 
                     ldb      #Ch1_Tone_On                 ;| #Ch1_Noise_Off 
                     jsr      Sound_Byte_raw 
@@ -422,15 +422,15 @@ Do_Sound_FX_C3Mute:
                     jsr      Sound_Byte_raw 
                     rts      
 
-Do_Sound_FX_C1SoundOff: 
+;Do_Sound_FX_C1SoundOff:    DUPLICATE FUNCTION LABEL commenting 
                                                           ;nothing playing 
-                    lda      #PSG_Ch1_Vol 
-                    ldb      #0 
-                    jsr      Sound_Byte_raw 
-                    lda      #0 
-                    sta      sfxC1ID 
-                    jsr      Clear_Sound 
-                    rts      
+;                    lda      #PSG_Ch1_Vol 
+;                    ldb      #0 
+;                    jsr      Sound_Byte_raw 
+;                    lda      #0 
+;                    sta      sfxC1ID 
+;                    jsr      Clear_Sound 
+;                    rts      
 
 Do_Sound_FX_C2Mute: 
 Do_Sound_FX_C2SoundOff: 

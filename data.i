@@ -643,7 +643,7 @@ Tank_R_t            fdb      Tank_R_1,Tank_R_2
 Prize_t             fdb      Prize_1,Prize_2,Prize_1,Prize_2 ; big/small animation 
 Wedge_L_t           fdb      Wedge_L_1, Wedge_L_2, Wedge_L_3, Wedge_L_2 
 Wedge_R_t           fdb      Wedge_R_1, Wedge_R_2, Wedge_R_3, Wedge_R_2 
-Demo_Label_t        fdb      demolabel, press_btn3_start_text, press_btn2_conf_text 
+Demo_Label_t        fdb      demo_label, press_btn4_start_text, press_btn2_conf_text ,press_btn1_hs_text 
 default_name_t      fdb      default_name0,default_name1,default_name2,default_name3,default_name4 
 default_high_t      fdb      default_high0,default_high1,default_high2,default_high3,default_high4 
 thanks_t            fdb      thanks0,thanks1,thanks2,thanks3,thanks4, thanks5 
@@ -699,28 +699,34 @@ alleyanxietylogo_data:
 ; TEXT STRINGS
 ;$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 ;deadstring          fcc      "SHIP HIT!",$80
-; GENERAL
+; CONFIGURATION VALUES
 joycal_label        fcc      "JOYSTICK SPEED",$80
 vslow_text          fcc      "VERY SLOW",$80
 slow_text           fcc      "SLOW",$80
 med_text            fcc      "MEDIUM",$80
 fast_text           fcc      "FAST",$80
+;
 gamesel_label       fcc      "  GAME SELECT",$80
 reggame_text        fcc      "CLASSICGAME",$80
 supergame_text      fcc      "SUPER GAME",$80
+; 
+level_start_label   fcc      "LEVEL TO START AT",$80
+hs_reset_label      fcc      "RESET HIGH SCORES",$80
+confirm_text        fcc      "ARE YOU SURE?",$80
 gameoverstr         fcc      "GAME OVER",$80
 highscorelabel      fcc      "HIGH SCORE",$80
 thankstolabel       fcc      "THANKS TO:",$80
 ; HIGH SCORE ENTRY STUFF 
-newhslabel          fcc      "NEW HIGH SCORE",$80
+new_hs_label        fcc      "NEW HIGH SCORE",$80
 press_btn3_text     fcc      "PRESS BUTTON 3 TO BACKSPACE",$80
 press_btn4_text     fcc      "PRESS BUTTON 4 TO ENTER",$80
 finish_btn4_text    fcc      "PRESS BUTTON 4 TO FINISH",$80
 ;
 ; Demo button stuff
-demolabel           fcc      "     DEMO MODE    ",$80
-press_btn3_start_text  fcc   "BUTTON 3 TO START",$80
+demo_label          fcc      "     DEMO MODE    ",$80
+press_btn4_start_text  fcc   "BUTTON 4 TO START",$80
 press_btn2_conf_text  fcc    "BUTTON 2 TO CONFIG",$80
+press_btn1_hs_text  fcc    "BUTTON 1 TO VIEW HIGHSCORES",$80
 ; high score entry 
 hs_abc_1            fcc      "A B C D E F",$80
 hs_abc_2            fcc      "G H I J K L",$80
@@ -741,7 +747,9 @@ default_name1       fcc      "JAW",$80
 default_name2       fcc      "GGG",$80
 default_name3       fcc      "GCE",$80
 default_name4       fcc      "GZE",$80
-eeprom_filler       db       0,0,0,0,0,0,0                ; padding to 63 bytes 
+default_shipspeed   db       3							; slow 
+default_gamemode    db       0 							; classic game
+eeprom_filler       db       0,0,0,0,0                    ; padding to 63 bytes 
 ; misc
 thanks0             fcc      "   MALBAN, VECTREXER   ",$80
 thanks1             fcc      " VECTORX, TODD W, EFNET",$80

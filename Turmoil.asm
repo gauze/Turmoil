@@ -15,7 +15,7 @@
                     include  "VECTREX.I"                  ; vectrex bios function include
 ; stuff that goes into RAM
                     include  "vars.i"                     ; RAM allocation starting at $C880
-; x
+; 
                     include  "macros.i"                   ; inlined code to save jsr/rts cycles
 ;***************************************************************************
 ; HEADER SECTION

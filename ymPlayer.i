@@ -38,12 +38,12 @@ STRUCT_LEN=(INFO_END-INFO_START)
                     org      ym_ram 
 cregister: 
                     ds       1 
-temp: 
-                    ds       1 
-temp2: 
-                    ds       1 
-temp3: 
-                    ds       1 
+ymtemp: 
+                    ds       2 
+;ymtemp2: 
+;                    ds       1 
+;ymtemp3: 
+;                    ds       1 
 calc_coder: 
                     ds       1 
 calc_bits: 
@@ -274,7 +274,7 @@ dechifer:
 ; if 0 - not
                     read_one_bit_from_data  
                     beq      directByte                   ; if bit is zero - jump 
-                    sts      temp                         ; save stackpointer 
+                    sts      ymtemp                         ; save stackpointer 
                     lds      REG_PHRASE_MAP,u             ; load the starting position of the phrase mappings for this register 
                     ldy      PHRASE_DEFINITION_START,u    ; and also the phrase definition address 
                     clra                                  ; was calc_bits, a contains the number of bits our current shannon code checkings 
@@ -307,7 +307,7 @@ bitLenFound:
                     bne      increaseCodeBits             ; if not the same, check next phrase in phrase mapping (jump) 
                     lda      2,s                          ; otherwise we found the correct phrase, load length of current phrase 
                     sta      CURRENT_PHRASE_LEN,u         ; and remember that 
-                    lds      temp                         ; restore stack 
+                    lds      ymtemp                         ; restore stack 
                     tfr      y,x                          ; pointer to current found phrase to X (will be resused in out) 
                     clrb                                  ; current position in phrase is at start 0 
                     stx      CURRENT_IS_PHRASE,u          ; store the phrase to the structure 

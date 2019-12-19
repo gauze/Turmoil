@@ -398,7 +398,7 @@ top2ok
                     lda      stallcnt 
                     cmpa     #100 
                     beq      donesplash 
-                    bra      splashloop 
+                    lbra      splashloop 
 
 donesplash 
                     lda      level 
@@ -605,7 +605,7 @@ no10cntresetC
                     lda      #$FF 
                     sta      Vec_Counter_1 
 keepgoing 
-                    bra      conf_loop 
+                    lbra      conf_loop 
 
 do_demo             lda      #1 
                     sta      Demo_Mode 
@@ -698,7 +698,7 @@ no10cntresetD
                     lda      #$FF 
                     sta      Vec_Counter_1 
 gskeepgoing 
-                    bra      gs_loop 
+                    lbra      gs_loop 
 
 do_demogs           lda      #1 
                     sta      Demo_Mode 
@@ -918,7 +918,7 @@ no2cntresetHS
                     std      Vec_Text_HW 
                     lda      #117 
                     ldb      #-60 
-                    ldu      #newhslabel 
+                    ldu      #new_hs_label 
                     jsr      Print_Str_d 
                     lda      temp1                        ; timer to hide instructions 
                     beq      show_inst 
@@ -1129,7 +1129,12 @@ _fill_sloopee
                     bpl      _fill_sloopee 
                     decb     
                     decb     
-                    bpl      get_sentryee 
+                    bpl      get_sentryee
+; load config values too
+				  lda      ee_shipspeed
+				  sta      shipspeed
+				  lda      ee_game_mode
+				  sta      Super_Game 
                     rts      
 
 ;))))))))))))))))))))))))))))))))))))))))))))))))))))))))))
@@ -1190,8 +1195,8 @@ noconfpress
 keepgoinghs 
                     jsr      do_ym_sound 
                     ldd      ym_data_current 
-                    beq      ym_restart                   ; loop default 
-                    bra      _keepshow 
+                    lbeq      ym_restart                   ; loop default 
+                    lbra      _keepshow 
 
 do_demohs 
                                                           ; jsr credits_thanks ; remove after testing 
@@ -1315,7 +1320,7 @@ donetemp1
                     cmpa     #6 
                     beq      creditsdone 
 dontinctemp4 
-                    bra      _ct_loop 
+                    lbra      _ct_loop 
 
 creditsdone 
                     ldd      temp 

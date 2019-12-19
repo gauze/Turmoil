@@ -11,10 +11,11 @@ introSplash
                     jsr      setup                        ; remove when done testing 
 ;                    jsr      fill_hs_tbl                  ; filling from ROM eventually pull from EPROM 
                     jsr      eeprom_load 
-                    jsr      fill_hs_tbl_eeprom 
+                    jsr      fill_hs_tbl_eeprom 			; also loads game options
                     jsr      titleScreen 
                     jsr      SfxInit 
-                    jsr      joystick_config 
+; only do this if eeprom_load doesn't find default values? nah skip it and allow access to config from #2 button press
+;                    jsr      joystick_config 
                     endm     
 ;
 RESTART             macro    
@@ -2652,7 +2653,7 @@ _is_zero
                     ldx      #zero 
                     DRAW_VL_MODE  
                     ldx      #numbers_t 
-                    bra      _scoreloop 
+                    lbra      _scoreloop 
 
 demo_score 
                     RESET0REF  
@@ -2721,7 +2722,7 @@ CHECK_DEMO          macro
                     beq      no_conf_press 
                     jsr      joystick_config 
 no_conf_press 
-                    lda      Vec_Button_1_3 
+                    lda      Vec_Button_1_4 
                     beq      no_check_needed 
                     clr      Demo_Mode 
                     jmp      restart 
