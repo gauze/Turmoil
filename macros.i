@@ -1676,9 +1676,10 @@ no_warp_delay
                     beq      no_check_needed 
                     lda      Vec_Button_1_2 
                     beq      no_conf_press 
-                    jsr      joystick_config 
+                    jsr      general_config
+				  jmp      main 						; return from GC menu still has buffered button presses, avoid by jmping to main
 no_conf_press 
-                    lda      Vec_Button_1_3 
+                    lda      Vec_Button_1_4 
                     beq      no_check_needed 
                     clr      Demo_Mode 
                     jmp      restart 
@@ -2719,9 +2720,9 @@ CHECK_DEMO          macro
                     beq      no_check_needed 
                     jsr      Read_Btns                    ; maybe only do one of these per loop? 
                     lda      Vec_Button_1_2 
-                    beq      no_conf_press 
+                    beq      no_conf_pressD 
                     jsr      joystick_config 
-no_conf_press 
+no_conf_pressD 
                     lda      Vec_Button_1_4 
                     beq      no_check_needed 
                     clr      Demo_Mode 

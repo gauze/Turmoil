@@ -10,6 +10,11 @@ Letter_Select_nomode:
                     fcb      -12, 0 
                     fcb      0, -12 
                     fcb      +12,0 
+GConf_Box_nomode:   fcb      3 
+                    fcb      0, 115 
+                    fcb      -10, 0 
+                    fcb      0, -115 
+                    fcb      10, 0 
 Conf_Box_nomode:    fcb      3 
                     fcb      0, 110 
                     fcb      -12, 0 
@@ -700,19 +705,26 @@ alleyanxietylogo_data:
 ;$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 ;deadstring          fcc      "SHIP HIT!",$80
 ; CONFIGURATION VALUES
-joycal_label        fcc      "JOYSTICK SPEED",$80
+; OPTIONS menu
+confopt_label       fcc      "CONFIGURATION OPTIONS",$80
+level_start_label   fcc      "LEVEL TO START AT",$80
+hs_reset_label      fcc      "FORMAT EEPROM",$80
+confirm_text        fcc      "ARE YOU SURE?",$80
+yes_text            fcc      "   YES",$80
+no_text             fcc      "    NO",$80
+return_text         fcc      "  EXIT",$80
+; JOYSTICK menu
+joycal_label        fcc      "  SHIP SPEED",$80
 vslow_text          fcc      "VERY SLOW",$80
 slow_text           fcc      "SLOW",$80
 med_text            fcc      "MEDIUM",$80
 fast_text           fcc      "FAST",$80
-;
+; GAME MODE MENU
+gamemode_label      fcc      "  GAME MODE",$80
 gamesel_label       fcc      "  GAME SELECT",$80
 reggame_text        fcc      "CLASSICGAME",$80
 supergame_text      fcc      "SUPER GAME",$80
-; 
-level_start_label   fcc      "LEVEL TO START AT",$80
-hs_reset_label      fcc      "RESET HIGH SCORES",$80
-confirm_text        fcc      "ARE YOU SURE?",$80
+; GENERAL
 gameoverstr         fcc      "GAME OVER",$80
 highscorelabel      fcc      "HIGH SCORE",$80
 thankstolabel       fcc      "THANKS TO:",$80
@@ -721,12 +733,13 @@ new_hs_label        fcc      "NEW HIGH SCORE",$80
 press_btn3_text     fcc      "PRESS BUTTON 3 TO BACKSPACE",$80
 press_btn4_text     fcc      "PRESS BUTTON 4 TO ENTER",$80
 finish_btn4_text    fcc      "PRESS BUTTON 4 TO FINISH",$80
+select_btn4_text    fcc      "PRESS BUTTON 4 TO SELECT",$80
 ;
 ; Demo button stuff
 demo_label          fcc      "     DEMO MODE    ",$80
 press_btn4_start_text  fcc   "BUTTON 4 TO START",$80
 press_btn2_conf_text  fcc    "BUTTON 2 TO CONFIG",$80
-press_btn1_hs_text  fcc    "BUTTON 1 TO VIEW HIGHSCORES",$80
+press_btn1_hs_text  fcc      "BUTTON 1 TO VIEW HIGHSCORES",$80
 ; high score entry 
 hs_abc_1            fcc      "A B C D E F",$80
 hs_abc_2            fcc      "G H I J K L",$80
@@ -747,8 +760,8 @@ default_name1       fcc      "JAW",$80
 default_name2       fcc      "GGG",$80
 default_name3       fcc      "GCE",$80
 default_name4       fcc      "GZE",$80
-default_shipspeed   db       3							; slow 
-default_gamemode    db       0 							; classic game
+default_shipspeed   db       3                            ; medium 
+default_gamemode    db       0                            ; classic game 
 eeprom_filler       db       0,0,0,0,0                    ; padding to 63 bytes 
 ; misc
 thanks0             fcc      "   MALBAN, VECTREXER   ",$80

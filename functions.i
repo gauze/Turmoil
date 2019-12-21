@@ -398,7 +398,7 @@ top2ok
                     lda      stallcnt 
                     cmpa     #100 
                     beq      donesplash 
-                    lbra      splashloop 
+                    lbra     splashloop 
 
 donesplash 
                     lda      level 
@@ -519,7 +519,129 @@ _tsdone
                     JSR      Clear_Sound 
                     rts      
 
-;&&&&&&&&&&&&&&&%%%%%%%
+;*%*%*%*%*%*%**%*%*%*%*%*%*%*%*%*%*%*%*%*%*%*%*%*%*%*%*%*%*%*%*%*%
+general_config                                            ;        have to change all label names!!! 
+                    lda      #10                          ; set up timeout counter 
+                    sta      temp1                        ; 10 iterations of 
+                    lda      #$FF 
+                    sta      Vec_Counter_1                ;; 255 2550/30 = about 85 seconds 
+                    lda      #0 
+                    sta      conf_box_index               ; index to start at 0 
+                    sta      frm10cnt 
+gconf_loop 
+                    jsr      Wait_Recal 
+                    jsr      Intensity_5F 
+                    lda      frm10cnt 
+                    bne      gcdoneYcal 
+                    jsr      Joy_Digital 
+                    nop      
+                    lda      Vec_Joy_1_Y 
+                    beq      gcdoneYcal                   ; no Y motion 
+                    bmi      going_down_gconf 
+                    lda      conf_box_index 
+                    beq      gcdoneYcal                   ; 0 is highest slot on screen !move 
+                    dec      conf_box_index 
+                    bra      gcdoneYcal 
+
+going_down_gconf 
+                    lda      conf_box_index 
+                    cmpa     #3                           ; 3 is lowest slot on screen !move 
+                    beq      gcdoneYcal 
+                    inc      conf_box_index 
+gcdoneYcal 
+                    jsr      Read_Btns 
+                    lda      Vec_Button_1_4 
+                    beq      no_press_gcal 
+                    jmp      gconf_done 
+
+no_press_gcal 
+                    RESET0REF  
+                    lda      #110 
+                    ldb      #-115 
+                    ldu      #confopt_label 
+                    jsr      Print_Str_d 
+                    lda      #90 
+                    ldb      #-83 
+                    ldu      #gamemode_label 
+                    jsr      Print_Str_d 
+                    lda      #78 
+                    ldb      #-85 
+                    ldu      #joycal_label 
+                    jsr      Print_Str_d 
+                    lda      #66 
+                    ldb      #-83 
+                    ldu      #hs_reset_label 
+                    jsr      Print_Str_d 
+                    lda      #54 
+                    ldb      #-60 
+                    ldu      #return_text 
+                    jsr      Print_Str_d 
+                    RESET0REF  
+                    lda      conf_box_index 
+                    ldx      #cboxYpos_t 
+                    lda      a,x 
+                    ldb      #-79 
+                    MOVETO_D  
+                    lda      #160 
+                    sta      VIA_t1_cnt_lo 
+                    ldx      #GConf_Box_nomode 
+                    DRAW_VLC  
+                    RESET0REF  
+                    lda      #-120 
+                    ldb      #-120 
+                    ldu      #select_btn4_text 
+                    jsr      Print_Str_d 
+                    lda      #10 
+                    inc      frm10cnt 
+                    cmpa     frm10cnt 
+                    bne      no10cntresetGC 
+                    clr      frm10cnt 
+no10cntresetGC 
+                    jsr      Dec_3_Counters 
+                    tst      Vec_Counter_1 
+                    bne      gckeepgoing 
+                    dec      temp1 
+                    beq      do_demogc 
+                    lda      #$FF 
+                    sta      Vec_Counter_1 
+gckeepgoing 
+                    lbra     gconf_loop 
+
+do_demogc           lda      #1 
+                    sta      Demo_Mode                    ; go back to demo mode because no keypress in 85 seconds 
+                    jmp      restart 
+
+gconf_done 
+                    lda      conf_box_index               ; load selected menu item index 
+                    cmpa     #0 
+                    bne      gctrynext1 
+                    jsr      game_select 
+                    jmp      general_config 
+
+gctrynext1 
+                    cmpa     #1 
+                    bne      gctrynext2 
+                    jsr      joystick_config 
+                    jmp      general_config 
+
+gctrynext2 
+                    cmpa     #2 
+                    bne      gctrynext3 
+                    jsr      format_eeprom_menu
+                    jmp      general_config 
+
+gctrynext3 
+                    cmpa     #3 
+                    bne      gckeep_running 
+                    nop      
+                    rts                                   ; return to main loop 
+
+gckeep_running 
+                    jmp      general_config 
+
+                    rts      
+
+;&&&&&&&&&&&&&&&%%%%%%%&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 joystick_config 
                     lda      #10 
                     sta      temp1 
@@ -605,7 +727,7 @@ no10cntresetC
                     lda      #$FF 
                     sta      Vec_Counter_1 
 keepgoing 
-                    lbra      conf_loop 
+                    lbra     conf_loop 
 
 do_demo             lda      #1 
                     sta      Demo_Mode 
@@ -615,7 +737,7 @@ conf_done
                     lda      conf_box_index 
                     inca     
                     sta      shipspeed                    ; ship verical speed 
-                    jsr      game_select 
+;                    jsr      game_select 
                     rts      
 
 ;********************************************************************************************
@@ -698,7 +820,7 @@ no10cntresetD
                     lda      #$FF 
                     sta      Vec_Counter_1 
 gskeepgoing 
-                    lbra      gs_loop 
+                    lbra     gs_loop 
 
 do_demogs           lda      #1 
                     sta      Demo_Mode 
@@ -710,7 +832,101 @@ gs_done
                     sta      Super_Game                   ; ship verical speed 
                     rts      
 
-;***************    ********************************************************************** 
+;(((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((
+format_eeprom_menu: 
+                    lda      #10 
+                    sta      temp1 
+                    lda      #$FF 
+                    sta      Vec_Counter_1 
+                    lda      #0 
+                    sta      conf_box_index 
+                    sta      frm10cnt 
+fem_loop 
+                    jsr      Wait_Recal 
+                    jsr      Intensity_5F 
+                    jsr      Do_Sound_FX_C1 
+                    lda      frm10cnt 
+                    bne      femdoneYcal 
+                    jsr      Joy_Digital 
+                    nop      
+                    lda      Vec_Joy_1_Y 
+                    beq      femdoneYcal                   ; no Y motion 
+                    bmi      going_down_fem 
+                    lda      conf_box_index 
+                    beq      femdoneYcal                   ; 0 is highest slot on screen !move 
+                    dec      conf_box_index 
+                    jsr      SFX_Bloop 
+                    bra      femdoneYcal 
+
+going_down_fem 
+                    lda      conf_box_index 
+                    cmpa     #1                           ; 3 is lowest slot on screen !move 
+                    beq      femdoneYcal 
+                    jsr      SFX_Bloop 
+                    inc      conf_box_index 
+femdoneYcal 
+                    jsr      Read_Btns 
+                    lda      Vec_Button_1_4 
+                    beq      no_pressfem 
+                    jsr      SFX_Pip 
+                    jmp      fem_done 
+
+no_pressfem 
+                    RESET0REF  
+                    lda      #110 
+                    ldb      #-81 
+                    ldu      #hs_reset_label 
+                    jsr      Print_Str_d 
+                    lda      #90 
+                    ldb      #-62 
+                    ldu      #no_text 
+                    jsr      Print_Str_d 
+                    lda      #78 
+                    ldb      #-58 
+                    ldu      #yes_text 
+                    jsr      Print_Str_d 
+                    RESET0REF  
+                    lda      conf_box_index 
+                    ldx      #cboxYpos_t 
+                    lda      a,x 
+                    ldb      #-60 
+                    MOVETO_D  
+                    ldx      #Game_Sel_Box_nomode 
+                    DRAW_VLC  
+                    RESET0REF  
+                    lda      #-120 
+                    ldb      #-120 
+                    ldu      #finish_btn4_text 
+                    jsr      Print_Str_d 
+                    lda      #10 
+                    inc      frm10cnt 
+                    cmpa     frm10cnt 
+                    bne      no10cntresetFEM 
+                    clr      frm10cnt 
+no10cntresetFEM 
+                    jsr      Dec_3_Counters 
+                    tst      Vec_Counter_1 
+                    bne      femkeepgoing 
+                    dec      temp1 
+                    beq      do_demofem 
+                    lda      #$FF 
+                    sta      Vec_Counter_1 
+femkeepgoing 
+                    lbra     fem_loop 
+
+do_demofem          lda      #1 						; do on TIMEOUT only
+                    sta      Demo_Mode 
+                    jmp      restart 
+
+fem_done 
+                    lda      conf_box_index 
+				  beq      fem_noformat 
+				  jsr      eeprom_format
+                    jsr      eeprom_load                  ; reload so it updates internal vars 
+fem_noformat        
+                    rts      
+
+;******************************************************************************* 
 check_highscore_entry: 
                     ldd      #$9411                       ; change refresh rate 
                     std      Vec_Rfrsh 
@@ -1040,7 +1256,7 @@ _fill_nloop1
                     lda      ,x+                          ; memcpy loop 
                     sta      ,y+ 
                     cmpa     #$80 
-                    bne      _fill_nloop1                  ; $80 is string terminator use instead of bpl incase any chars are above $80 
+                    bne      _fill_nloop1                 ; $80 is string terminator use instead of bpl incase any chars are above $80 
                     decb     
                     decb     
                     bpl      get_nentry1 
@@ -1111,7 +1327,7 @@ _fill_nloopee
                     lda      ,y+                          ; memcpy loop 
                     sta      ,x+ 
                     cmpa     #$80 
-                    bne      _fill_nloopee                  ; $80 is string terminator use instead of bpl incase any chars are above $80 
+                    bne      _fill_nloopee                ; $80 is string terminator use instead of bpl incase any chars are above $80 
                     decb     
                     decb     
                     bpl      get_nentryee 
@@ -1129,12 +1345,12 @@ _fill_sloopee
                     bpl      _fill_sloopee 
                     decb     
                     decb     
-                    bpl      get_sentryee
+                    bpl      get_sentryee 
 ; load config values too
-				  lda      ee_shipspeed
-				  sta      shipspeed
-				  lda      ee_game_mode
-				  sta      Super_Game 
+                    lda      ee_shipspeed 
+                    sta      shipspeed 
+                    lda      ee_game_mode 
+                    sta      Super_Game 
                     rts      
 
 ;))))))))))))))))))))))))))))))))))))))))))))))))))))))))))
@@ -1195,8 +1411,8 @@ noconfpress
 keepgoinghs 
                     jsr      do_ym_sound 
                     ldd      ym_data_current 
-                    lbeq      ym_restart                   ; loop default 
-                    lbra      _keepshow 
+                    lbeq     ym_restart                   ; loop default 
+                    lbra     _keepshow 
 
 do_demohs 
                                                           ; jsr credits_thanks ; remove after testing 
@@ -1320,7 +1536,7 @@ donetemp1
                     cmpa     #6 
                     beq      creditsdone 
 dontinctemp4 
-                    lbra      _ct_loop 
+                    lbra     _ct_loop 
 
 creditsdone 
                     ldd      temp 
