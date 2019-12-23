@@ -202,8 +202,8 @@ ee_hsn3             ds       4
 ee_hsn4             ds       4 
 ee_hsn5             ds       4 
 ; use this for OPTIONS  7 total max
-ee_shipspeed        ds       1 
-ee_game_mode        ds       1 
+ee_shipspeed        ds       1 						; 1-4 faster to slower
+ee_game_mode        ds       1 						; bool 1=Super game | 0=classic 
 ee_filler           ds       5 
 ;eeprom_buffer0      ds       32 
 ;eeprom_buffer1      ds       32                           

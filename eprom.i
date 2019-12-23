@@ -7,44 +7,42 @@
 ;eeprom_buffer1      ds       32                           ; 32 byte buffer 
 ;eeprom_buffer2      ds       32                           ; 32 byte buffer 
 ;EEPROM_STORESIZE    EQU      64                           ; only using 2 banks 
-
 ;functions
 ;                    JSR      eeprom_load
 ;                    JSR      eeprom_save 
-
-eeprom_load                                              ;        #isfunction 
-                    ldx      #eeprom_buffer              ; 
+eeprom_load                                               ;        #isfunction 
+                    ldx      #eeprom_buffer               ; 
                     jsr      ds2431_load                  ; load 32 byte eeprom to ram 
                     clra     
-                    ldb      #(EEPROM_STORESIZE)
-eeload_loop                                              ;        
+                    ldb      #(EEPROM_STORESIZE) 
+eeload_loop                                               ;        
                     adda     ,x+                          ; sum the bytes 
                     decb                                  ; 
-                    bne      eeload_loop                 ; 
+                    bne      eeload_loop                  ; 
                     cmpa     #EEPROM_CHECKSUM             ; equal to checksum? 
                     bne      eeprom_format                ; if not, then format the eeprom 
-                    rts                                   ; otherwise, return
-;
-eeprom_format 
-                    ldu      #default_high0               ; our HS table template
-                    ldx      #eeprom_buffer              ; 
-                    ldb      #$3F                         ; 63 
+                    rts                                   ; otherwise, return 
 
+;****************************************************************************
+eeprom_format 
+                    ldu      #default_high0               ; our HS table template 
+                    ldx      #eeprom_buffer               ; 
+                    ldb      #$3F                         ; 63 
 eeformat_loop                                             ;        copy default data (rom) to ram 
                     pulu     a                            ; 
                     sta      ,x+                          ; 
                     decb                                  ; 
                     bne      eeformat_loop                ; 
-; AND BEGIN
-eeprom_save 						; #isfunction
-                    ldx      #eeprom_buffer              ; 
-                    ldd      #(EEPROM_CHECKSUM<<8)+$3F    ; lda chksum ldb #63
+; AND BEGIN*******************************************************************
+eeprom_save                                               ;        #isfunction 
+                    ldx      #eeprom_buffer               ; 
+                    ldd      #(EEPROM_CHECKSUM<<8)+$3F    ; lda chksum ldb #63 
 eesave_loop                                               ;        
                     suba     ,x+                          ; create checksum byte 
                     decb                                  ; 
                     bne      eesave_loop                  ; 
                     sta      ,x                           ; 
-                    ldx      #eeprom_buffer              ; 
+                    ldx      #eeprom_buffer               ; 
                     jsr      ds2431_verify                ; compare ram to eeprom 
                     tsta                                  ; 
                     lbne     ds2431_save                  ; if different, then update eeprom 

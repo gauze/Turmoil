@@ -504,6 +504,7 @@ starfield:          fcb      -100,100
 ;shippos_t          fcb      -3*ALLEYWIDTH,-2*ALLEYWIDTH,-1*ALLEYWIDTH,0,1*ALLEYWIDTH,2*ALLEYWIDTH,3*ALLEYWIDTH ; Y pos of ship 
 ; position of cursor
 cboxYpos_t          db       93,81,69,57                  ; position of select box for Joystick conf 
+eeboxYpos_t         db       83,71                        ; position of select box for Joystick conf 
 hsentrynYpos_t                                            ;        position of hs table 
 hsboxYpos_t         db       103,91,79,67,55,43,31        ; Y,X pos of hs initials entry cusor 
 hsboxXpos_t         db       -54,-31,-9,13,35,58 
@@ -708,7 +709,9 @@ alleyanxietylogo_data:
 ; OPTIONS menu
 confopt_label       fcc      "CONFIGURATION OPTIONS",$80
 level_start_label   fcc      "LEVEL TO START AT",$80
-hs_reset_label      fcc      "FORMAT EEPROM",$80
+ee_warn1_label      fcc      "THIS WILL ERASE HIGH",$80
+ee_warn2_label      fcc      "SCORES AND ALL SETTINGS",$80
+hs_reset_label      fcc      "FORMAT EEPROM?",$80
 confirm_text        fcc      "ARE YOU SURE?",$80
 yes_text            fcc      "   YES",$80
 no_text             fcc      "    NO",$80

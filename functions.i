@@ -133,54 +133,12 @@ _no_add_lvl
 
 ; ##########################################################################
 gameover:                                                 ;        #isfunction 
-;                    ldx      #score 
-;                    ldu      #Vec_High_Score 
-;                    jsr      New_High_Score 
                     lda      Demo_Mode 
                     bne      _no_chk_hs 
                     jsr      check_highscore_entry 
 _no_chk_hs 
                     jmp      print_hs_tbl                 ; no RTS don't use jsr 
 
-; everything below this comment is unreachable currently
-;goloop: 
-;                    jsr      Wait_Recal 
-;                    clr      Vec_Misc_Count 
-;                    lda      #$7F 
-;                    sta      VIA_t1_cnt_lo                ; sets scale 
-;                    jsr      Intensity_7F 
-;                    RESET0REF  
-;                    lda      #70 
-;                    ldb      #-15 
-;                    ldu      #gameoverstr 
-;                    jsr      Print_Str_d 
-;                    RESET0REF  
-;                    lda      #-50 
-;                    ldb      #-50 
-;                    ldu      #score 
-;                    jsr      Print_Str_d 
-; high score stuff
-;                    ldu      #highscorelabel 
-;                    lda      #$F0 
-;                    ldb      -#127 
-;                    jsr      Print_Str_d 
-                                                          ; ldu #Vec_High_Score 
-                                                          ; ldd #$F050 
-                                                          ; jsr Print_Str_d 
-; print name example
-;                    ldx      #hsentryn_t 
-;                    ldu      ,x 
-;                    ldd      #$D400 
-;                    jsr      Print_Str_d 
-; print name example
-;                    ldx      #hsentrys_t 
-;                    ldu      ,x 
-;                    ldd      #$D4B0 
-;                    jsr      Print_Str_d 
-;                    jsr      Read_Btns 
-;                    lda      Vec_Button_1_3 
-;                    lbne     restart 
-;                    bra      goloop 
 ;################################################################
 levelsplash: 
                     jsr      Clear_Sound 
@@ -613,21 +571,23 @@ do_demogc           lda      #1
 
 gconf_done 
                     lda      conf_box_index               ; load selected menu item index 
-                    cmpa     #0 
+                    cmpa     #0 						; menuchoice 1
                     bne      gctrynext1 
                     jsr      game_select 
+				  jsr      write2eeprom				; save if there was a change
                     jmp      general_config 
 
 gctrynext1 
-                    cmpa     #1 
+                    cmpa     #1 						; menu choice 2
                     bne      gctrynext2 
                     jsr      joystick_config 
+				  jsr      write2eeprom				; save if there was a chnage
                     jmp      general_config 
 
 gctrynext2 
                     cmpa     #2 
                     bne      gctrynext3 
-                    jsr      format_eeprom_menu
+                    jsr      format_eeprom_menu 
                     jmp      general_config 
 
 gctrynext3 
@@ -850,10 +810,10 @@ fem_loop
                     jsr      Joy_Digital 
                     nop      
                     lda      Vec_Joy_1_Y 
-                    beq      femdoneYcal                   ; no Y motion 
+                    beq      femdoneYcal                  ; no Y motion 
                     bmi      going_down_fem 
                     lda      conf_box_index 
-                    beq      femdoneYcal                   ; 0 is highest slot on screen !move 
+                    beq      femdoneYcal                  ; 0 is highest slot on screen !move 
                     dec      conf_box_index 
                     jsr      SFX_Bloop 
                     bra      femdoneYcal 
@@ -873,21 +833,30 @@ femdoneYcal
 
 no_pressfem 
                     RESET0REF  
-                    lda      #110 
-                    ldb      #-81 
-                    ldu      #hs_reset_label 
+                    lda      #125 
+                    ldb      #-71 
+                    ldu      #confirm_text 
                     jsr      Print_Str_d 
-                    lda      #90 
+                    lda      #112 
+                    ldb      #-118 
+                    ldu      #ee_warn1_label 
+                    jsr      Print_Str_d 
+                    lda      #102 
+                    ldb      #-122 
+                    ldu      #ee_warn2_label 
+                    jsr      Print_Str_d 
+;
+                    lda      #80 
                     ldb      #-62 
                     ldu      #no_text 
                     jsr      Print_Str_d 
-                    lda      #78 
+                    lda      #68 
                     ldb      #-58 
                     ldu      #yes_text 
                     jsr      Print_Str_d 
                     RESET0REF  
                     lda      conf_box_index 
-                    ldx      #cboxYpos_t 
+                    ldx      #eeboxYpos_t
                     lda      a,x 
                     ldb      #-60 
                     MOVETO_D  
@@ -914,16 +883,16 @@ no10cntresetFEM
 femkeepgoing 
                     lbra     fem_loop 
 
-do_demofem          lda      #1 						; do on TIMEOUT only
+do_demofem          lda      #1                           ; do on TIMEOUT only 
                     sta      Demo_Mode 
                     jmp      restart 
 
 fem_done 
                     lda      conf_box_index 
-				  beq      fem_noformat 
-				  jsr      eeprom_format
+                    beq      fem_noformat 
+                    jsr      eeprom_format 				; over writes entire eeprom
                     jsr      eeprom_load                  ; reload so it updates internal vars 
-fem_noformat        
+fem_noformat 
                     rts      
 
 ;******************************************************************************* 
@@ -1241,10 +1210,11 @@ hsn_copy_loop
                     jmp      hs_test_loop 
 
 hs_check_done 
-; TO DO add section to write to EEPROM
+
 ; copy hsentrys_t and hsentryn_t to ee_hs_t & ee_hsn_t
 ; taken from fill_hs_tbl
 ; names
+write2eeprom:											;#isfunction
                     ldb      #4                           ; 5 entries, 0 index 
                     lslb                                  ; 2 byte table 
 get_nentry1 
@@ -1253,7 +1223,7 @@ get_nentry1
                     ldy      #ee_hsn_t                    ; table of scores from EEPROM 
                     ldy      b,y 
 _fill_nloop1 
-                    lda      ,x+                          ; memcpy loop 
+                    lda      ,x+                          ; 'memcpy' loop 
                     sta      ,y+ 
                     cmpa     #$80 
                     bne      _fill_nloop1                 ; $80 is string terminator use instead of bpl incase any chars are above $80 
@@ -1275,7 +1245,12 @@ _fill_sloop1
                     decb     
                     decb     
                     bpl      get_sentry1 
-; above, copied from fill_hs_tbl to reverse copy order.        
+; above, copied from fill_hs_tbl to reverse copy order
+; save config values too.
+                    lda      shipspeed 
+                    sta      ee_shipspeed 
+                    lda      Super_Game 
+                    sta      ee_game_mode 
                     jsr      eeprom_save 
 ;
                     rts      
