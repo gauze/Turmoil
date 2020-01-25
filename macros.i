@@ -33,6 +33,8 @@ restart
                     stb      shipdir 
                     ldx      #score 
                     jsr      Clear_Score 
+                    ldx      #running_score 
+                    jsr      Clear_Score
                     lda      #3                           ; normally 5 FIX 
                     sta      shipcnt 
                     lda      #$5F                         ; for high score input _ under scores _ 
@@ -47,7 +49,8 @@ restart
 ;
 WAIT_RECAL          macro    
                     jsr      Wait_Recal 
-                    endm     
+                    endm   
+;  
 DRAW_SHIP           macro    
 ; draw ship 
                     RESET0REF  
@@ -1026,7 +1029,7 @@ ship_moving_right
 wee_prize_score 
                     jsr      SFX_Ghost_Spawn 
                     ldd      #$800 
-                    ldx      #score 
+                    ldx      #running_score 
                     jsr      Add_Score_d 
                     lda      shipYpos 
                     lsla     
@@ -1177,7 +1180,7 @@ bullhit0
                     cmpa     #TANK 
                     beq      tank0 
 eventankdies0 
-                    ldx      #score 
+                    ldx      #running_score 
                     lda      alley0s 
                     ldb      #SCORE 
                     mul      
@@ -1251,7 +1254,7 @@ bullhit1
                     cmpa     #TANK 
                     beq      tank1 
 eventankdies1 
-                    ldx      #score 
+                    ldx      #running_score 
                     lda      alley1s 
                     ldb      #SCORE 
                     mul      
@@ -1325,7 +1328,7 @@ bullhit2
                     cmpa     #TANK 
                     beq      tank2 
 eventankdies2 
-                    ldx      #score 
+                    ldx      #running_score 
                     lda      alley2s 
                     ldb      #SCORE 
                     mul      
@@ -1399,7 +1402,7 @@ bullhit3
                     cmpa     #TANK 
                     beq      tank3 
 eventankdies3 
-                    ldx      #score 
+                    ldx      #running_score 
                     lda      alley3s 
                     ldb      #SCORE 
                     mul      
@@ -1473,7 +1476,7 @@ bullhit4
                     cmpa     #TANK 
                     beq      tank4 
 eventankdies4 
-                    ldx      #score 
+                    ldx      #running_score 
                     lda      alley4s 
                     ldb      #SCORE 
                     mul      
@@ -1547,7 +1550,7 @@ bullhit5
                     cmpa     #TANK 
                     beq      tank5 
 eventankdies5 
-                    ldx      #score 
+                    ldx      #running_score 
                     lda      alley5s 
                     ldb      #SCORE 
                     mul      
@@ -1621,7 +1624,7 @@ bullhit6
                     cmpa     #TANK 
                     beq      tank6 
 eventankdies6 
-                    ldx      #score 
+                    ldx      #running_score 
                     lda      alley6s 
                     ldb      #SCORE 
                     mul      
@@ -2636,6 +2639,16 @@ DRAW_VECTOR_SCORE   macro
                     MOVETO_D  
                     lda      #14                          ; scale it lower is better 
                     sta      VIA_t1_cnt_lo 
+				  ; TESTING THIS SHOULD BE #score and #running_score is comp to #score every frame and incremented until even!
+				  ldx      #running_score
+				  ldu      #score
+				  jsr      Compare_Score
+                    cmpa     #0
+				  beq      score_same
+				  lda      #10						; increment the (displayed)#score by 10
+                    ldx      #score
+				  jsr      Add_Score_a
+score_same	
                     ldy      #score 
 _scoreloop 
                     lda      ,y+ 

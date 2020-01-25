@@ -85,10 +85,11 @@ main                                                      ;        top of game l
                     include  "libsoundraw.i"              ; quick sound effects routines
                     include  "rawsounddata.i"
                     include  "rawsoundroutines.i"         ; 
-                    include  "rasterDraw.asm"             ; title screen
+                    include  "rasterDraw.asm"             ; title screen from VIDE
                     include  "ymPlayer.i"				; for song under high score
-                    include  "turmoil_ym.asm"			; our data
+                    include  "turmoil_ym.asm"			; our data for above
                     include  "ds2431LowLevel.i"           ; high score save stuff
                     include  "ds2431HighLevel.i"          ; using DS2431+ 1 wire eeprom
                     include  "eprom.i"                    ; should be named eeprom.i oh well
+				  include  "draw_synced_list.i"         ; from VIDE to, draw shapes with many vectors.
 end 

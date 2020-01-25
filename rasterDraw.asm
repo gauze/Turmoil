@@ -1,3 +1,5 @@
+; vim: ts=4 syntax=asm6809
+; credit: by MALBAN
 ; expects width strength to be set to the default bios location Vec_Text_Width
 ; expects height strength to be set to the default bios location Vec_Text_Height
 ; address of raster data is expected in U

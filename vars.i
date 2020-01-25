@@ -9,8 +9,9 @@
                     org      $C880                        ; start of our ram space 
 ; game basics
 score               ds       7                            ; 7 bytes 
+running_score       ds       7
 ;highscore           ds       7                            ; 7 bytes ;use built in instead.
-level               ds       1                            ; only does levels 1-99 then shows Infinity sign after tgat 
+level               ds       1                            ; only does levels 1-99 then shows Infinity sign after that 
 shipcnt             ds       1                            ; ships in reserve before GameOver 
 smartbombcnt        ds       1                            ; only in Super_Game 
 ; game option selector vars
@@ -189,6 +190,8 @@ EEPROM_STORESIZE    equ      64                           ; only using 2 banks
 EEPROM_CHECKSUM     equ      69                           ; see eprom.i for valid values 
 ; Variables 
 eeprom_buffer                                             ;        everything 
+;eeprom_buffer0      ds       32 
+;eeprom_buffer1      ds       32            
 ; scores
 ee_hs1              ds       7 
 ee_hs2              ds       7 
@@ -201,24 +204,23 @@ ee_hsn2             ds       4
 ee_hsn3             ds       4 
 ee_hsn4             ds       4 
 ee_hsn5             ds       4 
-; use this for OPTIONS  7 total max
+; use this for OPTIONS  7 bytes total
 ee_shipspeed        ds       1 						; 1-4 faster to slower
 ee_game_mode        ds       1 						; bool 1=Super game | 0=classic 
 ee_filler           ds       5 
-;eeprom_buffer0      ds       32 
-;eeprom_buffer1      ds       32                           
+                         
 ;          
 ; ymplayer ram and USE_ENVELOPES flag, * ok for top of RAM
 ym_ram              equ      * 
 USE_ENVELOPES=1 
 ;
-; CONSTANTS place after VARIABLES
+; CONSTANTS 
 ;ALLEYWIDTH          =        17                           ; moved to macros.i near where it's used for quick access
 LEFT                =        0 
 RIGHT               =        1 
 SCORE               =        10                           ; score 10 times speed/level something 
 MOVEAMOUNT          =        8                            ; how many 'pixels per frame' 
-;
+; eNEMY TABLE 
 GHOST               =        8                            ; various values for quick testing. positions are 
 TANK                =        6                            ; from Enemy_t table 
 EXPLOSION           =        9 

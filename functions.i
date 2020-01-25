@@ -14,6 +14,8 @@ setup:                                                    ;        setting up ha
                     sta      Vec_Joy_Mux_2_Y 
                     ldx      #score 
                     jsr      Clear_Score 
+				  ldx      #running_score
+                    jsr      Clear_Score
                     lda      #1 
                     sta      level 
                     bsr      setuplevel 
@@ -22,7 +24,7 @@ setup:                                                    ;        setting up ha
 setuplevel: 
                     ldd      #$FC50 
                     std      Vec_Text_HW 
-                    ldd      #0                           ; set a bunch of variables to 0 
+                    ldd      #0                           ; set a bunch of variables to 0 , no rush don't optimize
                     sta      bullet0e 
                     sta      bullet1e 
                     sta      bullet2e 
@@ -150,6 +152,10 @@ levelsplash:
                     sta      top1 
                     lda      #66 
                     sta      top2 
+X_3d=temp1
+Y_3d=temp2
+				  lda      #-127
+                    sta      Y_3d
 ; don't check this when TESTING!! 
                     lda      Demo_Mode 
                     lbne     dundo_demo 
@@ -346,11 +352,14 @@ top1ok
 top2ok 
 ; END of "Moving 3D Hallway" thing 
 ; star field
-                    RESET0REF  
-                    lda      #4 
-                    sta      Vec_Misc_Count 
-                    ldx      #starfield 
-                    jsr      Dot_List 
+
+                    RESET0REF  				  
+				  lda      Y_3d
+				  inc      Y_3d
+                    clrb        
+                    MOVETO_D
+                    ldu      #ShipIn3D_1
+                    jsr      draw_synced_list
 ;
                     inc      stallcnt 
                     lda      stallcnt 
@@ -478,7 +487,7 @@ _tsdone
                     rts      
 
 ;*%*%*%*%*%*%**%*%*%*%*%*%*%*%*%*%*%*%*%*%*%*%*%*%*%*%*%*%*%*%*%*%
-general_config                                            ;        have to change all label names!!! 
+general_config                                            
                     lda      #10                          ; set up timeout counter 
                     sta      temp1                        ; 10 iterations of 
                     lda      #$FF 
@@ -567,39 +576,40 @@ gckeepgoing
 
 do_demogc           lda      #1 
                     sta      Demo_Mode                    ; go back to demo mode because no keypress in 85 seconds 
-                    jmp      restart 
+                    jmp      gc_rts 
 
 gconf_done 
+; process keypresses if any
                     lda      conf_box_index               ; load selected menu item index 
-                    cmpa     #0 						; menuchoice 1
+                    cmpa     #0 						; menu choice 1 game select
                     bne      gctrynext1 
                     jsr      game_select 
 				  jsr      write2eeprom				; save if there was a change
-                    jmp      general_config 
+                    jmp      gckeep_running 
 
 gctrynext1 
-                    cmpa     #1 						; menu choice 2
+                    cmpa     #1 						; menu choice 2 Joystick config
                     bne      gctrynext2 
                     jsr      joystick_config 
-				  jsr      write2eeprom				; save if there was a chnage
-                    jmp      general_config 
+				  jsr      write2eeprom				; save if there was a change
+                    jmp      gckeep_running 
 
 gctrynext2 
-                    cmpa     #2 
+                    cmpa     #2 						; EEPROM FORMAT MENU
                     bne      gctrynext3 
                     jsr      format_eeprom_menu 
-                    jmp      general_config 
+                    jmp      gckeep_running 
 
 gctrynext3 
-                    cmpa     #3 
+                    cmpa     #3 						; RETURN
                     bne      gckeep_running 
-                    nop      
+                          
                     rts                                   ; return to main loop 
 
 gckeep_running 
                     jmp      general_config 
-
-                    rts      
+gc_rts
+				  rts
 
 ;&&&&&&&&&&&&&&&%%%%%%%&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 joystick_config 

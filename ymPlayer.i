@@ -39,11 +39,11 @@ STRUCT_LEN=(INFO_END-INFO_START)
 cregister: 
                     ds       1 
 ymtemp: 
-                    ds       2 
-;ymtemp2: 
-;                    ds       1 
-;ymtemp3: 
-;                    ds       1 
+                    ds       1 
+ymtemp2: 
+                    ds       1 
+ymtemp3: 
+                    ds       1 
 calc_coder: 
                     ds       1 
 calc_bits: 

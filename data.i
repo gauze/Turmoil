@@ -1,7 +1,7 @@
 ; vim: ts=4
 ; vim: syntax=asm6809
 ;***************************************************************************
-; VECTOR GRAPHICS DATA
+; VECTOR GRAPHICS LIST DATA
 ;***************************************************************************
 ; BOXES AROUND MENU SELECTIONS []
 Letter_Select_nomode: 
@@ -52,29 +52,7 @@ Level_Box2_nomode:
                     fcb      0, -110 
                     fcb      30, 0 
 ; SHIP 
-SHIP_SCALE=1 
-;ShipR_nomode:       fcb      9 
-;                    fcb      +0*SHIP_SCALE, +12*SHIP_SCALE 
-;                    fcb      +2*SHIP_SCALE, +0*SHIP_SCALE 
-;                    fcb      +0*SHIP_SCALE, -9*SHIP_SCALE 
-;                    fcb      +6*SHIP_SCALE, +18*SHIP_SCALE 
-;                    fcb      +1*SHIP_SCALE, 0*SHIP_SCALE  ; center Move this to end ?
-;                    fcb      +6*SHIP_SCALE, -18*SHIP_SCALE 
-;                    fcb      +0*SHIP_SCALE, +9*SHIP_SCALE 
-;                    fcb      +2*SHIP_SCALE, +0*SHIP_SCALE 
-;                    fcb      +0*SHIP_SCALE, -12*SHIP_SCALE 
-;                    fcb      -17*SHIP_SCALE, +0*SHIP_SCALE 
-;ShipL_nomode:       fcb      9 
-;                    fcb      +0*SHIP_SCALE, -12*SHIP_SCALE 
-;                    fcb      +2*SHIP_SCALE, +0*SHIP_SCALE 
-;                    fcb      +0*SHIP_SCALE, +9*SHIP_SCALE 
-;                    fcb      +6*SHIP_SCALE, -18*SHIP_SCALE 
-;                    fcb      +1*SHIP_SCALE, 0*SHIP_SCALE  ; center 
-;                    fcb      +6*SHIP_SCALE, +18*SHIP_SCALE 
-;                    fcb      +0*SHIP_SCALE, -9*SHIP_SCALE 
-;                    fcb      +2*SHIP_SCALE, +0*SHIP_SCALE 
-;                    fcb      +0*SHIP_SCALE, +12*SHIP_SCALE 
-;                    fcb      -17*SHIP_SCALE, +0*SHIP_SCALE 
+SHIP_SCALE=1
 ShipR_nomode:       fcb      9 
                     fcb      +0, +21*SHIP_SCALE           ; was 10 
                                                           ; fcb +1*SHIP_SCALE, 0*SHIP_SCALE ; center Move this to end ? 
@@ -98,17 +76,37 @@ ShipL_nomode:       fcb      9
                     fcb      +2*SHIP_SCALE, +0*SHIP_SCALE 
                     fcb      +0*SHIP_SCALE, +9*SHIP_SCALE 
                     fcb      +6*SHIP_SCALE, -18*SHIP_SCALE 
-Ship3D_nomode:      fcb      11 
-                    fcb      +0, -21*SHIP_SCALE 
-                    fcb      +6*SHIP_SCALE, +18*SHIP_SCALE ; tip 
-                    fcb      +0*SHIP_SCALE, -9*SHIP_SCALE 
-                    fcb      +2*SHIP_SCALE, +0*SHIP_SCALE 
-                    fcb      +0*SHIP_SCALE, +12*SHIP_SCALE 
-                    fcb      -17*SHIP_SCALE, +0*SHIP_SCALE 
-                    fcb      +0*SHIP_SCALE, -12*SHIP_SCALE ; upper right corner 
-                    fcb      +2*SHIP_SCALE, +0*SHIP_SCALE 
-                    fcb      +0*SHIP_SCALE, +9*SHIP_SCALE 
-                    fcb      +6*SHIP_SCALE, -18*SHIP_SCALE 
+
+;&&&&&&&&&&&&# 3D ship models "flattened"
+ShipIn3D_1:
+ DB +1, -33, -39 ; sync and move to y, x
+ DB -1, -46, +0 ; draw, y, x
+ DB -1, -23, +39 ; draw, y, x
+ DB -1, +102, +0 ; draw, y, x
+ DB -1, -72, -29 ; draw, y, x
+ DB -1, +39, +0 ; draw, y, x
+ DB -1, -33, +0 ; draw, y, x
+ DB -1, +66, +29 ; draw, y, x
+ DB -1, -69, +29 ; draw, y, x
+ DB +1, -102, +0 ; sync and move to y, x
+ DB -1, +23, +39 ; draw, y, x
+ DB -1, +22, -39 ; draw, y, x
+ DB +1, -33, +39 ; sync and move to y, x
+ DB -1, -46, +0 ; draw, y, x
+ DB +1, -33, +39 ; sync and move to y, x
+ DB -1, +0, -10 ; draw, y, x
+ DB -1, -37, +0 ; draw, y, x
+ DB +1, -72, +29 ; sync and move to y, x
+ DB -1, +72, -29 ; draw, y, x
+ DB -1, -57, +0 ; draw, y, x
+ DB -1, -22, -39 ; draw, y, x
+ DB +1, -33, -39 ; sync and move to y, x
+ DB -1, +0, +10 ; draw, y, x
+ DB +1, -66, +29 ; sync and move to y, x
+ DB -1, +33, +0 ; draw, y, x
+ DB +2 ; endmarker 
+;%%%%%%%%%%%%%%%%%;END 3D Ship Models
+
 ; UNUSED rectangular bullet using DOT instead
 ;Shot:               fcb      2,0,10                      
 ;                    fcb      2,1,0 
@@ -763,7 +761,7 @@ default_name1       fcc      "JAW",$80
 default_name2       fcc      "GGG",$80
 default_name3       fcc      "GCE",$80
 default_name4       fcc      "GZE",$80
-default_shipspeed   db       3                            ; medium 
+default_shipspeed   db       3                            ; slow 
 default_gamemode    db       0                            ; classic game 
 eeprom_filler       db       0,0,0,0,0                    ; padding to 63 bytes 
 ; misc
@@ -775,7 +773,7 @@ thanks4             fcc      " ARCADE WEDNESDAY CREW ",$80
 thanks5             fcc      "   DER LUCHS, V.ROLI   ",$80
                     fcc      "SECRET GAME",$80
 credits             fcc      "PROGRAMMED BY GAUZE 2016-2020",$80 
-                    FCC      "DISASSEMBLED BY MALBAN",$6B
+                    fcc      "DISASSEMBLED BY MALBAN",$6B
                     fcc      "KARRSOFT82LDMCBCJT82LDMCBCJ"
 ; table negative indexes start here 128-255 leave as reminder 
 ;                     db       128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,150,151,152,153,154,155,156,157,158,159,160,161,162,163,164,165,166,167,168,169,170,171,172,173,174,175,176,177,178,179,180,181,182,183,184,185,186,187,188,189,190,191,192,193,194,195,196,197,198,199,200,201,202,203,204,205,206,207,208,209,210,211,212,213,214,215,216,217,218,219,220,221,222,223,224,225,226,227,228,229,230,231,232,233,234,235,236,237,238,239,240,241,242,243,244,245,246,247,248,249,250,251,252,253,254,255
