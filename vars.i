@@ -1,5 +1,4 @@
-; vim: ts=4
-; vim: syntax=asm6809
+; vim: ts=4 syntax=asm6809 foldmethod=marker
 ;***************************************************************************
 ; Variable / RAM SECTION
 ;***************************************************************************
@@ -147,7 +146,7 @@ hsentry4n           ds       4
 hsentry4s           ds       7 
 hsentry5n           ds       4 
 hsentry5s           ds       7 
-hstempstr           ds       4                            ; hold temp name while sorting 
+;hstempstr           ds       4                            ; hold temp name while sorting 
 ;
 enemylvlcnt         ds       1                            ; how many enemies left in this level? 
 ; STATE FLAGS

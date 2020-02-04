@@ -1,3 +1,4 @@
+; vim: ts=4 syntax=asm6809 foldmethod=marker
 ;***************************************************************************
 ; example/perimeter values 
 ;***************************************************************************
@@ -10,7 +11,8 @@
 ;functions
 ;                    JSR      eeprom_load
 ;                    JSR      eeprom_save 
-eeprom_load                                               ;        #isfunction 
+;{{{ eeprom_load: load from 2431, der
+eeprom_load:                                               ;        #isfunction 
                     ldx      #eeprom_buffer               ; 
                     jsr      ds2431_load                  ; load 32 byte eeprom to ram 
                     clra     
@@ -22,7 +24,7 @@ eeload_loop                                               ;
                     cmpa     #EEPROM_CHECKSUM             ; equal to checksum? 
                     bne      eeprom_format                ; if not, then format the eeprom 
                     rts                                   ; otherwise, return 
-
+;}}}
 ;****************************************************************************
 eeprom_format 
                     ldu      #default_high0               ; our HS table template 
@@ -33,8 +35,8 @@ eeformat_loop                                             ;        copy default 
                     sta      ,x+                          ; 
                     decb                                  ; 
                     bne      eeformat_loop                ; 
-; AND BEGIN*******************************************************************
-eeprom_save                                               ;        #isfunction 
+;{{{ eeprom_save: <---
+eeprom_save:                                               ;        #isfunction 
                     ldx      #eeprom_buffer               ; 
                     ldd      #(EEPROM_CHECKSUM<<8)+$3F    ; lda chksum ldb #63 
 eesave_loop                                               ;        
@@ -47,7 +49,7 @@ eesave_loop                                               ;
                     tsta                                  ; 
                     lbne     ds2431_save                  ; if different, then update eeprom 
                     rts      
-
+;}}}
 ; Include the driver files
 ;                    include  "ds2431LowLevel.i"
 ;                    include  "ds2431HighLevel.i"

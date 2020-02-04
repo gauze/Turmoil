@@ -1,5 +1,5 @@
 ; vim: ts=4
-; vim: syntax=asm6809
+; vim: syntax=asm6809 foldmethod=marker
                     title    "Alley Anxiety"
 ; DESCRIPTION
 ; Port of 20th Century Fox Atari 2600 game Turmoil
@@ -35,7 +35,7 @@
                     fcc      $6E,$6E,$6F, $80             ; 3 solid blocks ending with $80 
                     fdb      $F850 
                     fcb      -$40, $23                    ; hight, width, rel y, rel x (from 0,0) 
-                    fcc      "-2019", $80                 ; more date
+                    fcc      "-2020", $80                 ; more date
                     db       0                            ; end of game header 
 ;                   bra restart ; TESTING skip intro to get right to it.  
 ;                  jsr      levelsplash  ; REMOVE to return to normal flow

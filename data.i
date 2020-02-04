@@ -1,21 +1,20 @@
-; vim: ts=4
-; vim: syntax=asm6809
+; vim: ts=4 syntax=asm6809 foldmethod=marker
 ;***************************************************************************
 ; VECTOR GRAPHICS LIST DATA
 ;***************************************************************************
-; BOXES AROUND MENU SELECTIONS []
-Letter_Select_nomode: 
+;{{{ BOXES AROUND MENU SELECTIONS []
+Letter_Select_nomode 
                     fcb      3 
                     fcb      0, +12 
                     fcb      -12, 0 
                     fcb      0, -12 
                     fcb      +12,0 
-GConf_Box_nomode:   fcb      3 
+GConf_Box_nomode   fcb      3 
                     fcb      0, 115 
                     fcb      -10, 0 
                     fcb      0, -115 
                     fcb      10, 0 
-Conf_Box_nomode:    fcb      3 
+Conf_Box_nomode    fcb      3 
                     fcb      0, 110 
                     fcb      -12, 0 
                     fcb      0, -110 
@@ -25,7 +24,8 @@ Game_Sel_Box_nomode  fcb     3
                     fcb      -12, 0 
                     fcb      0, -127 
                     fcb      12, 0 
-; WALLS AROUND ALLEYS 
+;}}}
+;{{{ WALLS AROUND ALLEYS 
 Full_Wall_nomode:   fcb      5                            ; lda #5 ; sta $C823 ; vector count 
                     fcb      0,127 
                     fcb      0,127 
@@ -38,6 +38,7 @@ Half_Wall:          fcb      3                            ; lda #3 ; sta $C823
                     fcb      3,0 
                     fcb      0,-115 
                     fcb      -3,0 
+;}}}
 ; Level graphic between levels, probably losing these ...
 Level_Box1_nomode: 
                     fcb      3 
@@ -51,7 +52,7 @@ Level_Box2_nomode:
                     fcb      -30, 0 
                     fcb      0, -110 
                     fcb      30, 0 
-; SHIP 
+;{{{ SHIP 
 SHIP_SCALE=1
 ShipR_nomode:       fcb      9 
                     fcb      +0, +21*SHIP_SCALE           ; was 10 
@@ -105,7 +106,7 @@ ShipIn3D_1:
  DB +1, -66, +29 ; sync and move to y, x
  DB -1, +33, +0 ; draw, y, x
  DB +2 ; endmarker 
-;%%%%%%%%%%%%%%%%%;END 3D Ship Models
+;}}}
 
 ; UNUSED rectangular bullet using DOT instead
 ;Shot:               fcb      2,0,10                      
@@ -121,7 +122,7 @@ Ship_Marker:                                              ;        UNUSED but ma
                     fcb      +9, +3 
                     fcb      -9, +3 
                     fcb      +7, +0 
-; Enemy list
+;{{{ Enemy lists
 Arrow_R_1: 
                     fcb      0, -5, 0 
                     fcb      2, +5, +5 
@@ -326,6 +327,8 @@ Cannonball          fcb      0, +3, 0
                     fcb      2, +3, -5 
                     fcb      2, +3, +5 
                     fcb      1 
+;}}}
+; {{{ Explode animation
 Explode_0: 
                     fcb      0, -8, -5 
                     fcb      2, +16, +5 
@@ -414,8 +417,9 @@ Explode_10:
                     fcb      2, +0, +15 
                     fcb      2, -11, -12 
                     fcb      1 
+;}}}
 None:               fcb      1 
-; NUMBERS all END at top right corner derive score from $c880 
+;{{{ NUMBERS all END at top right corner derive score from $c880 
 ; subtract $30 to get true value $20 == blank/space
 NUM_GAP=65 
 VNUM_SCALE=6 
@@ -486,17 +490,19 @@ nine:               fcb      0, -10*VNUM_SCALE, +0
                     fcb      2, +0, +8*VNUM_SCALE 
                     fcb      0, +6*VNUM_SCALE, +0+NUM_GAP 
                     fcb      1 
-; LETTERS
-; TODO
-; STAR FIELD
+;}}}
+;{{{ LETTERS
+;}}} 
+;{{{ STAR FIELD unused?
 ; Format: brightness mode, y, x ???
-starfield:          fcb      -100,100 
+starfield          fcb      -100,100 
                     fcb      87,-2 
                     fcb      -34, -2 
                     fcb      -3 , -76 
                     fcb      -1, 45 
+;}}}
 ;****************************************************************************************
-; TABLES TABLES TABLES TABLES TABLES TABLES TABLES TABLES TABLES TABLES TABLES TABLES 
+;{{{ TABLES TABLES TABLES TABLES TABLES TABLES TABLES TABLES TABLES TABLES TABLES TABLES 
 ;****************************************************************************************
                                                           ; align $100 
 ;shippos_t          fcb      -3*ALLEYWIDTH,-2*ALLEYWIDTH,-1*ALLEYWIDTH,0,1*ALLEYWIDTH,2*ALLEYWIDTH,3*ALLEYWIDTH ; Y pos of ship 
@@ -651,15 +657,18 @@ Demo_Label_t        fdb      demo_label, press_btn4_start_text, press_btn2_conf_
 default_name_t      fdb      default_name0,default_name1,default_name2,default_name3,default_name4 
 default_high_t      fdb      default_high0,default_high1,default_high2,default_high3,default_high4 
 thanks_t            fdb      thanks0,thanks1,thanks2,thanks3,thanks4, thanks5 
+;}}}
 ;##################################################################################
 ; SOUND data SOUND SOUND SOUND SOUND
 ;##################################################################################
+; REST OF SOUND DATA IN rawsounddata.i
 LOGOEXP             db       $15,$00,$01,$01 
 EXP1                db       $19,$3F,$00,$02 
 EXP2                db       $3F,$00,$00,$01 
 EXP3                db       $01,-1,1,$04 
+; REST OF SOUND DATA IN rawsounddata.i
 ;########################################################################
-; RASTER GRAPHICS DATA
+;{{{ RASTER GRAPHICS DATA
 ;########################################################################
 ; format:
 ; height, width
@@ -700,7 +709,8 @@ alleyanxietylogo_data:
                     db       %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000001, %11111000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000011, %11110000, %00000000, %00000000 ; forward 
                     db       %00000000, %00000000, %00000111, %10000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000111, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000, %00000000 ; backward 
 ;***********$$$$$$$$$$$$$$$**************$$$$$$$$$$$$$$$**************$$$$$$$$$
-; TEXT STRINGS
+;}}}
+;{{{ TEXT STRINGS
 ;$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 ;deadstring          fcc      "SHIP HIT!",$80
 ; CONFIGURATION VALUES
@@ -775,6 +785,8 @@ thanks5             fcc      "   DER LUCHS, V.ROLI   ",$80
 credits             fcc      "PROGRAMMED BY GAUZE 2016-2020",$80 
                     fcc      "DISASSEMBLED BY MALBAN",$6B
                     fcc      "KARRSOFT82LDMCBCJT82LDMCBCJ"
-; table negative indexes start here 128-255 leave as reminder 
+;}}}
+;{{{ table negative indexes start here 128-255 leave as reminder 
 ;                     db       128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,150,151,152,153,154,155,156,157,158,159,160,161,162,163,164,165,166,167,168,169,170,171,172,173,174,175,176,177,178,179,180,181,182,183,184,185,186,187,188,189,190,191,192,193,194,195,196,197,198,199,200,201,202,203,204,205,206,207,208,209,210,211,212,213,214,215,216,217,218,219,220,221,222,223,224,225,226,227,228,229,230,231,232,233,234,235,236,237,238,239,240,241,242,243,244,245,246,247,248,249,250,251,252,253,254,255
 ;shit_t               db       0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127, 42, 69
+;}}}

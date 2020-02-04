@@ -1,10 +1,10 @@
 ;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-; vim: ts=4
-; vim: syntax=asm6809
+; vim: ts=4 syntax=asm6809 foldmethod=marker
 ;###########################################################################
 ; SUBROUTINES/FUNCTIONS
 ;###########################################################################
-setup:                                                    ;        setting up hardware, resetting scores, once per boot 
+;{{{ setup ;        setting up hardware, resetting scores, once per boot 
+setup: 
                     lda      #1                           ; enable 
                     sta      Vec_Joy_Mux_1_X 
                     lda      #3 
@@ -14,8 +14,8 @@ setup:                                                    ;        setting up ha
                     sta      Vec_Joy_Mux_2_Y 
                     ldx      #score 
                     jsr      Clear_Score 
-				  ldx      #running_score
-                    jsr      Clear_Score
+                    ldx      #running_score 
+                    jsr      Clear_Score 
                     lda      #1 
                     sta      level 
                     bsr      setuplevel 
@@ -24,7 +24,7 @@ setup:                                                    ;        setting up ha
 setuplevel: 
                     ldd      #$FC50 
                     std      Vec_Text_HW 
-                    ldd      #0                           ; set a bunch of variables to 0 , no rush don't optimize
+                    ldd      #0                           ; set a bunch of variables to 0 , no rush don't optimize 
                     sta      bullet0e 
                     sta      bullet1e 
                     sta      bullet2e 
@@ -133,7 +133,8 @@ newlevel:
 _no_add_lvl 
                     rts      
 
-; ##########################################################################
+;}}}
+;{{{ gameover:   what to do when gameover #####################
 gameover:                                                 ;        #isfunction 
                     lda      Demo_Mode 
                     bne      _no_chk_hs 
@@ -141,10 +142,10 @@ gameover:                                                 ;        #isfunction
 _no_chk_hs 
                     jmp      print_hs_tbl                 ; no RTS don't use jsr 
 
-;################################################################
+;}}}      
+;{{{ levelsplash: bridge screen between levels
 levelsplash: 
                     jsr      Clear_Sound 
-                    clr      temp 
                     clr      stallcnt 
                     lda      #0 
                     sta      top0 
@@ -152,10 +153,18 @@ levelsplash:
                     sta      top1 
                     lda      #66 
                     sta      top2 
-X_3d=temp1
-Y_3d=temp2
-				  lda      #-127
-                    sta      Y_3d
+; for 3D ship use 
+Y_3d=temp1 
+bright3d=temp2 
+scale3d=temp3 
+                    ldd      #0 
+                    std      temp 
+                    std      temp2 
+; end 3D
+                    lda      #127 
+                    sta      scale3d 
+                    nega     
+                    sta      Y_3d 
 ; don't check this when TESTING!! 
                     lda      Demo_Mode 
                     lbne     dundo_demo 
@@ -205,7 +214,7 @@ _score_format_done
                     ldb      #-49 
                                                           ;jsr Print_Str_d 
                     PRINT_STR_D  
-; START "3D moving Hallway" thing
+; staRT "3D moving Hallway" thing
 ; Lines from center to edge
 ;                    jsr      Intensity_5F 
 ; first box
@@ -351,16 +360,20 @@ top1ok
                     sta      top2 
 top2ok 
 ; END of "Moving 3D Hallway" thing 
-; star field
-
-                    RESET0REF  				  
-				  lda      Y_3d
-				  inc      Y_3d
-                    clrb        
-                    MOVETO_D
-                    ldu      #ShipIn3D_1
-                    jsr      draw_synced_list
+; 3-D Ship
+                    RESET0REF  
+                    lda      scale3d                      ; change to bright3d eventually. 
+                    jsr      Intensity_a                  ; maybe reduce this as we scale smaller 
+                    lda      Y_3d 
+                    inc      Y_3d 
+                    clrb     
+                    tfr      d,x                          ; X=screen position y,x 
+                    lda      #$F7                         ; A=MOVE scale B=Image scale 
+                    ldb      scale3d 
+                    ldu      #ShipIn3D_1 
+                    jsr      draw_synced_list 
 ;
+                    dec      scale3d 
                     inc      stallcnt 
                     lda      stallcnt 
                     cmpa     #100 
@@ -385,9 +398,11 @@ dundo_demo
                     jsr      setuplevel 
                     rts      
 
-;**********************************************************************
+;}}}
+;{{{ deathsplash: when you're dead *******************
 deathsplash: 
                     clr      stallcnt 
+tempshipcnt         =        temp 
 deathloop 
                     jsr      Wait_Recal 
                     clr      Vec_Misc_Count 
@@ -405,11 +420,11 @@ deathloop
                     MOVETO_D  
                     lda      shipcnt                      ; vector draw ships remaining routine TEST 
                     beq      no_ships 
-                    sta      temp 
+                    sta      tempshipcnt 
 ships_left_loop1 
                     ldx      #Ship_Marker 
                     DRAW_VLC  
-                    dec      temp 
+                    dec      tempshipcnt 
                     bne      ships_left_loop1 
 no_ships 
                     inc      stallcnt 
@@ -421,59 +436,61 @@ no_ships
 donedeathloop 
                     rts      
 
-;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;}}}
+;{{{ titlescreen: RASTER shaky screen thing
 titleScreen: 
-                    LDA      #-1                          ; high bit set by any negative number 
-                    STA      Vec_Expl_Flag                ; set high bit for Explosion flag 
-                    LDA      #-45                         ; init values above tsmain 
-                    STA      shipXpos 
-                    LDA      #10 
-                    STA      shipYpos 
-                    LDA      #200                         ; 'counter' for display of logo, 4 seconds 
-                    STA      temp 
-                    LDU      ustacktempptr                ; save text w/h to stack 
-                    LDD      Vec_Text_HW 
+titlesfxcnt         =        temp 
+                    lda      #-1                          ; high bit set by any negative number 
+                    sta      Vec_Expl_Flag                ; set high bit for Explosion flag 
+                    lda      #-45                         ; init values above tsmain 
+                    sta      shipXpos 
+                    lda      #10 
+                    sta      shipYpos 
+                    lda      #200                         ; 'counter' for display of logo, 4 seconds 
+                    sta      titlesfxcnt 
+                    ldu      ustacktempptr                ; save text w/h to stack 
+                    ldd      Vec_Text_HW 
                                                           ; LDB Vec_Text_Width 
-                    PSHU     d 
+                    pshu     d 
                     stu      ustacktempptr 
 _tsmain 
-                    JSR      DP_to_C8                     ; DP to RAM 
-                    LDU      #LOGOEXP                     ; point to explosion table entry 
-                    JSR      Explosion_Snd 
-                    JSR      Wait_Recal                   ; Vectrex BIOS recalibration 
-                    JSR      Intensity_5F                 ; Sets the intensity of the 
+                    jsr      DP_to_C8                     ; DP to RAM 
+                    ldu      #LOGOEXP                     ; point to explosion table entry 
+                    jsr      Explosion_Snd 
+                    jsr      Wait_Recal                   ; Vectrex BIOS recalibration 
+                    jsr      Intensity_5F                 ; Sets the intensity of the 
                                                           ; vector beam to $5f 
-                    JSR      Do_Sound 
-                    LDA      temp 
-                    BEQ      _tsdone 
-                    DEC      temp 
-                    LDA      shipYpos                     ; Text position relative Y 
-                    LDB      shipXpos                     ; Text position relative X 
-                    JSR      Moveto_d 
-                    LDA      #-10 
-                    STA      Vec_Text_Height 
-                    LDA      #$40 
-                    STA      Vec_Text_Width 
-                    LDU      #alleyanxietylogo_data 
-                    JSR      draw_raster_image 
-                    LDA      shipYpos                     ; jiggle animation logic 
-                    CMPA     #10 
-                    BEQ      _incYPOS 
-                    DEC      shipYpos 
-                    BRA      _tsmain 
+                    jsr      Do_Sound 
+                    lda      titlesfxcnt 
+                    beq      _tsdone 
+                    dec      titlesfxcnt 
+                    lda      shipYpos                     ; Text position relative Y 
+                    ldb      shipXpos                     ; Text position relative X 
+                    jsr      Moveto_d 
+                    lda      #-10 
+                    sta      Vec_Text_Height 
+                    lda      #$40 
+                    sta      Vec_Text_Width 
+                    ldu      #alleyanxietylogo_data 
+                    jsr      draw_raster_image 
+                    lda      shipYpos                     ; jiggle animation logic 
+                    cmpa     #10 
+                    beq      _incYPOS 
+                    dec      shipYpos 
+                    bra      _tsmain 
 
 _incYPOS 
-                    INC      shipYpos 
-                    BRA      _tsmain                      ; and repeat forever 
+                    inc      shipYpos 
+                    bra      _tsmain                      ; and repeat forever 
 
 _tsdone 
-                    LDU      ustacktempptr                ; loading 2 registers off U stack 
-                    PULU     d 
-                    STD      Vec_Text_HW                  ; restoring 
-                    STU      ustacktempptr                ; save for later 
-                    LDA      #0 
-                    STA      Vec_Music_Flag 
-                    STA      Vec_Expl_Flag 
+                    ldu      ustacktempptr                ; loading 2 registers off U stack 
+                    pulu     d 
+                    std      Vec_Text_HW                  ; restoring 
+                    stu      ustacktempptr                ; save for later 
+                    lda      #0 
+                    sta      Vec_Music_Flag 
+                    sta      Vec_Expl_Flag 
                     sta      Vec_Expl_Chans 
                     sta      Vec_Expl_1 
                     sta      Vec_Expl_2 
@@ -483,11 +500,12 @@ _tsdone
                     sta      Vec_Expl_ChanA 
                     sta      Vec_Expl_ChanB 
                     sta      Vec_Expl_Timer 
-                    JSR      Clear_Sound 
+                    jsr      Clear_Sound 
                     rts      
 
-;*%*%*%*%*%*%**%*%*%*%*%*%*%*%*%*%*%*%*%*%*%*%*%*%*%*%*%*%*%*%*%*%
-general_config                                            
+;}}}
+;{{{ general_config: main config screen
+general_config: 
                     lda      #10                          ; set up timeout counter 
                     sta      temp1                        ; 10 iterations of 
                     lda      #$FF 
@@ -581,38 +599,39 @@ do_demogc           lda      #1
 gconf_done 
 ; process keypresses if any
                     lda      conf_box_index               ; load selected menu item index 
-                    cmpa     #0 						; menu choice 1 game select
+                    cmpa     #0                           ; menu choice 1 game select 
                     bne      gctrynext1 
                     jsr      game_select 
-				  jsr      write2eeprom				; save if there was a change
+                    jsr      write2eeprom                 ; save if there was a change 
                     jmp      gckeep_running 
 
 gctrynext1 
-                    cmpa     #1 						; menu choice 2 Joystick config
+                    cmpa     #1                           ; menu choice 2 Joystick config 
                     bne      gctrynext2 
                     jsr      joystick_config 
-				  jsr      write2eeprom				; save if there was a change
+                    jsr      write2eeprom                 ; save if there was a change 
                     jmp      gckeep_running 
 
 gctrynext2 
-                    cmpa     #2 						; EEPROM FORMAT MENU
+                    cmpa     #2                           ; EEPROM FORMAT MENU 
                     bne      gctrynext3 
                     jsr      format_eeprom_menu 
                     jmp      gckeep_running 
 
 gctrynext3 
-                    cmpa     #3 						; RETURN
+                    cmpa     #3                           ; RETURN 
                     bne      gckeep_running 
-                          
                     rts                                   ; return to main loop 
 
 gckeep_running 
                     jmp      general_config 
-gc_rts
-				  rts
 
-;&&&&&&&&&&&&&&&%%%%%%%&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
-joystick_config 
+gc_rts 
+                    rts      
+
+;}}}
+;{{{ joystick_config: screen where we config joystick speed
+joystick_config: 
                     lda      #10 
                     sta      temp1 
                     lda      #$FF 
@@ -710,7 +729,8 @@ conf_done
 ;                    jsr      game_select 
                     rts      
 
-;********************************************************************************************
+;}}}
+;{{{ game_select: select Classic or Super Game
 game_select: 
                     lda      #10 
                     sta      temp1 
@@ -802,7 +822,8 @@ gs_done
                     sta      Super_Game                   ; ship verical speed 
                     rts      
 
-;(((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((
+;}}}
+;{{{ format_eeprom_menu: erase all highscores and settings from 2431
 format_eeprom_menu: 
                     lda      #10 
                     sta      temp1 
@@ -866,7 +887,7 @@ no_pressfem
                     jsr      Print_Str_d 
                     RESET0REF  
                     lda      conf_box_index 
-                    ldx      #eeboxYpos_t
+                    ldx      #eeboxYpos_t 
                     lda      a,x 
                     ldb      #-60 
                     MOVETO_D  
@@ -900,12 +921,13 @@ do_demofem          lda      #1                           ; do on TIMEOUT only
 fem_done 
                     lda      conf_box_index 
                     beq      fem_noformat 
-                    jsr      eeprom_format 				; over writes entire eeprom
+                    jsr      eeprom_format                ; over writes entire eeprom 
                     jsr      eeprom_load                  ; reload so it updates internal vars 
 fem_noformat 
                     rts      
 
-;******************************************************************************* 
+;}}}
+;{{{ check_highscore_entry: see if score is high enough to get on board
 check_highscore_entry: 
                     ldd      #$9411                       ; change refresh rate 
                     std      Vec_Rfrsh 
@@ -921,7 +943,13 @@ check_highscore_entry:
                     sta      hs_box_Xindex 
                     sta      frm5cnt 
                     sta      hsentry_index 
-                    sta      temp1 
+                    sta      temp2 
+hse_timeout         =        temp1 
+hstempstr           =        temp3                        ; needs 4 bytes so uses bytes temp3 and 4 
+                    lda      #10 
+                    sta      hse_timeout 
+                    lda      #$FF 
+                    sta      Vec_Counter_1 
 hs_loop 
                     jsr      Wait_Recal 
                     jsr      Intensity_5F 
@@ -934,7 +962,7 @@ hs_loop
                     beq      jsdoneYhs                    ; no Y motion 
                     bmi      going_down_hs 
                     lda      #50 
-                    sta      temp1 
+                    sta      hse_timeout 
                     lda      hs_box_Yindex 
                     beq      jsdoneYhs                    ; 0 is highest slot on screen !move 
                     dec      hs_box_Yindex 
@@ -943,7 +971,7 @@ hs_loop
 
 going_down_hs 
                     lda      #50 
-                    sta      temp1 
+                    sta      hse_timeout 
                     lda      hs_box_Yindex 
                     cmpa     #6                           ; 5 is lowest row on screen !move 
                     beq      jsdoneYhs 
@@ -955,7 +983,7 @@ jsdoneYhs
                     beq      jsdoneXhs                    ; no X motion 
                     bmi      going_left_hs 
                     lda      #50 
-                    sta      temp1 
+                    sta      hse_timeout 
                     lda      hs_box_Xindex 
                     cmpa     #5 
                     beq      _wrapX                       ; 5 is highest slot on screen wrap ... 
@@ -974,7 +1002,7 @@ _wrapX
 
 going_left_hs 
                     lda      #50 
-                    sta      temp1 
+                    sta      hse_timeout 
                     lda      hs_box_Xindex 
                     beq      _unwrapX                     ; if zero move one line up, & end of line 
                     dec      hs_box_Xindex 
@@ -1009,7 +1037,7 @@ jsdoneXhs
                     inc      hsentry_index 
                     jsr      SFX_Pip 
                     lda      #50 
-                    sta      temp1 
+                    sta      hse_timeout 
 hsbtn4_done 
                     lda      Vec_Button_1_3 
                     beq      hsbtn3_done 
@@ -1022,7 +1050,7 @@ hsbtn4_done
                     ldb      hsentry_index 
                     sta      b,x                          ; over write char 
                     lda      #50 
-                    sta      temp1 
+                    sta      hse_timeout 
 hsbtn3_done 
 ; end INPUT handling
 hsgridxpos          =        -59 
@@ -1115,49 +1143,62 @@ no2cntresetHS
                     ldb      #-60 
                     ldu      #new_hs_label 
                     jsr      Print_Str_d 
-                    lda      temp1                        ; timer to hide instructions 
+                    lda      temp2                        ; timer to hide instructions 
                     beq      show_inst 
-                    dec      temp1 
-                    bne      no_ent_inst 
+                    dec      temp2 
+                    lbne     no_ent_inst 
 show_inst 
                     lda      frm2cnt 
-                    bne      noshow_3 
+                    lbne     noshow_3 
                     lda      #-110 
                     ldb      #-120 
                     ldu      #press_btn3_text 
-                    jsr      Print_Str_d 
+                    PRINT_STR_D  
 noshow_3 
                     lda      frm2cnt 
-                    beq      no_ent_inst 
+                    lbeq     no_ent_inst 
                     lda      hsentry_index 
                     cmpa     #3                           ; if at last hs_entry cursor idx, show different text. 
-                    beq      change_btn4_text 
+                    lbeq     change_btn4_text 
                     ldu      #press_btn4_text 
                     lda      #-120 
                     ldb      #-120 
-                    jsr      Print_Str_d 
-                    bra      no_ent_inst 
+                    PRINT_STR_D  
+                    lbra     no_ent_inst 
 
 change_btn4_text 
                     ldu      #finish_btn4_text 
                     lda      #-120 
                     ldb      #-120 
-                    jsr      Print_Str_d 
+                    PRINT_STR_D  
 no_ent_inst 
+; check time out
+                    jsr      Dec_3_Counters 
+                    tst      Vec_Counter_1 
+                    bne      keepitgoing 
+                    dec      hse_timeout 
+                    beq      doHSsave 
+                    lda      #$FF 
+                    sta      Vec_Counter_1 
+keepitgoing 
+; done
                     puls     d 
                     std      Vec_Text_HW 
                     jmp      hs_loop 
 
-doHSsave:                                                 ;        finished HS entry 
+doHSsave: 
+                    puls     d 
+                    std      Vec_Text_HW                  ; finished HS entry 
 ;   hsentryXn = initials  hsentryXs = score
 ; tables  hsentryn_t      hsentrys_t   
 ; table has 5 slots for scores
 ; #hstempstr holds entered initials
+top5idx             =        temp1 
                     lda      #4                           ; top 5 zero index 
-                    sta      temp1 
+                    sta      top5idx 
 hs_test_loop 
 ; score compare
-                    lda      temp1 
+                    lda      top5idx 
                     lsla     
                     ldx      #hsentrys_t 
                     ldx      a,x 
@@ -1168,10 +1209,10 @@ hs_test_loop
 ; remember indexes: top score == 0 5th = 4
 ; first copy current slot score to one slot higher in source index 0-3 only, discard on 4 
 hs_copy_outer_loop 
-                    lda      temp1 
+                    lda      top5idx 
                     cmpa     #4 
                     beq      no_copy_score 
-                    lda      temp1 
+                    lda      top5idx 
                     lsla     
                     ldy      #hsentrys_t 
                     ldy      a,y                          ; Y = source 
@@ -1183,7 +1224,7 @@ hs_copy_old_down_1_loop
                     lda      ,y+                          ; increments AFTER apparently!! 
                     sta      ,x+ 
                     bpl      hs_copy_old_down_1_loop 
-                    lda      temp1 
+                    lda      top5idx 
                     lsla     
                     ldy      #hsentryn_t 
                     ldy      a,y                          ; Y = source 
@@ -1197,7 +1238,7 @@ hsn_copy_old_down_1_loop
                     bpl      hsn_copy_old_down_1_loop 
 no_copy_score 
 ;
-                    lda      temp1 
+                    lda      top5idx 
                     lsla     
                     ldy      #score                       ; Y = source 
                     ldx      #hsentrys_t 
@@ -1207,7 +1248,7 @@ hs_copy_loop
                     sta      ,x+ 
                     bpl      hs_copy_loop 
 ; NAME 2nd 
-                    lda      temp1 
+                    lda      top5idx 
                     lsla     
                     ldy      #hstempstr                   ; from user input above 
                     ldx      #hsentryn_t 
@@ -1216,15 +1257,14 @@ hsn_copy_loop
                     lda      ,y+                          ; increments AFTER apparently!! 
                     sta      ,x+ 
                     bpl      hsn_copy_loop 
-                    dec      temp1 
+                    dec      top5idx 
                     jmp      hs_test_loop 
 
 hs_check_done 
-
 ; copy hsentrys_t and hsentryn_t to ee_hs_t & ee_hsn_t
 ; taken from fill_hs_tbl
 ; names
-write2eeprom:											;#isfunction
+write2eeprom:                                             ;#isfunction  
                     ldb      #4                           ; 5 entries, 0 index 
                     lslb                                  ; 2 byte table 
 get_nentry1 
@@ -1265,7 +1305,8 @@ _fill_sloop1
 ;
                     rts      
 
-;; populate hs table ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;}}}
+;{{{; populate hs table ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 fill_hs_tbl:                                              ;        only used if eeprom not found. 
 ;name
                     ldb      #4                           ; 5 entries, 0 index 
@@ -1299,6 +1340,8 @@ _fill_sloop
                     bpl      get_sentry 
                     rts      
 
+;}}}
+;{{{ fill_hs_tbl_eeprom: fill HS table from eeprom. only do one time.
 fill_hs_tbl_eeprom: 
 ; names
                     ldb      #4                           ; 5 entries, 0 index 
@@ -1338,8 +1381,9 @@ _fill_sloopee
                     sta      Super_Game 
                     rts      
 
-;))))))))))))))))))))))))))))))))))))))))))))))))))))))))))
-print_hs_tbl 
+;}}}
+;{{{ print_hs_tbl: print the high scores table
+print_hs_tbl: 
                     lda      #2 
                     sta      temp1 
 ym_restart 
@@ -1415,7 +1459,8 @@ leave_demo_mode_hs
                     clr      Demo_Mode 
                     jmp      restart 
 
-;((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((
+;}}}
+;{{{ credits_thanks: shoutouts
 credits_thanks: 
                     lda      PSG_Ch1_Vol 
                     ldb      #0 
@@ -1527,3 +1572,5 @@ creditsdone
                     ldd      temp 
                     std      Vec_Text_HW 
                     rts      
+
+;}}}

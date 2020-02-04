@@ -1,4 +1,4 @@
-; vim: ts=4 syntax=asm6809
+; vim: ts=4 syntax=asm6809 foldmethod=marker
 ; credit: by MALBAN
 ; expects width strength to be set to the default bios location Vec_Text_Width
 ; expects height strength to be set to the default bios location Vec_Text_Height

@@ -1,7 +1,6 @@
-;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-; vim: ts=4
-; vim: syntax=asm6809
+; vim: ts=4 syntax=asm6809 foldmethod=marker
 ; MACROS
+;{{{ INTRO_BOOT
 INTRO_BOOT          macro                                 ; run once on cold or warm boot 
 introSplash 
                     lda      #1 
@@ -11,13 +10,14 @@ introSplash
                     jsr      setup                        ; remove when done testing 
 ;                    jsr      fill_hs_tbl                  ; filling from ROM eventually pull from EPROM 
                     jsr      eeprom_load 
-                    jsr      fill_hs_tbl_eeprom 			; also loads game options
+                    jsr      fill_hs_tbl_eeprom           ; also loads game options 
                     jsr      titleScreen 
                     jsr      SfxInit 
 ; only do this if eeprom_load doesn't find default values? nah skip it and allow access to config from #2 button press
 ;                    jsr      joystick_config 
                     endm     
-;
+;}}}
+;{{{ RESTART
 RESTART             macro    
 restart 
                     ldd      #$3075 
@@ -34,7 +34,7 @@ restart
                     ldx      #score 
                     jsr      Clear_Score 
                     ldx      #running_score 
-                    jsr      Clear_Score
+                    jsr      Clear_Score 
                     lda      #3                           ; normally 5 FIX 
                     sta      shipcnt 
                     lda      #$5F                         ; for high score input _ under scores _ 
@@ -49,7 +49,7 @@ restart
 ;
 WAIT_RECAL          macro    
                     jsr      Wait_Recal 
-                    endm   
+                    endm     
 ;  
 DRAW_SHIP           macro    
 ; draw ship 
@@ -106,7 +106,8 @@ shitballs
 _donuthin1 
                     DRAW_VLC                              ; jsr Draw_VLc ;_mode 
                     endm     
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;}}}
+;{{{ DRAW_LINE_WALLS
 ALLEYWALL_Y         =        60 
 ALLEYHEIGHT         =        17 
 DRAW_LINE_WALLS     macro    
@@ -208,7 +209,8 @@ _bottomLine
                     ldd      #$007F                       ; start far left end far right 
                     DRAW_LINE_D  
                     endm     
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;}}}
+;{{{ DRAW_ENEMYS
 DRAW_ENEMYS         macro    
 ; *_D -> index 0|1 (0=Left, 1=Right)
                     RESET0REF  
@@ -389,7 +391,8 @@ skip5a
 skip6a 
 ;###########################################################################
                     endm     
-;&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+;}}}
+;{{{ MOVE_ENEMYS
 MOVE_ENEMYS         macro    
 ; move enemies0
                     lda      Ship_Dead 
@@ -943,7 +946,8 @@ setDtoR_6
                     inc      alley6d 
 subdone6 
                     endm     
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+;}}}
+;{{{ SHIP_Y_COLLISION_DETECT
 SHIP_Y_COLLISION_DETECT  macro  
                     lda      Ship_Dead                    ; if Ship_Dead do not do collision routine 
                     bne      no_hit 
@@ -985,7 +989,8 @@ TATER
 ;skipme
 no_hit 
                     endm     
-;^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 
+;}}}
+;{{{ SHIP_X_COLLISION_DETECT
 SHIP_X_COLLISION_DETECT  macro  
                     lda      Ship_Dead                    ; if Ship_Dead do not do collision routine 
                     lbne     donezo 
@@ -1113,7 +1118,8 @@ not_in_alley
 no_prize_score 
 donezo 
                     endm     
-;-----------------------------------------------------------------------------------
+;}}}
+;{{{ SHOT_COLLISION_DETECT
 SHOT_COLLISION_DETECT  macro  
 ; save next 32 lines for now JUST IN CASE
 ;                    lda      bullet0e 
@@ -1668,7 +1674,8 @@ tankright6
 bullet6_done 
 bullet6_miss 
                     endm     
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;}}}
+;{{{ READ_BUTTONS
 READ_BUTTONS        macro    
                     lda      warpdelay 
                     beq      no_warp_delay 
@@ -1679,8 +1686,9 @@ no_warp_delay
                     beq      no_check_needed 
                     lda      Vec_Button_1_2 
                     beq      no_conf_press 
-                    jsr      general_config
-				  jmp      main 						; return from GC menu still has buffered button presses, avoid by jmping to main
+                    jsr      general_config 
+                    jmp      main                         ; return from GC menu still has buffered button presses, avoid by jmping to main 
+
 no_conf_press 
                     lda      Vec_Button_1_4 
                     beq      no_check_needed 
@@ -1780,8 +1788,9 @@ noshootexplode
 noshootprize 
 cant_shoot_while_dead 
 cant_shoot_in_alley 
-                    endm                                  ; rts 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                    endm
+;}}}
+;{{{ NEW_ENEMY
 NEW_ENEMY           macro    
 ; need code to generate new random enemy OR prize in random alley
 ; type, and direction, direction decides initial X placement
@@ -1954,7 +1963,8 @@ enemy_done
                     inc      enemycnt 
 no_new_enemy 
                     endm     
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;}}}
+;{{{ RESET0REF
 RESET0REF           macro    
                     ldd      #$00CC 
                     stb      <VIA_cntl                    ;/BLANK low and /ZERO low 
@@ -1967,7 +1977,8 @@ RESET0REF           macro
                     ldb      #$01 
                     stb      <VIA_port_b                  ;disable mu 
                     endm     
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;}}}
+;{{{ MOVETO_D
 MOVETO_D            macro    
                     local    MLF318, MLF33B,MLF33D,MLF341,MLF345,moveto_d_done 
                     sta      <VIA_port_a                  ;Store Y in D/A register 
@@ -2003,7 +2014,8 @@ MLF345:             bitb     <VIA_int_flags               ;Wait for timer 1
                     beq      MLF345 
 moveto_d_done 
                     endm     
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;}}}
+;{{{ INTENSITY_A
 INTENSITY_A         macro    
                     sta      <VIA_port_a                  ;Store intensity in D/A 
                     sta      Vec_Brightness               ;Save intensity in $C827 
@@ -2014,7 +2026,8 @@ INTENSITY_A         macro
                     ldb      #$01 
                     stb      <VIA_port_b                  ;turn off mux 
                     endm     
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;}}}
+;{{{ READ_JOYSTICK
 READ_JOYSTICK       macro    
                     lda      Ship_Dead 
                     lbne     jsdone 
@@ -2182,7 +2195,8 @@ setLeftDone
 jsdoneX 
 jsdone 
                     endm     
-;;;;;;;;;;;;;;;;;;;;;;;;;;$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+;}}}
+;{{{ MOVE_BULLETS 
 MOVE_BULLETS        macro    
                     lda      #127 
                     sta      VIA_t1_cnt_lo 
@@ -2234,7 +2248,8 @@ next_bullet2
 
 bullets_done2 
                     endm     
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;}}}
+;{{{ DRAW_BULLETS
 DRAW_BULLETS        macro    
                     lda      #$7F 
                     INTENSITY_A  
@@ -2284,7 +2299,8 @@ bullets_done
                     lda      #$5F 
                     INTENSITY_A  
                     endm     
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;}}}
+;{{{ DRAW_VLC from BIOS
 DRAW_VLC            macro    
                     local    LF3F4,Draw_VLa 
                     lda      ,x+ 
@@ -2310,7 +2326,8 @@ LF3F4:              bitb     <VIA_int_flags               ;Wait for T1 to time o
                     bpl      Draw_VLa                     ;Go back for more points 
                                                           ; jmp Check0Ref ;Reset zero reference if necessary 
                     endm     
-; @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+;}}}
+;{{{ STALL_CHECK
 STALL_CHECK         macro    
                     lda      In_Alley 
                     bne      no_ghost 
@@ -2354,7 +2371,8 @@ ghost_d_done
 ;  END add ghost stuff, must tweak
 no_ghost 
                     endm     
-;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%     
+;}}}
+;{{{ FRAME_CNTS
 FRAME_CNTS          macro    
 ; increment the Test frame counter
 ; add more logic to set/increment SHAPE_f counters for desired animations
@@ -2440,7 +2458,8 @@ no100cntreset
                     clr      demo_label_cnt 
 noclrdlc 
                     endm     
-;@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+;}}}
+;{{{ CHECK_GAMEOVER
 CHECK_GAMEOVER      macro                                 ; TO DO add some kind of ship destruction animation 
                     lda      shipcnt 
                     bne      notgameover 
@@ -2448,7 +2467,8 @@ CHECK_GAMEOVER      macro                                 ; TO DO add some kind 
 
 notgameover 
                     endm     
-;###########################################################################################################
+;}}}
+;{{{ CHKENEMTCNT
 CHKENEMYCNT         macro    
                     clr      temp 
                     lda      alley0e 
@@ -2482,7 +2502,8 @@ nextE6
                     lda      temp 
                     sta      enemycnt 
                     endm     
-;###########################################################################################################
+;}}}
+;{{{ CHKPRIZEEXIST
 CHKPRIZEEXIST       macro    
                     lda      alley0e 
                     cmpa     #PRIZE 
@@ -2508,9 +2529,10 @@ CHKPRIZEEXIST       macro
                     clr      Is_Prize                     ; fail all tests, reset Is_Prize 
 prize_exist 
                     endm     
-;::::::::::::::::::::::::::::::::
+;}}}
+;{{{ ALLEY_TIMEOUT
 ALLEY_TIMEOUT       macro    
-; decrement counters on alley respawn timeouts                                     
+; decrement counters on alley respawn timeouts
                     ldd      prizecnt                     ; minumum counter for time between prize spawns 
                     addd     #1 
                     std      prizecnt 
@@ -2532,9 +2554,9 @@ cntatzero
                     lsla     
                     bge      respawncounter 
                     endm     
-;########################################################################################################
-;#########################################################################################################
+;}}}
 ;########################DRAWING MACROS
+;{{{ DRAW_VL_MODE from BIOS slightly optimized
 DRAW_VL_MODE        macro    
                     local    next_byte, next_line, dvm_done ,dorgle, fuckle, draw_solid 
 next_byte:          lda      ,x+                          ;Get the next mode byte 
@@ -2584,7 +2606,8 @@ dorgle:             bitb     <VIA_int_flags               ;Wait for T1 to time o
 
 dvm_done 
                     endm     
-;;;;;;;;;;;; from BIOS optimized slightly ;;;;;;;;;;;;;;;;;;;;;;;;
+;}}}
+;{{{ DRAW_LINE_D from BIOS optimized slightly ;;;;;;;;;;;;;;;;;;;;;;;;
 DRAW_LINE_D         macro    
                     local    timeout 
                     STA      <VIA_port_a                  ;Send Y to A/D 
@@ -2607,7 +2630,8 @@ timeout:            BITB     <VIA_int_flags               ;Wait for T1 to time o
                                                           ;BPL Draw_VL_a ;Go back for more points 
                                                           ;JMP Check0Ref ;Reset zero reference if necessary 
                     endm     
-;;;;;;;;;;;; from BIOS optimized slightly ;;;;;;;;;;;;;;;;;;;;;;;;
+;}}}
+;{{{ DRAW_LINE_D_PAT: from BIOS optimized slightly ;;;;;;;;;;;;;;;;;;;;;;;;
 DRAW_LINE_D_PAT     macro    
                     local    _timeout_pat 
                     STA      <VIA_port_a                  ;Send Y to A/D 
@@ -2624,8 +2648,8 @@ _timeout_pat        STA      <VIA_shift_reg               ;Put pattern in shift 
                     NOP                                   ;Wait a moment more 
                     CLR      <VIA_shift_reg               ;Clear shift register (blank output) 
                     endm     
-;;;;;;;;;;;; from BIOS optimized slightly ;;;;;;;;;;;;;;;;;;;;;;;;    
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;}}}
+;{{{ DRAW_VECTOR_SCORE
 DRAW_VECTOR_SCORE   macro    
                     lda      #$5F 
                     INTENSITY_A  
@@ -2639,16 +2663,6 @@ DRAW_VECTOR_SCORE   macro
                     MOVETO_D  
                     lda      #14                          ; scale it lower is better 
                     sta      VIA_t1_cnt_lo 
-				  ; TESTING THIS SHOULD BE #score and #running_score is comp to #score every frame and incremented until even!
-				  ldx      #running_score
-				  ldu      #score
-				  jsr      Compare_Score
-                    cmpa     #0
-				  beq      score_same
-				  lda      #10						; increment the (displayed)#score by 10
-                    ldx      #score
-				  jsr      Add_Score_a
-score_same	
                     ldy      #score 
 _scoreloop 
                     lda      ,y+ 
@@ -2667,7 +2681,7 @@ _is_zero
                     ldx      #zero 
                     DRAW_VL_MODE  
                     ldx      #numbers_t 
-                    lbra      _scoreloop 
+                    lbra     _scoreloop 
 
 demo_score 
                     RESET0REF  
@@ -2681,8 +2695,19 @@ demo_score
                                                           ;jsr Print_Str_d 
 score_done 
 _no_print_vscore 
+                                                          ; do EVERY frame instead of every other.
+                    ldx      #running_score 				; score i9n real time
+                    ldu      #score 					; currently displayed score , these can be the same
+                    COMPARE_SCORE 
+                    cmpa     #0 
+                    beq      score_same 
+                    lda      #10                          ; increment the (displayed)#score by 10 
+                    ldx      #score 
+                    jsr      Add_Score_a 
+score_same 
                     endm     
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;}}}
+;{{{ DRAW_RASTER_SCORE
 DRAW_RASTER_SCORE   macro    
                     lda      frm2cnt 
                     beq      _no_print_score 
@@ -2696,7 +2721,8 @@ DRAW_RASTER_SCORE   macro
                     jsr      Print_Str_d 
 _no_print_score 
                     endm     
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;}}}
+;{{{ PRINT_VECTOR_SHIPS
 PRINT_VECTOR_SHIPS  macro    
                     RESET0REF  
                     lda      #-127 
@@ -2710,7 +2736,8 @@ _ships_left_loop
                     dec      temp 
                     bne      _ships_left_loop 
                     endm     
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;}}}
+;{{{ PRINT_SHIPS
 PRINT_SHIPS         macro    
                     lda      #127                         ; restore scale 
                     sta      VIA_t1_cnt_lo 
@@ -2727,7 +2754,8 @@ PRINT_SHIPS         macro
                     jsr      Print_Ships 
 _no_print_ships 
                     endm     
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;}}}
+;{{{ CHECK_DEMO
 CHECK_DEMO          macro    
                     lda      Demo_Mode 
                     beq      no_check_needed 
@@ -2743,7 +2771,8 @@ no_conf_pressD
 
 no_check_needed 
                     endm     
-;&&&&&&&&&&&&&&&^^^^^^^^^^^^^^^^^^^^^^^^^&&&&&&&&&&&&&&&&&&&&&&&&&^^^^^^^^^^^^^^^^^
+;}}}
+;{{{ MOVETO_D_BEFORE
 MOVETO_D_BEFORE     macro    
                     sta      <VIA_port_a                  ;Store Y in D/A register 
                     clr      <VIA_port_b                  ;Enable mux 
@@ -2767,7 +2796,8 @@ MOVETO_D_BEFORE     macro
                     bra      MLF33D 
 
                     endm     
-; ^%^%$^%@*&^@(  
+;}}}
+;{{{   MOVETO_D_AFTER
 MOVETO_D_AFTER      macro    
                     local    AMLF33B,AMLF33D,AMLF341,AMLF345,moveto_d_a_done 
 AMLF33B:            lda      #$04                         ;Wait for timer 1 
@@ -2782,7 +2812,8 @@ AMLF345             bitb     <VIA_int_flags               ;Wait for timer 1
                     beq      AMLF345 
 moveto_d_a_done 
                     endm     
-;###################################################################################
+;}}}
+;{{{ SMART_BOMB
 SMART_BOMB          macro    
                     ldb      alley0e                      ; ENEMY FLAG 
                     beq      no_enemy0                    ; NO ENEMY BRANCH 
@@ -2884,14 +2915,16 @@ pos6
 no_enemy6 
                     clr      smartbombcnt 
                     endm     
-;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+;}}}
+;{{{ CHECK_LEVEL_DONE
 CHECK_LEVEL_DONE    macro    
                     lda      Level_Done                   ; check level_done flag 
                     lbeq     nolevel 
                     jsr      newlevel                     ; and run routine 
 nolevel 
                     endm     
-;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+;}}}
+;{{{ CHECK_SFX
 CHECK_SFX           macro    
                     lda      Demo_Mode 
                     bne      no_sfx_demo 
@@ -2900,7 +2933,8 @@ CHECK_SFX           macro
                     jsr      Do_Sound_FX_C3 
 no_sfx_demo 
                     endm     
-;^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+;}}}
+;{{{ ABS_A_B
 ABS_A_B             macro    
                     local    abs_end, _Abs_b 
                     TSTA     
@@ -2915,7 +2949,8 @@ _Abs_b              TSTB
                     DECB     
 abs_end 
                     endm     
-;#############################################################
+;}}}
+;{{{ PRINT_STR_D
 PRINT_STR_D         macro    
                     local    psdelayloop, psddone,linestart, moveflagset 
                     local    movedelay, movetimer1, movetimer2, movedone 
@@ -3039,3 +3074,19 @@ psddone             LDA      #$98
                     STA      <VIA_aux_cntl                ;T1->PB7 enabled 
                                                           ; JMP Reset0Ref ;Reset the zero reference 
                     endm     
+;}}}
+;{{{ COMPARE_SCORE 
+COMPARE_SCORE       macro    
+                    local    LF8CA,LF8D5,LF8D6 
+                    PSHS     X,U                          ;Save score pointers 
+                    CLRA                                  ;Default to scores are the same 
+LF8CA:              LDB      ,X+ 
+                    BMI      LF8D6                        ;Return if end of string 
+                    CMPB     ,U+ 
+                    BEQ      LF8CA                        ;Continue if byte is the same 
+                    BHI      LF8D5                        ;Return 1 if X > U 
+                    INCA                                  ;Return 2 if U > X 
+LF8D5:              INCA     
+LF8D6:              PULS     X,U                          ;Restore pointers and return 
+                    endm     
+;}}}
