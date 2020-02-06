@@ -920,7 +920,7 @@ do_demofem          lda      #1                           ; do on TIMEOUT only
 
 fem_done 
                     lda      conf_box_index 
-                    beq      fem_noformat 
+                    bne      fem_noformat 
                     jsr      eeprom_format                ; over writes entire eeprom 
                     jsr      eeprom_load                  ; reload so it updates internal vars 
 fem_noformat 
@@ -1187,8 +1187,6 @@ keepitgoing
                     jmp      hs_loop 
 
 doHSsave: 
-                    puls     d 
-                    std      Vec_Text_HW                  ; finished HS entry 
 ;   hsentryXn = initials  hsentryXs = score
 ; tables  hsentryn_t      hsentrys_t   
 ; table has 5 slots for scores
@@ -1306,7 +1304,7 @@ _fill_sloop1
                     rts      
 
 ;}}}
-;{{{; populate hs table ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;{{{ fill_hs_table: populate hs table ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 fill_hs_tbl:                                              ;        only used if eeprom not found. 
 ;name
                     ldb      #4                           ; 5 entries, 0 index 
