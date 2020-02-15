@@ -1,4 +1,4 @@
-; vim: ts=4 syntax=asm6809 foldmethod=marker
+; vim: ts=4 syntax=asm6809 foldmethod=marker fdo-=search
 ;***************************************************************************
 ; example/perimeter values 
 ;***************************************************************************

@@ -1,4 +1,4 @@
-; vim: ts=4 syntax=asm6809 foldmethod=marker
+; vim: ts=4 syntax=asm6809 foldmethod=marker fdo-=search
 ; Sound Registers 
 PSG_Ch1_Freq_Lo     =        0 
 PSG_Ch1_Freq_Hi     =        1 

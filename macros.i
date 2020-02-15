@@ -1,4 +1,4 @@
-; vim: ts=4 syntax=asm6809 foldmethod=marker
+; vim: ts=4 syntax=asm6809 foldmethod=marker fdo-=search
 ; MACROS
 ;{{{ INTRO_BOOT
 INTRO_BOOT          macro                                 ; run once on cold or warm boot 
@@ -1684,6 +1684,11 @@ no_warp_delay
                     jsr      Read_Btns                    ; maybe only do one of these per loop? 
                     lda      Demo_Mode 
                     beq      no_check_needed 
+                    lda      Vec_Button_1_1 
+                    beq      no_show_hsRB 
+                    jsr      print_hs_tbl 
+                    jmp      main 
+no_show_hsRB 
                     lda      Vec_Button_1_2 
                     beq      no_conf_press 
                     jsr      general_config 
@@ -1788,7 +1793,7 @@ noshootexplode
 noshootprize 
 cant_shoot_while_dead 
 cant_shoot_in_alley 
-                    endm
+                    endm     
 ;}}}
 ;{{{ NEW_ENEMY
 NEW_ENEMY           macro    
@@ -2453,7 +2458,7 @@ no50cntreset
                     sta      Explode_f 
 no100cntreset 
                     lda      demo_label_cnt 
-                    cmpa     #3 
+                    cmpa     #4 
                     bne      noclrdlc 
                     clr      demo_label_cnt 
 noclrdlc 
@@ -2685,20 +2690,27 @@ _is_zero
 
 demo_score 
                     RESET0REF  
+                    ldd      Vec_Text_HW                  ; save font size then restore after print_str_d 
+                    pshs     d 
+                    ldd      #$F73F 
+                    std      Vec_Text_HW 
+;
                     lda      demo_label_cnt 
                     lsla     
                     ldu      #Demo_Label_t 
                     ldu      a,u 
                     lda      #-127 
-                    ldb      #-100 
+                    ldb      #-127 
                     PRINT_STR_D  
+                    puls     d 
+                    std      Vec_Text_HW 
                                                           ;jsr Print_Str_d 
 score_done 
 _no_print_vscore 
-                                                          ; do EVERY frame instead of every other.
-                    ldx      #running_score 				; score i9n real time
-                    ldu      #score 					; currently displayed score , these can be the same
-                    COMPARE_SCORE 
+                                                          ; do EVERY frame instead of every other. 
+                    ldx      #running_score               ; score i9n real time 
+                    ldu      #score                       ; currently displayed score , these can be the same 
+                    COMPARE_SCORE  
                     cmpa     #0 
                     beq      score_same 
                     lda      #10                          ; increment the (displayed)#score by 10 
@@ -2755,22 +2767,26 @@ PRINT_SHIPS         macro
 _no_print_ships 
                     endm     
 ;}}}
-;{{{ CHECK_DEMO
-CHECK_DEMO          macro    
-                    lda      Demo_Mode 
-                    beq      no_check_needed 
-                    jsr      Read_Btns                    ; maybe only do one of these per loop? 
-                    lda      Vec_Button_1_2 
-                    beq      no_conf_pressD 
-                    jsr      joystick_config 
-no_conf_pressD 
-                    lda      Vec_Button_1_4 
-                    beq      no_check_needed 
-                    clr      Demo_Mode 
-                    jmp      restart 
-
-no_check_needed 
-                    endm     
+;{{{ CHECK_DEMO - no longer used
+;CHECK_DEMO          macro    
+;                    lda      Demo_Mode 
+;                    beq      no_check_needed 
+;                    jsr      Read_Btns                    ; maybe only do one of these per loop? 
+;                    lda      Vec_Button_1_1 
+;                    beq      no_show_hsD 
+;                    jsr      print_hs_tbl 
+;no_show_hsD 
+;                    lda      Vec_Button_1_2 
+;                    beq      no_conf_pressD 
+;                    jsr      joystick_config 
+;no_conf_pressD 
+;                    lda      Vec_Button_1_4 
+;                    beq      no_check_needed 
+;                    clr      Demo_Mode 
+;                    jmp      restart 
+;
+;no_check_needed 
+;                    endm     
 ;}}}
 ;{{{ MOVETO_D_BEFORE
 MOVETO_D_BEFORE     macro    

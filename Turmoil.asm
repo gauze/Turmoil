@@ -1,5 +1,5 @@
 ; vim: ts=4
-; vim: syntax=asm6809 foldmethod=marker
+; vim: syntax=asm6809 foldmethod=marker fdo-=search
                     title    "Alley Anxiety"
 ; DESCRIPTION
 ; Port of 20th Century Fox Atari 2600 game Turmoil
@@ -18,7 +18,7 @@
 ; 
                     include  "macros.i"                   ; inlined code to save jsr/rts cycles
 ;***************************************************************************
-; HEADER SECTION
+;{{{ HEADER SECTION
 ;***************************************************************************
 ; The cartridge ROM starts at address 0
                     code     
@@ -39,10 +39,11 @@
                     db       0                            ; end of game header 
 ;                   bra restart ; TESTING skip intro to get right to it.  
 ;                  jsr      levelsplash  ; REMOVE to return to normal flow
+;}}} 
                     bra      introSplash 
 
 ;***************************************************************************
-; MAGIC CARTHEADER SECTION
+;{{{ MAGIC CARTHEADER SECTION
 ;      DO NOT CHANGE THIS STRUCT
 ;***************************************************************************
 ;                    ORG      $0030 
@@ -50,8 +51,9 @@
 ;v4ecartversion      fdb      $0001                        ; I always have a version 
 ;                                                ; in comm. structs
 ;v4ecartflags        fdb      $4000 
+;}}}
 ;***************************************************************************
-; CODE SECTION
+;{{{ CODE SECTION
 ;***************************************************************************  
                     INTRO_BOOT                            ; runs ONCE per boot 
                     RESTART                               ; jump here on game restart 
@@ -76,10 +78,10 @@ main                                                      ;        top of game l
                     ALLEY_TIMEOUT                         ; prevent alleys from respawning instantly 
                     CHECK_LEVEL_DONE  
                     CHECK_SFX  
-                    jmp      main                         ; and repeat forever, sorta 
-
+                    jmp main                              ; and repeat forever
+;}}}
 ;-----------------------------------------------------------------------------------
-; must go at bottom or fills up RAM instead of ROM 
+;{{{ must go at bottom or fills up RAM instead of ROM 
                     include  "functions.i"                ; 
                     include  "data.i"                     ; static data, shapes, tables, text
                     include  "libsoundraw.i"              ; quick sound effects routines
@@ -90,6 +92,7 @@ main                                                      ;        top of game l
                     include  "turmoil_ym.asm"			; our data for above
                     include  "ds2431LowLevel.i"           ; high score save stuff
                     include  "ds2431HighLevel.i"          ; using DS2431+ 1 wire eeprom
-                    include  "eprom.i"                    ; should be named eeprom.i oh well
+                    include  "eeprom.i"                   ; should be named eeprom.i oh well
 				  include  "draw_synced_list.i"         ; from VIDE to, draw shapes with many vectors.
 end 
+;}}}

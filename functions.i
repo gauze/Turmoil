@@ -1,5 +1,5 @@
 ;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-; vim: ts=4 syntax=asm6809 foldmethod=marker
+; vim: ts=4 syntax=asm6809 foldmethod=marker fdo-=search
 ;###########################################################################
 ; SUBROUTINES/FUNCTIONS
 ;###########################################################################
@@ -506,6 +506,7 @@ _tsdone
 ;}}}
 ;{{{ general_config: main config screen
 general_config: 
+                    jsr      Clear_Sound 
                     lda      #10                          ; set up timeout counter 
                     sta      temp1                        ; 10 iterations of 
                     lda      #$FF 
@@ -1425,7 +1426,7 @@ _hsprtloop
                     bne      leave_demo_mode_hs           ; break out 
                     lda      Vec_Button_1_2 
                     beq      noconfpress 
-                    jsr      joystick_config 
+                    jsr      general_config 
 noconfpress 
 ; count down to next screen without button press
                     jsr      Dec_3_Counters 
