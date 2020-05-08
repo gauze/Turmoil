@@ -14,8 +14,7 @@
 ; load vectrex bios routine definitions
                     include  "VECTREX.I"                  ; vectrex bios function include
 ; stuff that goes into RAM
-                    include  "vars.i"                     ; RAM allocation starting at $C880
-; 
+                    include  "vars.i"                     ; RAM allocation starting at $C880 
                     include  "macros.i"                   ; inlined code to save jsr/rts cycles
 ;***************************************************************************
 ;{{{ HEADER SECTION
@@ -77,8 +76,9 @@ main                                                      ;        top of game l
                     STALL_CHECK                           ; can't just sit in an open alley forever... 
                     ALLEY_TIMEOUT                         ; prevent alleys from respawning instantly 
                     CHECK_LEVEL_DONE  
-                    CHECK_SFX  
-                    jmp main                              ; and repeat forever
+                    CHECK_SFX                             ; sound update 
+                    jmp      main                         ; and repeat forever 
+
 ;}}}
 ;-----------------------------------------------------------------------------------
 ;{{{ must go at bottom or fills up RAM instead of ROM 
@@ -88,11 +88,11 @@ main                                                      ;        top of game l
                     include  "rawsounddata.i"
                     include  "rawsoundroutines.i"         ; 
                     include  "rasterDraw.asm"             ; title screen from VIDE
-                    include  "ymPlayer.i"				; for song under high score
-                    include  "turmoil_ym.asm"			; our data for above
+                    include  "ymPlayer.i"                 ; for song under high score
+                    include  "turmoil_ym.asm"             ; our data for above
                     include  "ds2431LowLevel.i"           ; high score save stuff
                     include  "ds2431HighLevel.i"          ; using DS2431+ 1 wire eeprom
                     include  "eeprom.i"                   ; should be named eeprom.i oh well
-				  include  "draw_synced_list.i"         ; from VIDE to, draw shapes with many vectors.
+                    include  "draw_synced_list.i"         ; from VIDE to, draw shapes with many vectors.
 end 
 ;}}}

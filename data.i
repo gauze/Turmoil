@@ -719,7 +719,7 @@ confopt_label       fcc      "CONFIGURATION OPTIONS",$80
 level_start_label   fcc      "LEVEL TO START AT",$80
 ee_warn1_label      fcc      "THIS WILL ERASE HIGH",$80
 ee_warn2_label      fcc      "SCORES AND ALL SETTINGS",$80
-hs_reset_label      fcc      "FORMAT EEPROM?",$80
+hs_reset_label      fcc      "ERASE EEPROM",$80
 confirm_text        fcc      "ARE YOU SURE?",$80
 yes_text            fcc      "   YES",$80
 no_text             fcc      "    NO",$80
@@ -732,9 +732,9 @@ med_text            fcc      "MEDIUM",$80
 fast_text           fcc      "FAST",$80
 ; GAME MODE MENU
 gamemode_label      fcc      "  GAME MODE",$80
-gamesel_label       fcc      "  GAME SELECT",$80
-reggame_text        fcc      "CLASSICGAME",$80
-supergame_text      fcc      "SUPER GAME",$80
+gamesel_label       fcc      "GAME SELECT",$80
+reggame_text        fcc      "CLASSIC",$80
+supergame_text      fcc      " SUPER",$80
 ; GENERAL
 gameoverstr         fcc      "GAME OVER",$80
 highscorelabel      fcc      "HIGH SCORE",$80

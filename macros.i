@@ -24,7 +24,7 @@ restart
                     std      Vec_Rfrsh                    ; make sure we are at 50hz 
                     jsr      setup 
                     jsr      levelsplash 
-                    lda      #0 
+                    lda      #0                           ; set stuff to zero 
                     sta      shipYpos 
                     sta      shipXpos 
                     sta      In_Alley 
@@ -46,11 +46,11 @@ restart
                     clr      demo_label_cnt 
                     jsr      SfxInit 
                     endm     
-;
+;}}}
 WAIT_RECAL          macro    
                     jsr      Wait_Recal 
                     endm     
-;  
+;{{{ DRAW_SHIP  
 DRAW_SHIP           macro    
 ; draw ship 
                     RESET0REF  
@@ -95,6 +95,7 @@ scale_done
                     clr      shipXpos 
                     clr      In_Alley 
 change_dir 
+				  clr      shipXpos				   ; recenter ship to center if in alley
                     clr      Ship_Dead_Anim 
                     clr      Ship_Dead_Cnt                ; don't let it go minus. UNSIGNED 
                     CHECK_GAMEOVER  
@@ -1688,6 +1689,7 @@ no_warp_delay
                     beq      no_show_hsRB 
                     jsr      print_hs_tbl 
                     jmp      main 
+
 no_show_hsRB 
                     lda      Vec_Button_1_2 
                     beq      no_conf_press 
@@ -2039,10 +2041,11 @@ READ_JOYSTICK       macro
 ; can't move, done 
                     lda      Demo_Mode 
                     beq      not_demo_rjs 
+; can't control ship in Demo mode, controlled by Random()
                     lda      frm10cnt 
                     lbne     jsdone 
                     jsr      Random 
-                    anda     #%00000001 
+                    anda     #%00000001                   ; mask 
                     sta      shipdir                      ; set random ship direction 
                     lda      shipYdir                     ; 0 = up 1 = down 
                     bne      do_demo_dec 
@@ -2068,7 +2071,7 @@ rev_shipdir
                     inc      shipYpos 
                     jmp      jsdone 
 
-not_demo_rjs 
+not_demo_rjs                                              ; End of Demo_mode! 
                     lda      shipspeed                    ; user defined joystick speed 
                     lsla     
                     ldx      #speed_t 
@@ -2079,10 +2082,11 @@ not_demo_rjs
                     bne      jsdoneY                      ; disable Y position poll 
                     lda      Vec_Joy_1_Y 
                     beq      jsdoneY                      ; no Y motion 
-                    bmi      going_down 
+                    bmi      going_down 					; 
                     lda      shipYpos 
                     cmpa     #6                           ; slot 6 as far up as u can go don't move 
                     beq      jsdoneY 
+;going_up
                     jsr      SFX_VertMove 
                     inc      shipYpos 
                     clr      stallcnt 
@@ -2115,54 +2119,33 @@ going_right1
                     sta      shipdir 
                     lda      #8 
                     adda     shipXpos 
-                    bra      jsdone 
+                    bra      jsdoneX 
 
-; unreachable
-;                    sta      shipXpos 
-;                    bra      jsdoneX 
 going_left1 
                     lda      #LEFT 
-                    sta      shipdir 
-;                    lda      shipXpos 
+                    sta      shipdir  
                     suba     #8 
                     sta      shipXpos 
                     bra      jsdoneX 
 
 nope_prize 
 already_in 
-;                    lda      shipdir 
-;                    bne      facing_right 
-;                                                          ; left 
-;                    lda      shipXpos                     ; is X basically in the middle alley? unset in_alley flag 
-;                    cmpa     #5 
-;                    bgt      leave_flag                   ; if a-5 > 0 then clr in_alley 
-;                    clr      In_Alley                     ; clear in alley flag when in middle 
-;;                    clr      shipXpos 
-;                    bra      center_done 
-;leave_flag 
-;facing_right 
-;                    lda      shipXpos 
-;                    cmpa     #-5 
-;                    blt      center_done 
-;                    clr      In_Alley 
-;                    clr      shipXpos 
-;center_done 
-;
+
                     lda      Vec_Joy_1_X 
-                    beq      jsdoneX 
-                    bmi      going_left 
+                    beq      jsdoneX 					; no X dat bail
+                    bmi      going_left 					; hi bit set going left, no high bit going right.
 going_right 
                     lda      #RIGHT 
                     sta      shipdir 
                     lda      In_Alley 
                     beq      setRightDone 
-                    lda      #4 
+                    lda      #4 						; toy with this? (was 4)
                     adda     shipXpos 
-                    bvs      setMaxRight 
+                    bvs      setMaxRight 				; bvs == branch on overflow set
 ;  centering code here
                     tsta     
                     bpl      setRightDone 
-                    cmpa     #-5 
+                    cmpa     #-7 						; toy with this?
                     blt      setRightDone 
                     clr      In_Alley 
                     clra                                  ; saved to shipXpos later 
@@ -2182,11 +2165,11 @@ going_left
                     beq      setLeftDone 
                     lda      shipXpos 
                     suba     #4 
-                    bvs      setMaxLeft 
+                    bvs      setMaxLeft 					; branch on overflow set
 ; centering code here 
                     tsta     
                     bmi      setLeftDone 
-                    cmpa     #5                           ; if ship is closer than 5 
+                    cmpa     #7                           ; if ship is closer than 5 
                     bgt      setLeftDone                  ; center it on screen 
                     clr      In_Alley                     ; and remove from In_Alley 
                     clra                                  ; saved to shipXpos later 

@@ -2,20 +2,24 @@
 ;***************************************************************************
 ; Variable / RAM SECTION
 ;***************************************************************************
+; key to variables/symbols (WIP)
+; constants = ALL_UPPERCASE
+; variables = all_lower_case
+; flags = Camel_Case (delimited by underscore)
 ; insert your variables (RAM usage) in the BSS section
 ; user RAM starts at $c880 
                     bss      
                     org      $C880                        ; start of our ram space 
 ; game basics
 score               ds       7                            ; 7 bytes 
-running_score       ds       7
+running_score       ds       7                            ; 7 bytes used for animation of score.
 ;highscore           ds       7                            ; 7 bytes ;use built in instead.
 level               ds       1                            ; only does levels 1-99 then shows Infinity sign after that 
 shipcnt             ds       1                            ; ships in reserve before GameOver 
 smartbombcnt        ds       1                            ; only in Super_Game 
 ; game option selector vars
 conf_box_index      ds       1                            ; configuration selector 
-hs_box_Yindex       ds       1                            ; highscore input character selector 
+hs_box_Yindex       ds       1                            ; highscore input character selector, grid
 hs_box_Xindex       ds       1 
 ;
 ; your ship related variables, X,Y position and direction facing L/R, and number left
@@ -206,20 +210,26 @@ ee_hsn5             ds       4
 ; use this for OPTIONS  7 bytes total
 ee_shipspeed        ds       1 						; 1-4 faster to slower
 ee_game_mode        ds       1 						; bool 1=Super game | 0=classic 
-ee_filler           ds       5 
+ee_filler           ds       5 						; filler so it's exactly 63 bytes long, plus checksum digit
                          
 ;          
 ; ymplayer ram and USE_ENVELOPES flag, * ok for top of RAM
 ym_ram              equ      * 
 USE_ENVELOPES=1 
 ;
-; CONSTANTS 
+; CONSTANTS
+;   ____ ___  _   _ ____ _____  _    _   _ _____ ____  
+;  / ___/ _ \| \ | / ___|_   _|/ \  | \ | |_   _/ ___| 
+; | |  | | | |  \| \___ \ | | / _ \ |  \| | | | \___ \ 
+; | |__| |_| | |\  |___) || |/ ___ \| |\  | | |  ___) |
+;  \____\___/|_| \_|____/ |_/_/   \_\_| \_| |_| |____/ 
+;                                                      
 ;ALLEYWIDTH          =        17                           ; moved to macros.i near where it's used for quick access
 LEFT                =        0 
 RIGHT               =        1 
 SCORE               =        10                           ; score 10 times speed/level something 
 MOVEAMOUNT          =        8                            ; how many 'pixels per frame' 
-; eNEMY TABLE 
+; ENEMY TABLE 
 GHOST               =        8                            ; various values for quick testing. positions are 
 TANK                =        6                            ; from Enemy_t table 
 EXPLOSION           =        9 

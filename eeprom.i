@@ -26,7 +26,8 @@ eeload_loop                                               ;
                     rts                                   ; otherwise, return 
 ;}}}
 ;****************************************************************************
-eeprom_format 
+;{{{ eeprom_format:
+eeprom_format: 
                     ldu      #default_high0               ; our HS table template 
                     ldx      #eeprom_buffer               ; 
                     ldb      #$3F                         ; 63 
@@ -49,6 +50,7 @@ eesave_loop                                               ;
                     tsta                                  ; 
                     lbne     ds2431_save                  ; if different, then update eeprom 
                     rts      
+;}}}
 ;}}}
 ; Include the driver files
 ;                    include  "ds2431LowLevel.i"

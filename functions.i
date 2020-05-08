@@ -920,10 +920,11 @@ do_demofem          lda      #1                           ; do on TIMEOUT only
                     jmp      restart 
 
 fem_done 
-                    lda      conf_box_index 
-                    bne      fem_noformat 
+                    lda      conf_box_index               ; default = 0 don't format. 
+                    beq      fem_noformat 
                     jsr      eeprom_format                ; over writes entire eeprom 
                     jsr      eeprom_load                  ; reload so it updates internal vars 
+                    jsr      fill_hs_tbl_eeprom			  ; then copy to working buffer
 fem_noformat 
                     rts      
 
