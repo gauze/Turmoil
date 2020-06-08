@@ -517,6 +517,7 @@ general_config:
 gconf_loop 
                     jsr      Wait_Recal 
                     jsr      Intensity_5F 
+                    jsr      Do_Sound_FX_C1 
                     lda      frm10cnt 
                     bne      gcdoneYcal 
                     jsr      Joy_Digital 
@@ -527,6 +528,7 @@ gconf_loop
                     lda      conf_box_index 
                     beq      gcdoneYcal                   ; 0 is highest slot on screen !move 
                     dec      conf_box_index 
+                    jsr      SFX_Bloop 
                     bra      gcdoneYcal 
 
 going_down_gconf 
@@ -534,6 +536,7 @@ going_down_gconf
                     cmpa     #3                           ; 3 is lowest slot on screen !move 
                     beq      gcdoneYcal 
                     inc      conf_box_index 
+                    jsr      SFX_Bloop 
 gcdoneYcal 
                     jsr      Read_Btns 
                     lda      Vec_Button_1_4 
@@ -645,6 +648,7 @@ joystick_config:
 conf_loop 
                     jsr      Wait_Recal 
                     jsr      Intensity_5F 
+                    jsr      Do_Sound_FX_C1 
                     lda      frm10cnt 
                     bne      jsdoneYcal 
                     jsr      Joy_Digital 
@@ -655,13 +659,15 @@ conf_loop
                     lda      conf_box_index 
                     beq      jsdoneYcal                   ; 0 is highest slot on screen !move 
                     dec      conf_box_index 
+                    jsr      SFX_Bloop 
                     bra      jsdoneYcal 
 
 going_down_conf 
                     lda      conf_box_index 
                     cmpa     #3                           ; 3 is lowest slot on screen !move 
                     beq      jsdoneYcal 
-                    inc      conf_box_index 
+                    inc      conf_box_index
+                    jsr      SFX_Bloop  
 jsdoneYcal 
                     jsr      Read_Btns 
                     lda      Vec_Button_1_4 
@@ -924,7 +930,7 @@ fem_done
                     beq      fem_noformat 
                     jsr      eeprom_format                ; over writes entire eeprom 
                     jsr      eeprom_load                  ; reload so it updates internal vars 
-                    jsr      fill_hs_tbl_eeprom			  ; then copy to working buffer
+                    jsr      fill_hs_tbl_eeprom           ; then copy to working buffer 
 fem_noformat 
                     rts      
 
