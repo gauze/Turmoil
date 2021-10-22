@@ -1,5 +1,8 @@
 ; vim: ts=4 syntax=asm6809 foldmethod=marker fdo-=search
 ; MACROS
+WAIT_RECAL          macro    
+                    jsr      Wait_Recal 
+                    endm     
 ;{{{ INTRO_BOOT
 INTRO_BOOT          macro                                 ; run once on cold or warm boot 
 introSplash 
@@ -47,9 +50,6 @@ restart
                     jsr      SfxInit 
                     endm     
 ;}}}
-WAIT_RECAL          macro    
-                    jsr      Wait_Recal 
-                    endm     
 ;{{{ DRAW_SHIP  
 DRAW_SHIP           macro    
 ; draw ship 
@@ -1972,18 +1972,22 @@ no_new_enemy
                     endm     
 ;}}}
 ;{{{ RESET0REF
-RESET0REF           macro    
-                    ldd      #$00CC 
-                    stb      <VIA_cntl                    ;/BLANK low and /ZERO low 
-                    sta      <VIA_shift_reg               ;clear shift register 
-                    ldd      #$0302 
-                    clr      <VIA_port_a                  ;clear D/A register 
-                    sta      <VIA_port_b                  ;mux=1, disable mux 
-                    stb      <VIA_port_b                  ;mux=1, enable mux 
-                    stb      <VIA_port_b                  ;do it again 
-                    ldb      #$01 
-                    stb      <VIA_port_b                  ;disable mu 
-                    endm     
+;RESET0REF           macro    
+;                    ldd      #$00CC 
+;                    stb      <VIA_cntl                    ;/BLANK low and /ZERO low 
+;                    sta      <VIA_shift_reg               ;clear shift register 
+;                    ldd      #$0302 
+;                    clr      <VIA_port_a                  ;clear D/A register 
+;                    sta      <VIA_port_b                  ;mux=1, disable mux 
+;                    stb      <VIA_port_b                  ;mux=1, enable mux 
+;                    stb      <VIA_port_b                  ;do it again 
+;                    ldb      #$01 
+;                    stb      <VIA_port_b                  ;disable mu 
+;                    endm     
+RESET0REF           macro
+					ldb      #$CC
+                    stb      <VIA_cntl
+                    endm
 ;}}}
 ;{{{ MOVETO_D
 MOVETO_D            macro    
@@ -2456,7 +2460,7 @@ CHECK_GAMEOVER      macro                                 ; TO DO add some kind 
 notgameover 
                     endm     
 ;}}}
-;{{{ CHKENEMTCNT
+;{{{ CHKENEMYCNT
 CHKENEMYCNT         macro    
                     clr      temp 
                     lda      alley0e 
@@ -2750,6 +2754,7 @@ PRINT_SHIPS         macro
 _no_print_ships 
                     endm     
 ;}}}
+; OTHER
 ;{{{ CHECK_DEMO - no longer used
 ;CHECK_DEMO          macro    
 ;                    lda      Demo_Mode 
@@ -3089,3 +3094,19 @@ LF8D5:              INCA
 LF8D6:              PULS     X,U                          ;Restore pointers and return 
                     endm     
 ;}}}
+
+
+; CRAP MESSING WITH ARRAY MACRO
+LARRAY_X_A          macro    array, index 
+				  local    
+                    lda      index  
+                    ldx      array 
+                    lsla     
+                    ldx      a,x                  
+				  endm
+ARRAY_X_A          macro    array, index 
+				  local    
+                    lda      index  
+                    ldx      array    
+                    lda      a,x                  
+				  endm
