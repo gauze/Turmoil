@@ -95,15 +95,23 @@ scale_done
                     clr      shipXpos 
                     clr      In_Alley 
 change_dir 
+				  lda     Ship_Dead_Cnt
+				  cmpa    #0
+				  beq     dontplaysound
+			      jsr      SFX_Undead
+dontplaysound
 				  clr      shipXpos				   ; recenter ship to center if in alley
                     clr      Ship_Dead_Anim 
                     clr      Ship_Dead_Cnt                ; don't let it go minus. UNSIGNED 
+		  
                     CHECK_GAMEOVER  
 shitballs 
+				  
                     ldx      #ShipL_nomode 
                     ldb      shipdir                      ; testing for 0|LEFT 1|RIGHT 
                     beq      _donuthin1 
                     ldx      #ShipR_nomode 
+
 _donuthin1 
                     DRAW_VLC                              ; jsr Draw_VLc ;_mode 
                     endm     
@@ -953,7 +961,7 @@ SHIP_Y_COLLISION_DETECT  macro
                     lda      Ship_Dead                    ; if Ship_Dead do not do collision routine 
                     bne      no_hit 
                     lda      In_Alley 
-                    bne      no_hit 
+                    bne      no_hit 				; can't hit moving horizontal
                     lda      shipYpos 
                     lsla     
                     ldx      #alleye_t 
@@ -987,6 +995,7 @@ TATER
                     sta      Ship_Dead_Cnt 
                     inc      Ship_Dead 
                     inc      Ship_Dead_Anim 
+					jsr      SFX_Dead
 ;skipme
 no_hit 
                     endm     

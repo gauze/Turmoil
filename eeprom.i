@@ -11,6 +11,7 @@
 ;functions
 ;                    JSR      eeprom_load
 ;                    JSR      eeprom_save 
+;					 JSR      eeprom_format
 ;{{{ eeprom_load: load from 2431, der
 eeprom_load:                                               ;        #isfunction 
                     ldx      #eeprom_buffer               ; 

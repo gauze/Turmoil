@@ -16,6 +16,8 @@ TANK_SPAWN          =        2
 UPBURST             =        3 
 DOWNBURST           =        4 
 VERTMOVE            =        5 
+DEAD				=		 6
+UNDEAD				=		 7
 ; ch 3
 SHOT                =        1 
 ALLEY_MOVE          =        2 
@@ -282,6 +284,10 @@ Do_Sound_FX_C1RevBloop:
 ;=Channel 2 effects check =======
 Do_Sound_FX_C2: 
                     lda      sfxC2ID 
+                    cmpa     #DEAD 
+                    lbeq     Do_Sound_FX_C2Dead
+                    cmpa     #UNDEAD 
+                    lbeq     Do_Sound_FX_C2Undead 
                     cmpa     #UPBURST 
                     lbeq     Do_Sound_FX_C2UpBurst 
                     cmpa     #DOWNBURST 
@@ -379,7 +385,7 @@ Do_Sound_FX_C2DownBurst:
 ; extra bit to clear registers above
                     lda      sfxC2W1 
                     cmpa     #0 
-                    beq      Do_Sound_FX_C2SoundOff 
+                    lbeq      Do_Sound_FX_C2SoundOff 
                                                           ;set mixer byte 
                     lda      #PSG_OnOff 
                     ldb      #Ch2_Tone_Off 
@@ -406,6 +412,74 @@ Do_Sound_FX_C2DownBurst:
                     dec      sfxC2W1 
                     rts      
 
+Do_Sound_FX_C2Undead: 
+                    lda      sfxC2W1 
+                    cmpa     #0 
+                    lbeq     Do_Sound_FX_C2SoundOff 
+                                                          ;set mixer byte 
+                    lda      #PSG_OnOff 
+                    ldb      #Ch2_Tone_Off 
+                    jsr      Sound_Byte_raw 
+                    lda      #PSG_OnOff 
+                    ldb      #Ch2_Noise_On 
+                    jsr      Sound_Byte_raw 
+                    ldx      #Up_Burst_Noise 
+                    lda      sfxC2W1 
+                    lda      a,x 
+                    sta      tempW1 
+                                                          ;set pitch ch3 
+                    lda      #PSG_Noise 
+                    ldb      tempW1 
+                    jsr      Sound_Byte_raw 
+                    lda      #PSG_Ch1_Vol 
+                    ldb      #0 
+                    jsr      Sound_Byte_raw 
+                    lda      #PSG_Ch3_Vol 
+                    ldb      #0 
+                    jsr      Sound_Byte_raw 
+                    lda      #PSG_Ch2_Vol 
+                    ldb      #15 
+                    jsr      Sound_Byte_raw 
+                    dec      sfxC2W1 
+                    rts      
+
+Do_Sound_FX_C2Dead: 
+; extra bit to clean registers BS.
+                    lda      #PSG_Ch2_Freq_Lo 
+                    ldb      #0 
+                    jsr      Sound_Byte_raw 
+                    lda      #PSG_Ch2_Freq_Hi 
+                    ldb      #0 
+                    jsr      Sound_Byte_raw 
+; extra bit to clear registers above
+                    lda      sfxC2W1 
+                    cmpa     #0 
+                    beq      Do_Sound_FX_C2SoundOff 
+                                                          ;set mixer byte 
+                    lda      #PSG_OnOff 
+                    ldb      #Ch2_Tone_Off 
+                    jsr      Sound_Byte_raw 
+                    lda      #PSG_OnOff 
+                    ldb      #Ch2_Noise_On 
+                    jsr      Sound_Byte_raw 
+                    ldx      #Down_Burst_Noise 
+                    lda      sfxC2W1 
+                    lda      a,x 
+                    sta      tempW1 
+                    lda      #PSG_Noise 
+                    ldb      tempW1 
+                    jsr      Sound_Byte_raw 
+                    lda      #PSG_Ch1_Vol 
+                    ldb      #0 
+                    jsr      Sound_Byte_raw 
+                    lda      #PSG_Ch3_Vol 
+                    ldb      #0 
+                    jsr      Sound_Byte_raw 
+                    lda      #PSG_Ch2_Vol 
+                    ldb      #15 
+                    jsr      Sound_Byte_raw 
+                    dec      sfxC2W1 
+                    rts      
 ;=========================
 ;=Channel 3 FX ======
 Do_Sound_FX_C3: 
@@ -578,4 +652,16 @@ SFX_VertMove:
                     lda      #PSG_Env_Shape 
                     ldb      #%00001110 
                     jsr      Sound_Byte_raw 
+                    rts    
+SFX_Undead:  
+                    lda      #UNDEAD 
+                    sta      sfxC2ID 
+                    lda      #55
+                    sta      sfxC2W1 
+                    rts 
+SFX_Dead:
+                    lda      #DEAD 
+                    sta      sfxC2ID 
+                    lda      #55 
+                    sta      sfxC2W1 
                     rts      

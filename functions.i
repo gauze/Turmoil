@@ -640,11 +640,13 @@ joystick_config:
                     sta      temp1 
                     lda      #$FF 
                     sta      Vec_Counter_1 
-                    lda      #0 
-                    sta      conf_box_index 
+                    lda      #0
                     sta      frm10cnt 
-                    inca     
-                    sta      shipspeed 
+					lda      shipspeed
+					deca      
+                    sta      conf_box_index 
+;                    inca     
+;                    sta      shipspeed 
 conf_loop 
                     jsr      Wait_Recal 
                     jsr      Intensity_5F 

@@ -1,16 +1,16 @@
 Disorganized list of things people mentioned.
 
-> 1. Suggestion: Options menu could have 1: Cancel to back out without making changes
-> 2. Bug: Options menu doesn't show the current selection
-> 3. Bug: Ship Speed menu doesn't beep
-> 4. Bug Game Select box [    ] not centered around the options, or text needs to be centered
+> 1. Suggestion: Options menu could have 1: Cancel to back out without making changes (only options re game type and speed, big deal??)
+> 2. Bug: Options menu doesn't show the current selection (read value first and set it as menu is displayed)
+> FIXED 3. Bug: Ship Speed menu doesn't beep
+> 4. [Bug] Game Select box [    ] not centered around the options, or text needs to be centered
 > 5. Suggestion: Erase Eeprom could confirm that it cleared the settings
 > 6. Optimization: Text at bottom of high score page could be optimized to not flicker so much
-> 7. I'm good with naming things I think, and Alley Anxiety somehow is not rolling off the tongue for me.  Is that a new or old name? What's wrong with Turmoil? Love that glowie logo though, it's a cool effect!
-> 8. The gameplay is cool.  Some issues I see, there's no way to really tell how much time you have to get to the diamonds before they move on you.  You can't focus on the blinks when you are shooting other things.  Seems to make for too much of a random death and hard to build up a skill for it..
-> 9. I wish as you were sweeping up and down the diamond didn't allow you to accidentally fly down the tunnel until you recentered the joystick and then pushed into the tunnel, then you'd have more control over it.  Right now you kind of usually accidentally fly down the wrong way half of the time
-> 10. If you accidentally go down a diamond tunnel, and want to escape instead, it's hard to find the center again.  I think there needs to be some kind of "deadband" zone around the center where if you are close enough to center and press up or down you just pop out.
-> 11. There needs to be some more dynamic elements of the game I think besides the diamond and the other ship that comes out.  Something off the top of my head that could be interesting... in the bottom left maybe randomly pick one of the symbols and if you get 3 of those in a row you turn invincible for a time?  Fun stuff with modifiers like that would be cool
+> 7. Suggestion: "I'm good with naming things I think, and Alley Anxiety somehow is not rolling off the tongue for me.  Is that a new or old name? What's wrong with Turmoil? Love that glowie logo though, it's a cool effect!"
+> 8. [Comment] The gameplay is cool.  Some issues I see, there's no way to really tell how much time you have to get to the diamonds before they move on you.  You can't focus on the blinks when you are shooting other things.  Seems to make for too much of a random death and hard to build up a skill for it..
+> 9. [Suggestion] I wish as you were sweeping up and down the diamond didn't allow you to accidentally fly down the tunnel until you recentered the joystick and then pushed into the tunnel, then you'd have more control over it.  Right now you kind of usually accidentally fly down the wrong way half of the time
+> 10. [Mostly fixed?] [Suggestion] If you accidentally go down a diamond tunnel, and want to escape instead, it's hard to find the center again.  I think there needs to be some kind of "deadband" zone around the center where if you are close enough to center and press up or down you just pop out.
+> 11. [Suggestion] There needs to be some more dynamic elements of the game I think besides the diamond and the other ship that comes out.  Something off the top of my head that could be interesting... in the bottom left maybe randomly pick one of the symbols and if you get 3 of those in a row you turn invincible for a time?  Fun stuff with modifiers like that would be cool
 @technobly#7837 
 
 69. sounds don't work right entering level until getting Diamond then they correct, have to dig.
