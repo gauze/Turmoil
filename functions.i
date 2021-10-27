@@ -1187,7 +1187,7 @@ no_ent_inst
                     tst      Vec_Counter_1 
                     bne      keepitgoing 
                     dec      hse_timeout 
-                    beq      doHSsave 
+                    beq      doHSsaveRestoreS
                     lda      #$FF 
                     sta      Vec_Counter_1 
 keepitgoing 
@@ -1195,7 +1195,9 @@ keepitgoing
                     puls     d 
                     std      Vec_Text_HW 
                     jmp      hs_loop 
-
+doHSsaveRestoreS:
+                    puls     d    				; otherwise stack is fukt
+                    std      Vec_Text_HW 
 doHSsave: 
 ;   hsentryXn = initials  hsentryXs = score
 ; tables  hsentryn_t      hsentrys_t   

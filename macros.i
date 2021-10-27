@@ -996,7 +996,7 @@ TATER
                     inc      Ship_Dead 
                     inc      Ship_Dead_Anim 
 					jsr      SFX_Dead
-;skipme
+
 no_hit 
                     endm     
 ;}}}
@@ -1124,6 +1124,7 @@ Xhit                dec      shipcnt                      ; lose one ship
                     sta      Ship_Dead_Cnt 
                     inc      Ship_Dead 
                     inc      Ship_Dead_Anim 
+					jsr      SFX_Dead
 not_in_alley 
 no_prize_score 
 donezo 
@@ -1730,7 +1731,7 @@ warp
                     lbne     cant_warp_in_alley 
                     ldb      warpdelay 
                     lbne     no_press                     ; too soon to warp again software debounce 
-                    pshs     a 
+;                    pshs     a 
                     jsr      Random 
                     anda     #%00000111 
                     cmpa     #7 

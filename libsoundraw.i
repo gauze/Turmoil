@@ -27,7 +27,7 @@ Use_Env             =        %10000         ; set bit 5 of a Vol reg to use env
 ;        5 - Voice 3 use Noise Generator On/Off
 ;        6-7 - unused
 ; MASK aliases for PSG_OnOff register only uses bits 0-5
-; use IMMEDIATE or with OR | operators,opcodes
+; use #IMMEDIATE or with OR | operators,opcodes
 ;
 Ch1_Tone_On         =        %00100000  
 Ch2_Tone_On         =        %00010000 
@@ -35,20 +35,20 @@ Ch3_Tone_On         =        %00001000
 Ch1_Noise_On        =        %00000100 
 Ch2_Noise_On        =        %00000010 
 Ch3_Noise_On        =        %00000001 
-; use IMMEDIATE or with AND & operators,opcodes
+; use #IMMEDIATE or with AND & operators,opcodes
 Ch1_Tone_Off        =        %00011111 
 Ch2_Tone_Off        =        %00101111 
 Ch3_Tone_Off        =        %00110111
 Ch1_Noise_Off       =        %00111011 
 Ch2_Noise_Off       =        %00111101 
 Ch3_Noise_Off       =        %00111110 
-; use IMMEDIATE or with OR | operators,opcodes
+; use #IMMEDIATE or with OR | operators,opcodes
 Ch_All_Tone_On      =        %00111000 
 Ch_All_Noise_On     =        %00000111 
-; use IMMEDIATE or with AND & operators,opcodes 
+; use #IMMEDIATE or with AND & operators,opcodes 
 Ch_All_Tone_Off     =        %00000111 
 Ch_All_Noise_Off    =        %00111000 
-; use IMMEDIATE  
+; use #IMMEDIATE  
 Ch_All_Off          =        %00000000 
-; use IMMEDIATE
+; use #IMMEDIATE
 Ch_All_On           =        %00111111 
