@@ -640,10 +640,10 @@ joystick_config:
                     sta      temp1 
                     lda      #$FF 
                     sta      Vec_Counter_1 
-                    lda      #0
+                    lda      #0 
                     sta      frm10cnt 
-					lda      shipspeed
-					deca      
+                    lda      shipspeed 
+                    deca     
                     sta      conf_box_index 
 ;                    inca     
 ;                    sta      shipspeed 
@@ -668,8 +668,8 @@ going_down_conf
                     lda      conf_box_index 
                     cmpa     #3                           ; 3 is lowest slot on screen !move 
                     beq      jsdoneYcal 
-                    inc      conf_box_index
-                    jsr      SFX_Bloop  
+                    inc      conf_box_index 
+                    jsr      SFX_Bloop 
 jsdoneYcal 
                     jsr      Read_Btns 
                     lda      Vec_Button_1_4 
@@ -939,7 +939,10 @@ fem_noformat
 ;}}}
 ;{{{ check_highscore_entry: see if score is high enough to get on board
 check_highscore_entry: 
-                    ldd      #$9411                       ; change refresh rate 
+;                    ldd      #$9411                       ; change refresh rate
+				  ldd      Vec_Rfrsh
+				  pshs     d 
+                    ldd      #$50C3                       ; 30hz 
                     std      Vec_Rfrsh 
 ; score compare see if we even need to do this
                     ldx      #hsentrys_t 
@@ -1158,15 +1161,16 @@ no2cntresetHS
                     dec      temp2 
                     lbne     no_ent_inst 
 show_inst 
-                    lda      frm2cnt 
-                    lbne     noshow_3 
+;                    lda      frm2cnt 
+;                    lbne     noshow_3 
                     lda      #-110 
                     ldb      #-120 
                     ldu      #press_btn3_text 
-                    PRINT_STR_D  
-noshow_3 
-                    lda      frm2cnt 
-                    lbeq     no_ent_inst 
+                    PRINT_STR_D 
+				  RESET0REF 
+;noshow_3 
+;                    lda      frm2cnt 
+;                    lbeq     no_ent_inst 
                     lda      hsentry_index 
                     cmpa     #3                           ; if at last hs_entry cursor idx, show different text. 
                     lbeq     change_btn4_text 
@@ -1187,7 +1191,7 @@ no_ent_inst
                     tst      Vec_Counter_1 
                     bne      keepitgoing 
                     dec      hse_timeout 
-                    beq      doHSsaveRestoreS
+                    beq      doHSsaveRestoreS 
                     lda      #$FF 
                     sta      Vec_Counter_1 
 keepitgoing 
@@ -1195,8 +1199,9 @@ keepitgoing
                     puls     d 
                     std      Vec_Text_HW 
                     jmp      hs_loop 
-doHSsaveRestoreS:
-                    puls     d    				; otherwise stack is fukt
+
+doHSsaveRestoreS: 
+                    puls     d                            ; otherwise stack is fukt 
                     std      Vec_Text_HW 
 doHSsave: 
 ;   hsentryXn = initials  hsentryXs = score
@@ -1313,6 +1318,8 @@ _fill_sloop1
                     sta      ee_game_mode 
                     jsr      eeprom_save 
 ;
+				  puls     d						; restore refresh to 50hz
+                    std      Vec_Rfrsh
                     rts      
 
 ;}}}
