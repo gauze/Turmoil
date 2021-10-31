@@ -16,6 +16,7 @@
 ; stuff that goes into RAM
                     include  "vars.i"                     ; RAM allocation starting at $C880 
                     include  "macros.i"                   ; inlined code to save jsr/rts cycles
+                    include  "freq.i"
 ;***************************************************************************
 ;{{{ HEADER SECTION
 ;***************************************************************************

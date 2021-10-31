@@ -940,8 +940,8 @@ fem_noformat
 ;{{{ check_highscore_entry: see if score is high enough to get on board
 check_highscore_entry: 
 ;                    ldd      #$9411                       ; change refresh rate
-				  ldd      Vec_Rfrsh
-				  pshs     d 
+                    ldd      Vec_Rfrsh 
+                    pshs     d 
                     ldd      #$50C3                       ; 30hz 
                     std      Vec_Rfrsh 
 ; score compare see if we even need to do this
@@ -1166,8 +1166,8 @@ show_inst
                     lda      #-110 
                     ldb      #-120 
                     ldu      #press_btn3_text 
-                    PRINT_STR_D 
-				  RESET0REF 
+                    PRINT_STR_D  
+                    RESET0REF  
 ;noshow_3 
 ;                    lda      frm2cnt 
 ;                    lbeq     no_ent_inst 
@@ -1317,9 +1317,13 @@ _fill_sloop1
                     lda      Super_Game 
                     sta      ee_game_mode 
                     jsr      eeprom_save 
+; for vectreme and ?? copy current highscore to Vec_High_Score
+                    ldx      #ee_hs1 
+                    ldy      #Vec_High_Score 
+                    COPY_STR  
 ;
-				  puls     d						; restore refresh to 50hz
-                    std      Vec_Rfrsh
+                    puls     d                            ; restore refresh to 50hz 
+                    std      Vec_Rfrsh 
                     rts      
 
 ;}}}
@@ -1396,6 +1400,10 @@ _fill_sloopee
                     sta      shipspeed 
                     lda      ee_game_mode 
                     sta      Super_Game 
+; for vectreme and ??
+                    ldx      #ee_hs1 
+                    ldy      #Vec_High_Score 
+                    COPY_STR  
                     rts      
 
 ;}}}
@@ -1590,4 +1598,6 @@ creditsdone
                     std      Vec_Text_HW 
                     rts      
 
+;}}}
+;{{{ set_hz
 ;}}}

@@ -3104,7 +3104,19 @@ LF8D5:              INCA
 LF8D6:              PULS     X,U                          ;Restore pointers and return 
                     endm     
 ;}}}
-
+;{{{ #COPY_STR copy a string, must be terminated with $80 #####################
+; usage: X is source, Y is destination, a is destroyed
+; ldx #source
+; ldy #destination
+; COPY_STR
+COPY_STR            macro
+                    local cpstrloop
+cpstrloop
+                    lda ,x+
+                    sta ,y+
+                    bpl cpstrloop
+                    endm
+;}}}
 
 ; CRAP MESSING WITH ARRAY MACRO
 LARRAY_X_A          macro    array, index 
