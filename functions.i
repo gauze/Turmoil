@@ -135,7 +135,7 @@ _no_add_lvl
 
 ;}}}
 ;{{{ gameover:   what to do when gameover #####################
-gameover:                                                 ;        #isfunction 
+gameover: 
                     lda      Demo_Mode 
                     bne      _no_chk_hs 
                     jsr      check_highscore_entry 
@@ -396,46 +396,47 @@ store_max_enemy_cnt
                     inc      shipcnt                      ; free ship 
 dundo_demo 
                     jsr      setuplevel 
+                    jsr      SfxInit 
                     rts      
 
 ;}}}
-;{{{ deathsplash: when you're dead *******************
-deathsplash: 
-                    clr      stallcnt 
-tempshipcnt         =        temp 
-deathloop 
-                    jsr      Wait_Recal 
-                    clr      Vec_Misc_Count 
-                    lda      #$80 
-                    sta      VIA_t1_cnt_lo 
-                    jsr      Intensity_7F 
+;{{{ deathsplash: when you're dead (currently never called) *******************
+; looks like this as intended to be called when your shit died which I am doing inline not
+; reuse for GAMEOVER??
+;deathsplash: 
+;                    clr      stallcnt 
+;tempshipcnt         =        temp 
+;deathloop 
+;                    jsr      Wait_Recal 
+;                    clr      Vec_Misc_Count 
+;                    lda      #$80 
+;                    sta      VIA_t1_cnt_lo 
+;                    jsr      Intensity_7F 
 ; dead
-;                    ldu      #deadstring 
-                    lda      #-20 
-                    ldb      #-10 
-                    jsr      Print_Str_d 
+;                    ldu      #deadstring                   
+;                    lda      #-20 
+;                    ldb      #-10 
+;                    jsr      Print_Str_d 
 ; ships left?
-                    lda      #-50 
-                    ldb      #65 
-                    MOVETO_D  
-                    lda      shipcnt                      ; vector draw ships remaining routine TEST 
-                    beq      no_ships 
-                    sta      tempshipcnt 
-ships_left_loop1 
-                    ldx      #Ship_Marker 
-                    DRAW_VLC  
-                    dec      tempshipcnt 
-                    bne      ships_left_loop1 
-no_ships 
-                    inc      stallcnt 
-                    lda      stallcnt 
-                    cmpa     #100                         ; 2 seconds 
-                    beq      donedeathloop 
-                    jmp      deathloop 
-
-donedeathloop 
-                    rts      
-
+;                    lda      #-50 
+;                    ldb      #65 
+;                    MOVETO_D  
+;                    lda      shipcnt                      ; vector draw ships remaining routine TEST 
+;                    beq      no_ships 
+;                    sta      tempshipcnt 
+;ships_left_loop1 
+;                   ldx      #Ship_Marker 
+;                    DRAW_VLC  
+;                    dec      tempshipcnt 
+;                    bne      ships_left_loop1 
+;no_ships 
+;                    inc      stallcnt 
+;                    lda      stallcnt 
+;                    cmpa     #100                         ; 2 seconds 
+;                    beq      donedeathloop 
+;                    jmp      deathloop 
+;donedeathloop 
+;                    rts      
 ;}}}
 ;{{{ titlescreen: RASTER shaky screen thing
 titleScreen: 
@@ -741,19 +742,20 @@ conf_done
 ;}}}
 ;{{{ game_select: select Classic or Super Game
 game_select: 
-                    lda      #10 
+                    lda      #10                          ; time out counters 
                     sta      temp1 
                     lda      #$FF 
                     sta      Vec_Counter_1 
-                    lda      #0 
-                    sta      conf_box_index 
+                    clra     
                     sta      frm10cnt 
+                    lda      Super_Game                   ; set counter to current game mode 
+                    sta      conf_box_index 
 gs_loop 
                     jsr      Wait_Recal 
                     jsr      Intensity_5F 
                     jsr      Do_Sound_FX_C1 
                     lda      frm10cnt 
-                    bne      gsdoneYcal 
+                    bne      gsdoneYcal                   ; every 10 frames check joystick move 
                     jsr      Joy_Digital 
                     nop      
                     lda      Vec_Joy_1_Y 
@@ -767,18 +769,18 @@ gs_loop
 
 going_down_gs 
                     lda      conf_box_index 
-                    cmpa     #1                           ; 3 is lowest slot on screen !move 
+                    cmpa     #1                           ; 1 is lowest slot on screen !move 
                     beq      gsdoneYcal 
                     jsr      SFX_Bloop 
                     inc      conf_box_index 
-gsdoneYcal 
+gsdoneYcal                                                ;        check 4 button, exist if pressed 
                     jsr      Read_Btns 
                     lda      Vec_Button_1_4 
                     beq      no_pressgs 
                     jsr      SFX_Pip 
                     jmp      gs_done 
 
-no_pressgs 
+no_pressgs                                                ;        print screen stuff here 
                     RESET0REF  
                     lda      #110 
                     ldb      #-81 
@@ -796,7 +798,7 @@ no_pressgs
                     lda      conf_box_index 
                     ldx      #cboxYpos_t 
                     lda      a,x 
-                    ldb      #-60 
+                    ldb      #-80 
                     MOVETO_D  
                     ldx      #Game_Sel_Box_nomode 
                     DRAW_VLC  
@@ -827,8 +829,7 @@ do_demogs           lda      #1
 
 gs_done 
                     lda      conf_box_index 
-                                                          ; inca 
-                    sta      Super_Game                   ; ship verical speed 
+                    sta      Super_Game 
                     rts      
 
 ;}}}
@@ -933,17 +934,17 @@ fem_done
                     jsr      eeprom_format                ; over writes entire eeprom 
                     jsr      eeprom_load                  ; reload so it updates internal vars 
                     jsr      fill_hs_tbl_eeprom           ; then copy to working buffer 
+;   add screen saying format successful?? on unsuccessful format would be misleading
+
 fem_noformat 
                     rts      
 
 ;}}}
 ;{{{ check_highscore_entry: see if score is high enough to get on board
 check_highscore_entry: 
-;                    ldd      #$9411                       ; change refresh rate
                     ldd      Vec_Rfrsh 
                     pshs     d 
-                    ldd      #$50C3                       ; 30hz 
-                    std      Vec_Rfrsh 
+					SET_REFRESH_30
 ; score compare see if we even need to do this
                     ldx      #hsentrys_t 
                     ldx      8,x                          ; check lowest entry 0-4 index w/ 1 left shift 
@@ -1276,7 +1277,9 @@ hsn_copy_loop
                     jmp      hs_test_loop 
 
 hs_check_done 
-; copy hsentrys_t and hsentryn_t to ee_hs_t & ee_hsn_t
+                    puls     d                            ; restore refresh to 50hz 
+                    std      Vec_Rfrsh 
+; copy hsentrys_t and hsentryn_t to ee_hs_t & ee_hsn_t        
 ; taken from fill_hs_tbl
 ; names
 write2eeprom:                                             ;#isfunction  
@@ -1322,8 +1325,6 @@ _fill_sloop1
                     ldy      #Vec_High_Score 
                     COPY_STR  
 ;
-                    puls     d                            ; restore refresh to 50hz 
-                    std      Vec_Rfrsh 
                     rts      
 
 ;}}}
