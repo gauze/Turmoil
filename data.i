@@ -507,7 +507,7 @@ starfield          fcb      -100,100
                                                           ; align $100 
 ;shippos_t          fcb      -3*ALLEYWIDTH,-2*ALLEYWIDTH,-1*ALLEYWIDTH,0,1*ALLEYWIDTH,2*ALLEYWIDTH,3*ALLEYWIDTH ; Y pos of ship 
 ; position of cursor
-cboxYpos_t          db       93,81,69,57                  ; position of select box for Joystick conf 
+cboxYpos_t          db       93,81,69,57,45                  ; position of select box for Joystick conf 
 eeboxYpos_t         db       83,71                        ; position of select box for Joystick conf 
 hsentrynYpos_t                                            ;        position of hs table 
 hsboxYpos_t         db       103,91,79,67,55,43,31        ; Y,X pos of hs initials entry cusor 
@@ -716,7 +716,7 @@ alleyanxietylogo_data:
 ; CONFIGURATION VALUES
 ; OPTIONS menu
 confopt_label       fcc      "CONFIGURATION OPTIONS",$80
-level_start_label   fcc      "LEVEL TO START AT",$80
+select_level_label   fcc      "SELECT LEVEL",$80
 ee_warn1_label      fcc      "THIS WILL ERASE HIGH",$80
 ee_warn2_label      fcc      "SCORES AND ALL SETTINGS",$80
 hs_reset_label      fcc      "ERASE EEPROM",$80
@@ -745,6 +745,12 @@ press_btn3_text     fcc      "BUTTON 3 TO BACKSPACE",$80
 press_btn4_text     fcc      "BUTTON 4 TO ENTER",$80
 finish_btn4_text    fcc      "BUTTON 4 TO FINISH",$80
 select_btn4_text    fcc      "BUTTON 4 TO SELECT",$80
+;
+;Level Select stuff
+ls_level_text       fcc      "01",$80   
+Score_50000         fcc      " 60000",$80
+;ls_tens_text        fcc      "0 ",$80
+;ls_ones_text        fcc      " 1",$80
 ;
 ; Demo button stuff
 demo_label          fcc      "         DEMO MODE        ",$80
@@ -782,7 +788,7 @@ thanks3             fcc      "THOMAS S, CHRIS PARSONS",$80
 thanks4             fcc      " ARCADE WEDNESDAY CREW ",$80
 thanks5             fcc      "   DER LUCHS, V.ROLI   ",$80
                     fcc      "SECRET GAME",$80
-credits             fcc      "PROGRAMMED BY GAUZE 2016-2020",$80 
+credits             fcc      "PROGRAMMED BY GAUZE 2016-2022",$80 
                     fcc      "DISASSEMBLED BY MALBAN",$6B
                     fcc      "KARRSOFT82LDMCBCJT82LDMCBCJ"
 ;}}}

@@ -35,15 +35,15 @@
                     fcc      $6E,$6E,$6F, $80             ; 3 solid blocks ending with $80 
                     fdb      $F850 
                     fcb      -$40, $23                    ; hight, width, rel y, rel x (from 0,0) 
-                    fcc      "-2020", $80                 ; more date
+                    fcc      "-2022", $80                 ; more date
                     db       0                            ; end of game header 
 ;                   bra restart ; TESTING skip intro to get right to it.  
 ;                  jsr      levelsplash  ; REMOVE to return to normal flow
 ;}}} 
-                    bra      introSplash 
+;                    bra      introSplash 
 
 ;***************************************************************************
-;{{{ MAGIC CARTHEADER SECTION
+;{{{ MAGIC CARTHEADER SECTION for vecfever
 ;      DO NOT CHANGE THIS STRUCT
 ;***************************************************************************
 ;                    ORG      $0030 
@@ -76,24 +76,24 @@ main                                                      ;        top of game l
                     SHIP_X_COLLISION_DETECT  
                     STALL_CHECK                           ; can't just sit in an open alley forever... 
                     ALLEY_TIMEOUT                         ; prevent alleys from respawning instantly 
-                    CHECK_LEVEL_DONE  
+                    CHECK_LEVEL_DONE                      ; check if level is over (all enemies killed) 
                     CHECK_SFX                             ; sound update 
                     jmp      main                         ; and repeat forever 
 
 ;}}}
 ;-----------------------------------------------------------------------------------
 ;{{{ must go at bottom or fills up RAM instead of ROM 
-                    include  "functions.i"                ; 
+                    include  "functions.i"                ; ...
                     include  "data.i"                     ; static data, shapes, tables, text
                     include  "libsoundraw.i"              ; quick sound effects routines
-                    include  "rawsounddata.i"
-                    include  "rawsoundroutines.i"         ; 
+                    include  "rawsounddata.i"             ; the data used by
+                    include  "rawsoundroutines.i"         ; the functions routing sounds to  3 channels
                     include  "rasterDraw.asm"             ; title screen from VIDE
                     include  "ymPlayer.i"                 ; for song under high score
                     include  "turmoil_ym.asm"             ; our data for above
                     include  "ds2431LowLevel.i"           ; high score save stuff
                     include  "ds2431HighLevel.i"          ; using DS2431+ 1 wire eeprom
-                    include  "eeprom.i"                   ; should be named eeprom.i oh well
+                    include  "eeprom.i"                   ; uses the 2 above 
                     include  "draw_synced_list.i"         ; from VIDE to, draw shapes with many vectors.
 end 
 ;}}}

@@ -8,6 +8,7 @@ INTRO_BOOT          macro                                 ; run once on cold or 
 introSplash 
                     lda      #1 
                     sta      Demo_Mode                    ; in Demo_Mode on boot 
+				  clr      select_level_flag
                     ldu      #ustacktemp 
                     stu      ustacktempptr                ; only do this once 
                     jsr      setup                        ; remove when done testing 
@@ -23,8 +24,7 @@ introSplash
 ;{{{ RESTART
 RESTART             macro    
 restart 
-                    ldd      #$3075 
-                    std      Vec_Rfrsh                    ; make sure we are at 50hz 
+				  SET_REFRESH_50
                     jsr      setup 
                     jsr      levelsplash 
                     lda      #0                           ; set stuff to zero 
@@ -38,7 +38,7 @@ restart
                     jsr      Clear_Score 
                     ldx      #running_score 
                     jsr      Clear_Score 
-                    lda      #3                           ; normally 5 FIX 
+                    lda      #3                          
                     sta      shipcnt 
                     lda      #$5F                         ; for high score input _ under scores _ 
                     sta      hstempstr 

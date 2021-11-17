@@ -5,6 +5,11 @@
 ;###########################################################################
 ;{{{ setup ;        setting up hardware, resetting scores, once per boot 
 setup: 
+                    lda      select_level_flag 
+                    bne      no_level_set 
+                    lda      #1 
+                    sta      level 
+no_level_set 
                     lda      #1                           ; enable 
                     sta      Vec_Joy_Mux_1_X 
                     lda      #3 
@@ -16,8 +21,6 @@ setup:
                     jsr      Clear_Score 
                     ldx      #running_score 
                     jsr      Clear_Score 
-                    lda      #1 
-                    sta      level 
                     bsr      setuplevel 
                     rts      
 
@@ -400,7 +403,7 @@ dundo_demo
                     rts      
 
 ;}}}
-;{{{ deathsplash: when you're dead (currently never called) *******************
+;{{{ deathsplash when you're dead (currently never called) *******************
 ; looks like this as intended to be called when your shit died which I am doing inline not
 ; reuse for GAMEOVER??
 ;deathsplash: 
@@ -533,9 +536,20 @@ gconf_loop
                     bra      gcdoneYcal 
 
 going_down_gconf 
+                    ldx      #Vec_High_Score 
+                    ldu      #Score_50000 
+                    jsr      Compare_Score 
+                    cmpa     #1 
+                    bne      dontallow4slots 			
+                    lda      conf_box_index 
+                    cmpa     #4                           ; 4 is lowest slot on screen !move 
+                    beq      gcdoneYcal 
+				  bra      dolsinc
+dontallow4slots 
                     lda      conf_box_index 
                     cmpa     #3                           ; 3 is lowest slot on screen !move 
                     beq      gcdoneYcal 
+dolsinc
                     inc      conf_box_index 
                     jsr      SFX_Bloop 
 gcdoneYcal 
@@ -566,9 +580,19 @@ no_press_gcal
                     ldb      #-60 
                     ldu      #return_text 
                     jsr      Print_Str_d 
+                    ldx      #Vec_High_Score              ; only show level select option if HS over 50k 
+                    ldu      #Score_50000 
+                    jsr      Compare_Score 
+                    cmpa     #1 
+                    bne      dontshowls 
+                    lda      #40 
+                    ldb      #-80 
+                    ldu      #select_level_label 
+                    jsr      Print_Str_d 
+dontshowls 
                     RESET0REF  
                     lda      conf_box_index 
-                    ldx      #cboxYpos_t 
+                    ldx      #cboxYpos_t                  ; add to cboxYpos_t for additonal menu entries 
                     lda      a,x 
                     ldb      #-79 
                     MOVETO_D  
@@ -624,10 +648,14 @@ gctrynext2
                     jmp      gckeep_running 
 
 gctrynext3 
-                    cmpa     #3                           ; RETURN 
-                    bne      gckeep_running 
-                    rts                                   ; return to main loop 
+                    cmpa     #3 
+                    bne      gctrynext4 
+                    rts                                   ; exit! return to main 
 
+gctrynext4 
+                    cmpa     #4 
+                    bne      gckeep_running 
+                    jsr      select_level 
 gckeep_running 
                     jmp      general_config 
 
@@ -935,8 +963,116 @@ fem_done
                     jsr      eeprom_load                  ; reload so it updates internal vars 
                     jsr      fill_hs_tbl_eeprom           ; then copy to working buffer 
 ;   add screen saying format successful?? on unsuccessful format would be misleading
-
 fem_noformat 
+                    rts      
+
+;}}}
+;{{{ select_level: select level?
+select_level: 
+                    lda      #10                          ; time out counters 
+                    sta      temp1 
+                    lda      #$FF 
+                    sta      Vec_Counter_1 
+                    clra     
+                    sta      frm5cnt 
+                    lda      #1                           ; set counter lvl 1 
+                    sta      conf_box_index 
+                    sta      select_level_flag 
+                    ldd      ls_level_text 
+                    std      ls_tens_tmp 
+                    lda      #$80 
+                    sta      ls_level_term 
+ls_loop 
+                    jsr      Wait_Recal 
+                    jsr      Intensity_5F 
+                    jsr      Do_Sound_FX_C1 
+                    lda      frm5cnt 
+                    bne      lsdoneYcal                   ; every 10 frames check joystick move 
+                    jsr      Joy_Digital 
+                    nop      
+                    lda      Vec_Joy_1_Y 
+                    beq      lsdoneYcal                   ; no Y motion 
+                    bmi      going_down_ls 
+                    lda      conf_box_index               ; stick going UP so increment level, if ... 
+                    cmpa     #99 
+                    beq      lsdoneYcal                   ; 99 highest level, bail out 
+                    inc      conf_box_index 
+                    lda      ls_ones_tmp                  ; ones digit 
+                    cmpa     # '9'
+                    beq      ls_tens_inc 
+                    inca     
+                    sta      ls_ones_tmp                  ; ones digit 
+                    jmp      done_ls_ones_inc 
+
+ls_tens_inc 
+                    inc      ls_tens_tmp 
+                    lda      # '0'
+                    sta      ls_ones_tmp 
+done_ls_ones_inc 
+                    jsr      SFX_Bloop 
+                    bra      lsdoneYcal 
+
+going_down_ls 
+                    lda      conf_box_index 
+                    cmpa     #1                           ; 1 is lowest slot on screen !move 
+                    beq      lsdoneYcal 
+                    jsr      SFX_Bloop 
+                    dec      conf_box_index 
+                    lda      ls_ones_tmp 
+                    cmpa     # '0'
+                    beq      ls_tens_dec 
+                    dec      ls_ones_tmp 
+                    jmp      lsdoneYcal 
+
+ls_tens_dec 
+                    dec      ls_tens_tmp 
+                    lda      # '9'
+                    sta      ls_ones_tmp 
+lsdoneYcal                                                ;        check 4 button, exist if pressed 
+                    jsr      Read_Btns 
+                    lda      Vec_Button_1_4 
+                    beq      no_pressls 
+                    jsr      SFX_Pip 
+                    jmp      ls_done 
+
+no_pressls                                                ;        print screen stuff here 
+                    RESET0REF  
+                    lda      #110 
+                    ldb      #-81 
+                    ldu      #select_level_label 
+                    jsr      Print_Str_d 
+                    lda      #90 
+                    ldb      #-16 
+                    ldu      #ls_tens_tmp 
+                    jsr      Print_Str_d 
+                    RESET0REF  
+                    lda      #-120 
+                    ldb      #-120 
+                    ldu      #finish_btn4_text 
+                    jsr      Print_Str_d 
+                    lda      #5 
+                    inc      frm5cnt                      ; internal frame counter stuff got joystick/button handling 
+                    cmpa     frm5cnt 
+                    bne      no5cntresetLS 
+                    clr      frm5cnt 
+no5cntresetLS 
+                    jsr      Dec_3_Counters               ; timeout counter stuff 
+                    tst      Vec_Counter_1 
+                    bne      lskeepgoing 
+                    dec      temp1 
+                    beq      do_demols 
+                    lda      #$FF 
+                    sta      Vec_Counter_1 
+lskeepgoing 
+                    lbra     ls_loop 
+
+do_demols           lda      #1                           ; no user input don't save 
+                    sta      Demo_Mode 
+                    jmp      restart 
+
+ls_done 
+                    lda      conf_box_index               ; save 'em 
+                    sta      level                        ; will use this value next time you start the game 
                     rts      
 
 ;}}}
@@ -944,7 +1080,7 @@ fem_noformat
 check_highscore_entry: 
                     ldd      Vec_Rfrsh 
                     pshs     d 
-					SET_REFRESH_30
+                    SET_REFRESH_30  
 ; score compare see if we even need to do this
                     ldx      #hsentrys_t 
                     ldx      8,x                          ; check lowest entry 0-4 index w/ 1 left shift 

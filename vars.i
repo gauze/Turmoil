@@ -12,15 +12,19 @@
                     org      $C880                        ; start of our ram space 
 ; game basics
 score               ds       7                            ; 7 bytes 
-running_score       ds       7                            ; 7 bytes used for animation of score.
+running_score       ds       7                            ; 7 bytes used for animation of score. 
 ;highscore           ds       7                            ; 7 bytes ;use built in instead.
 level               ds       1                            ; only does levels 1-99 then shows Infinity sign after that 
 shipcnt             ds       1                            ; ships in reserve before GameOver 
 smartbombcnt        ds       1                            ; only in Super_Game 
 ; game option selector vars
 conf_box_index      ds       1                            ; configuration selector 
-hs_box_Yindex       ds       1                            ; highscore input character selector, grid
+hs_box_Yindex       ds       1                            ; highscore input character selector, grid 
 hs_box_Xindex       ds       1 
+ls_tens_tmp         ds       1 
+ls_ones_tmp         ds       1
+ls_level_term       ds       1 
+select_level_flag   ds       1
 ;
 ; your ship related variables, X,Y position and direction facing L/R, and number left
 shipspeed           ds       1                            ; vertical speed, selected by user 
@@ -208,10 +212,9 @@ ee_hsn3             ds       4
 ee_hsn4             ds       4 
 ee_hsn5             ds       4 
 ; use this for OPTIONS  7 bytes total
-ee_shipspeed        ds       1 						; 1-4 faster to slower
-ee_game_mode        ds       1 						; bool 1=Super game | 0=classic 
-ee_filler           ds       5 						; filler so it's exactly 63 bytes long, plus checksum digit
-                         
+ee_shipspeed        ds       1                            ; 1-4 faster to slower 
+ee_game_mode        ds       1                            ; bool 1=Super game | 0=classic 
+ee_filler           ds       5                            ; filler so it's exactly 63 bytes long, plus checksum digit 
 ;          
 ; ymplayer ram and USE_ENVELOPES flag, * ok for top of RAM
 ym_ram              equ      * 
