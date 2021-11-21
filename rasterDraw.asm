@@ -1,5 +1,3 @@
-; vim: ts=4 syntax=asm6809 foldmethod=marker
-; credit: by MALBAN
 ; expects width strength to be set to the default bios location Vec_Text_Width
 ; expects height strength to be set to the default bios location Vec_Text_Height
 ; address of raster data is expected in U
@@ -138,7 +136,7 @@ dummy2:
                     lda Vec_Counter_2                     ; width of one line 
                     sta Vec_Counter_3                     ; reset output counter 
                     inc <VIA_port_b                       ; disable mux 
-                    jmp nextForwardLine                   ; go back for next scan line 
+                    bra nextForwardLine                   ; go back for next scan line 
 
 exit_raster_late: 
                     lda #$98                              ; EXIT routine 

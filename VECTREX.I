@@ -1,4 +1,5 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; this file contains includes for vectrex BIOS functions and variables      ;
 ; it was written by Bruce Tomlin, slighte changed by Malban                 ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -111,7 +112,7 @@ Vec_NMI_Vector  EQU     $CBFB   ;SWI/NMI interrupt vector (3 bytes)
 Vec_Cold_Flag   EQU     $CBFE   ;Cold start flag (warm start if = $7321)
                                 ;
 VIA_port_b      EQU     $D000   ;VIA port B data I/O register
-*       0 sample/hold (0=enable mux         1=disable mux)
+*       0 sample/hold (0=enable  mux 1=disable mux)
 *       1 mux sel 0
 *       2 mux sel 1
 *       3 sound BC1

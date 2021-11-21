@@ -441,12 +441,13 @@ dundo_demo
 ;donedeathloop 
 ;                    rts      
 ;}}}
-;{{{ titlescreen: RASTER shaky screen thing
+;{{{ titlescreen:  shaky screen thing
 titleScreen: 
 titlesfxcnt         =        temp 
+logobrightness      =        temp2
                     lda      #-1                          ; high bit set by any negative number 
                     sta      Vec_Expl_Flag                ; set high bit for Explosion flag 
-                    lda      #-45                         ; init values above tsmain 
+                    lda      #-64                         ; init values above tsmain 
                     sta      shipXpos 
                     lda      #10 
                     sta      shipYpos 
@@ -454,15 +455,19 @@ titlesfxcnt         =        temp
                     sta      titlesfxcnt 
                     ldu      ustacktempptr                ; save text w/h to stack 
                     ldd      Vec_Text_HW 
-                                                          ; LDB Vec_Text_Width 
+                                                          
                     pshu     d 
                     stu      ustacktempptr 
+				  clr      logobrightness
 _tsmain 
                     jsr      DP_to_C8                     ; DP to RAM 
                     ldu      #LOGOEXP                     ; point to explosion table entry 
                     jsr      Explosion_Snd 
-                    jsr      Wait_Recal                   ; Vectrex BIOS recalibration 
-                    jsr      Intensity_5F                 ; Sets the intensity of the 
+                    jsr      Wait_Recal                   ; Vectrex BIOS recalibration
+				  lda      logobrightness
+				  adda     #32
+				  sta      logobrightness 
+                    jsr      Intensity_a                 ; Sets the intensity of the 
                                                           ; vector beam to $5f 
                     jsr      Do_Sound 
                     lda      titlesfxcnt 
@@ -475,7 +480,8 @@ _tsmain
                     sta      Vec_Text_Height 
                     lda      #$40 
                     sta      Vec_Text_Width 
-                    ldu      #alleyanxietylogo_data 
+;                    ldu      #alleyanxietylogo_data
+				  ldu      #AALogo2021_data 
                     jsr      draw_raster_image 
                     lda      shipYpos                     ; jiggle animation logic 
                     cmpa     #10 
