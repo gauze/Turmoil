@@ -21,9 +21,8 @@ no_level_set
                     jsr      Clear_Score 
                     ldx      #running_score 
                     jsr      Clear_Score 
-                    bsr      setuplevel 
-                    rts      
-
+;                    bsr      setuplevel 
+;                    rts      
 setuplevel: 
                     ldd      #$FC50 
                     std      Vec_Text_HW 
@@ -159,7 +158,9 @@ levelsplash:
 ; for 3D ship use 
 Y_3d=temp1 
 bright3d=temp2 
-scale3d=temp3 
+scale3d=temp3
+                    lda      #-1                          ; high bit set by any negative number 
+                    sta      Vec_Expl_Flag                ; set high bit for Explosion flag  
                     ldd      #0 
                     std      temp 
                     std      temp2 
@@ -172,6 +173,9 @@ scale3d=temp3
                     lda      Demo_Mode 
                     lbne     dundo_demo 
 splashloop 
+                    jsr      DP_to_C8                     ; DP to RAM 
+                    ldu      #EXP4                     ; point to explosion table entry 
+                    jsr      Explosion_Snd  
                     jsr      Wait_Recal 
                     clr      Vec_Misc_Count 
                     lda      #$80                         ; scale 128 
@@ -381,6 +385,7 @@ top2ok
                     lda      stallcnt 
                     cmpa     #100 
                     beq      donesplash 
+				  jsr      Do_Sound
                     lbra     splashloop 
 
 donesplash 
@@ -398,6 +403,7 @@ store_max_enemy_cnt
                     sta      enemylvlcnt 
                     inc      shipcnt                      ; free ship 
 dundo_demo 
+				  jsr      Clear_Sound
                     jsr      setuplevel 
                     jsr      SfxInit 
                     rts      
@@ -444,7 +450,7 @@ dundo_demo
 ;{{{ titlescreen:  shaky screen thing
 titleScreen: 
 titlesfxcnt         =        temp 
-logobrightness      =        temp2
+logobrightness      =        temp2 
                     lda      #-1                          ; high bit set by any negative number 
                     sta      Vec_Expl_Flag                ; set high bit for Explosion flag 
                     lda      #-64                         ; init values above tsmain 
@@ -455,20 +461,23 @@ logobrightness      =        temp2
                     sta      titlesfxcnt 
                     ldu      ustacktempptr                ; save text w/h to stack 
                     ldd      Vec_Text_HW 
-                                                          
                     pshu     d 
                     stu      ustacktempptr 
-				  clr      logobrightness
+                    clr      logobrightness 
 _tsmain 
                     jsr      DP_to_C8                     ; DP to RAM 
                     ldu      #LOGOEXP                     ; point to explosion table entry 
                     jsr      Explosion_Snd 
-                    jsr      Wait_Recal                   ; Vectrex BIOS recalibration
-				  lda      logobrightness
-				  adda     #32
-				  sta      logobrightness 
-                    jsr      Intensity_a                 ; Sets the intensity of the 
-                                                          ; vector beam to $5f 
+                    jsr      Wait_Recal                   ; Vectrex BIOS recalibration 
+
+                    lda      logobrightness               ; fade logo in
+				  cmpa     #127
+				  beq      fullbright
+				  inc      logobrightness
+fullbright
+                    jsr      Intensity_a                  ; Sets the intensity of the 
+
+                                                        
                     jsr      Do_Sound 
                     lda      titlesfxcnt 
                     beq      _tsdone 
@@ -481,8 +490,11 @@ _tsmain
                     lda      #$40 
                     sta      Vec_Text_Width 
 ;                    ldu      #alleyanxietylogo_data
-				  ldu      #AALogo2021_data 
-                    jsr      draw_raster_image 
+                    ldu      #AALogo2021_data 
+                    jsr      draw_raster_image
+                    lda      logobrightness               ; check if logo is full bright if not don't shake yet
+				  cmpa     #127
+				  bne      notfullbrightyet 
                     lda      shipYpos                     ; jiggle animation logic 
                     cmpa     #10 
                     beq      _incYPOS 
@@ -491,6 +503,7 @@ _tsmain
 
 _incYPOS 
                     inc      shipYpos 
+notfullbrightyet
                     bra      _tsmain                      ; and repeat forever 
 
 _tsdone 
@@ -546,16 +559,17 @@ going_down_gconf
                     ldu      #Score_50000 
                     jsr      Compare_Score 
                     cmpa     #1 
-                    bne      dontallow4slots 			
+                    bne      dontallow4slots 
                     lda      conf_box_index 
                     cmpa     #4                           ; 4 is lowest slot on screen !move 
                     beq      gcdoneYcal 
-				  bra      dolsinc
+                    bra      dolsinc 
+
 dontallow4slots 
                     lda      conf_box_index 
                     cmpa     #3                           ; 3 is lowest slot on screen !move 
                     beq      gcdoneYcal 
-dolsinc
+dolsinc 
                     inc      conf_box_index 
                     jsr      SFX_Bloop 
 gcdoneYcal 
@@ -1744,3 +1758,33 @@ creditsdone
 ;}}}
 ;{{{ set_hz
 ;}}}
+
+
+;; from RUM commented out;CURVY    LDD       #$8118         ;DRAW CURVED LINE FROM UPDATE TABLE <----
+
+CURVY:    LDD       #$8118         ;DRAW CURVED LINE FROM UPDATE TABLE <----
+         STA       VIA_port_b
+         STB       VIA_aux_cntl           ;U - REG IS POINTER
+         BRA       RAINY
+JELLO    STB       VIA_port_b           ;FORMAT- Y,ON/OFF,X,X,X
+         STA       VIA_shift_reg             ; 0 GOES TO NEXT Y, ADDIT. 0 ENDS
+JALLO    LDA       ,U+
+         BEQ       BRAINY         ;UPDATING X-VALUES
+         STA       VIA_port_a
+         BRA       JALLO
+BRAINY   LDB       #$81           ;RAMP OFF
+         STB       VIA_port_b
+         STA       VIA_shift_reg            ;VID OFF
+RAINY    LDA       ,U+           ;NEXT Y
+         BEQ       JFIN           ;IF DONE
+         STA       VIA_port_a            ;IF GOOD Y VAL
+         DECB
+         STB       VIA_port_b           ;BEGIN S/H
+         LDD       ,U++          ;A=VID ENBL, B=NEXT X
+         INC       VIA_port_b           ;Y S/H DONE
+         STB       VIA_port_a
+         LDB       #$01
+         BRA       JELLO
+JFIN     LDA       #$98
+         STA       VIA_aux_cntl            ;PUT BACK
+         RTS

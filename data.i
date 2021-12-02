@@ -3,6 +3,9 @@
 ; VECTOR GRAPHICS LIST DATA
 ;***************************************************************************
 ;{{{ BOXES AROUND MENU SELECTIONS []
+Tank_69
+				fcb 1, 1
+				fcb 10, 21 , 36 ,40, 1,60,70,1,90,100, -90,-1,-90,-95,-1,-20, -10, 127, 0 ; 0 = end
 Letter_Select_nomode 
                     fcb      3 
                     fcb      0, +12 
@@ -116,12 +119,12 @@ ShipIn3D_1:
 ;                    fcb      2,0,10 
 ;                    fcb      1 
 ; number of guys left 
-Ship_Marker:                                              ;        UNUSED but makes assembly fail LEAVE IT 
-                    fcb      3 
-                    fcb      -7, +0 
-                    fcb      +9, +3 
-                    fcb      -9, +3 
-                    fcb      +7, +0 
+;Ship_Marker:                                              ;        UNUSED but makes assembly fail LEAVE IT 
+;                    fcb      3 
+;                    fcb      -7, +0 
+;                    fcb      +9, +3 
+;                    fcb      -9, +3 
+;                    fcb      +7, +0 
 ;{{{ Enemy lists
 Arrow_R_1: 
                     fcb      0, -5, 0 
@@ -656,7 +659,7 @@ Wedge_R_t           fdb      Wedge_R_1, Wedge_R_2, Wedge_R_3, Wedge_R_2
 Demo_Label_t        fdb      demo_label, press_btn4_start_text, press_btn2_conf_text , press_btn1_hs_text 
 default_name_t      fdb      default_name0,default_name1,default_name2,default_name3,default_name4 
 default_high_t      fdb      default_high0,default_high1,default_high2,default_high3,default_high4 
-thanks_t            fdb      thanks0,thanks1,thanks2,thanks3,thanks4, thanks5 
+thanks_t            fdb      thanks0,thanks1,thanks2,thanks3,thanks4,thanks5 
 ;}}}
 ;##################################################################################
 ; SOUND data SOUND SOUND SOUND SOUND
@@ -666,6 +669,7 @@ LOGOEXP             db       $15,$00,$01,$01
 EXP1                db       $19,$3F,$00,$02 
 EXP2                db       $3F,$00,$00,$01 
 EXP3                db       $01,-1,1,$04 
+EXP4                db       $3F,$01,$00,$01
 ; REST OF SOUND DATA IN rawsounddata.i
 ;########################################################################
 ;{{{ RASTER GRAPHICS DATA

@@ -41,7 +41,6 @@
 ;                  jsr      levelsplash  ; REMOVE to return to normal flow
 ;}}} 
 ;                    bra      introSplash 
-
 ;***************************************************************************
 ;{{{ MAGIC CARTHEADER SECTION for vecfever
 ;      DO NOT CHANGE THIS STRUCT
@@ -56,9 +55,21 @@
 ;{{{ CODE SECTION
 ;***************************************************************************  
                     INTRO_BOOT                            ; runs ONCE per boot 
-                    RESTART                               ; jump here on game restart 
-main                                                      ;        top of game loop 
-                    WAIT_RECAL  
+;                    RESTART                               ; jump here on game restart 
+main
+; TEST area                                                      ;        top of game loop 
+                    WAIT_RECAL
+                    lda      #127 
+                    sta      VIA_t1_cnt_lo                ; controls "scale" 
+				  jsr Intensity_7F
+				  clra
+				  clrb
+				  MOVETO_D
+				  jsr Dot_here
+				  ldu  #Tank_69
+				  jsr  CURVY  
+				  jmp main
+;
                     READ_JOYSTICK  
                     DRAW_LINE_WALLS  
                     DRAW_SHIP  
@@ -78,6 +89,8 @@ main                                                      ;        top of game l
                     ALLEY_TIMEOUT                         ; prevent alleys from respawning instantly 
                     CHECK_LEVEL_DONE                      ; check if level is over (all enemies killed) 
                     CHECK_SFX                             ; sound update 
+;                    ldu      #Tank_69 
+;                    jsr      CURVY                        ; testing commented out RUM code ?? 
                     jmp      main                         ; and repeat forever 
 
 ;}}}

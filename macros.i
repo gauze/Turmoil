@@ -8,7 +8,7 @@ INTRO_BOOT          macro                                 ; run once on cold or 
 introSplash 
                     lda      #1 
                     sta      Demo_Mode                    ; in Demo_Mode on boot 
-				  clr      select_level_flag
+                    clr      select_level_flag 
                     ldu      #ustacktemp 
                     stu      ustacktempptr                ; only do this once 
                     jsr      setup                        ; remove when done testing 
@@ -24,7 +24,7 @@ introSplash
 ;{{{ RESTART
 RESTART             macro    
 restart 
-				  SET_REFRESH_50
+                    SET_REFRESH_50  
                     jsr      setup 
                     jsr      levelsplash 
                     lda      #0                           ; set stuff to zero 
@@ -38,7 +38,7 @@ restart
                     jsr      Clear_Score 
                     ldx      #running_score 
                     jsr      Clear_Score 
-                    lda      #3                          
+                    lda      #3 
                     sta      shipcnt 
                     lda      #$5F                         ; for high score input _ under scores _ 
                     sta      hstempstr 
@@ -95,23 +95,20 @@ scale_done
                     clr      shipXpos 
                     clr      In_Alley 
 change_dir 
-				  lda     Ship_Dead_Cnt
-				  cmpa    #0
-				  beq     dontplaysound
-			      jsr      SFX_Undead
-dontplaysound
-				  clr      shipXpos				   ; recenter ship to center if in alley
+                    lda      Ship_Dead_Cnt 
+                    cmpa     #0 
+                    beq      dontplaysound 
+                    jsr      SFX_Undead 
+dontplaysound 
+                    clr      shipXpos                     ; recenter ship to center if in alley 
                     clr      Ship_Dead_Anim 
                     clr      Ship_Dead_Cnt                ; don't let it go minus. UNSIGNED 
-		  
                     CHECK_GAMEOVER  
 shitballs 
-				  
                     ldx      #ShipL_nomode 
                     ldb      shipdir                      ; testing for 0|LEFT 1|RIGHT 
                     beq      _donuthin1 
                     ldx      #ShipR_nomode 
-
 _donuthin1 
                     DRAW_VLC                              ; jsr Draw_VLc ;_mode 
                     endm     
@@ -961,23 +958,22 @@ SHIP_Y_COLLISION_DETECT  macro
                     lda      Ship_Dead                    ; if Ship_Dead do not do collision routine 
                     bne      no_hit 
                     lda      In_Alley 
-                    bne      no_hit 				; can't hit moving horizontal
+                    bne      no_hit                       ; can't hit moving horizontal 
+
                     lda      shipYpos 
                     lsla     
                     ldx      #alleye_t 
-                                                          ;ldx a,x 
-                    lda      [a,x] 
-                    beq      no_hit 
-                    lda      shipYpos 
-                    lsla     
-                    ldx      #alleyx_t 
-                                                          ;ldx a,x 
+                    ldb      [a,x] 
+                    beq      no_hit 					   ; don't check no enemy in our alley
+;                    lda      shipYpos 
+;                    lsla     						   ; a hasn't changed
+                    ldx      #alleyx_t  
                     ldb      [a,x] 
                     jsr      Abs_b 
                     cmpb     #15                          ; trial and error 
                     bgt      no_hit 
                     dec      shipcnt                      ; lose one ship 
-                    clrb     
+                    clrb    						   ; set b to 0 to clr  
                     lda      shipYpos                     ; clear e exist flag for this alley, ie destroy it 
                     lsla     
                     ldx      #alleye_t 
@@ -995,8 +991,7 @@ TATER
                     sta      Ship_Dead_Cnt 
                     inc      Ship_Dead 
                     inc      Ship_Dead_Anim 
-					jsr      SFX_Dead
-
+                    jsr      SFX_Dead 
 no_hit 
                     endm     
 ;}}}
@@ -1124,7 +1119,7 @@ Xhit                dec      shipcnt                      ; lose one ship
                     sta      Ship_Dead_Cnt 
                     inc      Ship_Dead 
                     inc      Ship_Dead_Anim 
-					jsr      SFX_Dead
+                    jsr      SFX_Dead 
 not_in_alley 
 no_prize_score 
 donezo 
@@ -1994,10 +1989,10 @@ no_new_enemy
 ;                    ldb      #$01 
 ;                    stb      <VIA_port_b                  ;disable mu 
 ;                    endm     
-RESET0REF           macro
-					ldb      #$CC
-                    stb      <VIA_cntl
-                    endm
+RESET0REF           macro    
+                    ldb      #$CC 
+                    stb      <VIA_cntl 
+                    endm     
 ;}}}
 ;{{{ MOVETO_D
 MOVETO_D            macro    
@@ -2085,7 +2080,7 @@ rev_shipdir
                     inc      shipYpos 
                     jmp      jsdone 
 
-not_demo_rjs                                              ; End of Demo_mode! 
+not_demo_rjs                                              ;        End of Demo_mode! 
                     lda      shipspeed                    ; user defined joystick speed 
                     lsla     
                     ldx      #speed_t 
@@ -2096,7 +2091,7 @@ not_demo_rjs                                              ; End of Demo_mode!
                     bne      jsdoneY                      ; disable Y position poll 
                     lda      Vec_Joy_1_Y 
                     beq      jsdoneY                      ; no Y motion 
-                    bmi      going_down 					; 
+                    bmi      going_down                   ; 
                     lda      shipYpos 
                     cmpa     #6                           ; slot 6 as far up as u can go don't move 
                     beq      jsdoneY 
@@ -2137,29 +2132,28 @@ going_right1
 
 going_left1 
                     lda      #LEFT 
-                    sta      shipdir  
+                    sta      shipdir 
                     suba     #8 
                     sta      shipXpos 
                     bra      jsdoneX 
 
 nope_prize 
 already_in 
-
                     lda      Vec_Joy_1_X 
-                    beq      jsdoneX 					; no X dat bail
-                    bmi      going_left 					; hi bit set going left, no high bit going right.
+                    beq      jsdoneX                      ; no X dat bail 
+                    bmi      going_left                   ; hi bit set going left, no high bit going right. 
 going_right 
                     lda      #RIGHT 
                     sta      shipdir 
                     lda      In_Alley 
                     beq      setRightDone 
-                    lda      #4 						; toy with this? (was 4)
+                    lda      #4                           ; toy with this? (was 4) 
                     adda     shipXpos 
-                    bvs      setMaxRight 				; bvs == branch on overflow set
+                    bvs      setMaxRight                  ; bvs == branch on overflow set 
 ;  centering code here
                     tsta     
                     bpl      setRightDone 
-                    cmpa     #-7 						; toy with this?
+                    cmpa     #-7                          ; toy with this? 
                     blt      setRightDone 
                     clr      In_Alley 
                     clra                                  ; saved to shipXpos later 
@@ -2179,7 +2173,7 @@ going_left
                     beq      setLeftDone 
                     lda      shipXpos 
                     suba     #4 
-                    bvs      setMaxLeft 					; branch on overflow set
+                    bvs      setMaxLeft                   ; branch on overflow set 
 ; centering code here 
                     tsta     
                     bmi      setLeftDone 
@@ -3109,26 +3103,25 @@ LF8D6:              PULS     X,U                          ;Restore pointers and 
 ; ldx #source
 ; ldy #destination
 ; COPY_STR
-COPY_STR            macro
-                    local cpstrloop
-cpstrloop
-                    lda ,x+
-                    sta ,y+
-                    bpl cpstrloop
-                    endm
+COPY_STR            macro    
+                    local    cpstrloop 
+cpstrloop 
+                    lda      ,x+ 
+                    sta      ,y+ 
+                    bpl      cpstrloop 
+                    endm     
 ;}}}
-
 ; CRAP MESSING WITH ARRAY MACRO
 LARRAY_X_A          macro    array, index 
-				  local    
-                    lda      index  
+                    local    
+                    lda      index 
                     ldx      array 
                     lsla     
-                    ldx      a,x                  
-				  endm
-ARRAY_X_A          macro    array, index 
-				  local    
-                    lda      index  
-                    ldx      array    
-                    lda      a,x                  
-				  endm
+                    ldx      a,x 
+                    endm     
+ARRAY_X_A           macro    array, index 
+                    local    
+                    lda      index 
+                    ldx      array 
+                    lda      a,x 
+                    endm     
