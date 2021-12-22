@@ -12,11 +12,11 @@
 ; DEFINE SECTION
 ;***************************************************************************
 ; load vectrex bios routine definitions
-                    include  "VECTREX.I"                  ; vectrex bios function include
+                    include  "include/VECTREX.I"                  ; vectrex bios function include
 ; stuff that goes into RAM
-                    include  "vars.i"                     ; RAM allocation starting at $C880 
-                    include  "macros.i"                   ; inlined code to save jsr/rts cycles
-                    include  "freq.i"
+                    include  "include/vars.i"                     ; RAM allocation starting at $C880 
+                    include  "include/macros.i"                   ; inlined code to save jsr/rts cycles
+                    include  "include/freq.i"                     ; refresh rates macros
 ;***************************************************************************
 ;{{{ HEADER SECTION
 ;***************************************************************************
@@ -55,21 +55,27 @@
 ;{{{ CODE SECTION
 ;***************************************************************************  
                     INTRO_BOOT                            ; runs ONCE per boot 
-;                    RESTART                               ; jump here on game restart 
-main
+                    RESTART                               ; jump here on game restart 
+main 
+                    WAIT_RECAL  
 ; TEST area                                                      ;        top of game loop 
-                    WAIT_RECAL
-                    lda      #127 
-                    sta      VIA_t1_cnt_lo                ; controls "scale" 
-				  jsr Intensity_7F
-				  clra
-				  clrb
-				  MOVETO_D
-				  jsr Dot_here
-				  ldu  #Tank_69
-				  jsr  CURVY  
-				  jmp main
-;
+;                    lda      #10 
+;                    sta      VIA_t1_cnt_lo                ; controls "scale" 
+;                  jsr Intensity_7F
+;                  clrd
+;                  MOVETO_D
+;                  jsr Dot_here
+;                  ldu  #Tank_69
+;                  jsr  CURVY 
+;                  clrd
+;                  MOVETO_D
+;                  jsr Dot_here
+;                  ldu  #Tank_70
+;				jsr draw_curved_line
+;                  jsr  CURVY 
+ 
+;                  jmp main
+; END TEST
                     READ_JOYSTICK  
                     DRAW_LINE_WALLS  
                     DRAW_SHIP  
@@ -96,17 +102,17 @@ main
 ;}}}
 ;-----------------------------------------------------------------------------------
 ;{{{ must go at bottom or fills up RAM instead of ROM 
-                    include  "functions.i"                ; ...
-                    include  "data.i"                     ; static data, shapes, tables, text
-                    include  "libsoundraw.i"              ; quick sound effects routines
-                    include  "rawsounddata.i"             ; the data used by
-                    include  "rawsoundroutines.i"         ; the functions routing sounds to  3 channels
-                    include  "rasterDraw.asm"             ; title screen from VIDE
-                    include  "ymPlayer.i"                 ; for song under high score
-                    include  "turmoil_ym.asm"             ; our data for above
-                    include  "ds2431LowLevel.i"           ; high score save stuff
-                    include  "ds2431HighLevel.i"          ; using DS2431+ 1 wire eeprom
-                    include  "eeprom.i"                   ; uses the 2 above 
-                    include  "draw_synced_list.i"         ; from VIDE to, draw shapes with many vectors.
+                    include  "include/functions.i"                ; ...
+                    include  "include/data.i"                     ; static data, shapes, tables, text
+                    include  "include/libsoundraw.i"              ; quick sound effects routines
+                    include  "include/rawsounddata.i"             ; the data used by
+                    include  "include/rawsoundroutines.i"         ; the functions routing sounds to  3 channels
+                    include  "include/rasterDraw.asm"             ; title screen from VIDE
+                    include  "include/ymPlayer.i"                 ; for song under high score
+                    include  "include/turmoil_ym.asm"             ; our data for above
+                    include  "include/ds2431LowLevel.i"           ; high score save stuff
+                    include  "include/ds2431HighLevel.i"          ; using DS2431+ 1 wire eeprom
+                    include  "include/eeprom.i"                   ; uses the 2 above 
+                    include  "include/draw_synced_list.i"         ; from VIDE to, draw shapes with many vectors.
 end 
 ;}}}
